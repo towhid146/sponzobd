@@ -1088,6 +1088,67 @@
         color: var(--tx3);
         margin-top: 4px;
       }
+
+      .profile-modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+      }
+      .profile-modal.on {
+        display: flex;
+      }
+      .profile-modal-card {
+        width: min(760px, calc(100vw - 24px));
+        max-height: calc(100vh - 24px);
+        overflow-y: auto;
+        background: var(--srf);
+        border-radius: var(--r3);
+        border: 1px solid var(--bdr);
+        padding: 16px;
+      }
+      .pem-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .pem-field {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+      .pem-field label {
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .pem-field input,
+      .pem-field select,
+      .pem-field textarea {
+        width: 100%;
+        padding: 8px 10px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        font-family: var(--font);
+        font-size: 13px;
+      }
+      .pem-field textarea {
+        min-height: 86px;
+        resize: vertical;
+      }
+      .pem-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 12px;
+      }
+      .pem-hint {
+        margin-top: 6px;
+        font-size: 11px;
+        color: var(--tx3);
+      }
     </style>
   </head>
   <body>
@@ -1279,9 +1340,9 @@
           style="display: flex; flex-direction: column"
         >
           <div class="cover-wrap">
-            <div class="cover-inner"></div>
+            <div class="cover-inner" id="brand-cover-view"></div>
             <div class="cover-stripe"></div>
-            <div class="cover-edit" onclick="switchTab('edit')">
+            <div class="cover-edit" onclick="openProfileEditor('media')">
               <svg
                 width="11"
                 height="11"
@@ -1328,7 +1389,7 @@
                 <button
                   class="btn-ghost"
                   style="font-size: 11px; padding: 4px 10px"
-                  onclick="switchTab('edit')"
+                  onclick="openProfileEditor('core')"
                 >
                   Edit profile
                 </button>
@@ -1377,7 +1438,11 @@
                 >
               </div>
             </div>
-            <div class="ins ins-a" style="margin-top: 12px">
+            <div
+              class="ins ins-a"
+              id="logo-missing-alert"
+              style="margin-top: 12px"
+            >
               <svg viewBox="0 0 14 14" fill="none">
                 <circle cx="7" cy="7" r="6" fill="#FAC775" />
                 <path
@@ -1391,7 +1456,7 @@
               application rates — campaigns with logos receive significantly
               more creator interest.
               <button
-                onclick="switchTab('edit')"
+                onclick="openProfileEditor('media')"
                 style="
                   margin-left: 8px;
                   padding: 2px 9px;
@@ -1484,7 +1549,7 @@
               <div class="panel">
                 <div class="ph">
                   <div class="pt">About</div>
-                  <div class="pe" onclick="switchTab('edit')">Edit</div>
+                  <div class="pe" onclick="openProfileEditor('core')">Edit</div>
                 </div>
                 <p
                   id="about-primary"
@@ -1586,7 +1651,9 @@
               <div class="panel">
                 <div class="ph">
                   <div class="pt">Brand details</div>
-                  <div class="pe" onclick="switchTab('edit')">Edit</div>
+                  <div class="pe" onclick="openProfileEditor('preferences')">
+                    Edit
+                  </div>
                 </div>
                 <div class="info-row">
                   <span class="ir-l">Industry</span
@@ -1740,7 +1807,7 @@
                     >Logo not uploaded
                     <span
                       style="cursor: pointer; text-decoration: underline"
-                      onclick="switchTab('edit')"
+                      onclick="openProfileEditor('media')"
                       >Add now</span
                     >
                   </div>
@@ -2716,6 +2783,156 @@ We partner with health and wellness creators who believe in authentic nutrition 
       <span id="toast-msg">Saved!</span>
     </div>
 
+    <div class="profile-modal" id="modal-brand-core">
+      <div class="profile-modal-card">
+        <div class="ph" style="margin-bottom: 12px">
+          <div class="pt">Edit brand profile</div>
+          <button class="btn-ghost" onclick="closeProfileEditor()">
+            Close
+          </button>
+        </div>
+        <div class="pem-grid">
+          <div class="pem-field">
+            <label>Brand name</label>
+            <input id="pem-brand-name" type="text" />
+          </div>
+          <div class="pem-field">
+            <label>Industry</label>
+            <select id="pem-industry">
+              <option>Health &amp; food</option>
+              <option>Fashion &amp; beauty</option>
+              <option>Technology</option>
+              <option>Education</option>
+              <option>Food &amp; beverage</option>
+              <option>Sports &amp; fitness</option>
+              <option>Retail &amp; e-commerce</option>
+              <option>Social causes</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="pem-field" style="grid-column: 1 / -1">
+            <label>Tagline</label>
+            <input id="pem-tagline" type="text" maxlength="180" />
+          </div>
+          <div class="pem-field" style="grid-column: 1 / -1">
+            <label>About</label>
+            <textarea id="pem-about"></textarea>
+          </div>
+          <div class="pem-field">
+            <label>Location</label>
+            <select id="pem-location">
+              <option>Dhaka</option>
+              <option>Chittagong</option>
+              <option>Sylhet</option>
+              <option>Rajshahi</option>
+              <option>Khulna</option>
+              <option>Nationwide</option>
+            </select>
+          </div>
+          <div class="pem-field">
+            <label>Website</label>
+            <input id="pem-website" type="url" placeholder="https://..." />
+          </div>
+        </div>
+        <div class="pem-actions">
+          <button class="btn-ghost" onclick="closeProfileEditor()">
+            Cancel
+          </button>
+          <button class="btn-g" onclick="saveProfileEdits('core')">
+            Save changes
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-modal" id="modal-brand-preferences">
+      <div class="profile-modal-card">
+        <div class="ph" style="margin-bottom: 12px">
+          <div class="pt">Edit campaign preferences</div>
+          <button class="btn-ghost" onclick="closeProfileEditor()">
+            Close
+          </button>
+        </div>
+        <div class="pem-grid">
+          <div class="pem-field">
+            <label>Typical budget range</label>
+            <select id="pem-budget">
+              <option>Under ৳10,000</option>
+              <option>৳10,000 – ৳20,000</option>
+              <option>৳20,000 – ৳40,000</option>
+              <option>৳40,000 – ৳80,000</option>
+              <option>Above ৳80,000</option>
+            </select>
+          </div>
+          <div class="pem-field">
+            <label>Preferred platforms</label>
+            <select id="pem-platforms">
+              <option>Instagram &amp; YouTube</option>
+              <option>Instagram only</option>
+              <option>TikTok only</option>
+              <option>Instagram &amp; TikTok</option>
+              <option>All platforms</option>
+            </select>
+          </div>
+          <div class="pem-field" style="grid-column: 1 / -1">
+            <label>Creator preference tags</label>
+            <textarea
+              id="pem-creator-tags"
+              placeholder="Comma separated, for example: Health, Nutrition, Lifestyle"
+            ></textarea>
+            <div class="pem-hint">
+              These tags appear in your public brand profile.
+            </div>
+          </div>
+        </div>
+        <div class="pem-actions">
+          <button class="btn-ghost" onclick="closeProfileEditor()">
+            Cancel
+          </button>
+          <button class="btn-g" onclick="saveProfileEdits('preferences')">
+            Save changes
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-modal" id="modal-brand-media">
+      <div class="profile-modal-card">
+        <div class="ph" style="margin-bottom: 12px">
+          <div class="pt">Edit logo and cover</div>
+          <button class="btn-ghost" onclick="closeProfileEditor()">
+            Close
+          </button>
+        </div>
+        <div class="pem-grid">
+          <div class="pem-field" style="grid-column: 1 / -1">
+            <label>Brand logo upload</label>
+            <input id="pem-logo-file" type="file" accept="image/*" />
+          </div>
+          <div class="pem-field" style="grid-column: 1 / -1">
+            <label>Brand logo URL (optional)</label>
+            <input id="pem-logo-url" type="url" placeholder="https://..." />
+          </div>
+          <div class="pem-field" style="grid-column: 1 / -1">
+            <label>Cover image upload</label>
+            <input id="pem-cover-file" type="file" accept="image/*" />
+          </div>
+          <div class="pem-field" style="grid-column: 1 / -1">
+            <label>Cover image URL (optional)</label>
+            <input id="pem-cover-url" type="url" placeholder="https://..." />
+          </div>
+        </div>
+        <div class="pem-actions">
+          <button class="btn-ghost" onclick="closeProfileEditor()">
+            Cancel
+          </button>
+          <button class="btn-g" onclick="saveProfileEdits('media')">
+            Save changes
+          </button>
+        </div>
+      </div>
+    </div>
+
     <script>
       const pages = ["profile", "edit", "billing", "subscription"];
       const tabs = ["profile", "edit", "billing", "subscription"];
@@ -2913,7 +3130,38 @@ We partner with health and wellness creators who believe in authentic nutrition 
         setNodeText("sb-plan", "Pro plan");
         setNodeText("top-plan-badge", "Pro plan");
 
-        setNodeText("brand-avatar", initials);
+        const brandAvatar = document.getElementById("brand-avatar");
+        if (brandAvatar) {
+          if (p.logoUrl) {
+            brandAvatar.style.backgroundImage = `url('${p.logoUrl}')`;
+            brandAvatar.style.backgroundSize = "cover";
+            brandAvatar.style.backgroundPosition = "center";
+            brandAvatar.classList.remove("missing-logo");
+            brandAvatar.textContent = "";
+          } else {
+            brandAvatar.style.backgroundImage = "none";
+            brandAvatar.classList.add("missing-logo");
+            brandAvatar.textContent = initials;
+          }
+        }
+
+        const coverView = document.getElementById("brand-cover-view");
+        if (coverView) {
+          if (p.coverUrl) {
+            coverView.style.backgroundImage = `url('${p.coverUrl}')`;
+            coverView.style.backgroundSize = "cover";
+            coverView.style.backgroundPosition = "center";
+          } else {
+            coverView.style.backgroundImage = "none";
+            coverView.style.background = "var(--blu-m)";
+          }
+        }
+
+        const logoAlert = document.getElementById("logo-missing-alert");
+        if (logoAlert) {
+          logoAlert.style.display = p.logoUrl ? "none" : "flex";
+        }
+
         setNodeText("brand-name-view", p.brandName || "Brand name");
         setNodeText("brand-tagline-view", p.tagline || "Add a tagline");
         setNodeText(
@@ -3004,6 +3252,48 @@ We partner with health and wellness creators who believe in authentic nutrition 
             p.preferredPlatforms || defaultBrandProfile.preferredPlatforms;
         }
 
+        const modalBrandName = document.getElementById("pem-brand-name");
+        if (modalBrandName) modalBrandName.value = p.brandName || "";
+
+        const modalIndustry = document.getElementById("pem-industry");
+        if (modalIndustry)
+          modalIndustry.value = p.industry || defaultBrandProfile.industry;
+
+        const modalTagline = document.getElementById("pem-tagline");
+        if (modalTagline) modalTagline.value = p.tagline || "";
+
+        const modalAbout = document.getElementById("pem-about");
+        if (modalAbout) modalAbout.value = p.about || "";
+
+        const modalLocation = document.getElementById("pem-location");
+        if (modalLocation)
+          modalLocation.value = p.location || defaultBrandProfile.location;
+
+        const modalWebsite = document.getElementById("pem-website");
+        if (modalWebsite) modalWebsite.value = p.website || "";
+
+        const modalBudget = document.getElementById("pem-budget");
+        if (modalBudget)
+          modalBudget.value =
+            p.typicalBudget || defaultBrandProfile.typicalBudget;
+
+        const modalPlatforms = document.getElementById("pem-platforms");
+        if (modalPlatforms) {
+          modalPlatforms.value =
+            p.preferredPlatforms || defaultBrandProfile.preferredPlatforms;
+        }
+
+        const modalTags = document.getElementById("pem-creator-tags");
+        if (modalTags) {
+          modalTags.value = (p.preferredCreatorTags || []).join(", ");
+        }
+
+        const modalLogoUrl = document.getElementById("pem-logo-url");
+        if (modalLogoUrl) modalLogoUrl.value = p.logoUrl || "";
+
+        const modalCoverUrl = document.getElementById("pem-cover-url");
+        if (modalCoverUrl) modalCoverUrl.value = p.coverUrl || "";
+
         updateTaglineCount();
         updateAboutCount();
       }
@@ -3040,6 +3330,157 @@ We partner with health and wellness creators who believe in authentic nutrition 
         return normalizeProfile(next);
       }
 
+      function parseTagsText(text) {
+        return String(text || "")
+          .split(/[,\n]/)
+          .map((item) => item.trim())
+          .filter(Boolean)
+          .slice(0, 12);
+      }
+
+      function fillProfileEditor(section) {
+        const p = sponsorProfileState || defaultBrandProfile;
+        if (section === "core") {
+          const map = [
+            ["pem-brand-name", p.brandName || ""],
+            ["pem-industry", p.industry || defaultBrandProfile.industry],
+            ["pem-tagline", p.tagline || ""],
+            ["pem-about", p.about || ""],
+            ["pem-location", p.location || defaultBrandProfile.location],
+            ["pem-website", p.website || ""],
+          ];
+          map.forEach(([id, value]) => {
+            const el = document.getElementById(id);
+            if (el) el.value = value;
+          });
+        }
+
+        if (section === "preferences") {
+          const map = [
+            [
+              "pem-budget",
+              p.typicalBudget || defaultBrandProfile.typicalBudget,
+            ],
+            [
+              "pem-platforms",
+              p.preferredPlatforms || defaultBrandProfile.preferredPlatforms,
+            ],
+            ["pem-creator-tags", (p.preferredCreatorTags || []).join(", ")],
+          ];
+          map.forEach(([id, value]) => {
+            const el = document.getElementById(id);
+            if (el) el.value = value;
+          });
+        }
+
+        if (section === "media") {
+          const logoUrl = document.getElementById("pem-logo-url");
+          if (logoUrl) logoUrl.value = p.logoUrl || "";
+          const coverUrl = document.getElementById("pem-cover-url");
+          if (coverUrl) coverUrl.value = p.coverUrl || "";
+
+          const logoFile = document.getElementById("pem-logo-file");
+          if (logoFile) logoFile.value = "";
+          const coverFile = document.getElementById("pem-cover-file");
+          if (coverFile) coverFile.value = "";
+        }
+      }
+
+      function openProfileEditor(section = "core") {
+        const modalMap = {
+          core: "modal-brand-core",
+          preferences: "modal-brand-preferences",
+          media: "modal-brand-media",
+        };
+
+        closeProfileEditor();
+        fillProfileEditor(section);
+        const modal = document.getElementById(modalMap[section]);
+        if (!modal) return;
+        modal.classList.add("on");
+      }
+
+      function closeProfileEditor() {
+        document.querySelectorAll(".profile-modal.on").forEach((modal) => {
+          modal.classList.remove("on");
+        });
+      }
+
+      function fileToDataUrl(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(String(reader.result || ""));
+          reader.onerror = () => reject(new Error("Failed to read file"));
+          reader.readAsDataURL(file);
+        });
+      }
+
+      async function saveProfileEdits(section) {
+        const next = { ...sponsorProfileState };
+
+        if (section === "core") {
+          next.brandName =
+            document.getElementById("pem-brand-name")?.value?.trim() ||
+            next.brandName;
+          next.industry =
+            document.getElementById("pem-industry")?.value?.trim() ||
+            next.industry;
+          next.tagline =
+            document.getElementById("pem-tagline")?.value?.trim() ||
+            next.tagline;
+          next.about =
+            document.getElementById("pem-about")?.value?.trim() || next.about;
+          next.location =
+            document.getElementById("pem-location")?.value?.trim() ||
+            next.location;
+          next.website =
+            document.getElementById("pem-website")?.value?.trim() || "";
+        }
+
+        if (section === "preferences") {
+          next.typicalBudget =
+            document.getElementById("pem-budget")?.value?.trim() ||
+            next.typicalBudget;
+          next.preferredPlatforms =
+            document.getElementById("pem-platforms")?.value?.trim() ||
+            next.preferredPlatforms;
+          next.preferredCreatorTags = parseTagsText(
+            document.getElementById("pem-creator-tags")?.value || "",
+          );
+        }
+
+        if (section === "media") {
+          let logoUrl =
+            document.getElementById("pem-logo-url")?.value?.trim() ||
+            next.logoUrl ||
+            "";
+          let coverUrl =
+            document.getElementById("pem-cover-url")?.value?.trim() ||
+            next.coverUrl ||
+            "";
+
+          const logoFile = document.getElementById("pem-logo-file")?.files?.[0];
+          const coverFile =
+            document.getElementById("pem-cover-file")?.files?.[0];
+          if (logoFile) {
+            logoUrl = await fileToDataUrl(logoFile);
+          }
+          if (coverFile) {
+            coverUrl = await fileToDataUrl(coverFile);
+          }
+
+          next.logoUrl = logoUrl;
+          next.coverUrl = coverUrl;
+        }
+
+        next.profileStrength = calculateProfileStrength(next);
+        await persistProfile(normalizeProfile(next), {
+          successMessage: "Profile saved successfully",
+          switchToProfile: true,
+          closeModalOnSuccess: true,
+        });
+      }
+
       function readLocalProfile(phone) {
         try {
           const raw = localStorage.getItem(profileStorageKey(phone));
@@ -3072,8 +3513,13 @@ We partner with health and wellness creators who believe in authentic nutrition 
         return normalizeProfile(data?.profile || {});
       }
 
-      async function saveSettings() {
-        const nextProfile = collectProfileFromForm();
+      async function persistProfile(nextProfile, options = {}) {
+        const {
+          successMessage = "Profile saved successfully",
+          switchToProfile = false,
+          closeModalOnSuccess = false,
+        } = options;
+
         renderProfile(nextProfile);
         writeLocalProfile(sponsorPhone, nextProfile);
 
@@ -3100,11 +3546,26 @@ We partner with health and wellness creators who believe in authentic nutrition 
           );
           renderProfile(serverProfile);
           writeLocalProfile(sponsorPhone, serverProfile);
-          showToast("Profile saved successfully");
-          switchTab("profile");
+          if (closeModalOnSuccess) {
+            closeProfileEditor();
+          }
+          showToast(successMessage);
+          if (switchToProfile) {
+            switchTab("profile");
+          }
+          return true;
         } catch (err) {
           showToast("Saved locally. Server sync failed.");
+          return false;
         }
+      }
+
+      async function saveSettings() {
+        const nextProfile = collectProfileFromForm();
+        await persistProfile(nextProfile, {
+          successMessage: "Profile saved successfully",
+          switchToProfile: true,
+        });
       }
 
       async function initializeSponsorProfile() {
