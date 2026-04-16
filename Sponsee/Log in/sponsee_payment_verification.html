@@ -1,0 +1,1545 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SponzoBD — Payment Verification</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --red: #e24b4a;
+        --red-l: #fcebeb;
+        --red-m: #f7c1c1;
+        --grn: #1d9e75;
+        --grn-l: #eaf3de;
+        --grn-m: #c0dd97;
+        --grn-d: #085041;
+        --grn-3: #3b6d11;
+        --grn-t: #27500a;
+        --teal-l: #e1f5ee;
+        --teal-m: #9fe1cb;
+        --blu-l: #e6f1fb;
+        --blu-m: #b5d4f4;
+        --blu-t: #0c447c;
+        --amb-l: #faeeda;
+        --amb-m: #fac775;
+        --amb-t: #633806;
+        --amb-d: #854f0b;
+        --pur-l: #eeedfe;
+        --pur-t: #3c3489;
+        --bg: #f5f4f0;
+        --srf: #ffffff;
+        --srf2: #f0eee8;
+        --bdr: rgba(0, 0, 0, 0.09);
+        --bdr-m: rgba(0, 0, 0, 0.15);
+        --tx1: #1a1a1a;
+        --tx2: #555;
+        --tx3: #999;
+        --font: "DM Sans", system-ui, sans-serif;
+        --r1: 8px;
+        --r2: 10px;
+        --r3: 14px;
+      }
+      html,
+      body {
+        min-height: 100vh;
+        font-family: var(--font);
+        background: var(--bg);
+        color: var(--tx1);
+        font-size: 14px;
+      }
+      .app {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      /* sidebar same as profile page */
+      .sb {
+        width: 224px;
+        flex-shrink: 0;
+        background: var(--srf);
+        border-right: 1px solid var(--bdr);
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+      }
+      .sb-logo {
+        padding: 18px 18px 14px;
+        border-bottom: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .logo-ic {
+        width: 30px;
+        height: 30px;
+        background: var(--red);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .sb-user {
+        padding: 12px 18px;
+        border-bottom: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .av {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: var(--teal-m);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--grn-d);
+        flex-shrink: 0;
+      }
+      .nav {
+        padding: 8px 0;
+        flex: 1;
+      }
+      .nav-sec {
+        padding: 6px 18px 3px;
+        font-size: 10px;
+        color: var(--tx3);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      .ni {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 8px 18px;
+        font-size: 13px;
+        color: var(--tx2);
+        cursor: pointer;
+        border-left: 2px solid transparent;
+      }
+      .ni:hover {
+        background: var(--srf2);
+      }
+      .ni.on {
+        background: var(--srf2);
+        color: var(--tx1);
+        font-weight: 600;
+        border-left-color: var(--red);
+      }
+      .ni svg {
+        width: 15px;
+        height: 15px;
+        flex-shrink: 0;
+        opacity: 0.5;
+      }
+      .ni.on svg {
+        opacity: 1;
+      }
+      .ni-badge {
+        margin-left: auto;
+        background: var(--red);
+        color: #fff;
+        font-size: 10px;
+        padding: 1px 7px;
+        border-radius: 20px;
+        font-weight: 700;
+      }
+
+      /* main */
+      .main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      .topbar {
+        height: 52px;
+        background: var(--srf);
+        border-bottom: 1px solid var(--bdr);
+        padding: 0 22px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+      .tb-t {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .body {
+        flex: 1;
+        padding: 24px 22px;
+        display: flex;
+        gap: 20px;
+        align-items: flex-start;
+      }
+      .body-left {
+        flex: 1;
+        min-width: 0;
+      }
+      .body-right {
+        width: 300px;
+        flex-shrink: 0;
+      }
+
+      /* deal context card */
+      .deal-ctx-card {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        border-radius: var(--r3);
+        padding: 16px 18px;
+        margin-bottom: 18px;
+      }
+      .dc-badge {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: var(--grn-3);
+        background: var(--grn-l);
+        padding: 3px 9px;
+        border-radius: 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        margin-bottom: 10px;
+      }
+      .dc-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--tx1);
+        margin-bottom: 3px;
+      }
+      .dc-sub {
+        font-size: 12px;
+        color: var(--tx3);
+        margin-bottom: 12px;
+      }
+      .dc-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 6px 0;
+        border-bottom: 1px solid var(--bdr);
+        font-size: 13px;
+      }
+      .dc-row:last-child {
+        border-bottom: none;
+      }
+      .dc-l {
+        color: var(--tx2);
+      }
+      .dc-v {
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .dc-v.grn {
+        color: var(--grn-3);
+      }
+      .escrow-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 11px;
+        padding: 3px 9px;
+        border-radius: 20px;
+        background: var(--amb-l);
+        color: var(--amb-t);
+        font-weight: 700;
+        margin-top: 10px;
+      }
+
+      /* main verification card */
+      .verif-card {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        border-radius: var(--r3);
+        overflow: hidden;
+        margin-bottom: 16px;
+      }
+      .vc-hd {
+        padding: 16px 18px;
+        border-bottom: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .vc-hd-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--amb-l);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .vc-hd-t {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .vc-hd-s {
+        font-size: 12px;
+        color: var(--tx3);
+        margin-top: 2px;
+      }
+      .vc-body {
+        padding: 18px 20px;
+      }
+
+      /* step list */
+      .steps-list {
+        display: flex;
+        flex-direction: column;
+      }
+      .step-block {
+        display: flex;
+        gap: 14px;
+        padding-bottom: 20px;
+        position: relative;
+      }
+      .step-block:last-child {
+        padding-bottom: 0;
+      }
+      .step-block:not(:last-child)::before {
+        content: "";
+        position: absolute;
+        left: 17px;
+        top: 36px;
+        bottom: 0;
+        width: 1.5px;
+        background: var(--bdr-m);
+      }
+      .step-block.done:not(:last-child)::before {
+        background: var(--grn-m);
+      }
+      .step-num {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: 700;
+        flex-shrink: 0;
+        border: 2px solid var(--bdr-m);
+        background: var(--srf);
+        color: var(--tx3);
+      }
+      .step-block.active .step-num {
+        background: var(--red);
+        border-color: var(--red);
+        color: #fff;
+      }
+      .step-block.done .step-num {
+        background: var(--grn-l);
+        border-color: var(--grn-m);
+        color: var(--grn-3);
+      }
+      .step-content {
+        flex: 1;
+        padding-top: 5px;
+      }
+      .step-t {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--tx1);
+        margin-bottom: 4px;
+      }
+      .step-block.done .step-t {
+        color: var(--grn-3);
+      }
+      .step-s {
+        font-size: 12px;
+        color: var(--tx3);
+        margin-bottom: 10px;
+        line-height: 1.6;
+      }
+
+      /* form fields inside steps */
+      .f-lbl {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--tx2);
+        margin-bottom: 5px;
+      }
+      .f-inp {
+        width: 100%;
+        padding: 9px 12px;
+        border: 1.5px solid var(--bdr-m);
+        border-radius: var(--r2);
+        background: var(--srf);
+        color: var(--tx1);
+        font-size: 13px;
+        font-family: var(--font);
+      }
+      .f-inp:focus {
+        outline: none;
+        border-color: var(--grn);
+      }
+      .f-inp.ok {
+        border-color: var(--grn-m);
+        background: var(--grn-l);
+      }
+      .f-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      .f-field {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        margin-bottom: 10px;
+      }
+      .f-hint {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-top: 3px;
+        line-height: 1.5;
+      }
+      /* bkash option */
+      .pmethod-chips {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+      .pm-chip {
+        padding: 9px 14px;
+        border: 1.5px solid var(--bdr-m);
+        border-radius: var(--r2);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--tx2);
+        background: var(--srf);
+        transition: all 0.12s;
+      }
+      .pm-chip:hover {
+        border-color: var(--grn-m);
+        background: var(--grn-l);
+      }
+      .pm-chip.on {
+        border-color: var(--grn);
+        background: var(--grn-l);
+        color: var(--grn-3);
+        font-weight: 600;
+      }
+      .pm-ic {
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      /* security note */
+      .security-note {
+        background: var(--blu-l);
+        border: 1px solid var(--blu-m);
+        border-radius: var(--r2);
+        padding: 10px 13px;
+        font-size: 12px;
+        color: var(--blu-t);
+        line-height: 1.6;
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+        margin-bottom: 12px;
+      }
+      .security-note svg {
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      /* save btn */
+      .save-btn {
+        padding: 10px 20px;
+        background: var(--red);
+        border: none;
+        border-radius: var(--r2);
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .save-btn:hover {
+        background: #c73c3b;
+      }
+      .save-btn.g {
+        background: var(--grn);
+      }
+      .save-btn.g:hover {
+        background: var(--grn-3);
+      }
+      /* done step display */
+      .done-line {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 12px;
+        color: var(--grn-3);
+        font-weight: 600;
+        padding: 6px 0;
+        border-bottom: 1px solid var(--bdr);
+      }
+      .done-line:last-child {
+        border-bottom: none;
+      }
+
+      /* right panel cards */
+      .info-card {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        border-radius: var(--r3);
+        padding: 16px 18px;
+        margin-bottom: 14px;
+      }
+      .ic-t {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--tx1);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .ic-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--tx2);
+        margin-bottom: 8px;
+        line-height: 1.55;
+      }
+      .ic-row:last-child {
+        margin-bottom: 0;
+      }
+      .ic-row svg {
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      /* payment preview */
+      .pay-preview {
+        background: var(--grn-l);
+        border: 1px solid var(--grn-m);
+        border-radius: var(--r3);
+        padding: 16px 18px;
+      }
+      .pp-t {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--grn-3);
+        margin-bottom: 10px;
+      }
+      .pp-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        padding: 5px 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+      }
+      .pp-row:last-child {
+        border-bottom: none;
+        font-weight: 700;
+        font-size: 13px;
+      }
+      .pp-l {
+        color: var(--grn-t);
+      }
+      .pp-v {
+        font-weight: 700;
+        color: var(--grn-d);
+      }
+      /* completed state */
+      .completed-banner {
+        background: var(--grn-d);
+        border-radius: var(--r3);
+        padding: 24px;
+        text-align: center;
+        color: #fff;
+        display: none;
+      }
+      .cb-icon {
+        font-size: 36px;
+        margin-bottom: 10px;
+      }
+      .cb-t {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 5px;
+      }
+      .cb-s {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.75);
+        margin-bottom: 16px;
+        line-height: 1.6;
+      }
+      .cb-btn {
+        padding: 11px 24px;
+        background: var(--teal-m);
+        border: none;
+        border-radius: var(--r2);
+        color: var(--grn-d);
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      /* NID tooltip */
+      .nid-why {
+        font-size: 11px;
+        color: var(--blu-t);
+        cursor: pointer;
+        text-decoration: underline;
+        text-decoration-style: dotted;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- SIDEBAR -->
+      <div class="sb">
+        <div class="sb-logo">
+          <div class="logo-ic">
+            <svg viewBox="0 0 16 16" fill="none" width="15" height="15">
+              <path
+                d="M3 8a5 5 0 1010 0A5 5 0 003 8z"
+                fill="white"
+                opacity="0.25"
+              />
+              <path
+                d="M8 5v3l2 2"
+                stroke="white"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+          <div>
+            <div style="font-size: 15px; font-weight: 600; color: var(--tx1)">
+              SponzoBD
+            </div>
+            <div style="font-size: 10px; color: var(--tx3)">Creator portal</div>
+          </div>
+        </div>
+        <div class="sb-user">
+          <div class="av">LA</div>
+          <div>
+            <div style="font-size: 13px; font-weight: 600; color: var(--tx1)">
+              Lamia Akter
+            </div>
+            <div style="font-size: 11px; color: var(--tx3)">
+              Health & wellness · 52K
+            </div>
+            <div
+              style="
+                font-size: 11px;
+                color: var(--grn-3);
+                font-weight: 600;
+                margin-top: 1px;
+              "
+            >
+              Premium plan
+            </div>
+          </div>
+        </div>
+        <nav class="nav">
+          <div class="nav-sec">Main</div>
+          <div
+            class="ni on"
+            onclick="
+              window.location.href =
+                '../The Main Page/sponsee_home_feed (1).html'
+            "
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <path
+                d="M1.5 6.5L7.5 1.5L13.5 6.5V13H9.5V9.5H5.5V13H1.5V6.5Z"
+              ></path>
+            </svg>
+            Home
+          </div>
+          <div
+            class="ni"
+            onclick="
+              window.location.href = '../The Main Page/dashboard_analytics.html'
+            "
+          >
+            <svg viewBox="0 0 15 15" fill="currentColor">
+              <rect x="1" y="1" width="5" height="5" rx="1"></rect>
+              <rect x="9" y="1" width="5" height="5" rx="1"></rect>
+              <rect x="1" y="9" width="5" height="5" rx="1"></rect>
+              <rect x="9" y="9" width="5" height="5" rx="1"></rect>
+            </svg>
+            Dashboard &amp; analytics
+          </div>
+          <div
+            class="ni"
+            onclick="
+              window.location.href = '../The Main Page/browse_campaigns.html'
+            "
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <rect x="1.5" y="2.5" width="12" height="10" rx="1.5"></rect>
+              <path d="M5 6h5M5 9h3"></path>
+            </svg>
+            Browse campaigns
+          </div>
+          <div
+            class="ni"
+            onclick="
+              window.location.href =
+                '../The Main Page/Sponsee_ my_applications_deals.html'
+            "
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <circle cx="7.5" cy="7.5" r="5.5"></circle>
+              <path d="M7.5 4.5v3l2 1.5"></path>
+            </svg>
+            My applications &amp; deals
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = '../The Main Page/messages.html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <path d="M2 2h11v8H8l-3 2.5V10H2V2z"></path>
+            </svg>
+            Messages<span class="ni-badge">1</span>
+          </div>
+          <div
+            class="ni"
+            onclick="
+              window.location.href = '../The Main Page/ai_pitch_generator.html'
+            "
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <path d="M3 12l2-2 2 1 4-5"></path>
+              <circle
+                cx="11.5"
+                cy="3.5"
+                r="1.8"
+                fill="currentColor"
+                opacity="0.35"
+              ></circle>
+            </svg>
+            AI pitch generator
+          </div>
+          <div
+            class="ni"
+            onclick="
+              window.location.href = '../The Main Page/sponsee Profile.html'
+            "
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <circle cx="7.5" cy="5" r="2.5"></circle>
+              <path d="M2 13c0-3 2.5-4.5 5.5-4.5S13 10 13 13"></path>
+            </svg>
+            My profile
+          </div>
+        </nav>
+      </div>
+
+      <!-- MAIN -->
+      <div class="main">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 10px">
+            <button
+              onclick="history.back()"
+              style="
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                font-size: 13px;
+                color: var(--tx3);
+                cursor: pointer;
+                background: none;
+                border: none;
+                font-family: var(--font);
+                padding: 0;
+              "
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 14 14"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <path d="M9 2L5 7l4 5" />
+              </svg>
+              Back to messages
+            </button>
+            <div
+              style="width: 1px; height: 16px; background: var(--bdr-m)"
+            ></div>
+            <div class="tb-t">Payment verification</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px">
+            <span
+              style="
+                font-size: 11px;
+                padding: 3px 10px;
+                border-radius: 20px;
+                background: var(--amb-l);
+                color: var(--amb-t);
+                font-weight: 700;
+              "
+              >Action required · first payment</span
+            >
+          </div>
+        </div>
+
+        <div class="body">
+          <div class="body-left">
+            <!-- DEAL CONTEXT -->
+            <div class="deal-ctx-card">
+              <div class="dc-badge">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                  <circle cx="5" cy="5" r="4" fill="var(--grn-m)" />
+                  <path
+                    d="M2.5 5l2 2L7.5 3"
+                    stroke="#27500A"
+                    stroke-width="1.3"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                Deal closed · content approved
+              </div>
+              <div class="dc-title">
+                GreenFresh BD × National Health Week 2025
+              </div>
+              <div class="dc-sub">
+                Your content was approved. Before we release your payment, we
+                need to verify your identity and payment details — required
+                once, stored securely.
+              </div>
+              <div class="dc-row">
+                <span class="dc-l">Agreed amount</span
+                ><span class="dc-v">৳35,000</span>
+              </div>
+              <div class="dc-row">
+                <span class="dc-l">Platform fee (3.5%)</span
+                ><span class="dc-v">– ৳1,225</span>
+              </div>
+              <div class="dc-row">
+                <span class="dc-l">Your payout</span
+                ><span class="dc-v grn">৳33,775</span>
+              </div>
+              <div class="dc-row">
+                <span class="dc-l">Payment method</span
+                ><span class="dc-v">bKash / bank · set below</span>
+              </div>
+              <div class="escrow-badge">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                  <rect x="2" y="4.5" width="6" height="4" rx=".8" />
+                  <path
+                    d="M3.5 4.5V3.2a1.5 1.5 0 113 0v1.3"
+                    stroke="var(--amb-d)"
+                    stroke-width="1.2"
+                  />
+                </svg>
+                ৳35,000 held in escrow · releases after this verification
+              </div>
+            </div>
+
+            <!-- VERIFICATION STEPS -->
+            <div class="verif-card" id="verif-form">
+              <div class="vc-hd">
+                <div class="vc-hd-icon">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <circle cx="10" cy="10" r="8" fill="var(--amb-m)" />
+                    <path
+                      d="M6.5 10l2.5 2.5L13.5 7"
+                      stroke="white"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <div class="vc-hd-t">One-time payment verification</div>
+                  <div class="vc-hd-s">
+                    Required before your first payout · takes 5 minutes · done
+                    once only
+                  </div>
+                </div>
+              </div>
+              <div class="vc-body">
+                <div class="steps-list">
+                  <!-- STEP 1: Legal name -->
+                  <div class="step-block active" id="step-1">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                      <div class="step-t">Legal full name</div>
+                      <div class="step-s">
+                        Your name exactly as it appears on your National ID or
+                        passport. Stored securely — never shown to sponsors or
+                        on your public profile.
+                      </div>
+                      <div class="f-row">
+                        <div class="f-field" style="margin-bottom: 0">
+                          <div class="f-lbl">First name</div>
+                          <input
+                            class="f-inp"
+                            id="fname"
+                            type="text"
+                            placeholder="e.g. Lamia"
+                          />
+                        </div>
+                        <div class="f-field" style="margin-bottom: 0">
+                          <div class="f-lbl">Last name</div>
+                          <input
+                            class="f-inp"
+                            id="lname"
+                            type="text"
+                            placeholder="e.g. Akter"
+                          />
+                        </div>
+                      </div>
+                      <div style="height: 10px"></div>
+                      <button class="save-btn" onclick="completeStep(1)">
+                        Save & continue →
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- STEP 2: NID -->
+                  <div
+                    class="step-block"
+                    id="step-2"
+                    style="opacity: 0.5; pointer-events: none"
+                  >
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                      <div class="step-t">
+                        National ID number
+                        <span class="nid-why" onclick="showNidWhy()"
+                          >Why do we need this?</span
+                        >
+                      </div>
+                      <div class="step-s">
+                        Your 10 or 17-digit NID number. Required by Bangladesh
+                        Bank regulations for any commercial payout via bKash or
+                        bank transfer. Typed only — no scan needed at this
+                        stage.
+                      </div>
+                      <div class="security-note">
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 14 14"
+                          fill="none"
+                        >
+                          <circle cx="7" cy="7" r="6" fill="var(--blu-m)" />
+                          <path
+                            d="M7 5v4M7 4v.5"
+                            stroke="var(--blu-t)"
+                            stroke-width="1.3"
+                            stroke-linecap="round"
+                          />
+                        </svg>
+                        Your NID number is encrypted and stored on SponzoBD
+                        servers. It is never shared with sponsors, never shown
+                        publicly, and is used only for payment compliance. You
+                        will not need to enter this again.
+                      </div>
+                      <div class="f-field">
+                        <div class="f-lbl">NID number</div>
+                        <input
+                          class="f-inp"
+                          id="nid"
+                          type="text"
+                          placeholder="10 or 17-digit NID number"
+                          maxlength="17"
+                        />
+                        <div class="f-hint">
+                          If you do not have an NID, you may use a valid
+                          passport number instead.
+                        </div>
+                      </div>
+                      <button class="save-btn" onclick="completeStep(2)">
+                        Save & continue →
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- STEP 3: Payment method -->
+                  <div
+                    class="step-block"
+                    id="step-3"
+                    style="opacity: 0.5; pointer-events: none"
+                  >
+                    <div class="step-num">3</div>
+                    <div class="step-content">
+                      <div class="step-t">Payment method</div>
+                      <div class="step-s">
+                        Where should we send your earnings? You can update this
+                        at any time in account settings.
+                      </div>
+                      <div class="pmethod-chips">
+                        <div
+                          class="pm-chip on"
+                          id="pm-bkash"
+                          onclick="selectPM('bkash')"
+                        >
+                          <div
+                            class="pm-ic"
+                            style="background: #e2136e; color: #fff"
+                          >
+                            bK
+                          </div>
+                          bKash
+                        </div>
+                        <div
+                          class="pm-chip"
+                          id="pm-bank"
+                          onclick="selectPM('bank')"
+                        >
+                          <div
+                            class="pm-ic"
+                            style="
+                              background: var(--blu-l);
+                              color: var(--blu-t);
+                            "
+                          >
+                            🏦
+                          </div>
+                          Bank transfer
+                        </div>
+                      </div>
+                      <div id="bkash-fields">
+                        <div class="f-field">
+                          <div class="f-lbl">bKash personal number</div>
+                          <div style="display: flex; gap: 0">
+                            <div
+                              style="
+                                padding: 9px 11px;
+                                border: 1.5px solid var(--bdr-m);
+                                border-right: none;
+                                border-radius: var(--r2) 0 0 var(--r2);
+                                background: var(--srf2);
+                                font-size: 13px;
+                                color: var(--tx2);
+                              "
+                            >
+                              🇧🇩 +880
+                            </div>
+                            <input
+                              class="f-inp"
+                              id="bkash-num"
+                              type="tel"
+                              placeholder="01XXXXXXXXX"
+                              style="border-radius: 0 var(--r2) var(--r2) 0"
+                            />
+                          </div>
+                          <div class="f-hint">
+                            Must be registered as a bKash personal or agent
+                            account.
+                          </div>
+                        </div>
+                      </div>
+                      <div id="bank-fields" style="display: none">
+                        <div class="f-row">
+                          <div class="f-field" style="margin-bottom: 0">
+                            <div class="f-lbl">Bank name</div>
+                            <select
+                              id="bank-name"
+                              class="f-inp"
+                              style="background: var(--srf)"
+                            >
+                              <option>Dutch-Bangla Bank</option>
+                              <option>BRAC Bank</option>
+                              <option>Islami Bank</option>
+                              <option>City Bank</option>
+                              <option>Other</option>
+                            </select>
+                          </div>
+                          <div class="f-field" style="margin-bottom: 0">
+                            <div class="f-lbl">Account number</div>
+                            <input
+                              id="bank-account"
+                              class="f-inp"
+                              type="text"
+                              placeholder="Account number"
+                            />
+                          </div>
+                        </div>
+                        <div class="f-field">
+                          <div class="f-lbl">Account holder name</div>
+                          <input
+                            id="bank-holder"
+                            class="f-inp"
+                            type="text"
+                            placeholder="As on bank records"
+                          />
+                        </div>
+                      </div>
+                      <button class="save-btn g" onclick="completeStep(3)">
+                        Verify & release payment →
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- COMPLETED STATE (hidden until done) -->
+            <div class="completed-banner" id="completed-banner">
+              <div class="cb-icon">✓</div>
+              <div class="cb-t">Verification complete!</div>
+              <div class="cb-s">
+                Your payment details are saved. <strong>৳33,775</strong> will be
+                sent to your bKash within 1–2 business days. You will receive an
+                SMS confirmation.<br /><br />You will not need to do this again
+                for future payments.
+              </div>
+              <button
+                class="cb-btn"
+                onclick="
+                  window.location.href =
+                    '../The Main Page/sponsee_home_feed (1).html'
+                "
+              >
+                Go to dashboard →
+              </button>
+            </div>
+          </div>
+
+          <!-- RIGHT PANEL -->
+          <div class="body-right">
+            <!-- Why we need this -->
+            <div class="info-card">
+              <div class="ic-t">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <circle cx="7" cy="7" r="6" fill="var(--teal-m)" />
+                  <path
+                    d="M7 5v4M7 4v.5"
+                    stroke="var(--grn-d)"
+                    stroke-width="1.3"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                Why we need this
+              </div>
+              <div class="ic-row">
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 12 12"
+                  fill="none"
+                  stroke="var(--grn-3)"
+                  stroke-width="1.2"
+                >
+                  <circle cx="6" cy="6" r="5" />
+                  <path d="M6 4v3.5" />
+                  <circle cx="6" cy="9" r=".5" fill="var(--grn-3)" />
+                </svg>
+                Bangladesh Bank regulations require identity verification before
+                any commercial payout via bKash or bank transfer.
+              </div>
+              <div class="ic-row">
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 12 12"
+                  fill="none"
+                  stroke="var(--grn-3)"
+                  stroke-width="1.2"
+                >
+                  <circle cx="6" cy="6" r="5" />
+                  <path d="M6 4v3.5" />
+                  <circle cx="6" cy="9" r=".5" fill="var(--grn-3)" />
+                </svg>
+                This is required once only. All future payments are sent
+                automatically without any re-verification.
+              </div>
+              <div class="ic-row">
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 12 12"
+                  fill="none"
+                  stroke="var(--grn-3)"
+                  stroke-width="1.2"
+                >
+                  <circle cx="6" cy="6" r="5" />
+                  <path d="M6 4v3.5" />
+                  <circle cx="6" cy="9" r=".5" fill="var(--grn-3)" />
+                </svg>
+                Your NID number is never shown to sponsors. It is stored
+                encrypted and used only for payment compliance.
+              </div>
+            </div>
+
+            <!-- Security -->
+            <div class="info-card">
+              <div class="ic-t">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <rect
+                    x="2"
+                    y="6"
+                    width="10"
+                    height="7"
+                    rx="1.5"
+                    fill="var(--grn-m)"
+                  />
+                  <path
+                    d="M5 6V4a2 2 0 114 0v2"
+                    stroke="var(--grn-d)"
+                    stroke-width="1.3"
+                  />
+                </svg>
+                Your data is secure
+              </div>
+              <div class="ic-row">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path
+                    d="M2 6l2.5 2.5L10 3"
+                    stroke="var(--grn-3)"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                Legal name and NID stored encrypted — never publicly visible
+              </div>
+              <div class="ic-row">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path
+                    d="M2 6l2.5 2.5L10 3"
+                    stroke="var(--grn-3)"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                Payment details never shared with sponsors
+              </div>
+              <div class="ic-row">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path
+                    d="M2 6l2.5 2.5L10 3"
+                    stroke="var(--grn-3)"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                We never ask for your bKash PIN or bank password
+              </div>
+              <div class="ic-row">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path
+                    d="M2 6l2.5 2.5L10 3"
+                    stroke="var(--grn-3)"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                Verification is done once — not repeated per deal
+              </div>
+            </div>
+
+            <!-- Payment preview -->
+            <div class="pay-preview">
+              <div class="pp-t">Your first payout breakdown</div>
+              <div class="pp-row">
+                <span class="pp-l">Agreed deal amount</span
+                ><span class="pp-v">৳35,000</span>
+              </div>
+              <div class="pp-row">
+                <span class="pp-l">SponzoBD fee (3.5%)</span
+                ><span class="pp-v">– ৳1,225</span>
+              </div>
+              <div
+                class="pp-row"
+                style="
+                  padding-top: 8px;
+                  border-top: 1px solid rgba(0, 0, 0, 0.1);
+                  margin-top: 4px;
+                "
+              >
+                <span class="pp-l">You receive</span
+                ><span class="pp-v">৳33,775</span>
+              </div>
+              <div
+                style="font-size: 11px; color: var(--grn-t); margin-top: 8px"
+              >
+                Sent via bKash within 1–2 business days of verification. SMS
+                confirmation included.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let activeStep = 1;
+      let selectedPM = "bkash";
+      const API_BASE = `${window.location.origin}/api`;
+      const VERIF_RECORD_ID = "sponsee_lamia_akter";
+
+      let autosaveTimer = null;
+
+      async function loadVerificationRecord() {
+        const res = await fetch(
+          `${API_BASE}/payment-verification/${encodeURIComponent(VERIF_RECORD_ID)}`,
+        );
+        if (res.status === 404) return null;
+        if (!res.ok) throw new Error("Failed to load verification record");
+        const data = await res.json();
+        return data.record || null;
+      }
+
+      function collectVerificationPayload() {
+        return {
+          id: VERIF_RECORD_ID,
+          firstName: document.getElementById("fname").value.trim(),
+          lastName: document.getElementById("lname").value.trim(),
+          nid: document.getElementById("nid").value.trim(),
+          paymentMethod: selectedPM,
+          bkashNumber: document.getElementById("bkash-num").value.trim(),
+          bankName: document.getElementById("bank-name").value,
+          bankAccount: document.getElementById("bank-account").value.trim(),
+          bankHolder: document.getElementById("bank-holder").value.trim(),
+          completed:
+            document.getElementById("completed-banner").style.display ===
+            "block",
+          updatedAt: new Date().toISOString(),
+        };
+      }
+
+      async function saveVerificationRecord(partial = {}) {
+        const payload = {
+          ...collectVerificationPayload(),
+          ...partial,
+        };
+
+        const res = await fetch(
+          `${API_BASE}/payment-verification/${encodeURIComponent(VERIF_RECORD_ID)}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          },
+        );
+
+        if (!res.ok) {
+          throw new Error("Failed to save verification record");
+        }
+
+        return true;
+      }
+
+      function queueAutosave() {
+        clearTimeout(autosaveTimer);
+        autosaveTimer = setTimeout(() => {
+          saveVerificationRecord().catch(() => {});
+        }, 300);
+      }
+
+      function applySavedData(saved) {
+        if (!saved) return;
+        document.getElementById("fname").value = saved.firstName || "";
+        document.getElementById("lname").value = saved.lastName || "";
+        document.getElementById("nid").value = saved.nid || "";
+        document.getElementById("bkash-num").value = saved.bkashNumber || "";
+        document.getElementById("bank-name").value =
+          saved.bankName || "Dutch-Bangla Bank";
+        document.getElementById("bank-account").value = saved.bankAccount || "";
+        document.getElementById("bank-holder").value = saved.bankHolder || "";
+        selectPM(saved.paymentMethod || "bkash");
+
+        if (saved.completed) {
+          document.getElementById("verif-form").style.display = "none";
+          document.getElementById("completed-banner").style.display = "block";
+        }
+      }
+
+      function setupAutosave() {
+        [
+          "fname",
+          "lname",
+          "nid",
+          "bkash-num",
+          "bank-name",
+          "bank-account",
+          "bank-holder",
+        ].forEach((id) => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          el.addEventListener("input", () => {
+            queueAutosave();
+          });
+          el.addEventListener("change", () => {
+            queueAutosave();
+          });
+        });
+      }
+
+      function completeStep(n) {
+        // validate minimally
+        if (n === 1) {
+          const f = document.getElementById("fname").value.trim();
+          const l = document.getElementById("lname").value.trim();
+          if (!f || !l) {
+            alert("Please enter your legal full name.");
+            return;
+          }
+        }
+        if (n === 2) {
+          const nid = document.getElementById("nid").value.trim();
+          if (nid.length < 10) {
+            alert("Please enter a valid NID number (10 or 17 digits).");
+            return;
+          }
+        }
+        if (n === 3) {
+          // complete
+          document.getElementById("verif-form").style.display = "none";
+          document.getElementById("completed-banner").style.display = "block";
+          saveVerificationRecord({ completed: true }).catch(() => {});
+          return;
+        }
+
+        saveVerificationRecord({ completed: false }).catch(() => {});
+
+        // mark current step done
+        const cur = document.getElementById("step-" + n);
+        cur.classList.remove("active");
+        cur.classList.add("done");
+        const numEl = cur.querySelector(".step-num");
+        numEl.innerHTML =
+          '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L8 3" stroke="var(--grn-3)" stroke-width="1.8" stroke-linecap="round"/></svg>';
+
+        // replace form content with done summary
+        const content = cur.querySelector(".step-content");
+        const title = content.querySelector(".step-t").textContent;
+        let doneText = "";
+        if (n === 1) {
+          doneText = (
+            document.getElementById("fname").value +
+            " " +
+            document.getElementById("lname").value
+          ).trim();
+        } else if (n === 2) {
+          const nidVal = document.getElementById("nid").value;
+          doneText = "NID ••••••" + nidVal.slice(-4) + " · encrypted & stored";
+        }
+        content.innerHTML =
+          '<div class="step-t" style="color:var(--grn-3);">' +
+          title +
+          "</div>" +
+          '<div class="done-line"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L8 3" stroke="var(--grn-3)" stroke-width="1.5" stroke-linecap="round"/></svg>' +
+          doneText +
+          "</div>";
+
+        // unlock next
+        const next = document.getElementById("step-" + (n + 1));
+        if (next) {
+          next.style.opacity = "1";
+          next.style.pointerEvents = "auto";
+          next.classList.add("active");
+          // scroll to it
+          setTimeout(
+            () => next.scrollIntoView({ behavior: "smooth", block: "center" }),
+            100,
+          );
+        }
+        activeStep = n + 1;
+      }
+
+      function selectPM(type) {
+        selectedPM = type;
+        document
+          .getElementById("pm-bkash")
+          .classList.toggle("on", type === "bkash");
+        document
+          .getElementById("pm-bank")
+          .classList.toggle("on", type === "bank");
+        document.getElementById("bkash-fields").style.display =
+          type === "bkash" ? "block" : "none";
+        document.getElementById("bank-fields").style.display =
+          type === "bank" ? "block" : "none";
+        saveVerificationRecord({ paymentMethod: type }).catch(() => {});
+      }
+
+      function showNidWhy() {
+        alert(
+          "Bangladesh Bank MFS regulations (BFIU guidelines) require financial service providers to collect NID information before processing commercial payments. This is a legal requirement — not our choice. Your NID is stored encrypted and never shared with anyone outside this compliance requirement.",
+        );
+      }
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        try {
+          const saved = await loadVerificationRecord();
+          applySavedData(saved);
+        } catch (_) {
+          // Ignore database load errors and continue with form defaults.
+        }
+        setupAutosave();
+      });
+    </script>
+    <script src="../The Main Page/sponsee_dynamic.js"></script>
+  </body>
+</html>

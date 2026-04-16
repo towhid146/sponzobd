@@ -1,0 +1,2609 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SponzoBD — Brand Profile</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --red: #e24b4a;
+        --red-l: #fcebeb;
+        --red-m: #f7c1c1;
+        --grn: #1d9e75;
+        --grn-l: #eaf3de;
+        --grn-m: #c0dd97;
+        --grn-d: #085041;
+        --grn-3: #3b6d11;
+        --grn-t: #27500a;
+        --teal-l: #e1f5ee;
+        --teal-m: #9fe1cb;
+        --blu-l: #e6f1fb;
+        --blu-m: #b5d4f4;
+        --blu-t: #0c447c;
+        --blu-d: #042c53;
+        --amb-l: #faeeda;
+        --amb-m: #fac775;
+        --amb-t: #633806;
+        --amb-d: #854f0b;
+        --pur-l: #eeedfe;
+        --pur-t: #3c3489;
+        --bg: #f4f2ee;
+        --srf: #ffffff;
+        --srf2: #f0eee9;
+        --bdr: rgba(0, 0, 0, 0.08);
+        --bdr-m: rgba(0, 0, 0, 0.14);
+        --tx1: #1a1a1a;
+        --tx2: #555;
+        --tx3: #999;
+        --font: "DM Sans", system-ui, sans-serif;
+        --r1: 7px;
+        --r2: 10px;
+        --r3: 14px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+        font-family: var(--font);
+        font-size: 14px;
+        color: var(--tx1);
+        background: var(--bg);
+      }
+      .app {
+        display: flex;
+        height: 100vh;
+      }
+
+      /* SIDEBAR */
+      .sb {
+        width: 220px;
+        flex-shrink: 0;
+        background: var(--srf);
+        border-right: 1px solid var(--bdr);
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
+      .sb-logo {
+        padding: 15px 16px 12px;
+        border-bottom: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .logo-ic {
+        width: 28px;
+        height: 28px;
+        background: var(--red);
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .sb-user {
+        padding: 11px 16px;
+        border-bottom: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .av-s {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: var(--blu-l);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--blu-t);
+        flex-shrink: 0;
+      }
+      .u-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .u-sub {
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .u-plan {
+        font-size: 11px;
+        color: var(--red);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-top: 2px;
+        font-weight: 600;
+      }
+      .pdot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--red);
+      }
+      .nav {
+        flex: 1;
+        overflow-y: auto;
+        padding: 8px 0;
+      }
+      .nav-sec {
+        padding: 5px 16px 3px;
+        font-size: 10px;
+        color: var(--tx3);
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        font-weight: 600;
+      }
+      .ni {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        font-size: 13px;
+        color: var(--tx2);
+        cursor: pointer;
+        border-left: 2.5px solid transparent;
+      }
+      .ni:hover {
+        background: var(--srf2);
+      }
+      .ni.on {
+        background: var(--srf2);
+        color: var(--tx1);
+        font-weight: 600;
+        border-left-color: var(--red);
+      }
+      .ni svg {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+        opacity: 0.5;
+      }
+      .ni.on svg {
+        opacity: 1;
+      }
+      .ni-lock {
+        margin-left: auto;
+        width: 12px;
+        height: 12px;
+        opacity: 0.3;
+      }
+      .sb-tier {
+        margin: 0 10px 14px;
+        padding: 10px 12px;
+        background: var(--red-l);
+        border-radius: var(--r2);
+        border: 1px solid var(--red-m);
+      }
+      .st-lbl {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--red);
+        margin-bottom: 3px;
+      }
+      .st-note {
+        font-size: 11px;
+        color: #791f1f;
+        line-height: 1.5;
+      }
+
+      /* MAIN */
+      .main {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+      }
+      .topbar {
+        height: 52px;
+        background: var(--srf);
+        border-bottom: 1px solid var(--bdr);
+        padding: 0 22px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+      }
+      .tb-t {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .tb-r {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .badge-incomplete {
+        background: var(--red-l);
+        color: var(--red);
+        font-size: 11px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-weight: 600;
+      }
+
+      /* PAGE TABS */
+      .page-tabs {
+        display: flex;
+        border-bottom: 1px solid var(--bdr);
+        background: var(--srf);
+        flex-shrink: 0;
+        padding: 0 22px;
+      }
+      .tab {
+        padding: 12px 0;
+        margin-right: 22px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--tx3);
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+      }
+      .tab:hover {
+        color: var(--tx1);
+      }
+      .tab.on {
+        color: var(--tx1);
+        border-bottom-color: var(--red);
+        font-weight: 600;
+      }
+
+      /* pages */
+      .page {
+        display: none;
+        flex: 1;
+        overflow-y: auto;
+      }
+      .page.on {
+        display: block;
+      }
+
+      /* COMPLETION BANNER */
+      .comp-banner {
+        background: var(--amb-l);
+        border-bottom: 1px solid var(--amb-m);
+        padding: 10px 22px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+        flex-shrink: 0;
+      }
+      .cb-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--amb-m);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .cb-text {
+        font-size: 12px;
+        color: var(--amb-d);
+        line-height: 1.5;
+      }
+      .cb-text b {
+        font-weight: 700;
+      }
+      .cb-steps {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-top: 5px;
+      }
+      .cs {
+        font-size: 11px;
+        padding: 3px 9px;
+        border-radius: 20px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .cs-done {
+        background: var(--grn-l);
+        color: var(--grn-3);
+      }
+      .cs-todo {
+        background: var(--red-l);
+        color: var(--red);
+      }
+      .cb-bar-wrap {
+        flex-shrink: 0;
+        text-align: right;
+      }
+      .cb-track {
+        width: 130px;
+        height: 5px;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 3px;
+        overflow: hidden;
+        margin-bottom: 3px;
+      }
+      .cb-fill {
+        height: 100%;
+        background: var(--amb-d);
+        border-radius: 3px;
+        width: 30%;
+        transition: width 0.4s;
+      }
+      .cb-pct {
+        font-size: 11px;
+        color: var(--amb-d);
+        font-weight: 700;
+      }
+
+      /* BRAND PROFILE sections */
+      /* cover */
+      .cover {
+        height: 110px;
+        background: linear-gradient(135deg, var(--blu-l), var(--blu-d) 200%);
+        position: relative;
+        overflow: hidden;
+      }
+      .cover-stripe {
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 18px,
+          rgba(255, 255, 255, 0.05) 18px,
+          rgba(255, 255, 255, 0.05) 20px
+        );
+      }
+      .cover-edit {
+        position: absolute;
+        bottom: 10px;
+        right: 14px;
+        padding: 5px 10px;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        font-size: 11px;
+        color: var(--tx2);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-family: var(--font);
+      }
+
+      /* identity */
+      .identity-wrap {
+        background: var(--srf);
+        border-bottom: 1px solid var(--bdr);
+        padding: 0 22px 15px;
+      }
+      .iw-row {
+        display: flex;
+        align-items: flex-end;
+        gap: 14px;
+        margin-top: -28px;
+        margin-bottom: 12px;
+      }
+      .brand-av {
+        width: 58px;
+        height: 58px;
+        border-radius: 12px;
+        background: var(--blu-l);
+        border: 3px solid var(--srf);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--blu-t);
+        flex-shrink: 0;
+      }
+      .brand-name-t {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--tx1);
+        margin-bottom: 2px;
+        letter-spacing: -0.3px;
+      }
+      .brand-sub {
+        font-size: 13px;
+        color: var(--tx2);
+      }
+      .iw-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+      .iw-m {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 12px;
+        color: var(--tx3);
+      }
+      .iw-m svg {
+        width: 13px;
+        height: 13px;
+        opacity: 0.4;
+      }
+      .iw-m.blu {
+        color: var(--blu-t);
+      }
+
+      /* badges */
+      .badges-strip {
+        background: var(--srf);
+        border-bottom: 1px solid var(--bdr);
+        padding: 10px 22px;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        flex-wrap: wrap;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+        border: 1px solid var(--grn-m);
+        background: var(--grn-l);
+        color: var(--grn-3);
+      }
+      .badge svg {
+        width: 11px;
+        height: 11px;
+      }
+      .badge-empty {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+        border: 1.5px dashed var(--bdr-m);
+        background: transparent;
+        color: var(--tx3);
+        cursor: pointer;
+      }
+      .badge-empty:hover {
+        border-color: var(--blu-m);
+        background: var(--blu-l);
+        color: var(--blu-t);
+      }
+
+      /* stats bar */
+      .stats-bar {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        background: var(--srf);
+        border-bottom: 1px solid var(--bdr);
+      }
+      .sb-item {
+        padding: 13px 20px;
+        border-right: 1px solid var(--bdr);
+      }
+      .sb-item:last-child {
+        border-right: none;
+      }
+      .sb-v {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--tx1);
+        margin-bottom: 2px;
+      }
+      .sb-v.empty {
+        color: var(--bdr-m);
+        font-size: 14px;
+        font-weight: 400;
+      }
+      .sb-l {
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .sb-n {
+        font-size: 10px;
+        margin-top: 2px;
+        font-weight: 500;
+      }
+      .sb-n.ok {
+        color: var(--grn-3);
+      }
+      .sb-n.na {
+        color: var(--tx3);
+      }
+      .sb-add {
+        font-size: 10px;
+        color: var(--red);
+        cursor: pointer;
+        font-weight: 600;
+        margin-top: 3px;
+        display: inline-block;
+      }
+
+      /* profile grid */
+      .profile-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+        gap: 15px;
+        padding: 16px 22px;
+      }
+      .panel {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        border-radius: var(--r3);
+        padding: 14px 17px;
+        margin-bottom: 11px;
+      }
+      .panel:last-child {
+        margin-bottom: 0;
+      }
+      .panel.empty {
+        border: 1.5px dashed var(--bdr-m);
+        background: transparent;
+      }
+      .ph {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+      .pt {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .pe {
+        font-size: 12px;
+        color: var(--red);
+        cursor: pointer;
+      }
+      .pe-add {
+        font-size: 12px;
+        color: var(--red);
+        cursor: pointer;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 3px;
+      }
+      .divider {
+        height: 1px;
+        background: var(--bdr);
+        margin: 11px 0;
+      }
+      /* empty state */
+      .es {
+        padding: 16px 0;
+        text-align: center;
+      }
+      .es-ic {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: var(--srf2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 8px;
+      }
+      .es-t {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--tx1);
+        margin-bottom: 4px;
+      }
+      .es-s {
+        font-size: 12px;
+        color: var(--tx3);
+        margin-bottom: 11px;
+        line-height: 1.6;
+        max-width: 240px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .es-btn {
+        padding: 7px 16px;
+        background: var(--red);
+        border: none;
+        border-radius: var(--r1);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .es-why {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-top: 7px;
+      }
+      .es-why b {
+        color: var(--amb-d);
+      }
+      .inline-empty {
+        padding: 11px 13px;
+        border-radius: var(--r2);
+        border: 1.5px dashed var(--bdr-m);
+        text-align: center;
+        cursor: pointer;
+      }
+      .inline-empty:hover {
+        border-color: var(--blu-m);
+        background: var(--blu-l);
+      }
+      .ie-t {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--tx3);
+      }
+      .ie-s {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-top: 2px;
+      }
+      .inline-empty:hover .ie-t,
+      .inline-empty:hover .ie-s {
+        color: var(--blu-t);
+      }
+      /* tag chips */
+      .tag-chip {
+        font-size: 11px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        background: var(--srf2);
+        color: var(--tx2);
+        display: inline-block;
+        margin: 2px;
+      }
+      /* campaign locked */
+      .campaign-card {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        border-radius: var(--r3);
+        padding: 14px 16px;
+        margin-bottom: 10px;
+        position: relative;
+        overflow: hidden;
+      }
+      .cc-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 8px;
+      }
+      .cc-t {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .cc-sub {
+        font-size: 12px;
+        color: var(--tx3);
+        margin-top: 2px;
+      }
+      .cc-status {
+        font-size: 11px;
+        padding: 3px 9px;
+        border-radius: 20px;
+        font-weight: 600;
+      }
+      .draft-badge {
+        background: var(--srf2);
+        color: var(--tx3);
+      }
+      .locked-ov {
+        position: absolute;
+        inset: 0;
+        background: rgba(244, 242, 238, 0.88);
+        backdrop-filter: blur(2px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--r3);
+      }
+      .locked-ov-inner {
+        text-align: center;
+      }
+      .lo-icon {
+        font-size: 22px;
+        margin-bottom: 6px;
+      }
+      .lo-t {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--tx2);
+        margin-bottom: 4px;
+      }
+      .lo-s {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-bottom: 10px;
+      }
+      .lo-btn {
+        padding: 7px 16px;
+        background: var(--red);
+        border: none;
+        border-radius: var(--r1);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+
+      /* CREATORS PAGE */
+      .creators-page {
+        padding: 16px 22px;
+      }
+      .locked-banner {
+        background: var(--amb-l);
+        border: 1px solid var(--amb-m);
+        border-radius: var(--r3);
+        padding: 13px 16px;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+      }
+      .lb-left {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .lb-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--amb-m);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .lb-t {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--amb-d);
+      }
+      .lb-s {
+        font-size: 11px;
+        color: var(--amb-t);
+        margin-top: 2px;
+      }
+      .lb-steps {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-top: 6px;
+      }
+      .ls-done {
+        font-size: 11px;
+        padding: 3px 9px;
+        border-radius: 20px;
+        font-weight: 600;
+        background: var(--grn-l);
+        color: var(--grn-3);
+      }
+      .ls-todo {
+        font-size: 11px;
+        padding: 3px 9px;
+        border-radius: 20px;
+        font-weight: 600;
+        background: var(--red-l);
+        color: var(--red);
+        cursor: pointer;
+      }
+      .lb-btn {
+        padding: 8px 16px;
+        background: var(--amb-d);
+        border: none;
+        border-radius: var(--r1);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: var(--font);
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      /* creator cards */
+      .creator-card {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        border-radius: var(--r3);
+        padding: 14px 16px;
+        margin-bottom: 10px;
+      }
+      .cc-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 11px;
+        margin-bottom: 10px;
+      }
+      .cc-av {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .cc-info {
+        flex: 1;
+      }
+      .cc-name {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .cc-niche {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-top: 2px;
+      }
+      .cc-right-top {
+        text-align: right;
+        flex-shrink: 0;
+      }
+      .compat-badge {
+        font-size: 11px;
+        padding: 3px 9px;
+        border-radius: 20px;
+        font-weight: 700;
+      }
+      .compat-strong {
+        background: var(--grn-l);
+        color: var(--grn-3);
+      }
+      .compat-good {
+        background: var(--teal-l);
+        color: var(--grn-d);
+      }
+      .cc-stats {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 10px;
+      }
+      .cc-stat {
+        text-align: center;
+      }
+      .cc-stat-v {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .cc-stat-l {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-top: 2px;
+      }
+      .cc-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-bottom: 10px;
+      }
+      .cc-tag {
+        font-size: 11px;
+        padding: 2px 9px;
+        border-radius: 20px;
+        background: var(--srf2);
+        color: var(--tx2);
+      }
+      .cc-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .cc-meta {
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .view-btn {
+        padding: 7px 14px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        background: var(--srf);
+        color: var(--tx2);
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .post-btn {
+        padding: 7px 14px;
+        border: none;
+        border-radius: var(--r1);
+        background: var(--red);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .post-btn.locked {
+        background: var(--srf2);
+        color: var(--tx3);
+        border: 1px solid var(--bdr-m);
+        cursor: not-allowed;
+      }
+      .filter-bar {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 14px;
+        flex-wrap: wrap;
+      }
+      .filter-chip {
+        padding: 6px 14px;
+        border: 1px solid var(--bdr-m);
+        border-radius: 20px;
+        font-size: 12px;
+        color: var(--tx2);
+        cursor: pointer;
+        background: var(--srf);
+      }
+      .filter-chip.on,
+      .filter-chip:hover {
+        background: var(--srf2);
+        color: var(--tx1);
+      }
+      .search-inp {
+        padding: 7px 12px;
+        border: 1px solid var(--bdr-m);
+        border-radius: 20px;
+        background: var(--srf);
+        font-size: 12px;
+        font-family: var(--font);
+        color: var(--tx1);
+        width: 180px;
+      }
+      .search-inp:focus {
+        outline: none;
+        border-color: var(--blu-t);
+      }
+
+      /* modal */
+      .modal-ov {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        z-index: 100;
+        display: none;
+        align-items: center;
+        justify-content: center;
+      }
+      .modal-ov.on {
+        display: flex;
+      }
+      .modal-box {
+        background: var(--srf);
+        border-radius: var(--r3);
+        padding: 22px 24px;
+        width: 420px;
+        max-width: 95vw;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+      }
+      .mb-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--tx1);
+        margin-bottom: 4px;
+      }
+      .mb-sub {
+        font-size: 13px;
+        color: var(--tx3);
+        margin-bottom: 16px;
+        line-height: 1.5;
+      }
+      .f-lbl {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--tx2);
+        margin-bottom: 5px;
+      }
+      .f-inp {
+        width: 100%;
+        padding: 9px 12px;
+        border: 1.5px solid var(--bdr-m);
+        border-radius: var(--r2);
+        background: var(--srf);
+        color: var(--tx1);
+        font-size: 13px;
+        font-family: var(--font);
+        margin-bottom: 10px;
+      }
+      .f-inp:focus {
+        outline: none;
+        border-color: var(--blu-t);
+      }
+      .f-ta {
+        width: 100%;
+        padding: 9px 12px;
+        border: 1.5px solid var(--bdr-m);
+        border-radius: var(--r2);
+        background: var(--srf);
+        color: var(--tx1);
+        font-size: 13px;
+        font-family: var(--font);
+        margin-bottom: 10px;
+        resize: none;
+        height: 70px;
+      }
+      .f-ta:focus {
+        outline: none;
+        border-color: var(--blu-t);
+      }
+      .f-sel {
+        width: 100%;
+        padding: 9px 12px;
+        border: 1.5px solid var(--bdr-m);
+        border-radius: var(--r2);
+        background: var(--srf);
+        color: var(--tx1);
+        font-size: 13px;
+        font-family: var(--font);
+        margin-bottom: 10px;
+      }
+      .mb-btns {
+        display: flex;
+        gap: 8px;
+        margin-top: 4px;
+      }
+      .mb-cancel {
+        flex: 1;
+        padding: 10px;
+        border: 1.5px solid var(--bdr-m);
+        border-radius: var(--r2);
+        background: var(--srf);
+        color: var(--tx2);
+        font-size: 13px;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .mb-save {
+        flex: 2;
+        padding: 10px;
+        border: none;
+        border-radius: var(--r2);
+        background: var(--blu-t);
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .mb-save:hover {
+        background: var(--blu-d);
+      }
+      /* toast */
+      .toast {
+        position: fixed;
+        bottom: 22px;
+        right: 22px;
+        background: var(--grn-d);
+        color: #fff;
+        padding: 10px 16px;
+        border-radius: var(--r2);
+        font-size: 13px;
+        font-weight: 600;
+        display: none;
+        z-index: 200;
+        align-items: center;
+        gap: 7px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+      }
+      .toast.on {
+        display: flex;
+      }
+      /* ins */
+      .ins {
+        font-size: 12px;
+        padding: 8px 11px;
+        border-radius: var(--r1);
+        display: flex;
+        align-items: flex-start;
+        gap: 7px;
+        line-height: 1.55;
+        margin-top: 9px;
+      }
+      .ins svg {
+        width: 13px;
+        height: 13px;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .ins-a {
+        background: var(--amb-l);
+        color: var(--amb-t);
+      }
+      .ins-b {
+        background: var(--blu-l);
+        color: var(--blu-t);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- SIDEBAR -->
+      <div class="sb">
+        <div class="sb-logo">
+          <div class="logo-ic">
+            <svg viewBox="0 0 16 16" fill="none" width="15" height="15">
+              <path
+                d="M3 8a5 5 0 1010 0A5 5 0 003 8z"
+                fill="white"
+                opacity="0.25"
+              />
+              <path
+                d="M8 5v3l2 2"
+                stroke="white"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+          <div>
+            <div style="font-size: 14px; font-weight: 700; color: var(--tx1)">
+              SponzoBD
+            </div>
+            <div style="font-size: 10px; color: var(--tx3)">Sponsor portal</div>
+          </div>
+        </div>
+        <div class="sb-user">
+          <div class="av-s">GF</div>
+          <div>
+            <div class="u-name">GreenFresh BD</div>
+            <div class="u-sub">Food & beverage · New</div>
+            <div class="u-plan">
+              <span class="pdot"></span>Profile incomplete
+            </div>
+          </div>
+        </div>
+        <nav class="nav">
+          <div class="nav-sec">Main</div>
+          <div class="ni on">
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <path
+                d="M1.5 6.5L7.5 1.5L13.5 6.5V13H9.5V9.5H5.5V13H1.5V6.5Z"
+              /></svg
+            >Brand profile
+          </div>
+          <div class="ni" style="opacity: 0.4">
+            <svg viewBox="0 0 15 15" fill="currentColor">
+              <rect x="1" y="1" width="5" height="5" rx="1" />
+              <rect x="9" y="1" width="5" height="5" rx="1" />
+              <rect x="1" y="9" width="5" height="5" rx="1" />
+              <rect x="9" y="9" width="5" height="5" rx="1" /></svg
+            >Dashboard<svg
+              class="ni-lock"
+              viewBox="0 0 12 12"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.2"
+            >
+              <rect x="2.5" y="5" width="7" height="5.5" rx="1" />
+              <path d="M4 5V3.5a2 2 0 114 0V5" />
+            </svg>
+          </div>
+          <div class="ni" onclick="switchTab('campaigns', this)">
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <rect x="1.5" y="2.5" width="12" height="10" rx="1.5" />
+              <path d="M5 6h5M5 9h3" /></svg
+            >My campaigns
+          </div>
+          <div class="ni" onclick="switchTab('creators', this)">
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <circle cx="5.5" cy="5" r="2.5" />
+              <path d="M1 12c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4" />
+              <path d="M11 7l2 2 2-3" stroke-width="1.4" /></svg
+            >Browse creators
+          </div>
+          <div class="ni" style="opacity: 0.4">
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <path d="M2 2h11v8H8l-3 2.5V10H2V2z" /></svg
+            >Messages<svg
+              class="ni-lock"
+              viewBox="0 0 12 12"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.2"
+            >
+              <rect x="2.5" y="5" width="7" height="5.5" rx="1" />
+              <path d="M4 5V3.5a2 2 0 114 0V5" />
+            </svg>
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'sponsor_brand_settings (4).html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <circle cx="7.5" cy="7.5" r="2" />
+              <path
+                d="M7.5 1v1M7.5 13v1M1 7.5h1M13 7.5h1M3 3l.7.7M11.3 11.3l.7.7M3 12l.7-.7M11.3 3.7l.7-.7"
+              /></svg
+            >Brand settings
+          </div>
+        </nav>
+        <div class="sb-tier">
+          <div class="st-lbl">Complete your profile</div>
+          <div class="st-note">
+            Add brand page URL + verify to post campaigns and receive
+            applications.
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN -->
+      <div class="main">
+        <div class="topbar">
+          <div class="tb-t" id="tb-t">Brand profile</div>
+          <div class="tb-r">
+            <span class="badge-incomplete" id="topbar-badge"
+              >Profile 30% complete</span
+            >
+            <button
+              style="
+                padding: 7px 14px;
+                background: var(--red);
+                border: none;
+                border-radius: var(--r1);
+                color: #fff;
+                font-size: 12px;
+                font-weight: 700;
+                cursor: pointer;
+                font-family: var(--font);
+              "
+              onclick="openModal('desc')"
+            >
+              Complete profile
+            </button>
+          </div>
+        </div>
+
+        <!-- PAGE TABS -->
+        <div class="page-tabs">
+          <div class="tab on" id="tab-brand" onclick="switchTab('brand', this)">
+            Brand profile
+          </div>
+          <div
+            class="tab"
+            id="tab-campaigns"
+            onclick="switchTab('campaigns', this)"
+          >
+            My campaigns
+            <span
+              style="
+                font-size: 10px;
+                padding: 1px 7px;
+                border-radius: 20px;
+                background: var(--srf2);
+                color: var(--tx3);
+                font-weight: 700;
+                margin-left: 4px;
+              "
+              >0 posted</span
+            >
+          </div>
+          <div
+            class="tab"
+            id="tab-creators"
+            onclick="switchTab('creators', this)"
+          >
+            Browse creators
+            <span
+              style="
+                font-size: 10px;
+                padding: 1px 7px;
+                border-radius: 20px;
+                background: var(--grn-l);
+                color: var(--grn-3);
+                font-weight: 700;
+                margin-left: 4px;
+              "
+              >350K+</span
+            >
+          </div>
+        </div>
+
+        <!-- ══ BRAND PROFILE PAGE ══ -->
+        <div class="page on" id="page-brand">
+          <!-- COMPLETION BANNER -->
+          <div class="comp-banner" id="comp-banner">
+            <div style="display: flex; align-items: flex-start; gap: 10px">
+              <div class="cb-icon">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                  <circle cx="6.5" cy="6.5" r="5.5" fill="var(--amb-d)" />
+                  <path
+                    d="M6.5 4v3.5M6.5 9v.5"
+                    stroke="#fff"
+                    stroke-width="1.2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="cb-text">
+                  <b>Profile 30% complete.</b> Add your brand description and
+                  page URL, then verify it to unlock campaign posting.
+                </div>
+                <div class="cb-steps">
+                  <span class="cs cs-done">✓ Phone verified</span>
+                  <span class="cs cs-done">✓ Industry set</span>
+                  <span class="cs cs-done">✓ Budget set</span>
+                  <span class="cs cs-todo" onclick="openModal('desc')"
+                    >+ Brand description</span
+                  >
+                  <span class="cs cs-todo" onclick="openModal('url')"
+                    >+ Brand page URL</span
+                  >
+                  <span class="cs cs-todo" onclick="openModal('verify')"
+                    >+ Verify brand page</span
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="cb-bar-wrap">
+              <div class="cb-track">
+                <div class="cb-fill" id="cb-fill" style="width: 30%"></div>
+              </div>
+              <div class="cb-pct" id="cb-pct">30%</div>
+            </div>
+          </div>
+
+          <!-- COVER -->
+          <div class="cover">
+            <div class="cover-stripe"></div>
+            <div class="cover-edit">
+              <svg
+                width="11"
+                height="11"
+                viewBox="0 0 12 12"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.3"
+              >
+                <path d="M8.5 1.5l2 2L4 10H2v-2L8.5 1.5z" /></svg
+              >Change cover
+            </div>
+          </div>
+
+          <!-- IDENTITY -->
+          <div class="identity-wrap">
+            <div class="iw-row">
+              <div class="brand-av">GF</div>
+              <div style="flex: 1; min-width: 0; padding-bottom: 4px">
+                <div class="brand-name-t">GreenFresh BD</div>
+                <div class="brand-sub" id="brand-sub">
+                  Food & beverage · Dhaka · New sponsor
+                </div>
+              </div>
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  align-items: flex-end;
+                  gap: 5px;
+                  padding-bottom: 4px;
+                "
+              >
+                <div
+                  style="
+                    font-size: 11px;
+                    padding: 3px 10px;
+                    border-radius: 20px;
+                    background: var(--srf2);
+                    color: var(--tx3);
+                    font-weight: 600;
+                  "
+                >
+                  New sponsor
+                </div>
+                <div style="font-size: 11px; color: var(--tx3)">
+                  Member since Mar 2025
+                </div>
+                <button
+                  style="
+                    padding: 5px 12px;
+                    border: 1px solid var(--bdr-m);
+                    border-radius: var(--r1);
+                    background: transparent;
+                    color: var(--tx2);
+                    font-size: 11px;
+                    cursor: pointer;
+                    font-family: var(--font);
+                  "
+                  onclick="openModal('desc')"
+                >
+                  Edit profile
+                </button>
+              </div>
+            </div>
+            <div class="iw-meta" id="iw-meta">
+              <div class="iw-m">
+                <svg
+                  viewBox="0 0 12 12"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.2"
+                >
+                  <rect x="1.5" y="2" width="9" height="8" rx="1" />
+                  <path d="M4 2V1M8 2V1M1.5 5h9" /></svg
+                >Member since Mar 2025
+              </div>
+              <div
+                class="iw-m"
+                id="url-meta"
+                onclick="openModal('url')"
+                style="cursor: pointer; font-style: italic"
+              >
+                Brand page URL not set — click to add
+              </div>
+              <div class="iw-m" id="budget-meta">
+                Budget: Under ৳20,000 per campaign
+              </div>
+            </div>
+          </div>
+
+          <!-- BADGES STRIP -->
+          <div class="badges-strip">
+            <div class="badge">
+              <svg viewBox="0 0 12 12" fill="none">
+                <circle cx="6" cy="6" r="5" fill="#C0DD97" />
+                <path
+                  d="M3.5 6l2 2L8.5 4"
+                  stroke="#27500A"
+                  stroke-width="1.3"
+                  stroke-linecap="round"
+                /></svg
+              >Phone verified
+            </div>
+            <div class="badge-empty" onclick="openModal('verify')">
+              <svg viewBox="0 0 12 12" fill="none" width="11" height="11">
+                <circle
+                  cx="6"
+                  cy="6"
+                  r="5"
+                  stroke="var(--bdr-m)"
+                  stroke-width="1.2"
+                />
+                <path
+                  d="M6 3.5v5M3.5 6h5"
+                  stroke="var(--tx3)"
+                  stroke-width="1.2"
+                  stroke-linecap="round"
+                />
+              </svg>
+              + Verify brand page
+            </div>
+            <div class="badge-empty" onclick="openModal('escrow')">
+              <svg viewBox="0 0 12 12" fill="none" width="11" height="11">
+                <circle
+                  cx="6"
+                  cy="6"
+                  r="5"
+                  stroke="var(--bdr-m)"
+                  stroke-width="1.2"
+                />
+                <path
+                  d="M6 3.5v5M3.5 6h5"
+                  stroke="var(--tx3)"
+                  stroke-width="1.2"
+                  stroke-linecap="round"
+                />
+              </svg>
+              + Escrow verified
+            </div>
+            <div style="font-size: 11px; color: var(--tx3); padding: 5px 0">
+              0 campaigns · 0 deals completed
+            </div>
+          </div>
+
+          <!-- STATS BAR -->
+          <div class="stats-bar">
+            <div class="sb-item">
+              <div class="sb-v empty">0</div>
+              <div class="sb-l">Campaigns posted</div>
+              <div
+                class="sb-add"
+                onclick="
+                  switchTab(
+                    'campaigns',
+                    document.getElementById('tab-campaigns'),
+                  )
+                "
+              >
+                + Post first campaign
+              </div>
+            </div>
+            <div class="sb-item">
+              <div class="sb-v empty">—</div>
+              <div class="sb-l">Deals completed</div>
+              <div class="sb-n na">After first deal</div>
+            </div>
+            <div class="sb-item">
+              <div class="sb-v empty">—</div>
+              <div class="sb-l">Avg creator rating</div>
+              <div class="sb-n na">How creators rate you</div>
+            </div>
+            <div class="sb-item">
+              <div class="sb-v empty">৳0</div>
+              <div class="sb-l">Total spend</div>
+              <div class="sb-n na">Via SponzoBD escrow</div>
+            </div>
+          </div>
+
+          <!-- PROFILE GRID -->
+          <div class="profile-grid">
+            <!-- LEFT -->
+            <div>
+              <!-- Brand description — EMPTY -->
+              <div
+                class="panel empty"
+                onclick="openModal('desc')"
+                style="cursor: pointer; margin-bottom: 11px"
+              >
+                <div class="ph">
+                  <div class="pt">Brand description</div>
+                  <div class="pe-add">
+                    <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                      <path
+                        d="M5.5 1v9M1 5.5h9"
+                        stroke="var(--red)"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                      /></svg
+                    >Add
+                  </div>
+                </div>
+                <div class="es">
+                  <div class="es-ic">
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 18 18"
+                      fill="none"
+                      stroke="var(--tx3)"
+                      stroke-width="1.2"
+                    >
+                      <path d="M3 5h12M3 8h12M3 11h8" />
+                    </svg>
+                  </div>
+                  <div class="es-t">No brand description yet</div>
+                  <div class="es-s">
+                    Tell creators what your brand does and who you are
+                    targeting. They read this before applying.
+                  </div>
+                  <button
+                    class="es-btn"
+                    onclick="
+                      event.stopPropagation();
+                      openModal('desc');
+                    "
+                  >
+                    Write description →
+                  </button>
+                  <div class="es-why">
+                    Brands with descriptions get <b>4× more</b> quality
+                    applications
+                  </div>
+                </div>
+              </div>
+
+              <!-- Brand page URL — EMPTY and REQUIRED -->
+              <div class="panel empty" style="margin-bottom: 11px">
+                <div class="ph">
+                  <div class="pt">Brand page</div>
+                  <div class="pe-add" onclick="openModal('url')">
+                    <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                      <path
+                        d="M5.5 1v9M1 5.5h9"
+                        stroke="var(--red)"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                      /></svg
+                    >Add page URL
+                  </div>
+                </div>
+                <div class="es">
+                  <div class="es-ic">
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 18 18"
+                      fill="none"
+                      stroke="var(--tx3)"
+                      stroke-width="1.2"
+                    >
+                      <rect x="2" y="2" width="14" height="14" rx="2" />
+                      <path d="M2 7h14M7 2v14" />
+                    </svg>
+                  </div>
+                  <div class="es-t">No brand page linked</div>
+                  <div class="es-s">
+                    Add your Facebook page or Instagram business handle.
+                    Required before you can post campaigns.
+                  </div>
+                  <button class="es-btn" onclick="openModal('url')">
+                    Add brand page →
+                  </button>
+                  <div class="es-why">
+                    <b>Required to post campaigns.</b> Creators verify brand
+                    legitimacy through this page.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Target audience — partial -->
+              <div class="panel" style="margin-bottom: 0">
+                <div class="ph">
+                  <div class="pt">Target audience</div>
+                  <div class="pe" onclick="openModal('audience')">Edit</div>
+                </div>
+                <div
+                  style="font-size: 11px; color: var(--tx3); margin-bottom: 6px"
+                >
+                  Budget range (set at signup)
+                </div>
+                <div style="margin-bottom: 11px">
+                  <span
+                    style="
+                      font-size: 12px;
+                      padding: 4px 12px;
+                      border-radius: 20px;
+                      background: var(--blu-l);
+                      color: var(--blu-t);
+                      font-weight: 700;
+                    "
+                    >Under ৳20,000 per campaign</span
+                  >
+                </div>
+                <div class="divider"></div>
+                <div
+                  style="font-size: 11px; color: var(--tx3); margin-bottom: 6px"
+                >
+                  Preferred platforms
+                </div>
+                <div class="inline-empty" onclick="openModal('audience')">
+                  <div class="ie-t">+ Set platform preferences</div>
+                  <div class="ie-s">Instagram, TikTok, YouTube, Facebook</div>
+                </div>
+                <div class="divider"></div>
+                <div
+                  style="font-size: 11px; color: var(--tx3); margin-bottom: 6px"
+                >
+                  Target age & location
+                </div>
+                <div class="inline-empty" onclick="openModal('audience')">
+                  <div class="ie-t">+ Set audience targeting</div>
+                  <div class="ie-s">Age range, gender skew, city focus</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT -->
+            <div>
+              <!-- Industry set -->
+              <div class="panel" style="margin-bottom: 11px">
+                <div class="ph">
+                  <div class="pt">Industry & category</div>
+                  <div class="pe" onclick="openModal('industry')">Edit</div>
+                </div>
+                <div style="margin-bottom: 8px">
+                  <span
+                    style="
+                      font-size: 12px;
+                      padding: 4px 12px;
+                      border-radius: 20px;
+                      background: var(--grn-l);
+                      color: var(--grn-3);
+                      font-weight: 700;
+                    "
+                    >Food & beverage</span
+                  >
+                </div>
+                <div style="font-size: 11px; color: var(--tx3)">
+                  Campaign categories — help creators understand what you sell
+                </div>
+                <div
+                  class="inline-empty"
+                  style="margin-top: 8px"
+                  onclick="openModal('industry')"
+                >
+                  <div class="ie-t">+ Add campaign categories</div>
+                  <div class="ie-s">
+                    e.g. Organic food, Healthy snacks, Beverages
+                  </div>
+                </div>
+              </div>
+
+              <!-- Verification status -->
+              <div class="panel" style="margin-bottom: 11px">
+                <div class="ph"><div class="pt">Verification status</div></div>
+                <div style="display: flex; flex-direction: column; gap: 8px">
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                      padding: 7px 0;
+                      border-bottom: 1px solid var(--bdr);
+                      font-size: 12px;
+                    "
+                  >
+                    <span style="color: var(--tx2)">Phone</span>
+                    <span
+                      style="
+                        font-size: 11px;
+                        padding: 2px 8px;
+                        border-radius: 20px;
+                        background: var(--grn-l);
+                        color: var(--grn-3);
+                        font-weight: 600;
+                      "
+                      >✓ Verified</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                      padding: 7px 0;
+                      border-bottom: 1px solid var(--bdr);
+                      font-size: 12px;
+                    "
+                  >
+                    <span style="color: var(--tx2)">Brand page</span>
+                    <button
+                      style="
+                        font-size: 11px;
+                        padding: 2px 10px;
+                        border-radius: 20px;
+                        background: var(--red-l);
+                        color: var(--red);
+                        font-weight: 600;
+                        border: none;
+                        cursor: pointer;
+                        font-family: var(--font);
+                      "
+                      onclick="openModal('verify')"
+                    >
+                      Verify →
+                    </button>
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                      padding: 7px 0;
+                      border-bottom: 1px solid var(--bdr);
+                      font-size: 12px;
+                    "
+                  >
+                    <span style="color: var(--tx2)">Escrow account</span>
+                    <button
+                      style="
+                        font-size: 11px;
+                        padding: 2px 10px;
+                        border-radius: 20px;
+                        background: var(--srf2);
+                        color: var(--tx3);
+                        font-weight: 600;
+                        border: none;
+                        cursor: pointer;
+                        font-family: var(--font);
+                      "
+                      onclick="openModal('escrow')"
+                    >
+                      Set up →
+                    </button>
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                      padding: 7px 0;
+                      font-size: 12px;
+                    "
+                  >
+                    <span style="color: var(--tx2)">Trade licence</span>
+                    <span style="font-size: 11px; color: var(--tx3)"
+                      >Required before first escrow</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <!-- Contact person -->
+              <div class="panel empty">
+                <div class="ph">
+                  <div class="pt">Contact person</div>
+                  <div class="pe-add" onclick="openModal('contact')">
+                    <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                      <path
+                        d="M5.5 1v9M1 5.5h9"
+                        stroke="var(--red)"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                      /></svg
+                    >Add
+                  </div>
+                </div>
+                <div class="inline-empty" onclick="openModal('contact')">
+                  <div class="ie-t">+ Add authorised contact person</div>
+                  <div class="ie-s">
+                    Name and designation — stored internally only
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ CAMPAIGNS PAGE ══ -->
+        <div class="page" id="page-campaigns">
+          <div style="padding: 16px 22px">
+            <!-- post campaign CTA -->
+            <div
+              style="
+                background: var(--blu-d);
+                border-radius: var(--r3);
+                padding: 20px 22px;
+                margin-bottom: 16px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 16px;
+                position: relative;
+                overflow: hidden;
+              "
+            >
+              <div
+                style="
+                  position: absolute;
+                  inset: 0;
+                  background: radial-gradient(
+                    ellipse at 80% 50%,
+                    rgba(181, 212, 244, 0.12) 0%,
+                    transparent 60%
+                  );
+                "
+              ></div>
+              <div>
+                <div
+                  style="
+                    font-size: 16px;
+                    font-weight: 700;
+                    color: #fff;
+                    margin-bottom: 4px;
+                  "
+                >
+                  Post your first campaign
+                </div>
+                <div
+                  style="
+                    font-size: 13px;
+                    color: rgba(255, 255, 255, 0.6);
+                    margin-bottom: 10px;
+                  "
+                >
+                  Set your brief, budget, and target creator profile. Compatible
+                  creators apply directly.
+                </div>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap">
+                  <span class="cs cs-done">✓ Phone verified</span>
+                  <span
+                    class="cs cs-todo"
+                    style="cursor: pointer"
+                    onclick="
+                      switchTab('brand', document.getElementById('tab-brand'));
+                      openModal('url');
+                    "
+                    >+ Brand page URL required</span
+                  >
+                  <span
+                    class="cs cs-todo"
+                    style="cursor: pointer"
+                    onclick="
+                      switchTab('brand', document.getElementById('tab-brand'));
+                      openModal('verify');
+                    "
+                    >+ Brand verification required</span
+                  >
+                </div>
+              </div>
+              <button
+                style="
+                  padding: 11px 22px;
+                  background: var(--red);
+                  border: none;
+                  border-radius: var(--r2);
+                  color: #fff;
+                  font-size: 14px;
+                  font-weight: 700;
+                  cursor: pointer;
+                  font-family: var(--font);
+                  flex-shrink: 0;
+                "
+                onclick="
+                  T(
+                    'Complete brand page URL and verification first to post a campaign',
+                  )
+                "
+              >
+                Post campaign
+              </button>
+            </div>
+
+            <!-- empty state -->
+            <div
+              style="
+                background: var(--srf);
+                border: 1.5px dashed var(--bdr-m);
+                border-radius: var(--r3);
+                padding: 40px 24px;
+                text-align: center;
+              "
+            >
+              <svg
+                width="40"
+                height="40"
+                viewBox="0 0 40 40"
+                fill="none"
+                stroke="var(--tx3)"
+                stroke-width="1.2"
+                opacity=".4"
+                style="margin-bottom: 12px"
+              >
+                <rect x="4" y="6" width="32" height="28" rx="3" />
+                <path d="M13 14h14M13 20h14M13 26h8" />
+              </svg>
+              <div
+                style="
+                  font-size: 15px;
+                  font-weight: 700;
+                  color: var(--tx1);
+                  margin-bottom: 6px;
+                "
+              >
+                No campaigns yet
+              </div>
+              <div
+                style="
+                  font-size: 13px;
+                  color: var(--tx3);
+                  margin-bottom: 16px;
+                  line-height: 1.6;
+                  max-width: 320px;
+                  margin-left: auto;
+                  margin-right: auto;
+                "
+              >
+                Complete your brand profile to post your first campaign.
+                Verified brands receive significantly more quality applications.
+              </div>
+              <button
+                style="
+                  padding: 9px 20px;
+                  background: var(--red);
+                  border: none;
+                  border-radius: var(--r2);
+                  color: #fff;
+                  font-size: 13px;
+                  font-weight: 700;
+                  cursor: pointer;
+                  font-family: var(--font);
+                "
+                onclick="
+                  switchTab('brand', document.getElementById('tab-brand'))
+                "
+              >
+                Complete brand profile →
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ CREATORS PAGE ══ -->
+        <div class="page" id="page-creators">
+          <div class="creators-page">
+            <!-- locked banner — can browse, cannot contact -->
+            <div class="locked-banner">
+              <div class="lb-left">
+                <div class="lb-icon">
+                  <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+                    <rect
+                      x="2.5"
+                      y="6.5"
+                      width="10"
+                      height="7"
+                      rx="1.5"
+                      fill="var(--amb-d)"
+                    />
+                    <path
+                      d="M5 6.5V4.5a2.5 2.5 0 015 0v2"
+                      stroke="var(--amb-d)"
+                      stroke-width="1.4"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <div class="lb-t">
+                    You can browse creators — but cannot post campaigns or
+                    contact them until your brand page is verified
+                  </div>
+                  <div class="lb-steps">
+                    <span class="ls-done">✓ Phone verified</span>
+                    <span class="ls-done">✓ Industry & budget set</span>
+                    <span
+                      class="ls-todo"
+                      onclick="
+                        switchTab(
+                          'brand',
+                          document.getElementById('tab-brand'),
+                        );
+                        openModal('url');
+                      "
+                      >+ Add brand page URL</span
+                    >
+                    <span
+                      class="ls-todo"
+                      onclick="
+                        switchTab(
+                          'brand',
+                          document.getElementById('tab-brand'),
+                        );
+                        openModal('verify');
+                      "
+                      >+ Verify brand page</span
+                    >
+                  </div>
+                </div>
+              </div>
+              <button
+                class="lb-btn"
+                onclick="
+                  switchTab('brand', document.getElementById('tab-brand'))
+                "
+              >
+                Complete profile →
+              </button>
+            </div>
+
+            <div class="filter-bar">
+              <input
+                class="search-inp"
+                type="text"
+                placeholder="Search creators..."
+              />
+              <div class="filter-chip on">All niches</div>
+              <div class="filter-chip">Health</div>
+              <div class="filter-chip">Food</div>
+              <div class="filter-chip">Fashion</div>
+              <div class="filter-chip">Top rated ↑</div>
+            </div>
+
+            <!-- Creator cards — all visible, post campaign locked -->
+            <div class="creator-card">
+              <div class="cc-header">
+                <div
+                  class="cc-av"
+                  style="background: var(--teal-m); color: var(--grn-d)"
+                >
+                  LA
+                </div>
+                <div class="cc-info">
+                  <div class="cc-name">Lamia Akter</div>
+                  <div class="cc-niche">
+                    Health & wellness · Dhaka · @lamia.wellness
+                  </div>
+                </div>
+                <div class="cc-right-top">
+                  <div class="compat-badge compat-strong">Strong match</div>
+                  <div
+                    style="font-size: 11px; color: var(--tx3); margin-top: 4px"
+                  >
+                    Based on your industry
+                  </div>
+                </div>
+              </div>
+              <div class="cc-stats">
+                <div class="cc-stat">
+                  <div class="cc-stat-v">52K</div>
+                  <div class="cc-stat-l">Followers</div>
+                </div>
+                <div class="cc-stat">
+                  <div class="cc-stat-v">4.8%</div>
+                  <div class="cc-stat-l">Engagement</div>
+                </div>
+                <div class="cc-stat">
+                  <div class="cc-stat-v">7</div>
+                  <div class="cc-stat-l">Deals done</div>
+                </div>
+                <div class="cc-stat">
+                  <div class="cc-stat-v">4.8★</div>
+                  <div class="cc-stat-l">Avg rating</div>
+                </div>
+              </div>
+              <div class="cc-tags">
+                <span class="cc-tag">Health & wellness</span
+                ><span class="cc-tag">Instagram</span
+                ><span class="cc-tag">TikTok</span
+                ><span class="cc-tag">Bangla & English</span
+                ><span class="cc-tag">Dhaka</span>
+              </div>
+              <div class="ins ins-b" style="margin-bottom: 9px">
+                <svg viewBox="0 0 14 14" fill="none">
+                  <circle cx="7" cy="7" r="6" fill="var(--blu-m)" />
+                  <path
+                    d="M7 5v4M7 4v.5"
+                    stroke="var(--blu-t)"
+                    stroke-width="1.2"
+                    stroke-linecap="round"
+                  /></svg
+                >You can view her full profile. To run a campaign with her,
+                complete your brand verification and post a campaign — she can
+                then apply.
+              </div>
+              <div class="cc-footer">
+                <div class="cc-meta">Rates from ৳18,000 · 7 deals verified</div>
+                <div style="display: flex; gap: 8px">
+                  <button
+                    class="view-btn"
+                    onclick="T('Opening Lamia\'s full profile...')"
+                  >
+                    View profile
+                  </button>
+                  <button
+                    class="post-btn locked"
+                    onclick="
+                      T(
+                        'Complete brand verification to post a campaign and receive applications',
+                      )
+                    "
+                  >
+                    Post campaign
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="creator-card">
+              <div class="cc-header">
+                <div
+                  class="cc-av"
+                  style="background: var(--amb-l); color: var(--amb-d)"
+                >
+                  RK
+                </div>
+                <div class="cc-info">
+                  <div class="cc-name">Rafi Khan</div>
+                  <div class="cc-niche">
+                    Food & lifestyle · Dhaka · @rafikhan.food
+                  </div>
+                </div>
+                <div class="cc-right-top">
+                  <div class="compat-badge compat-strong">Strong match</div>
+                  <div
+                    style="font-size: 11px; color: var(--tx3); margin-top: 4px"
+                  >
+                    Perfect niche fit
+                  </div>
+                </div>
+              </div>
+              <div class="cc-stats">
+                <div class="cc-stat">
+                  <div class="cc-stat-v">28K</div>
+                  <div class="cc-stat-l">Followers</div>
+                </div>
+                <div class="cc-stat">
+                  <div class="cc-stat-v">3.9%</div>
+                  <div class="cc-stat-l">Engagement</div>
+                </div>
+                <div class="cc-stat">
+                  <div class="cc-stat-v">5</div>
+                  <div class="cc-stat-l">Deals done</div>
+                </div>
+                <div class="cc-stat">
+                  <div class="cc-stat-v">4.6★</div>
+                  <div class="cc-stat-l">Avg rating</div>
+                </div>
+              </div>
+              <div class="cc-tags">
+                <span class="cc-tag">Food & lifestyle</span
+                ><span class="cc-tag">TikTok</span
+                ><span class="cc-tag">Bangla</span
+                ><span class="cc-tag">Dhaka</span>
+              </div>
+              <div class="cc-footer">
+                <div class="cc-meta">Rates from ৳10,000 · 5 deals verified</div>
+                <div style="display: flex; gap: 8px">
+                  <button
+                    class="view-btn"
+                    onclick="T('Opening Rafi\'s full profile...')"
+                  >
+                    View profile
+                  </button>
+                  <button
+                    class="post-btn locked"
+                    onclick="
+                      T('Complete brand verification to post a campaign')
+                    "
+                  >
+                    Post campaign
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="creator-card">
+              <div class="cc-header">
+                <div
+                  class="cc-av"
+                  style="background: var(--grn-l); color: var(--grn-3)"
+                >
+                  FA
+                </div>
+                <div class="cc-info">
+                  <div class="cc-name">Faria Ahmed</div>
+                  <div class="cc-niche">
+                    Nutrition & wellness · Dhaka · @faria.health
+                  </div>
+                </div>
+                <div class="cc-right-top">
+                  <div class="compat-badge compat-good">Good match</div>
+                  <div
+                    style="font-size: 11px; color: var(--tx3); margin-top: 4px"
+                  >
+                    Health-adjacent
+                  </div>
+                </div>
+              </div>
+              <div class="cc-stats">
+                <div class="cc-stat">
+                  <div class="cc-stat-v">38K</div>
+                  <div class="cc-stat-l">Followers</div>
+                </div>
+                <div class="cc-stat">
+                  <div class="cc-stat-v">4.2%</div>
+                  <div class="cc-stat-l">Engagement</div>
+                </div>
+                <div class="cc-stat">
+                  <div class="cc-stat-v">4</div>
+                  <div class="cc-stat-l">Deals done</div>
+                </div>
+                <div class="cc-stat">
+                  <div class="cc-stat-v">4.5★</div>
+                  <div class="cc-stat-l">Avg rating</div>
+                </div>
+              </div>
+              <div class="cc-tags">
+                <span class="cc-tag">Nutrition</span
+                ><span class="cc-tag">Instagram</span
+                ><span class="cc-tag">Bangla & English</span
+                ><span class="cc-tag">Dhaka</span>
+              </div>
+              <div class="cc-footer">
+                <div class="cc-meta">Rates from ৳15,000 · 4 deals verified</div>
+                <div style="display: flex; gap: 8px">
+                  <button
+                    class="view-btn"
+                    onclick="T('Opening Faria\'s full profile...')"
+                  >
+                    View profile
+                  </button>
+                  <button
+                    class="post-btn locked"
+                    onclick="
+                      T('Complete brand verification to post a campaign')
+                    "
+                  >
+                    Post campaign
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div
+              style="
+                text-align: center;
+                padding: 14px 0 8px;
+                font-size: 12px;
+                color: var(--tx3);
+              "
+            >
+              Showing 3 of 350,000+ creators · Verify your brand to post
+              campaigns and receive applications
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL -->
+    <div
+      class="modal-ov"
+      id="modal-ov"
+      onclick="if (event.target === this) closeModal();"
+    >
+      <div class="modal-box" id="modal-box"></div>
+    </div>
+
+    <div class="toast" id="tst">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+        <path
+          d="M2 7l3 3 7-7"
+          stroke="white"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        /></svg
+      ><span id="tm"></span>
+    </div>
+
+    <script>
+      let progress = {
+        phone: true,
+        industry: true,
+        budget: true,
+        desc: false,
+        url: false,
+        verify: false,
+        contact: false,
+        audience: false,
+      };
+
+      function updateProgress() {
+        const total = Object.keys(progress).length;
+        const done = Object.values(progress).filter(Boolean).length;
+        const pct = Math.round((done / total) * 100);
+        document.getElementById("cb-fill").style.width = pct + "%";
+        document.getElementById("cb-pct").textContent = pct + "%";
+        document.getElementById("topbar-badge").textContent =
+          "Profile " + pct + "% complete";
+        document.getElementById("topbar-badge").style.background =
+          pct >= 70 ? "var(--grn-l)" : "var(--red-l)";
+        document.getElementById("topbar-badge").style.color =
+          pct >= 70 ? "var(--grn-3)" : "var(--red)";
+        const unlocked = progress.url && progress.verify;
+        if (unlocked) {
+          // hide comp banner
+          document.getElementById("comp-banner").style.display = "none";
+          // unlock post campaign buttons
+          document.querySelectorAll(".post-btn.locked").forEach((b) => {
+            b.classList.remove("locked");
+            b.onclick = function () {
+              T("Opening campaign creation form...");
+            };
+          });
+          // update locked banner in creators
+          const lb = document
+            .getElementById("page-creators")
+            ?.querySelector(".locked-banner");
+          if (lb) {
+            lb.style.background = "var(--grn-l)";
+            lb.style.borderColor = "var(--grn-m)";
+            lb.innerHTML =
+              '<div class="lb-left"><div class="lb-icon" style="background:var(--grn-m);"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 7-7" stroke="var(--grn-d)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="lb-t" style="color:var(--grn-d);">Brand verified · campaign posting unlocked!</div><div class="lb-s" style="color:var(--grn-3);">You can now post campaigns and creators can apply to them.</div></div></div><button style="padding:8px 16px;background:var(--grn);border:none;border-radius:var(--r1);color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font);" onclick="switchTab(\'campaigns\',document.getElementById(\'tab-campaigns\'))">Post campaign →</button>';
+          }
+          document.querySelector(".u-plan").innerHTML =
+            '<span class="pdot" style="background:var(--grn);"></span>Brand verified';
+          document.querySelector(".u-plan").style.color = "var(--grn-3)";
+          document.querySelector(".sb-tier").style.background = "var(--grn-l)";
+          document.querySelector(".sb-tier").style.borderColor = "var(--grn-m)";
+          document.querySelector(".sb-tier .st-lbl").style.color =
+            "var(--grn-3)";
+          document.querySelector(".sb-tier .st-lbl").textContent =
+            "Brand verified ✓";
+          document.querySelector(".sb-tier .st-note").textContent =
+            "You can now post campaigns and receive creator applications.";
+          document.querySelector(".sb-tier .st-note").style.color =
+            "var(--grn-t)";
+        }
+      }
+
+      const MODALS = {
+        desc: {
+          title: "Add brand description",
+          sub: "Tell creators what your brand does. They read this before applying to your campaigns.",
+          body: `<div class="f-lbl">Brand description</div><textarea class="f-ta" id="m-desc" style="height:80px;" placeholder="e.g. GreenFresh BD is a Dhaka-based organic food brand helping health-conscious Bangladeshis eat better since 2022. We sell via our website and partner retail stores across Dhaka and Chittagong."></textarea>`,
+        },
+        url: {
+          title: "Add brand page URL",
+          sub: "Required before posting campaigns. Creators check this to verify your brand is legitimate.",
+          body: `<div class="f-lbl">Facebook page URL or Instagram business handle</div><input class="f-inp" id="m-url" type="url" placeholder="facebook.com/greenfreshbd"><div style="font-size:11px;color:var(--tx3);margin-top:-5px;margin-bottom:10px;">Paste the full URL of your Facebook Business Page or Instagram business account.</div>`,
+        },
+        verify: {
+          title: "Verify your brand page",
+          sub: "Proves you control the brand page you have listed. Unlocks campaign posting.",
+          body: `<div style="background:var(--blu-l);border:1.5px solid var(--blu-m);border-radius:var(--r2);padding:14px 16px;margin-bottom:12px;"><div style="font-size:11px;font-weight:700;color:var(--blu-t);margin-bottom:7px;">Your verification code</div><div style="font-size:20px;font-weight:700;font-family:monospace;letter-spacing:.12em;color:var(--blu-d);margin-bottom:10px;">SBD-GF7X</div><div style="font-size:12px;color:var(--blu-t);line-height:1.65;">1. Open your Facebook page → Edit page info → About<br>2. Paste <strong>SBD-GF7X</strong> anywhere in About section and save<br>3. Click Verify below — then remove the code</div></div>`,
+        },
+        escrow: {
+          title: "Set up escrow payment method",
+          sub: "Required before funding your first deal. Choose how to deposit campaign funds.",
+          body: `<div class="f-lbl">Payment method</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;"><div style="padding:10px;border:1.5px solid var(--bdr-m);border-radius:var(--r2);cursor:pointer;text-align:center;" onclick="this.style.borderColor='var(--blu-t)';this.style.background='var(--blu-l)'"><div style="font-size:14px;font-weight:700;color:#E2136E;">bK</div><div style="font-size:12px;font-weight:600;color:var(--tx1);">bKash Business</div></div><div style="padding:10px;border:1.5px solid var(--bdr-m);border-radius:var(--r2);cursor:pointer;text-align:center;" onclick="this.style.borderColor='var(--blu-t)';this.style.background='var(--blu-l)'"><div style="font-size:14px;">🏦</div><div style="font-size:12px;font-weight:600;color:var(--tx1);">Bank transfer</div></div></div><div class="f-lbl">bKash Business number</div><input class="f-inp" placeholder="01XXXXXXXXX" type="tel">`,
+        },
+        contact: {
+          title: "Add authorised contact person",
+          sub: "Stored internally only — never shown publicly.",
+          body: `<div class="f-lbl">Full name</div><input class="f-inp" id="m-contact" placeholder="e.g. Rahim Ahmed"><div class="f-lbl">Designation</div><input class="f-inp" placeholder="e.g. Marketing Manager, Founder, CEO">`,
+        },
+        audience: {
+          title: "Set target audience preferences",
+          sub: "Improves compatibility matching with creators.",
+          body: `<div class="f-lbl">Target age range</div><select class="f-sel"><option>Any age</option><option>18–24</option><option>25–34</option><option>18–34</option><option>35+</option></select><div class="f-lbl">Primary location focus</div><select class="f-sel"><option>Nationwide</option><option>Dhaka only</option><option>Dhaka + Chittagong</option><option>Urban BD</option></select><div class="f-lbl">Preferred content language</div><select class="f-sel"><option>Bangla</option><option>English</option><option>Bangla & English</option></select>`,
+        },
+        industry: {
+          title: "Edit industry & category",
+          sub: "",
+          body: `<div class="f-lbl">Industry</div><select class="f-sel"><option>Food & beverage</option><option>Health & wellness</option><option>Fashion & beauty</option><option>Tech & gadgets</option><option>Education</option></select>`,
+        },
+      };
+
+      function openModal(key) {
+        const m = MODALS[key];
+        if (!m) return;
+        const box = document.getElementById("modal-box");
+        box.innerHTML =
+          '<div style="display:flex;justify-content:space-between;margin-bottom:4px;"><div class="mb-title">' +
+          m.title +
+          '</div><button onclick="closeModal()" style="background:none;border:none;cursor:pointer;color:var(--tx3);font-size:20px;line-height:1;">&times;</button></div>' +
+          (m.sub ? '<div class="mb-sub">' + m.sub + "</div>" : "") +
+          m.body +
+          '<div class="mb-btns"><button class="mb-cancel" onclick="closeModal()">Cancel</button><button class="mb-save" onclick="saveModal(\'' +
+          key +
+          "')\">Save →</button></div>";
+        document.getElementById("modal-ov").classList.add("on");
+      }
+      function closeModal() {
+        document.getElementById("modal-ov").classList.remove("on");
+      }
+
+      function saveModal(key) {
+        closeModal();
+        progress[key] = true;
+        updateProgress();
+        const msgs = {
+          desc: "Brand description saved",
+          url: "Brand page URL added",
+          verify: "Brand page verified · Identity Verified badge added",
+          escrow: "Escrow payment method saved",
+          contact: "Contact person saved",
+          audience: "Audience preferences saved",
+          industry: "Industry updated",
+        };
+        T(msgs[key] || "Saved");
+        // specific UI updates
+        if (key === "url") {
+          document.getElementById("url-meta").textContent = "Brand page linked";
+          document.getElementById("url-meta").style.fontStyle = "normal";
+          document.getElementById("url-meta").style.color = "var(--grn-3)";
+          // update badge empty to add verified option
+        }
+        if (key === "verify") {
+          // add verified badge
+          const strip = document.querySelector(".badges-strip");
+          const emptyBadge = strip.querySelector(".badge-empty");
+          if (emptyBadge) {
+            const nb = document.createElement("div");
+            nb.className = "badge";
+            nb.innerHTML =
+              '<svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" fill="#C0DD97"/><path d="M3.5 6l2 2L8.5 4" stroke="#27500A" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>Identity verified';
+            strip.insertBefore(nb, emptyBadge);
+            emptyBadge.remove();
+          }
+          // update verify status
+          const vRow = document.querySelectorAll(
+            '.panel .f-lbl, [style*="Brand page"]',
+          );
+          document
+            .querySelectorAll("[onclick*=\"openModal('verify')\"]")
+            .forEach((b) => {
+              b.style.background = "var(--grn-l)";
+              b.style.color = "var(--grn-3)";
+              b.textContent = "✓ Verified";
+              b.onclick = null;
+            });
+        }
+        if (key === "desc") {
+          // replace empty panel with text
+          const descPanel = document.querySelector(".panel.empty");
+          if (descPanel) {
+            descPanel.classList.remove("empty");
+            const val =
+              document.getElementById("m-desc")?.value ||
+              "GreenFresh BD is a Dhaka-based organic food brand.";
+            descPanel.innerHTML =
+              '<div class="ph"><div class="pt">Brand description</div><div class="pe" onclick="openModal(\'desc\')">Edit</div></div><p style="font-size:13px;color:var(--tx2);line-height:1.75;">' +
+              val +
+              "</p>";
+          }
+        }
+      }
+
+      function switchTab(id, el) {
+        document
+          .querySelectorAll(".tab")
+          .forEach((t) => t.classList.remove("on"));
+        document
+          .querySelectorAll(".page")
+          .forEach((p) => p.classList.remove("on"));
+        if (el) el.classList.add("on");
+        else document.getElementById("tab-" + id)?.classList.add("on");
+        document.getElementById("page-" + id).classList.add("on");
+        document.getElementById("tb-t").textContent =
+          {
+            brand: "Brand profile",
+            campaigns: "My campaigns",
+            creators: "Browse creators",
+          }[id] || id;
+        document
+          .querySelectorAll(".ni.on")
+          .forEach((n) => n.classList.remove("on"));
+        const niMap = { brand: 0, campaigns: 2, creators: 3 };
+        document.querySelectorAll(".ni")[niMap[id]]?.classList.add("on");
+      }
+
+      function T(m) {
+        const t = document.getElementById("tst");
+        document.getElementById("tm").textContent = m;
+        t.classList.add("on");
+        setTimeout(() => t.classList.remove("on"), 2800);
+      }
+    </script>
+  </body>
+</html>

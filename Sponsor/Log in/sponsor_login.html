@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SponzoBD — Sponsor Login</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --red:#E24B4A;--red-l:#FCEBEB;--red-m:#F7C1C1;
+  --grn:#1D9E75;--grn-l:#EAF3DE;--grn-m:#C0DD97;--grn-d:#085041;--grn-3:#3B6D11;
+  --teal-l:#E1F5EE;--teal-m:#9FE1CB;
+  --blu-l:#E6F1FB;--blu-m:#B5D4F4;--blu-t:#0C447C;--blu-d:#042C53;
+  --amb-l:#FAEEDA;--amb-m:#FAC775;--amb-t:#633806;
+  --bg:#F4F2EE;--srf:#FFFFFF;--srf2:#F0EEE9;
+  --bdr:rgba(0,0,0,.09);--bdr-m:rgba(0,0,0,.15);
+  --tx1:#1A1A1A;--tx2:#555;--tx3:#999;
+  --font:'DM Sans',system-ui,sans-serif;
+  --r1:7px;--r2:10px;--r3:14px;
+}
+html,body{min-height:100vh;font-family:var(--font);background:var(--bg);color:var(--tx1);}
+.page{display:flex;min-height:100vh;}
+
+/* LEFT PANEL */
+.left{width:380px;flex-shrink:0;background:var(--blu-d);display:flex;flex-direction:column;justify-content:space-between;padding:40px 44px;position:relative;overflow:hidden;}
+.lp-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 20% 80%,rgba(12,68,124,.5) 0%,transparent 60%),radial-gradient(ellipse at 85% 10%,rgba(181,212,244,.1) 0%,transparent 50%);pointer-events:none;}
+.lp-logo{display:flex;align-items:center;gap:10px;margin-bottom:52px;}
+.lp-logo-ic{width:36px;height:36px;background:var(--red);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.lp-logo-name{font-size:20px;font-weight:700;color:#fff;letter-spacing:-.3px;}
+.lp-logo-sub{font-size:11px;color:rgba(255,255,255,.4);}
+.lp-title{font-size:28px;font-weight:700;color:#fff;line-height:1.25;letter-spacing:-.3px;margin-bottom:14px;}
+.lp-title span{color:var(--teal-m);}
+.lp-items{display:flex;flex-direction:column;gap:14px;margin-top:28px;}
+.lp-item{display:flex;align-items:center;gap:11px;}
+.lp-item-ic{width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.lp-item-t{font-size:13px;color:rgba(255,255,255,.7);}
+.lp-item-t b{color:#fff;}
+.lp-bottom{font-size:11px;color:rgba(255,255,255,.3);}
+.lp-bottom a{color:var(--teal-m);text-decoration:none;}
+
+/* RIGHT PANEL */
+.right{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 24px;}
+.login-box{width:100%;max-width:400px;}
+.lb-logo{display:flex;align-items:center;gap:8px;margin-bottom:32px;}
+.lb-logo-ic{width:32px;height:32px;background:var(--red);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.lb-logo-t{font-size:16px;font-weight:700;color:var(--tx1);}
+.lb-title{font-size:24px;font-weight:700;color:var(--tx1);letter-spacing:-.3px;margin-bottom:5px;}
+.lb-sub{font-size:13px;color:var(--tx3);margin-bottom:28px;}
+/* tabs */
+.method-tabs{display:flex;gap:0;background:var(--srf2);border-radius:var(--r2);padding:3px;margin-bottom:22px;}
+.mt{flex:1;padding:8px 14px;border-radius:var(--r1);font-size:13px;font-weight:500;color:var(--tx3);cursor:pointer;text-align:center;transition:all .12s;}
+.mt.on{background:var(--srf);color:var(--tx1);font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,.1);}
+/* form */
+.f-lbl{font-size:12px;font-weight:600;color:var(--tx2);margin-bottom:5px;}
+.field{margin-bottom:14px;}
+.f-inp{width:100%;padding:10px 13px;border:1.5px solid var(--bdr-m);border-radius:var(--r2);background:var(--srf);color:var(--tx1);font-size:14px;font-family:var(--font);transition:border-color .15s;}
+.f-inp:focus{outline:none;border-color:var(--blu-t);}
+.f-inp.ok{border-color:var(--grn-m);}
+.f-inp.err{border-color:var(--red);}
+.phone-wrap{display:flex;}
+.phone-pre{padding:10px 12px;border:1.5px solid var(--bdr-m);border-right:none;border-radius:var(--r2) 0 0 var(--r2);background:var(--srf2);font-size:14px;color:var(--tx2);white-space:nowrap;}
+.phone-inp{flex:1;padding:10px 13px;border:1.5px solid var(--bdr-m);border-radius:0 var(--r2) var(--r2) 0;background:var(--srf);color:var(--tx1);font-size:14px;font-family:var(--font);}
+.phone-inp:focus{outline:none;border-color:var(--blu-t);}
+.otp-row{display:flex;gap:8px;margin-top:11px;}
+.otp-inp{flex:1;padding:10px 13px;border:1.5px solid var(--bdr-m);border-radius:var(--r2);background:var(--srf);color:var(--tx1);font-size:14px;font-family:var(--font);letter-spacing:.2em;}
+.otp-inp:focus{outline:none;border-color:var(--blu-t);}
+.otp-send-btn{padding:10px 14px;border:1.5px solid var(--blu-m);border-radius:var(--r2);background:var(--blu-l);color:var(--blu-t);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font);white-space:nowrap;flex-shrink:0;}
+.otp-send-btn:hover{background:var(--blu-m);}
+.otp-send-btn:disabled{opacity:.5;cursor:default;}
+.pw-wrap{position:relative;}
+.pw-wrap .f-inp{padding-right:42px;}
+.pw-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--tx3);}
+.forgot{font-size:12px;color:var(--blu-t);cursor:pointer;text-align:right;margin-top:-8px;margin-bottom:16px;}
+.submit-btn{width:100%;padding:13px;background:var(--blu-t);border:none;border-radius:var(--r2);color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--font);margin-top:4px;transition:background .12s;}
+.submit-btn:hover{background:var(--blu-d);}
+.or-div{display:flex;align-items:center;gap:10px;margin:18px 0;font-size:12px;color:var(--tx3);}
+.or-div::before,.or-div::after{content:'';flex:1;height:1px;background:var(--bdr-m);}
+/* error state */
+.error-msg{background:var(--red-l);border:1px solid var(--red-m);border-radius:var(--r2);padding:9px 13px;font-size:12px;color:var(--red);display:none;margin-bottom:12px;font-weight:500;}
+/* otp verified */
+.otp-ok{display:none;align-items:center;gap:5px;font-size:12px;color:var(--grn-3);font-weight:600;padding:8px 0;}
+/* bottom links */
+.bottom-links{text-align:center;margin-top:20px;}
+.bl-row{font-size:13px;color:var(--tx3);margin-bottom:8px;}
+.bl-row a{color:var(--blu-t);font-weight:600;text-decoration:none;}
+.bl-row.signup a{color:var(--red);}
+/* brand badge on login page */
+.brand-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;background:var(--blu-l);color:var(--blu-t);font-size:12px;font-weight:600;border:1px solid var(--blu-m);margin-bottom:22px;}
+/* screen */
+.screen{display:none;}
+.screen.on{display:block;}
+/* login options */
+.login-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px;}
+.lo{padding:11px 14px;border:1.5px solid var(--bdr-m);border-radius:var(--r2);cursor:pointer;text-align:center;background:var(--srf);transition:all .12s;}
+.lo:hover{border-color:var(--blu-m);background:var(--blu-l);}
+.lo-icon{font-size:20px;margin-bottom:4px;}
+.lo-t{font-size:12px;font-weight:600;color:var(--tx1);}
+.lo-s{font-size:11px;color:var(--tx3);margin-top:2px;}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- LEFT PANEL -->
+<div class="left">
+  <div class="lp-bg"></div>
+  <div>
+    <div class="lp-logo">
+      <div class="lp-logo-ic"><svg viewBox="0 0 16 16" fill="none" width="18" height="18"><path d="M3 8a5 5 0 1010 0A5 5 0 003 8z" fill="white" opacity="0.3"/><path d="M8 5v3l2 2" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+      <div><div class="lp-logo-name">SponzoBD</div><div class="lp-logo-sub">Sponsor portal</div></div>
+    </div>
+    <div class="lp-title">Welcome back to <span>SponzoBD.</span></div>
+    <div style="font-size:13px;color:rgba(255,255,255,.55);margin-top:8px;line-height:1.7;">Your campaigns, creators, and deals are waiting.</div>
+    <div class="lp-items">
+      <div class="lp-item"><div class="lp-item-ic"><svg viewBox="0 0 15 15" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.3"><rect x="1.5" y="2.5" width="12" height="10" rx="1.5"/><path d="M5 6h5M5 9h3"/></svg></div><div class="lp-item-t">Live campaigns and <b>applicant review</b></div></div>
+      <div class="lp-item"><div class="lp-item-ic"><svg viewBox="0 0 15 15" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.3"><path d="M2 2h11v8H8l-3 2.5V10H2V2z"/></svg></div><div class="lp-item-t">Conversations and <b>active deals</b></div></div>
+      <div class="lp-item"><div class="lp-item-ic"><svg viewBox="0 0 15 15" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.3"><rect x="2" y="5" width="11" height="7.5" rx="1"/><path d="M5 5V3.5a2.5 2.5 0 115 0V5"/></svg></div><div class="lp-item-t">Escrow and <b>payment tracking</b></div></div>
+    </div>
+  </div>
+  <div class="lp-bottom">New here? <a href="sponsor_signup.html">Create a sponsor account →</a><br><br>© 2025 SponzoBD</div>
+</div>
+
+<!-- RIGHT PANEL -->
+<div class="right">
+  <div class="login-box">
+    <div class="lb-logo">
+      <div class="lb-logo-ic"><svg viewBox="0 0 16 16" fill="none" width="16" height="16"><path d="M3 8a5 5 0 1010 0A5 5 0 003 8z" fill="white" opacity="0.3"/><path d="M8 5v3l2 2" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+      <div class="lb-logo-t">SponzoBD</div>
+    </div>
+
+    <!-- METHOD PICKER — shown first -->
+    <div class="screen on" id="method-screen">
+      <div class="lb-title">Sign in to your account</div>
+      <div class="lb-sub">Sponsor portal — choose how to sign in</div>
+
+      <div class="login-opts">
+        <div class="lo" onclick="showMethod('otp')">
+          <div class="lo-icon">📱</div>
+          <div class="lo-t">Phone OTP</div>
+          <div class="lo-s">Send me a code</div>
+        </div>
+        <div class="lo" onclick="showMethod('pw')">
+          <div class="lo-icon">🔑</div>
+          <div class="lo-t">Email & password</div>
+          <div class="lo-s">Use my credentials</div>
+        </div>
+      </div>
+
+      <div class="or-div">or</div>
+
+      <div style="background:var(--srf2);border-radius:var(--r2);padding:12px 14px;font-size:12px;color:var(--tx3);line-height:1.6;">
+        <strong style="color:var(--tx2);">Tip:</strong> Phone OTP is the fastest way in — no password needed. We'll send a 6-digit code to your registered number.
+      </div>
+
+      <div class="bottom-links">
+        <div class="bl-row signup">New here? <a href="sponsor_signup.html">Create a sponsor account</a></div>
+        <div class="bl-row">Looking to earn as a creator? <a href="sponsee_signup.html" style="color:var(--grn-3);">Join as creator</a></div>
+      </div>
+    </div>
+
+    <!-- OTP METHOD -->
+    <div class="screen" id="otp-screen">
+      <button style="display:flex;align-items:center;gap:5px;font-size:13px;color:var(--tx3);cursor:pointer;background:none;border:none;font-family:var(--font);padding:0;margin-bottom:20px;" onclick="showMethod('pick')">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 2L5 7l4 5"/></svg>
+        Back
+      </button>
+      <div class="lb-title">Sign in with phone</div>
+      <div class="lb-sub">We'll send a 6-digit code to your registered phone number.</div>
+
+      <div class="error-msg" id="otp-err">Phone number not found. <a href="sponsor_signup.html" style="color:var(--red);font-weight:700;">Create an account →</a></div>
+
+      <div class="field">
+        <div class="f-lbl">Phone number</div>
+        <div class="phone-wrap">
+          <div class="phone-pre">🇧🇩 +880</div>
+          <input class="phone-inp" id="otp-phone" type="tel" placeholder="01XXXXXXXXX" maxlength="11">
+        </div>
+      </div>
+
+      <div class="otp-row" id="otp-code-row" style="display:none;margin-top:0;margin-bottom:14px;">
+        <input class="otp-inp" id="otp-code" type="text" placeholder="• • • • • •" maxlength="6">
+        <button class="otp-send-btn" disabled id="otp-resend" onclick="resendOTP2()">Resend</button>
+      </div>
+
+      <div class="otp-ok" id="otp-ok2"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" fill="#C0DD97"/><path d="M3.5 6.5l2 2L9.5 4" stroke="#27500A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Code verified · signing you in...</div>
+
+      <button class="submit-btn" id="otp-send-main" onclick="sendLoginOTP()">Send verification code</button>
+    </div>
+
+    <!-- PASSWORD METHOD -->
+    <div class="screen" id="pw-screen">
+      <button style="display:flex;align-items:center;gap:5px;font-size:13px;color:var(--tx3);cursor:pointer;background:none;border:none;font-family:var(--font);padding:0;margin-bottom:20px;" onclick="showMethod('pick')">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 2L5 7l4 5"/></svg>
+        Back
+      </button>
+      <div class="lb-title">Sign in with email</div>
+      <div class="lb-sub">Use the email and password from your signup.</div>
+
+      <div class="error-msg" id="pw-err">Incorrect email or password. <a href="#" onclick="showForgot()" style="color:var(--red);">Forgot password?</a></div>
+
+      <div class="field">
+        <div class="f-lbl">Email address</div>
+        <input class="f-inp" id="email" type="email" placeholder="your@email.com">
+      </div>
+      <div class="field">
+        <div class="f-lbl">Password</div>
+        <div class="pw-wrap">
+          <input class="f-inp" id="pw-inp" type="password" placeholder="Your password" onkeydown="if(event.key==='Enter')pwLogin()">
+          <div class="pw-eye" onclick="togglePw()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><ellipse cx="8" cy="8" rx="6" ry="4"/><circle cx="8" cy="8" r="1.5" fill="currentColor"/></svg></div>
+        </div>
+      </div>
+      <div class="forgot" onclick="showForgot()">Forgot password?</div>
+      <button class="submit-btn" onclick="pwLogin()">Sign in →</button>
+
+      <div class="or-div">or</div>
+      <button style="width:100%;padding:11px;border:1.5px solid var(--bdr-m);border-radius:var(--r2);background:var(--srf);color:var(--tx2);font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font);" onclick="showMethod('otp')">Sign in with phone OTP instead</button>
+
+      <div class="bottom-links" style="margin-top:16px;">
+        <div class="bl-row signup">Don't have an account? <a href="sponsor_signup.html">Create one →</a></div>
+      </div>
+    </div>
+
+    <!-- FORGOT PASSWORD -->
+    <div class="screen" id="forgot-screen">
+      <button style="display:flex;align-items:center;gap:5px;font-size:13px;color:var(--tx3);cursor:pointer;background:none;border:none;font-family:var(--font);padding:0;margin-bottom:20px;" onclick="showMethod('pw')">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 2L5 7l4 5"/></svg>
+        Back
+      </button>
+      <div class="lb-title">Reset your password</div>
+      <div class="lb-sub">Enter your registered phone number. We'll send a reset code.</div>
+      <div class="field">
+        <div class="f-lbl">Phone number</div>
+        <div class="phone-wrap">
+          <div class="phone-pre">🇧🇩 +880</div>
+          <input class="phone-inp" id="reset-phone" type="tel" placeholder="01XXXXXXXXX" maxlength="11">
+        </div>
+      </div>
+      <button class="submit-btn" onclick="sendReset()">Send reset code →</button>
+
+      <div style="display:none;margin-top:14px;background:var(--grn-l);border:1px solid var(--grn-m);border-radius:var(--r2);padding:12px 14px;font-size:13px;color:var(--grn-3);" id="reset-sent">
+        ✓ Reset code sent to your phone. Check your messages and follow the link.
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<script>
+function showMethod(m){
+  ['method-screen','otp-screen','pw-screen','forgot-screen'].forEach(s=>document.getElementById(s).classList.remove('on'));
+  if(m==='pick') document.getElementById('method-screen').classList.add('on');
+  else if(m==='otp') document.getElementById('otp-screen').classList.add('on');
+  else if(m==='pw') document.getElementById('pw-screen').classList.add('on');
+  else if(m==='forgot') document.getElementById('forgot-screen').classList.add('on');
+}
+
+function sendLoginOTP(){
+  const p=document.getElementById('otp-phone').value.trim();
+  if(p.length<10){alert('Enter your registered phone number.');return;}
+  document.getElementById('otp-code-row').style.display='flex';
+  document.getElementById('otp-send-main').textContent='✓ Code sent · resend in 60s';
+  document.getElementById('otp-send-main').disabled=true;
+  let t=60;const iv=setInterval(()=>{t--;document.getElementById('otp-send-main').textContent='✓ Code sent · resend in '+t+'s';if(t<=0){clearInterval(iv);document.getElementById('otp-resend').disabled=false;document.getElementById('otp-send-main').textContent='✓ Code sent';}},1000);
+  document.getElementById('otp-code').addEventListener('input',function(){
+    if(this.value.length===6){
+      setTimeout(()=>{
+        this.classList.add('ok');
+        document.getElementById('otp-ok2').style.display='flex';
+        document.getElementById('otp-send-main').style.display='none';
+        setTimeout(()=>alert('Signed in! Taking you to your dashboard...'),800);
+      },400);
+    }
+  });
+}
+
+function resendOTP2(){document.getElementById('otp-resend').disabled=true;let t=60;const iv=setInterval(()=>{t--;if(t<=0){clearInterval(iv);document.getElementById('otp-resend').disabled=false;}},1000);}
+
+function pwLogin(){
+  const e=document.getElementById('email').value.trim();
+  const p=document.getElementById('pw-inp').value;
+  if(!e||!p){alert('Please enter your email and password.');return;}
+  // simulate: show error for wrong credentials, success for demo
+  if(p.length>=6){ alert('Signed in! Taking you to your dashboard...'); }
+  else{ document.getElementById('pw-err').style.display='block'; }
+}
+
+function togglePw(){const i=document.getElementById('pw-inp');i.type=i.type==='password'?'text':'password';}
+function showForgot(){showMethod('forgot');}
+function sendReset(){
+  const p=document.getElementById('reset-phone').value.trim();
+  if(p.length<10){alert('Enter your registered phone number.');return;}
+  document.getElementById('reset-sent').style.display='block';
+}
+</script>
+</body>
+</html>

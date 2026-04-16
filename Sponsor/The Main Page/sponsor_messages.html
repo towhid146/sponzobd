@@ -1,0 +1,2928 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SponzoBD — Messages (Sponsor)</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --red: #e24b4a;
+        --red-l: #fcebeb;
+        --red-m: #f7c1c1;
+        --grn: #1d9e75;
+        --grn-l: #eaf3de;
+        --grn-m: #c0dd97;
+        --grn-d: #085041;
+        --grn-3: #3b6d11;
+        --grn-t: #27500a;
+        --teal-l: #e1f5ee;
+        --teal-m: #9fe1cb;
+        --blu-l: #e6f1fb;
+        --blu-m: #b5d4f4;
+        --blu-t: #0c447c;
+        --amb-l: #faeeda;
+        --amb-m: #fac775;
+        --amb-t: #633806;
+        --amb-d: #854f0b;
+        --pur-l: #eeedfe;
+        --pur-t: #3c3489;
+        --bg: #f4f2ee;
+        --srf: #ffffff;
+        --srf2: #f0eee9;
+        --bdr: rgba(0, 0, 0, 0.08);
+        --bdr-m: rgba(0, 0, 0, 0.14);
+        --tx1: #1a1a1a;
+        --tx2: #555;
+        --tx3: #999;
+        --font: "DM Sans", system-ui, sans-serif;
+        --r1: 7px;
+        --r2: 10px;
+        --r3: 14px;
+      }
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+        font-family: var(--font);
+        font-size: 14px;
+        color: var(--tx1);
+        background: var(--bg);
+      }
+      .app {
+        display: flex;
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+      }
+      .sb {
+        width: 220px;
+        flex-shrink: 0;
+        background: var(--srf);
+        border-right: 1px solid var(--bdr);
+        display: flex;
+        flex-direction: column;
+      }
+      .sb-logo {
+        padding: 15px 16px 12px;
+        border-bottom: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .logo-ic {
+        width: 28px;
+        height: 28px;
+        background: var(--red);
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .sb-user {
+        padding: 11px 16px;
+        border-bottom: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .av-s {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: var(--blu-l);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--blu-t);
+        flex-shrink: 0;
+      }
+      .u-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .u-sub {
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .u-plan {
+        font-size: 11px;
+        color: var(--blu-t);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-top: 2px;
+      }
+      .pdot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--blu-t);
+      }
+      .nav {
+        flex: 1;
+        overflow-y: auto;
+        padding: 8px 0;
+      }
+      .nav-sec {
+        padding: 5px 16px 3px;
+        font-size: 10px;
+        color: var(--tx3);
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        font-weight: 600;
+      }
+      .ni {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        font-size: 13px;
+        color: var(--tx2);
+        cursor: pointer;
+        border-left: 2.5px solid transparent;
+      }
+      .ni:hover {
+        background: var(--srf2);
+      }
+      .ni.on {
+        background: var(--srf2);
+        color: var(--tx1);
+        font-weight: 600;
+        border-left-color: var(--red);
+      }
+      .ni svg {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+        opacity: 0.5;
+      }
+      .ni.on svg {
+        opacity: 1;
+      }
+      .ni-badge {
+        margin-left: auto;
+        background: var(--red);
+        color: #fff;
+        font-size: 10px;
+        padding: 1px 7px;
+        border-radius: 20px;
+        font-weight: 700;
+      }
+      .sb-tier {
+        margin: 0 10px 14px;
+        padding: 10px 12px;
+        background: var(--blu-l);
+        border-radius: var(--r2);
+      }
+      .st-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 4px;
+      }
+      .st-lbl {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--blu-t);
+      }
+      .st-plan {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--blu-t);
+        background: var(--blu-m);
+        padding: 1px 8px;
+        border-radius: 20px;
+      }
+      .st-bar {
+        height: 3px;
+        background: rgba(0, 0, 0, 0.12);
+        border-radius: 2px;
+        margin: 4px 0;
+      }
+      .st-fill {
+        height: 3px;
+        background: var(--blu-t);
+        border-radius: 2px;
+        width: 66%;
+      }
+      .st-note {
+        font-size: 11px;
+        color: var(--blu-t);
+        opacity: 0.8;
+      }
+      .main {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+      }
+      .topbar {
+        height: 52px;
+        background: var(--srf);
+        border-bottom: 1px solid var(--bdr);
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+      }
+      .tb-t {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .tb-r {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .badge-pro {
+        background: var(--blu-l);
+        color: var(--blu-t);
+        font-size: 11px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-weight: 700;
+      }
+      .msg-layout {
+        display: flex;
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+      }
+      .conv-col {
+        width: 272px;
+        flex-shrink: 0;
+        border-right: 1px solid var(--bdr);
+        background: var(--srf);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .conv-hd {
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+      }
+      .conv-hd-t {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .unread-badge {
+        background: var(--red);
+        color: #fff;
+        font-size: 11px;
+        padding: 2px 9px;
+        border-radius: 20px;
+        font-weight: 700;
+      }
+      .conv-search {
+        padding: 8px 12px;
+        border-bottom: 1px solid var(--bdr);
+        flex-shrink: 0;
+      }
+      .csi {
+        width: 100%;
+        padding: 7px 11px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r2);
+        background: var(--srf2);
+        color: var(--tx1);
+        font-size: 12px;
+        font-family: var(--font);
+      }
+      .csi:focus {
+        outline: none;
+        border-color: var(--grn);
+      }
+      .conv-list {
+        flex: 1;
+        overflow-y: auto;
+      }
+      .conv-item {
+        padding: 11px 14px;
+        border-bottom: 1px solid var(--bdr);
+        cursor: pointer;
+        display: flex;
+        gap: 9px;
+        border-left: 2.5px solid transparent;
+      }
+      .conv-item:hover {
+        background: var(--srf2);
+      }
+      .conv-item.active {
+        background: var(--srf2);
+        border-left-color: var(--red);
+      }
+      .ci-av {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .av-la {
+        background: var(--teal-m);
+        color: var(--grn-d);
+      }
+      .av-ni {
+        background: var(--pur-l);
+        color: var(--pur-t);
+      }
+      .av-rk {
+        background: var(--amb-l);
+        color: var(--amb-d);
+      }
+      .av-fa {
+        background: var(--grn-l);
+        color: var(--grn-3);
+      }
+      .ci-body {
+        flex: 1;
+        min-width: 0;
+      }
+      .ci-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 1px;
+      }
+      .ci-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .ci-time {
+        font-size: 10px;
+        color: var(--tx3);
+        flex-shrink: 0;
+        margin-left: 5px;
+      }
+      .ci-camp {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-bottom: 3px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .ci-prev {
+        font-size: 12px;
+        color: var(--tx2);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .ci-prev.unread {
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .ci-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 5px;
+      }
+      .stage-pill {
+        font-size: 10px;
+        padding: 2px 7px;
+        border-radius: 20px;
+        font-weight: 600;
+      }
+      .sp-terms {
+        background: var(--blu-l);
+        color: var(--blu-t);
+      }
+      .sp-record {
+        background: var(--pur-l);
+        color: var(--pur-t);
+      }
+      .sp-escrow {
+        background: var(--amb-l);
+        color: var(--amb-t);
+      }
+      .sp-content {
+        background: var(--red-l);
+        color: #791f1f;
+      }
+      .sp-review {
+        background: var(--teal-l);
+        color: var(--grn-d);
+      }
+      .sp-done {
+        background: var(--grn-l);
+        color: var(--grn-3);
+      }
+      .udot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--red);
+        flex-shrink: 0;
+      }
+      .chat-col {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background: var(--bg);
+      }
+      .ctx-bar {
+        background: var(--srf);
+        border-bottom: 1px solid var(--bdr);
+        padding: 10px 17px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        flex-shrink: 0;
+        position: relative;
+      }
+      .ctx-left {
+        flex: 1;
+      }
+      .ctx-creator {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .ctx-camp {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-top: 1px;
+      }
+      .ctx-pipe {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        margin-top: 7px;
+        flex-wrap: wrap;
+      }
+      .dp {
+        font-size: 10px;
+        padding: 2px 8px;
+        border-radius: 20px;
+        background: var(--srf2);
+        color: var(--tx3);
+        font-weight: 500;
+      }
+      .dp.done {
+        background: var(--grn-l);
+        color: var(--grn-3);
+      }
+      .dp.now {
+        background: var(--blu-l);
+        color: var(--blu-t);
+        font-weight: 700;
+      }
+      .dp.urgent {
+        background: var(--red-l);
+        color: #791f1f;
+        font-weight: 700;
+      }
+      .dp-arr {
+        font-size: 10px;
+        color: var(--tx3);
+      }
+      .ctx-right {
+        flex-shrink: 0;
+        text-align: right;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 6px;
+      }
+      .ctx-amt {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--grn-3);
+      }
+      .ctx-lbl {
+        font-size: 10px;
+        color: var(--tx3);
+      }
+      .journey-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 320px;
+        background: var(--srf);
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r3);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        z-index: 50;
+        display: none;
+        overflow: hidden;
+      }
+      .journey-dropdown.on {
+        display: block;
+      }
+      .jd-hd {
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--bdr);
+        background: var(--pur-l);
+      }
+      .jd-hd-t {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--pur-t);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .jd-row {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 7px 14px;
+      }
+      .jd-dot {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        border: 1.5px solid var(--bdr-m);
+        background: var(--srf);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .jd-dot.done {
+        background: var(--grn-l);
+        border-color: var(--grn-m);
+      }
+      .jd-dot.now {
+        background: var(--blu-l);
+        border-color: var(--blu-t);
+      }
+      .jd-info {
+        flex: 1;
+      }
+      .jd-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .jd-label.done {
+        color: var(--grn-3);
+      }
+      .jd-label.now {
+        color: var(--blu-t);
+      }
+      .jd-label.grey {
+        color: var(--tx3);
+      }
+      .jd-who {
+        font-size: 10px;
+        color: var(--tx3);
+      }
+      .jd-line {
+        width: 1.5px;
+        height: 10px;
+        background: var(--bdr-m);
+        margin-left: 22px;
+      }
+      .jd-line.done {
+        background: var(--grn-m);
+      }
+      .journey-btn {
+        padding: 5px 11px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        background: var(--srf);
+        font-size: 11px;
+        color: var(--tx2);
+        cursor: pointer;
+        font-family: var(--font);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-weight: 600;
+      }
+      .journey-btn:hover {
+        background: var(--srf2);
+      }
+      .journey-btn.on {
+        background: var(--pur-l);
+        border-color: var(--pur-t);
+        color: var(--pur-t);
+      }
+      .thread {
+        flex: 1;
+        padding: 14px 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 11px;
+        overflow-y: auto;
+        min-height: 0;
+      }
+      .msg-wrap {
+        display: flex;
+        gap: 8px;
+        align-items: flex-end;
+      }
+      .msg-wrap.me {
+        flex-direction: row-reverse;
+      }
+      .m-av {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .bubble {
+        max-width: 65%;
+        padding: 9px 13px;
+        border-radius: 16px;
+        font-size: 13px;
+        line-height: 1.55;
+      }
+      .b-cr {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        color: var(--tx1);
+        border-bottom-left-radius: 4px;
+      }
+      .b-me {
+        background: var(--blu-l);
+        color: var(--blu-t);
+        border-bottom-right-radius: 4px;
+      }
+      .b-sys {
+        background: var(--pur-l);
+        color: var(--pur-t);
+        font-size: 12px;
+        border-bottom-right-radius: 4px;
+      }
+      .msg-t {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-top: 3px;
+      }
+      .msg-t.r {
+        text-align: right;
+      }
+      .seen {
+        font-size: 10px;
+        color: var(--tx3);
+        text-align: right;
+        margin-top: 1px;
+      }
+      .sys-ev {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        border-radius: var(--r2);
+        padding: 8px 13px;
+        text-align: center;
+        max-width: 400px;
+        margin: 0 auto;
+      }
+      .se-lbl {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--tx2);
+        margin-bottom: 2px;
+      }
+      .se-det {
+        font-size: 12px;
+        color: var(--tx1);
+      }
+      .se-t {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-top: 2px;
+      }
+      /* all 5 cards */
+      .terms-card {
+        background: var(--srf);
+        border: 1px solid var(--grn-m);
+        border-radius: var(--r3);
+        padding: 12px 14px;
+        max-width: 70%;
+      }
+      .tc-hd {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--grn-3);
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .tc-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 0;
+        border-bottom: 1px solid var(--bdr);
+        font-size: 12px;
+      }
+      .tc-row:last-of-type {
+        border-bottom: none;
+      }
+      .tc-l {
+        color: var(--tx2);
+      }
+      .tc-v {
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .tc-badge {
+        font-size: 11px;
+        padding: 3px 9px;
+        border-radius: 20px;
+        margin-top: 9px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-weight: 700;
+      }
+      .tc-pend {
+        background: var(--amb-l);
+        color: var(--amb-t);
+      }
+      .tc-acc {
+        background: var(--grn-l);
+        color: var(--grn-3);
+      }
+      .tc-actions {
+        display: flex;
+        gap: 7px;
+        margin-top: 10px;
+        flex-wrap: wrap;
+      }
+      .deal-rec {
+        background: var(--srf);
+        border: 2px solid var(--grn-m);
+        border-radius: var(--r3);
+        padding: 13px 15px;
+        max-width: 76%;
+      }
+      .dr-hd {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--grn-d);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        border-bottom: 1px solid var(--bdr);
+        padding-bottom: 8px;
+      }
+      .dr-sec-t {
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--tx3);
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        margin: 8px 0 5px;
+      }
+      .dr-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 4px 0;
+        border-bottom: 1px solid var(--bdr);
+        font-size: 11px;
+      }
+      .dr-row:last-child {
+        border-bottom: none;
+      }
+      .dr-l {
+        color: var(--tx2);
+      }
+      .dr-v {
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .dr-v.grn {
+        color: var(--grn-3);
+      }
+      .dr-v.red {
+        color: var(--red);
+      }
+      .dr-sigs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 7px;
+        margin-top: 9px;
+        padding-top: 9px;
+        border-top: 1px solid var(--bdr-m);
+      }
+      .dr-sig {
+        background: var(--srf2);
+        border-radius: var(--r1);
+        padding: 7px 10px;
+      }
+      .dr-sig-name {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--tx1);
+        margin-bottom: 2px;
+      }
+      .dr-sig-meta {
+        font-size: 10px;
+        color: var(--tx3);
+      }
+      .dr-sig-ok {
+        font-size: 10px;
+        color: var(--grn-3);
+        font-weight: 700;
+        margin-top: 2px;
+      }
+      .dr-confirm-actions {
+        display: flex;
+        gap: 7px;
+        margin-top: 10px;
+      }
+      .escrow-card {
+        border-radius: var(--r3);
+        padding: 12px 14px;
+        max-width: 70%;
+      }
+      .esc-sp {
+        background: var(--amb-l);
+        border: 1px solid var(--amb-m);
+      }
+      .esc-cr {
+        background: var(--grn-l);
+        border: 1px solid var(--grn-m);
+      }
+      .esc-hd {
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 7px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .esc-sp .esc-hd {
+        color: var(--amb-t);
+      }
+      .esc-cr .esc-hd {
+        color: var(--grn-3);
+      }
+      .esc-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 4px 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+        font-size: 12px;
+      }
+      .esc-row:last-of-type {
+        border-bottom: none;
+      }
+      .esc-sp .esc-l {
+        color: var(--amb-t);
+      }
+      .esc-sp .esc-v {
+        font-weight: 700;
+        color: var(--amb-d);
+      }
+      .esc-cr .esc-l {
+        color: var(--grn-t);
+      }
+      .esc-cr .esc-v {
+        font-weight: 700;
+        color: var(--grn-d);
+      }
+      .content-card {
+        background: var(--srf);
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r3);
+        overflow: hidden;
+        max-width: 70%;
+      }
+      .cc-thumb {
+        width: 100%;
+        height: 96px;
+        background: linear-gradient(135deg, var(--grn-l), var(--teal-l));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .cc-body {
+        padding: 10px 12px;
+      }
+      .cc-hd {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--tx1);
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .cc-item {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 11px;
+        color: var(--tx2);
+        padding: 3px 0;
+        border-bottom: 1px solid var(--bdr);
+      }
+      .cc-item:last-child {
+        border-bottom: none;
+      }
+      .cc-link {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 12px;
+        color: var(--blu-t);
+        font-weight: 600;
+        padding: 6px 9px;
+        background: var(--blu-l);
+        border-radius: var(--r1);
+        margin: 7px 0;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .cc-link:hover {
+        background: var(--blu-m);
+      }
+      .cc-note {
+        font-size: 11px;
+        color: var(--tx2);
+        background: var(--srf2);
+        border-radius: var(--r1);
+        padding: 6px 9px;
+        margin-bottom: 7px;
+        line-height: 1.55;
+        border-left: 2px solid var(--bdr-m);
+      }
+      .cc-status {
+        font-size: 11px;
+        padding: 3px 9px;
+        border-radius: 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-weight: 700;
+      }
+      .cc-pend {
+        background: var(--amb-l);
+        color: var(--amb-t);
+      }
+      .cc-approved {
+        background: var(--grn-l);
+        color: var(--grn-3);
+      }
+      .cc-revision {
+        background: var(--red-l);
+        color: var(--red);
+      }
+      .cc-actions {
+        display: flex;
+        gap: 7px;
+        margin-top: 8px;
+        flex-wrap: wrap;
+      }
+      .review-card {
+        background: var(--srf);
+        border: 1px solid var(--grn-m);
+        border-radius: var(--r3);
+        padding: 12px 14px;
+        max-width: 70%;
+      }
+      .rv-hd {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--grn-3);
+        margin-bottom: 9px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .rv-stars {
+        display: flex;
+        gap: 4px;
+        margin-bottom: 8px;
+      }
+      .rv-star {
+        width: 26px;
+        height: 26px;
+        cursor: pointer;
+        clip-path: polygon(
+          50% 0%,
+          61% 35%,
+          98% 35%,
+          68% 57%,
+          79% 91%,
+          50% 70%,
+          21% 91%,
+          32% 57%,
+          2% 35%,
+          39% 35%
+        );
+        background: #ddd;
+        transition: background 0.1s;
+      }
+      .rv-star.on {
+        background: #ef9f27;
+      }
+      .rv-ta {
+        padding: 7px 10px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        background: var(--srf);
+        color: var(--tx1);
+        font-size: 12px;
+        font-family: var(--font);
+        width: 100%;
+        resize: none;
+        height: 50px;
+        margin-bottom: 8px;
+      }
+      .rv-ta:focus {
+        outline: none;
+        border-color: var(--grn);
+      }
+      .rv-note {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-bottom: 7px;
+      }
+      .rv-submitted {
+        background: var(--grn-l);
+        border-radius: var(--r2);
+        padding: 9px 12px;
+        font-size: 12px;
+        color: var(--grn-t);
+        line-height: 1.6;
+        border-left: 2px solid var(--grn-m);
+      }
+      .rv-by {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-top: 4px;
+      }
+      .panel-zone {
+        background: var(--srf);
+        border-top: 1px solid var(--bdr);
+        padding: 13px 18px;
+        flex-shrink: 0;
+        display: none;
+      }
+      .pz-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--tx1);
+        margin-bottom: 11px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .pz-close {
+        font-size: 12px;
+        color: var(--tx3);
+        cursor: pointer;
+        padding: 3px 8px;
+        border-radius: var(--r1);
+        border: 1px solid var(--bdr-m);
+      }
+      .pz-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 9px;
+        margin-bottom: 10px;
+      }
+      .pz-field {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .pz-field.full {
+        grid-column: 1/-1;
+      }
+      .pz-lbl {
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .pz-inp {
+        padding: 7px 10px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        background: var(--srf);
+        color: var(--tx1);
+        font-size: 13px;
+        font-family: var(--font);
+        width: 100%;
+      }
+      .pz-inp:focus {
+        outline: none;
+        border-color: var(--grn);
+      }
+      .pz-ta {
+        padding: 7px 10px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        background: var(--srf);
+        color: var(--tx1);
+        font-size: 13px;
+        font-family: var(--font);
+        width: 100%;
+        resize: none;
+        height: 52px;
+      }
+      .pz-ta:focus {
+        outline: none;
+        border-color: var(--grn);
+      }
+      .pz-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .pz-note {
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .input-area {
+        background: var(--srf);
+        border-top: 1px solid var(--bdr);
+        padding: 10px 18px;
+        flex-shrink: 0;
+      }
+      .qa-row {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 8px;
+        flex-wrap: wrap;
+      }
+      .qa {
+        padding: 4px 11px;
+        border: 1px solid var(--bdr-m);
+        border-radius: 20px;
+        font-size: 11px;
+        color: var(--tx2);
+        background: transparent;
+        cursor: pointer;
+        font-family: var(--font);
+        font-weight: 500;
+      }
+      .qa:hover {
+        background: var(--srf2);
+      }
+      .qa-g {
+        border-color: var(--grn-m);
+        color: var(--grn-3);
+        background: var(--grn-l);
+      }
+      .qa-r {
+        border-color: var(--red-m);
+        color: var(--red);
+        background: var(--red-l);
+      }
+      .qa-a {
+        border-color: var(--amb-m);
+        color: var(--amb-t);
+        background: var(--amb-l);
+      }
+      .msg-inp-row {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .msg-inp {
+        flex: 1;
+        padding: 9px 14px;
+        border: 1px solid var(--bdr-m);
+        border-radius: 20px;
+        background: var(--srf);
+        color: var(--tx1);
+        font-size: 13px;
+        font-family: var(--font);
+      }
+      .msg-inp:focus {
+        outline: none;
+        border-color: var(--blu-t);
+      }
+      .send-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: var(--red);
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+      .send-btn:hover {
+        background: #c73c3b;
+      }
+      .btn-r {
+        padding: 7px 13px;
+        background: var(--red);
+        border: none;
+        border-radius: var(--r1);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .btn-r:hover {
+        background: #c73c3b;
+      }
+      .btn-g {
+        padding: 6px 12px;
+        background: var(--grn-l);
+        border: 1px solid var(--grn-m);
+        border-radius: var(--r1);
+        color: var(--grn-t);
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .btn-ghost {
+        padding: 6px 11px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        background: transparent;
+        color: var(--tx2);
+        font-size: 12px;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .btn-ghost:hover {
+        background: var(--srf2);
+      }
+      .btn-a {
+        padding: 6px 12px;
+        background: var(--amb-l);
+        border: 1px solid var(--amb-m);
+        border-radius: var(--r1);
+        color: var(--amb-t);
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .toast {
+        position: fixed;
+        bottom: 22px;
+        right: 22px;
+        background: var(--grn-d);
+        color: #fff;
+        padding: 10px 16px;
+        border-radius: var(--r2);
+        font-size: 13px;
+        font-weight: 600;
+        display: none;
+        z-index: 300;
+        align-items: center;
+        gap: 7px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+      }
+      .toast.on {
+        display: flex;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- SIDEBAR -->
+      <div class="sb">
+        <div class="sb-logo">
+          <div class="logo-ic">
+            <svg viewBox="0 0 16 16" fill="none" width="15" height="15">
+              <path
+                d="M3 8a5 5 0 1010 0A5 5 0 003 8z"
+                fill="white"
+                opacity="0.25"
+              />
+              <path
+                d="M8 5v3l2 2"
+                stroke="white"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+          <div>
+            <div style="font-size: 14px; font-weight: 700; color: var(--tx1)">
+              SponzoBD
+            </div>
+            <div style="font-size: 10px; color: var(--tx3)">Sponsor portal</div>
+          </div>
+        </div>
+        <div class="sb-user">
+          <div class="av-s">GF</div>
+          <div>
+            <div class="u-name">GreenFresh BD</div>
+            <div class="u-sub">Health & food · Dhaka</div>
+            <div class="u-plan"><span class="pdot"></span>Pro plan</div>
+          </div>
+        </div>
+        <nav class="nav">
+          <div class="nav-sec">Main</div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'sponsor_home_feed (2).html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <path
+                d="M1.5 6.5L7.5 1.5L13.5 6.5V13H9.5V9.5H5.5V13H1.5V6.5Z"
+              /></svg
+            >Home
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'sponsor_dashboard.html'"
+          >
+            <svg viewBox="0 0 15 15" fill="currentColor">
+              <rect x="1" y="1" width="5" height="5" rx="1" />
+              <rect x="9" y="1" width="5" height="5" rx="1" />
+              <rect x="1" y="9" width="5" height="5" rx="1" />
+              <rect x="9" y="9" width="5" height="5" rx="1" /></svg
+            >Dashboard & analytics
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'sponsor_campaigns_deals.html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <rect x="1.5" y="2.5" width="12" height="10" rx="1.5" />
+              <path d="M5 6h5M5 9h3" /></svg
+            >My campaigns & deals
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'applicant_review (2).html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <circle cx="5.5" cy="5" r="2.5" />
+              <path d="M1 12c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4" />
+              <path d="M11 7l2 2 2-3" stroke-width="1.4" /></svg
+            >Applicant review
+          </div>
+          <div class="ni on">
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <path d="M2 2h11v8H8l-3 2.5V10H2V2z" /></svg
+            >Messages<span class="ni-badge">3</span>
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'sponsor_brand_settings (4).html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <circle cx="7.5" cy="7.5" r="2" />
+              <path
+                d="M7.5 1v1M7.5 13v1M1 7.5h1M13 7.5h1M3 3l.7.7M11.3 11.3l.7.7M3 12l.7-.7M11.3 3.7l.7-.7"
+              /></svg
+            >Brand settings
+          </div>
+        </nav>
+        <div class="sb-tier">
+          <div class="st-row">
+            <span class="st-lbl">Campaigns used</span
+            ><span class="st-plan">Pro</span>
+          </div>
+          <div class="st-bar"><div class="st-fill"></div></div>
+          <div class="st-note">4 of 6 campaigns this month</div>
+        </div>
+      </div>
+
+      <!-- MAIN -->
+      <div class="main">
+        <div class="topbar">
+          <div class="tb-t">Messages</div>
+          <div class="tb-r"><span class="badge-pro">Pro plan</span></div>
+        </div>
+        <div class="msg-layout">
+          <!-- CONV LIST -->
+          <div class="conv-col">
+            <div class="conv-hd">
+              <div class="conv-hd-t">Conversations</div>
+              <div class="unread-badge" id="ubadge">3 unread</div>
+            </div>
+            <div class="conv-search">
+              <input
+                class="csi"
+                type="text"
+                placeholder="Search conversations..."
+              />
+            </div>
+            <div class="conv-list">
+              <!-- Chat 1: Sponsor opens convo, creator proposes terms -->
+              <div class="conv-item active" id="ci-la" onclick="sw('la', this)">
+                <div class="ci-av av-la">LA</div>
+                <div class="ci-body">
+                  <div class="ci-top">
+                    <span class="ci-name">Lamia Akter</span
+                    ><span class="ci-time">2h ago</span>
+                  </div>
+                  <div class="ci-camp">
+                    National Health Week · Instagram, YouTube
+                  </div>
+                  <div class="ci-prev unread">
+                    Terms proposed — ৳35,000 for 2 reels, 3 stories, YouTube
+                    short.
+                  </div>
+                  <div class="ci-foot">
+                    <span class="stage-pill sp-terms">Terms proposed</span>
+                    <div class="udot"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Chat 2: Deal record — sponsor confirms -->
+              <div class="conv-item" id="ci-ni" onclick="sw('ni', this)">
+                <div class="ci-av av-ni">NI</div>
+                <div class="ci-body">
+                  <div class="ci-top">
+                    <span class="ci-name">Nadia Islam</span
+                    ><span class="ci-time">Mar 16</span>
+                  </div>
+                  <div class="ci-camp">Ramadan Wellness Series · Instagram</div>
+                  <div class="ci-prev unread">
+                    Deal record ready — your confirmation needed.
+                  </div>
+                  <div class="ci-foot">
+                    <span class="stage-pill sp-record">Deal record</span>
+                    <div class="udot"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Chat 3: Sponsor funds escrow -->
+              <div class="conv-item" id="ci-rk" onclick="sw('rk', this)">
+                <div class="ci-av av-rk">RK</div>
+                <div class="ci-body">
+                  <div class="ci-top">
+                    <span class="ci-name">Rafi Khan</span
+                    ><span class="ci-time">Mar 13</span>
+                  </div>
+                  <div class="ci-camp">Organic Superfoods Launch · TikTok</div>
+                  <div class="ci-prev unread">
+                    Terms accepted — please fund escrow to start.
+                  </div>
+                  <div class="ci-foot">
+                    <span class="stage-pill sp-escrow">Fund escrow</span>
+                    <div class="udot"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Chat 4: Content submitted — sponsor approves + rates creator -->
+              <div class="conv-item" id="ci-fa" onclick="sw('fa', this)">
+                <div class="ci-av av-fa">FA</div>
+                <div class="ci-body">
+                  <div class="ci-top">
+                    <span class="ci-name">Faria Ahmed</span
+                    ><span class="ci-time">Feb 26</span>
+                  </div>
+                  <div class="ci-camp">
+                    Supplement Awareness Campaign · Instagram
+                  </div>
+                  <div class="ci-prev">
+                    Payment released. Rate Faria to complete the deal.
+                  </div>
+                  <div class="ci-foot">
+                    <span class="stage-pill sp-review">Rate this creator</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CHAT AREA -->
+          <div class="chat-col">
+            <!-- ═══ CTX BARS ═══ -->
+            <div class="ctx-bar" id="ctx-la">
+              <div class="ctx-left">
+                <div class="ctx-creator">
+                  Lamia Akter · 52K · Instagram, TikTok
+                </div>
+                <div class="ctx-camp">
+                  National Health Week Campaign 2025 · Health & wellness ·
+                  Nationwide
+                </div>
+                <div class="ctx-pipe">
+                  <span class="dp done">Accepted</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp now">Terms negotiation</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp">Deal record</span
+                  ><span class="dp-arr">›</span> <span class="dp">Escrow</span
+                  ><span class="dp-arr">›</span> <span class="dp">Content</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp">Paid out</span>
+                </div>
+              </div>
+              <div class="ctx-right">
+                <div
+                  class="ctx-amt"
+                  style="font-size: 13px; color: var(--tx3); font-weight: 400"
+                >
+                  Pending terms
+                </div>
+                <div class="ctx-lbl">Awaiting your response</div>
+                <button
+                  class="journey-btn"
+                  id="jbtn-la"
+                  onclick="toggleJourney('la')"
+                >
+                  <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+                    <circle
+                      cx="6"
+                      cy="6"
+                      r="5"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    />
+                    <path
+                      d="M6 4v4M6 3v.5"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  Deal journey
+                </button>
+                <div class="journey-dropdown" id="jd-la">
+                  <div class="jd-hd">
+                    <div class="jd-hd-t">
+                      Deal journey · GreenFresh BD × Lamia Akter
+                    </div>
+                  </div>
+                  <div class="jd-stages">
+                    <div class="jd-row">
+                      <div class="jd-dot done">
+                        <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                          <path
+                            d="M1 4l2 2L7 2"
+                            stroke="#3B6D11"
+                            stroke-width="1.3"
+                            stroke-linecap="round"
+                          />
+                        </svg>
+                      </div>
+                      <div class="jd-info">
+                        <div class="jd-label done">
+                          You accepted Lamia's application
+                        </div>
+                        <div class="jd-who">You messaged first · Mar 15</div>
+                      </div>
+                    </div>
+                    <div class="jd-line done"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot now">
+                        <svg width="7" height="7" viewBox="0 0 7 7">
+                          <circle
+                            cx="3.5"
+                            cy="3.5"
+                            r="2.5"
+                            fill="var(--blu-t)"
+                          />
+                        </svg>
+                      </div>
+                      <div class="jd-info">
+                        <div class="jd-label now">
+                          Terms negotiation · Lamia proposed
+                        </div>
+                        <div class="jd-who">
+                          Accept, counter, or decline below
+                        </div>
+                      </div>
+                    </div>
+                    <div class="jd-line"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot"></div>
+                      <div class="jd-info">
+                        <div class="jd-label grey">
+                          Deal record confirmation
+                        </div>
+                        <div class="jd-who">
+                          Both confirm · binding commitment
+                        </div>
+                      </div>
+                    </div>
+                    <div class="jd-line"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot"></div>
+                      <div class="jd-info">
+                        <div class="jd-label grey">You fund escrow</div>
+                        <div class="jd-who">
+                          Creator starts after escrow secured
+                        </div>
+                      </div>
+                    </div>
+                    <div class="jd-line"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot"></div>
+                      <div class="jd-info">
+                        <div class="jd-label grey">Creator submits content</div>
+                        <div class="jd-who">You review and approve</div>
+                      </div>
+                    </div>
+                    <div class="jd-line"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot"></div>
+                      <div class="jd-info">
+                        <div class="jd-label grey">
+                          You approve → payment released
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="ctx-bar" id="ctx-ni" style="display: none">
+              <div class="ctx-left">
+                <div class="ctx-creator">
+                  Nadia Islam · 44K · Instagram, TikTok
+                </div>
+                <div class="ctx-camp">
+                  Ramadan Wellness Series · Health & wellness · Dhaka,
+                  Chittagong
+                </div>
+                <div class="ctx-pipe">
+                  <span class="dp done">Accepted</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp done">Terms agreed</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp now">Deal record</span
+                  ><span class="dp-arr">›</span> <span class="dp">Escrow</span
+                  ><span class="dp-arr">›</span> <span class="dp">Content</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp">Paid out</span>
+                </div>
+              </div>
+              <div class="ctx-right">
+                <div class="ctx-amt">৳22,000</div>
+                <div class="ctx-lbl">Agreed · confirm deal record</div>
+                <button
+                  class="journey-btn"
+                  id="jbtn-ni"
+                  onclick="toggleJourney('ni')"
+                >
+                  <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+                    <circle
+                      cx="6"
+                      cy="6"
+                      r="5"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    />
+                    <path
+                      d="M6 4v4M6 3v.5"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  Deal journey
+                </button>
+                <div class="journey-dropdown" id="jd-ni">
+                  <div class="jd-hd">
+                    <div class="jd-hd-t">
+                      Deal journey · GreenFresh BD × Nadia Islam
+                    </div>
+                  </div>
+                  <div class="jd-stages">
+                    <div class="jd-row">
+                      <div class="jd-dot done">
+                        <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                          <path
+                            d="M1 4l2 2L7 2"
+                            stroke="#3B6D11"
+                            stroke-width="1.3"
+                            stroke-linecap="round"
+                          />
+                        </svg>
+                      </div>
+                      <div class="jd-info">
+                        <div class="jd-label done">
+                          Accepted & terms agreed · ৳22,000
+                        </div>
+                      </div>
+                    </div>
+                    <div class="jd-line done"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot now">
+                        <svg width="7" height="7" viewBox="0 0 7 7">
+                          <circle
+                            cx="3.5"
+                            cy="3.5"
+                            r="2.5"
+                            fill="var(--blu-t)"
+                          />
+                        </svg>
+                      </div>
+                      <div class="jd-info">
+                        <div class="jd-label now">
+                          Deal record · your confirmation needed
+                        </div>
+                        <div class="jd-who">
+                          Confirm to proceed to escrow funding
+                        </div>
+                      </div>
+                    </div>
+                    <div class="jd-line"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot"></div>
+                      <div class="jd-info">
+                        <div class="jd-label grey">Fund escrow · ৳22,000</div>
+                      </div>
+                    </div>
+                    <div class="jd-line"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot"></div>
+                      <div class="jd-info">
+                        <div class="jd-label grey">
+                          Creator submits · you approve
+                        </div>
+                      </div>
+                    </div>
+                    <div class="jd-line"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot"></div>
+                      <div class="jd-info">
+                        <div class="jd-label grey">Payment released</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="ctx-bar" id="ctx-rk" style="display: none">
+              <div class="ctx-left">
+                <div class="ctx-creator">Rafi Khan · 28K · TikTok</div>
+                <div class="ctx-camp">
+                  Organic Superfoods Launch · Food & lifestyle · Nationwide
+                </div>
+                <div class="ctx-pipe">
+                  <span class="dp done">Accepted</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp done">Terms agreed</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp done">Deal record</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp urgent">Fund escrow</span
+                  ><span class="dp-arr">›</span> <span class="dp">Content</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp">Paid out</span>
+                </div>
+              </div>
+              <div class="ctx-right">
+                <div class="ctx-amt">৳18,000</div>
+                <div class="ctx-lbl">Agreed · escrow not yet funded</div>
+                <button
+                  class="journey-btn"
+                  id="jbtn-rk"
+                  onclick="toggleJourney('rk')"
+                >
+                  <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+                    <circle
+                      cx="6"
+                      cy="6"
+                      r="5"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    />
+                    <path
+                      d="M6 4v4M6 3v.5"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  Deal journey
+                </button>
+                <div class="journey-dropdown" id="jd-rk">
+                  <div class="jd-hd">
+                    <div class="jd-hd-t">
+                      Deal journey · GreenFresh BD × Rafi Khan
+                    </div>
+                  </div>
+                  <div class="jd-stages">
+                    <div class="jd-row">
+                      <div class="jd-dot done">
+                        <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                          <path
+                            d="M1 4l2 2L7 2"
+                            stroke="#3B6D11"
+                            stroke-width="1.3"
+                            stroke-linecap="round"
+                          />
+                        </svg>
+                      </div>
+                      <div class="jd-info">
+                        <div class="jd-label done">
+                          Accepted, terms agreed, deal record confirmed
+                        </div>
+                      </div>
+                    </div>
+                    <div class="jd-line done"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot now">
+                        <svg width="7" height="7" viewBox="0 0 7 7">
+                          <circle cx="3.5" cy="3.5" r="2.5" fill="var(--red)" />
+                        </svg>
+                      </div>
+                      <div class="jd-info">
+                        <div class="jd-label now" style="color: var(--red)">
+                          Fund escrow — creator is waiting
+                        </div>
+                        <div class="jd-who">
+                          Creator cannot start until escrow secured
+                        </div>
+                      </div>
+                    </div>
+                    <div class="jd-line"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot"></div>
+                      <div class="jd-info">
+                        <div class="jd-label grey">
+                          Creator works & submits content
+                        </div>
+                      </div>
+                    </div>
+                    <div class="jd-line"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot"></div>
+                      <div class="jd-info">
+                        <div class="jd-label grey">
+                          You approve → payment released
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="ctx-bar" id="ctx-fa" style="display: none">
+              <div class="ctx-left">
+                <div class="ctx-creator">Faria Ahmed · 38K · Instagram</div>
+                <div class="ctx-camp">
+                  Supplement Awareness Campaign · Health & wellness · Nationwide
+                </div>
+                <div class="ctx-pipe">
+                  <span class="dp done">Accepted</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp done">Terms agreed</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp done">Deal record</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp done">Content approved</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp done">Paid out</span>
+                </div>
+              </div>
+              <div class="ctx-right">
+                <div class="ctx-amt">৳20,000</div>
+                <div class="ctx-lbl">Paid out Feb 26</div>
+                <button
+                  class="journey-btn"
+                  id="jbtn-fa"
+                  onclick="toggleJourney('fa')"
+                >
+                  <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+                    <circle
+                      cx="6"
+                      cy="6"
+                      r="5"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    />
+                    <path
+                      d="M6 4v4M6 3v.5"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  Deal journey
+                </button>
+                <div class="journey-dropdown" id="jd-fa">
+                  <div class="jd-hd">
+                    <div class="jd-hd-t">
+                      Deal journey · GreenFresh BD × Faria Ahmed · Completed
+                    </div>
+                  </div>
+                  <div class="jd-stages">
+                    <div class="jd-row">
+                      <div class="jd-dot done">
+                        <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                          <path
+                            d="M1 4l2 2L7 2"
+                            stroke="#3B6D11"
+                            stroke-width="1.3"
+                            stroke-linecap="round"
+                          />
+                        </svg>
+                      </div>
+                      <div class="jd-info">
+                        <div class="jd-label done">
+                          All stages completed · ৳20,000 paid · Feb 26
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ═══ THREADS ═══ -->
+
+            <!-- THREAD 1: Sponsor opens — creator proposes terms (sponsor sees) -->
+            <div class="thread" id="thread-la">
+              <div class="sys-ev">
+                <div class="se-lbl">
+                  Application accepted · conversation opened
+                </div>
+                <div class="se-det">
+                  You accepted Lamia Akter on Mar 15 · You messaged first · she
+                  can now reply
+                </div>
+                <div class="se-t">Mar 15 · 10:00 AM · Platform</div>
+              </div>
+              <div class="msg-wrap me">
+                <div class="m-av av-s">GF</div>
+                <div>
+                  <div class="bubble b-me">
+                    Hi Lamia! We accepted your application — your audience is
+                    exactly who we need. Budget is ৳35,000 for 2 reels, 3
+                    stories and 1 YouTube short. Please review the brief and
+                    send your terms.
+                  </div>
+                  <div class="msg-t r">Mar 15 · 10:05 AM</div>
+                  <div class="seen">Seen</div>
+                </div>
+              </div>
+              <div class="msg-wrap">
+                <div class="m-av av-la">LA</div>
+                <div>
+                  <div class="bubble b-cr">
+                    Thank you! Great campaign brief. Sending my terms proposal
+                    now.
+                  </div>
+                  <div class="msg-t">Mar 15 · 11:30 AM</div>
+                </div>
+              </div>
+              <!-- CARD 1: TERMS CARD — sponsor sees, responds -->
+              <div class="msg-wrap">
+                <div class="m-av av-la">LA</div>
+                <div style="display: flex; flex-direction: column; gap: 3px">
+                  <div class="terms-card">
+                    <div class="tc-hd">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                        stroke="#3B6D11"
+                        stroke-width="1.3"
+                      >
+                        <rect x="1.5" y="1.5" width="9" height="9" rx="1" />
+                        <path d="M3.5 6h5M3.5 4h5M3.5 8h3" /></svg
+                      >Terms proposed by Lamia Akter
+                    </div>
+                    <div class="tc-row">
+                      <span class="tc-l">Rate</span
+                      ><span class="tc-v">৳35,000</span>
+                    </div>
+                    <div class="tc-row">
+                      <span class="tc-l">Deliverables</span
+                      ><span class="tc-v"
+                        >2 IG reels · 3 stories · 1 YouTube short</span
+                      >
+                    </div>
+                    <div class="tc-row">
+                      <span class="tc-l">Deadline</span
+                      ><span class="tc-v">March 22, 2025</span>
+                    </div>
+                    <div class="tc-row">
+                      <span class="tc-l">Revision rounds</span
+                      ><span class="tc-v">1 included · 7-day review</span>
+                    </div>
+                    <div class="tc-row">
+                      <span class="tc-l">Usage rights</span
+                      ><span class="tc-v">3 months · Bangladesh</span>
+                    </div>
+                    <div class="tc-badge tc-pend">Awaiting your response</div>
+                    <div class="tc-actions">
+                      <button class="btn-g" onclick="acceptTerms()">
+                        ✓ Accept terms
+                      </button>
+                      <button
+                        class="btn-a"
+                        onclick="showPanel('counter-panel')"
+                      >
+                        Counter-propose
+                      </button>
+                      <button
+                        class="btn-ghost"
+                        onclick="T('Decline sent — creator notified')"
+                      >
+                        Decline
+                      </button>
+                    </div>
+                  </div>
+                  <div class="msg-t">Mar 15 · 12:00 PM</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- THREAD 2: Deal record — sponsor confirms -->
+            <div class="thread" id="thread-ni" style="display: none">
+              <div class="sys-ev">
+                <div class="se-lbl">
+                  Terms agreed · ৳22,000 · Deal record generated
+                </div>
+                <div class="se-det">
+                  Both parties accepted terms · Platform generated the deal
+                  record · both must confirm
+                </div>
+                <div class="se-t">Mar 16 · 9:00 AM</div>
+              </div>
+              <!-- CARD 2: DEAL RECORD — sponsor sees, must confirm -->
+              <div class="msg-wrap">
+                <div
+                  class="m-av"
+                  style="background: var(--pur-l); color: var(--pur-t)"
+                >
+                  SB
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 3px">
+                  <div class="deal-rec">
+                    <div class="dr-hd">
+                      <svg
+                        width="13"
+                        height="13"
+                        viewBox="0 0 13 13"
+                        fill="none"
+                      >
+                        <rect
+                          x="1.5"
+                          y="1.5"
+                          width="10"
+                          height="10"
+                          rx="1.5"
+                          fill="#C0DD97"
+                        />
+                        <path
+                          d="M3.5 6.5h6M3.5 4.5h6M3.5 8.5h4"
+                          stroke="#27500A"
+                          stroke-width="1.2"
+                          stroke-linecap="round"
+                        /></svg
+                      >Deal Record · SponzoBD Platform · Auto-generated
+                    </div>
+                    <div class="dr-sec-t">Parties</div>
+                    <div class="dr-row">
+                      <span class="dr-l">Sponsor</span
+                      ><span class="dr-v">GreenFresh BD · Dhaka</span>
+                    </div>
+                    <div class="dr-row">
+                      <span class="dr-l">Creator</span
+                      ><span class="dr-v">Nadia Islam · @nadia.style</span>
+                    </div>
+                    <div class="dr-row">
+                      <span class="dr-l">Campaign</span
+                      ><span class="dr-v">Ramadan Wellness Series</span>
+                    </div>
+                    <div class="dr-sec-t">Agreed terms</div>
+                    <div class="dr-row">
+                      <span class="dr-l">Rate</span
+                      ><span class="dr-v grn">৳22,000</span>
+                    </div>
+                    <div class="dr-row">
+                      <span class="dr-l">Deliverables</span
+                      ><span class="dr-v">2 Instagram posts · 4 stories</span>
+                    </div>
+                    <div class="dr-row">
+                      <span class="dr-l">Deadline</span
+                      ><span class="dr-v">April 2, 2025</span>
+                    </div>
+                    <div class="dr-row">
+                      <span class="dr-l">Revision rounds</span
+                      ><span class="dr-v">1 · 7-day review window</span>
+                    </div>
+                    <div class="dr-row">
+                      <span class="dr-l">Usage rights</span
+                      ><span class="dr-v">3 months · Bangladesh</span>
+                    </div>
+                    <div class="dr-sec-t">Escrow & default conditions</div>
+                    <div class="dr-row">
+                      <span class="dr-l">You must fund</span
+                      ><span class="dr-v">৳22,000 after confirmation</span>
+                    </div>
+                    <div class="dr-row">
+                      <span class="dr-l">Auto-release</span
+                      ><span class="dr-v"
+                        >April 9, 2025 if you don't respond</span
+                      >
+                    </div>
+                    <div class="dr-row">
+                      <span class="dr-l">If creator misses deadline</span
+                      ><span class="dr-v red"
+                        >You may cancel · escrow refunded</span
+                      >
+                    </div>
+                    <div class="dr-row">
+                      <span class="dr-l">Platform fee</span
+                      ><span class="dr-v"
+                        >3.5% deducted at payment release</span
+                      >
+                    </div>
+                    <div class="dr-sigs">
+                      <div class="dr-sig">
+                        <div class="dr-sig-name">GreenFresh BD</div>
+                        <div class="dr-sig-meta">
+                          Awaiting your confirmation
+                        </div>
+                        <div class="dr-sig-ok" style="color: var(--amb-t)">
+                          ⏳ Action required
+                        </div>
+                      </div>
+                      <div class="dr-sig">
+                        <div class="dr-sig-name">Nadia Islam</div>
+                        <div class="dr-sig-meta">
+                          Confirmed Mar 16 · 9:02 AM
+                        </div>
+                        <div class="dr-sig-ok">✓ IP logged · confirmed</div>
+                      </div>
+                    </div>
+                    <div class="dr-confirm-actions">
+                      <button class="btn-g" onclick="confirmRecord()">
+                        ✓ I confirm and agree to these terms
+                      </button>
+                    </div>
+                  </div>
+                  <div class="msg-t">Mar 16 · 9:03 AM · Platform</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- THREAD 3: Sponsor funds escrow -->
+            <div class="thread" id="thread-rk" style="display: none">
+              <div class="sys-ev">
+                <div class="se-lbl">Deal record confirmed by both parties</div>
+                <div class="se-det">
+                  Please fund escrow to allow Rafi Khan to begin work
+                </div>
+                <div class="se-t">Mar 13 · 10:00 AM</div>
+              </div>
+              <div class="msg-wrap">
+                <div class="m-av av-rk">RK</div>
+                <div>
+                  <div class="bubble b-cr">
+                    Hi! Both parties confirmed the deal record. I'm ready to
+                    start as soon as escrow is funded. Looking forward to
+                    creating great content for the Superfoods launch!
+                  </div>
+                  <div class="msg-t">Mar 13 · 10:05 AM</div>
+                </div>
+              </div>
+              <!-- CARD 3: ESCROW CARD — sponsor funds, amber -->
+              <div class="msg-wrap me">
+                <div class="m-av av-s">GF</div>
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-end;
+                    gap: 3px;
+                  "
+                >
+                  <div class="escrow-card esc-sp">
+                    <div class="esc-hd">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                        stroke="var(--amb-d)"
+                        stroke-width="1.3"
+                      >
+                        <rect x="2" y="5" width="8" height="5.5" rx="1" />
+                        <path d="M4 5V3.5a2 2 0 114 0V5" /></svg
+                      >Escrow funded · ৳18,000 secured
+                    </div>
+                    <div class="esc-row">
+                      <span class="esc-l">Amount held</span
+                      ><span class="esc-v">৳18,000</span>
+                    </div>
+                    <div class="esc-row">
+                      <span class="esc-l">Funded by you</span
+                      ><span class="esc-v">GreenFresh BD · Mar 14</span>
+                    </div>
+                    <div class="esc-row">
+                      <span class="esc-l">Held by</span
+                      ><span class="esc-v">SponzoBD platform</span>
+                    </div>
+                    <div class="esc-row">
+                      <span class="esc-l">Released when</span
+                      ><span class="esc-v">You approve Rafi's content</span>
+                    </div>
+                    <div class="esc-row">
+                      <span class="esc-l">Auto-release</span
+                      ><span class="esc-v"
+                        >April 4, 2025 if you don't respond</span
+                      >
+                    </div>
+                    <div class="esc-row">
+                      <span class="esc-l">Creator's deadline</span
+                      ><span class="esc-v">March 28, 2025</span>
+                    </div>
+                  </div>
+                  <div class="msg-t r">Mar 14 · 8:30 AM</div>
+                </div>
+              </div>
+              <div class="msg-wrap">
+                <div class="m-av av-rk">RK</div>
+                <div>
+                  <div class="bubble b-cr">
+                    Escrow confirmed! Starting work today. Will share a content
+                    outline before filming.
+                  </div>
+                  <div class="msg-t">Mar 14 · 10:00 AM</div>
+                </div>
+              </div>
+              <div
+                style="
+                  text-align: center;
+                  font-size: 11px;
+                  color: var(--tx3);
+                  padding: 4px 0;
+                "
+              >
+                Rafi is working on content · deadline March 28 · 14 days
+                remaining
+              </div>
+            </div>
+
+            <!-- THREAD 4: Content submitted + approved + rate creator -->
+            <div class="thread" id="thread-fa" style="display: none">
+              <div class="sys-ev">
+                <div class="se-lbl">Content submitted by Faria Ahmed</div>
+                <div class="se-det">
+                  3 deliverables submitted · your review window: 5 business days
+                  · auto-release Mar 3
+                </div>
+                <div class="se-t">Feb 22 · 10:00 AM</div>
+              </div>
+              <!-- CARD 4: CONTENT CARD — sponsor sees and approves -->
+              <div class="msg-wrap">
+                <div class="m-av av-fa">FA</div>
+                <div style="display: flex; flex-direction: column; gap: 3px">
+                  <div class="content-card">
+                    <div class="cc-thumb">
+                      <svg
+                        width="26"
+                        height="26"
+                        viewBox="0 0 26 26"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.2"
+                        opacity=".35"
+                      >
+                        <rect x="2" y="2" width="22" height="22" rx="2" />
+                        <circle cx="8" cy="8" r="3" />
+                        <path d="M2 18l7-7 4 4 4-6 7 9" /></svg
+                      ><span style="font-size: 10px; color: var(--tx3)"
+                        >Content thumbnail · Instagram</span
+                      >
+                    </div>
+                    <div class="cc-body">
+                      <div class="cc-hd">
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 12 12"
+                          fill="none"
+                          stroke="#3B6D11"
+                          stroke-width="1.3"
+                        >
+                          <rect x="1.5" y="1.5" width="9" height="9" rx="1" />
+                          <path d="M3.5 4h5M3.5 6.5h5M3.5 9h3" /></svg
+                        >Content submitted · 3 of 3 deliverables
+                      </div>
+                      <div class="cc-item">
+                        <svg viewBox="0 0 11 11" fill="none" width="11">
+                          <circle cx="5.5" cy="5.5" r="4.5" fill="#C0DD97" />
+                          <path
+                            d="M3 5.5l2 2L8.5 3"
+                            stroke="#27500A"
+                            stroke-width="1.3"
+                            stroke-linecap="round"
+                          /></svg
+                        >Instagram reel · 48 sec
+                      </div>
+                      <div class="cc-item">
+                        <svg viewBox="0 0 11 11" fill="none" width="11">
+                          <circle cx="5.5" cy="5.5" r="4.5" fill="#C0DD97" />
+                          <path
+                            d="M3 5.5l2 2L8.5 3"
+                            stroke="#27500A"
+                            stroke-width="1.3"
+                            stroke-linecap="round"
+                          /></svg
+                        >Instagram story 1
+                      </div>
+                      <div class="cc-item">
+                        <svg viewBox="0 0 11 11" fill="none" width="11">
+                          <circle cx="5.5" cy="5.5" r="4.5" fill="#C0DD97" />
+                          <path
+                            d="M3 5.5l2 2L8.5 3"
+                            stroke="#27500A"
+                            stroke-width="1.3"
+                            stroke-linecap="round"
+                          /></svg
+                        >Instagram story 2
+                      </div>
+                      <a class="cc-link" href="#" onclick="return false;"
+                        ><svg
+                          width="11"
+                          height="11"
+                          viewBox="0 0 12 12"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.2"
+                        >
+                          <path d="M5 2H2v8h8V7M7 2h3v3M5 7l5-5" /></svg
+                        >View content files · Google Drive</a
+                      >
+                      <div class="cc-note">
+                        Reel features the supplement naturally in the morning
+                        routine. Both stories are lifestyle clips. Brand tag
+                        @greenfreshbd and hashtags included.
+                      </div>
+                      <span class="cc-status cc-approved"
+                        ><svg
+                          width="10"
+                          height="10"
+                          viewBox="0 0 10 10"
+                          fill="none"
+                        >
+                          <path
+                            d="M2 5l2 2L8 3"
+                            stroke="#3B6D11"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                          /></svg
+                        >You approved · Feb 22</span
+                      >
+                    </div>
+                  </div>
+                  <div class="msg-t">Feb 22 · 10:05 AM</div>
+                </div>
+              </div>
+              <div class="sys-ev">
+                <div class="se-lbl">Content approved · ৳20,000 released</div>
+                <div class="se-det">
+                  You approved Faria Ahmed's content · ৳20,000 escrow released
+                  to creator
+                </div>
+                <div class="se-t">Feb 22 · 2:00 PM</div>
+              </div>
+              <div class="msg-wrap">
+                <div class="m-av av-fa">FA</div>
+                <div>
+                  <div class="bubble b-cr">
+                    Payment received! Thank you GreenFresh BD — wonderful
+                    collaboration. Happy to work together again!
+                  </div>
+                  <div class="msg-t">Feb 26 · 11:00 AM</div>
+                </div>
+              </div>
+              <!-- CARD 5: REVIEW CARD — sponsor rates creator -->
+              <div class="msg-wrap">
+                <div
+                  class="m-av"
+                  style="background: var(--pur-l); color: var(--pur-t)"
+                >
+                  SB
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 3px">
+                  <div class="review-card" id="review-card-sp">
+                    <div class="rv-hd">
+                      <svg
+                        width="13"
+                        height="13"
+                        viewBox="0 0 13 13"
+                        fill="none"
+                      >
+                        <path
+                          d="M6.5 1.5L8 5H12L9 7.5L10 11L6.5 8.5L3 11L4 7.5L1 5H5Z"
+                          fill="#EF9F27"
+                          opacity=".6"
+                        /></svg
+                      >Rate this creator · Faria Ahmed
+                    </div>
+                    <div class="rv-note">
+                      How was your experience? Your rating appears publicly on
+                      Faria's creator profile.
+                    </div>
+                    <div class="rv-stars" id="sp-stars">
+                      <div class="rv-star" onclick="setRatingSp(1)"></div>
+                      <div class="rv-star" onclick="setRatingSp(2)"></div>
+                      <div class="rv-star" onclick="setRatingSp(3)"></div>
+                      <div class="rv-star" onclick="setRatingSp(4)"></div>
+                      <div class="rv-star" onclick="setRatingSp(5)"></div>
+                    </div>
+                    <textarea
+                      class="rv-ta"
+                      id="rv-sp-text"
+                      placeholder="Optional: write a short review — brief quality, professionalism, punctuality, content performance... (visible on her creator profile)"
+                    ></textarea>
+                    <button class="btn-g" onclick="submitRatingSp()">
+                      Submit rating
+                    </button>
+                  </div>
+                  <div class="msg-t">Feb 26 · Platform</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- PANEL ZONE: counter-propose -->
+            <div class="panel-zone" id="counter-panel">
+              <div class="pz-title">
+                Counter-propose terms
+                <button class="pz-close" onclick="hidePanel('counter-panel')">
+                  Close
+                </button>
+              </div>
+              <div class="pz-grid">
+                <div class="pz-field">
+                  <div class="pz-lbl">Counter rate (৳)</div>
+                  <input
+                    class="pz-inp"
+                    id="cp-rate"
+                    type="number"
+                    placeholder="e.g. 28000"
+                  />
+                </div>
+                <div class="pz-field">
+                  <div class="pz-lbl">Deliverables</div>
+                  <input
+                    class="pz-inp"
+                    id="cp-del"
+                    placeholder="e.g. 2 reels · 2 stories"
+                  />
+                </div>
+                <div class="pz-field">
+                  <div class="pz-lbl">Deadline</div>
+                  <input
+                    class="pz-inp"
+                    id="cp-date"
+                    placeholder="e.g. March 22, 2025"
+                  />
+                </div>
+                <div class="pz-field">
+                  <div class="pz-lbl">Revision rounds</div>
+                  <input
+                    class="pz-inp"
+                    id="cp-rev"
+                    placeholder="e.g. 1 included"
+                  />
+                </div>
+                <div class="pz-field">
+                  <div class="pz-lbl">Usage rights</div>
+                  <input
+                    class="pz-inp"
+                    id="cp-rights"
+                    placeholder="e.g. 3 months · BD"
+                  />
+                </div>
+                <div class="pz-field">
+                  <div class="pz-lbl">Notes</div>
+                  <textarea
+                    class="pz-ta"
+                    id="cp-notes"
+                    placeholder="Any changes to conditions..."
+                  ></textarea>
+                </div>
+              </div>
+              <div class="pz-foot">
+                <div class="pz-note">
+                  Creator sees this as a counter-proposal card and can accept or
+                  propose again.
+                </div>
+                <button class="btn-r" onclick="sendCounter()">
+                  Send counter-proposal
+                </button>
+              </div>
+            </div>
+
+            <!-- PANEL ZONE: revision request -->
+            <div class="panel-zone" id="revision-panel">
+              <div class="pz-title">
+                Request revision
+                <button class="pz-close" onclick="hidePanel('revision-panel')">
+                  Close
+                </button>
+              </div>
+              <div class="pz-grid">
+                <div class="pz-field full">
+                  <div class="pz-lbl">What needs changing?</div>
+                  <textarea
+                    class="pz-ta"
+                    id="rv-req"
+                    style="height: 70px"
+                    placeholder="e.g. Reel 1 needs the product shown more clearly in the first 3 seconds. Please also remove the competitor visible at 0:22."
+                  ></textarea>
+                </div>
+                <div class="pz-field">
+                  <div class="pz-lbl">Extended deadline (optional)</div>
+                  <input
+                    class="pz-inp"
+                    id="rv-date"
+                    placeholder="e.g. March 25, 2025"
+                  />
+                </div>
+                <div class="pz-field">
+                  <div class="pz-lbl">Revision round</div>
+                  <input
+                    class="pz-inp"
+                    value="Revision 1 of 1 allowed"
+                    readonly
+                    style="opacity: 0.6"
+                  />
+                </div>
+              </div>
+              <div class="pz-foot">
+                <div class="pz-note">
+                  Creator is notified. 1 revision round remaining.
+                </div>
+                <button class="btn-r" onclick="sendRevision()">
+                  Send revision request
+                </button>
+              </div>
+            </div>
+
+            <!-- INPUT AREA -->
+            <div class="input-area">
+              <div class="qa-row" id="qa-row"></div>
+              <div class="msg-inp-row">
+                <input
+                  class="msg-inp"
+                  id="msg-inp"
+                  type="text"
+                  placeholder="Type a message..."
+                  onkeydown="if (event.key === 'Enter') sendMsg();"
+                />
+                <button class="send-btn" onclick="sendMsg()">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path d="M1.5 7l11-5.5-5.5 11L6 8 1.5 7z" fill="white" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="toast" id="tst">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+        <path
+          d="M2 7l3 3 7-7"
+          stroke="white"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        /></svg
+      ><span id="tm"></span>
+    </div>
+    <script>
+      let active = "la";
+      let ratingCr = 0;
+      const CONVS = ["la", "ni", "rk", "fa"];
+
+      function sw(id, el) {
+        document
+          .querySelectorAll(".conv-item")
+          .forEach((c) => c.classList.remove("active"));
+        el.classList.add("active");
+        CONVS.forEach((c) => {
+          document.getElementById("ctx-" + c).style.display = "none";
+          document.getElementById("thread-" + c).style.display = "none";
+        });
+        document.getElementById("ctx-" + id).style.display = "flex";
+        const t = document.getElementById("thread-" + id);
+        t.style.display = "flex";
+        t.style.flexDirection = "column";
+        setTimeout(() => (t.scrollTop = t.scrollHeight), 50);
+        const ud = el.querySelector(".udot");
+        if (ud) ud.remove();
+        const pv = el.querySelector(".ci-prev");
+        if (pv) pv.classList.remove("unread");
+        updateBadge();
+        ["counter-panel", "revision-panel"].forEach((p) => {
+          const e2 = document.getElementById(p);
+          if (e2) e2.style.display = "none";
+        });
+        updateQA(id);
+        active = id;
+        CONVS.forEach((c) => {
+          const d = document.getElementById("jd-" + c);
+          if (d) d.classList.remove("on");
+          const b = document.getElementById("jbtn-" + c);
+          if (b) b.classList.remove("on");
+        });
+      }
+
+      function updateBadge() {
+        const r = document.querySelectorAll(".conv-item .udot").length;
+        const b = document.getElementById("ubadge");
+        b.textContent = r > 0 ? r + " unread" : "All read";
+        b.style.background = r > 0 ? "var(--red)" : "var(--grn)";
+      }
+
+      function updateQA(id) {
+        const row = document.getElementById("qa-row");
+        if (id === "la")
+          row.innerHTML =
+            '<button class="qa qa-g" onclick="acceptTerms()">✓ Accept terms</button><button class="qa qa-a" onclick="showPanel(\'counter-panel\')">Counter-propose</button><button class="qa" onclick="T(\'Decline sent\')">Decline</button>';
+        else if (id === "ni")
+          row.innerHTML =
+            '<button class="qa qa-g" onclick="confirmRecord()">✓ Confirm deal record</button>';
+        else if (id === "rk")
+          row.innerHTML =
+            '<button class="qa qa-g" onclick="fundEscrow()">Fund escrow ৳18,000</button><button class="qa" onclick="T(\'Opening chat...\')">Open chat</button>';
+        else if (id === "fa")
+          row.innerHTML =
+            '<span style="font-size:12px;color:var(--tx3);padding:4px 0;">Deal completed · rate Faria above to finish</span>';
+      }
+
+      function toggleJourney(id) {
+        CONVS.forEach((c) => {
+          if (c !== id) {
+            const d = document.getElementById("jd-" + c);
+            if (d) d.classList.remove("on");
+            const b = document.getElementById("jbtn-" + c);
+            if (b) b.classList.remove("on");
+          }
+        });
+        const d = document.getElementById("jd-" + id);
+        const b = document.getElementById("jbtn-" + id);
+        if (d) {
+          d.classList.toggle("on");
+          b.classList.toggle("on");
+        }
+      }
+
+      function showPanel(id) {
+        ["counter-panel", "revision-panel"].forEach((p) => {
+          document.getElementById(p).style.display =
+            p === id ? "block" : "none";
+        });
+      }
+      function hidePanel(id) {
+        document.getElementById(id).style.display = "none";
+      }
+
+      function acceptTerms() {
+        const card = document.querySelector("#thread-la .tc-badge");
+        if (card) {
+          card.className = "tc-badge tc-acc";
+          card.innerHTML =
+            '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2L8 3" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round"/></svg>Accepted by GreenFresh BD · Just now';
+        }
+        const actions = document.querySelector("#thread-la .tc-actions");
+        if (actions) actions.remove();
+        const thread = document.getElementById("thread-la");
+        const sys = document.createElement("div");
+        sys.className = "sys-ev";
+        sys.innerHTML =
+          '<div class="se-lbl">Terms accepted · deal record being generated</div><div class="se-det">GreenFresh BD accepted Lamia\'s terms · Platform generating deal record for both parties to confirm</div><div class="se-t">Just now · Platform</div>';
+        thread.appendChild(sys);
+        thread.scrollTop = thread.scrollHeight;
+        T(
+          "Terms accepted — deal record will appear for both parties to confirm",
+        );
+        updateQA("la");
+        document.getElementById("qa-row").innerHTML =
+          '<button class="qa" onclick="T(\'Awaiting deal record confirmation...\')">Awaiting deal record</button>';
+      }
+
+      function confirmRecord() {
+        const sigMine = document.querySelector(
+          "#thread-ni .dr-sig:first-child .dr-sig-meta",
+        );
+        if (sigMine) sigMine.textContent = "Confirmed by you · Just now";
+        const sigOk = document.querySelector(
+          "#thread-ni .dr-sig:first-child .dr-sig-ok",
+        );
+        if (sigOk) {
+          sigOk.textContent = "✓ IP logged · confirmed";
+          sigOk.style.color = "var(--grn-3)";
+        }
+        const cfBtns = document.querySelector("#thread-ni .dr-confirm-actions");
+        if (cfBtns)
+          cfBtns.innerHTML =
+            '<span style="font-size:12px;color:var(--grn-3);font-weight:700;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L10 3" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round"/></svg>You confirmed · now fund escrow to proceed</span>';
+        T(
+          "Deal record confirmed — please fund escrow for ৳22,000 to allow creator to start",
+        );
+        document.getElementById("qa-row").innerHTML =
+          '<button class="qa qa-g" onclick="T(\'Opening escrow payment...\')">Fund escrow ৳22,000</button>';
+      }
+
+      function fundEscrow() {
+        const thread = document.getElementById("thread-rk");
+        const w = document.createElement("div");
+        w.className = "msg-wrap me";
+        w.innerHTML =
+          '<div class="m-av av-s">GF</div>' +
+          '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;">' +
+          '<div class="escrow-card esc-sp">' +
+          '<div class="esc-hd"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="var(--amb-d)" stroke-width="1.3"><rect x="2" y="5" width="8" height="5.5" rx="1"/><path d="M4 5V3.5a2 2 0 114 0V5"/></svg>Escrow funded · ৳18,000 secured</div>' +
+          '<div class="esc-row"><span class="esc-l">Amount held</span><span class="esc-v">৳18,000</span></div>' +
+          '<div class="esc-row"><span class="esc-l">Funded by you</span><span class="esc-v">GreenFresh BD · Just now</span></div>' +
+          '<div class="esc-row"><span class="esc-l">Released when</span><span class="esc-v">You approve Rafi\'s content</span></div>' +
+          "</div>" +
+          '<div class="msg-t r">Just now</div></div>';
+        thread.appendChild(w);
+        thread.scrollTop = thread.scrollHeight;
+        T("Escrow funded — Rafi Khan can now start work");
+        document.getElementById("qa-row").innerHTML =
+          '<button class="qa" onclick="T(\'Opening chat...\')">Open chat</button><button class="qa" onclick="showPanel(\'revision-panel\')">Request revision</button>';
+      }
+
+      function sendCounter() {
+        const rate = document.getElementById("cp-rate").value;
+        const del = document.getElementById("cp-del").value;
+        if (!rate && !del) {
+          T("Fill in at least rate and deliverables");
+          return;
+        }
+        const thread = document.getElementById("thread-" + active);
+        const w = document.createElement("div");
+        w.className = "msg-wrap me";
+        w.innerHTML =
+          '<div class="m-av av-s">GF</div>' +
+          '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;">' +
+          '<div class="terms-card" style="border-color:var(--blu-m);">' +
+          '<div class="tc-hd" style="color:var(--blu-t);"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="var(--blu-t)" stroke-width="1.3"><rect x="1.5" y="1.5" width="9" height="9" rx="1"/><path d="M3.5 6h5M3.5 4h5M3.5 8h3"/></svg>Counter-proposal from GreenFresh BD</div>' +
+          (rate
+            ? '<div class="tc-row"><span class="tc-l">Counter rate</span><span class="tc-v">৳' +
+              parseInt(rate).toLocaleString() +
+              "</span></div>"
+            : "") +
+          (del
+            ? '<div class="tc-row"><span class="tc-l">Deliverables</span><span class="tc-v">' +
+              del +
+              "</span></div>"
+            : "") +
+          '<div class="tc-badge" style="background:var(--blu-l);color:var(--blu-t);">Awaiting creator response</div>' +
+          "</div>" +
+          '<div class="msg-t r">Just now</div></div>';
+        thread.appendChild(w);
+        thread.scrollTop = thread.scrollHeight;
+        hidePanel("counter-panel");
+        T("Counter-proposal sent to creator");
+      }
+
+      function sendRevision() {
+        const req = document.getElementById("rv-req").value.trim();
+        if (!req) {
+          T("Please describe what needs changing");
+          return;
+        }
+        const thread = document.getElementById("thread-" + active);
+        const w = document.createElement("div");
+        w.className = "msg-wrap me";
+        w.innerHTML =
+          '<div class="m-av av-s">GF</div>' +
+          '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;">' +
+          '<div style="background:var(--red-l);border:1px solid var(--red-m);border-radius:var(--r3);padding:11px 13px;max-width:70%;">' +
+          '<div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:6px;display:flex;align-items:center;gap:5px;"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><circle cx="5.5" cy="5.5" r="5" stroke="var(--red)" stroke-width="1.2"/><path d="M5.5 3v3M5.5 8v.5" stroke="var(--red)" stroke-width="1.2" stroke-linecap="round"/></svg>Revision requested</div>' +
+          '<div style="font-size:12px;color:var(--tx2);line-height:1.6;">' +
+          req +
+          "</div>" +
+          "</div>" +
+          '<div class="msg-t r">Just now</div></div>';
+        thread.appendChild(w);
+        thread.scrollTop = thread.scrollHeight;
+        hidePanel("revision-panel");
+        T("Revision request sent to creator");
+      }
+
+      function setRatingSp(n) {
+        ratingCr = n;
+        document
+          .querySelectorAll("#sp-stars .rv-star")
+          .forEach((s, i) => s.classList.toggle("on", i < n));
+      }
+
+      function submitRatingSp() {
+        if (!ratingCr) {
+          T("Please select a star rating");
+          return;
+        }
+        const note = document.getElementById("rv-sp-text").value.trim();
+        const stars = "⭐".repeat(ratingCr);
+        const card = document.getElementById("review-card-sp");
+        card.innerHTML =
+          '<div class="rv-hd"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1.5L8 5H12L9 7.5L10 11L6.5 8.5L3 11L4 7.5L1 5H5Z" fill="#EF9F27"/></svg>Your rating submitted</div>' +
+          '<div class="rv-submitted">' +
+          stars +
+          " — " +
+          ratingCr +
+          "/5 · Faria Ahmed" +
+          (note ? '<br><br>"' + note + '"' : "") +
+          '<div class="rv-by">— Visible on Faria\'s creator profile · submitted just now</div></div>';
+        T("Rating submitted — visible on Faria Ahmed's public profile");
+      }
+
+      function sendMsg() {
+        const inp = document.getElementById("msg-inp");
+        const text = inp.value.trim();
+        if (!text) return;
+        const thread = document.getElementById("thread-" + active);
+        const w = document.createElement("div");
+        w.className = "msg-wrap me";
+        w.innerHTML =
+          '<div class="m-av av-s">GF</div><div><div class="bubble b-me">' +
+          text +
+          '</div><div class="msg-t r">Just now</div></div>';
+        thread.appendChild(w);
+        thread.scrollTop = thread.scrollHeight;
+        inp.value = "";
+      }
+
+      function T(m) {
+        const t = document.getElementById("tst");
+        document.getElementById("tm").textContent = m;
+        t.classList.add("on");
+        setTimeout(() => t.classList.remove("on"), 2700);
+      }
+
+      (function () {
+        document.getElementById("thread-la").style.display = "flex";
+        document.getElementById("thread-la").style.flexDirection = "column";
+        document.getElementById("ctx-la").style.display = "flex";
+        updateQA("la");
+        setTimeout(() => {
+          const t = document.getElementById("thread-la");
+          t.scrollTop = t.scrollHeight;
+        }, 100);
+      })();
+    </script>
+  </body>
+</html>

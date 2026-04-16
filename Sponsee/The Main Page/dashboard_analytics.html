@@ -1,0 +1,3105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SponzoBD — Dashboard & Analytics</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --red: #e24b4a;
+        --red-l: #fcebeb;
+        --red-m: #f7c1c1;
+        --grn: #1d9e75;
+        --grn-l: #eaf3de;
+        --grn-m: #c0dd97;
+        --grn-d: #085041;
+        --grn-3: #3b6d11;
+        --grn-t: #27500a;
+        --teal-l: #e1f5ee;
+        --teal-m: #9fe1cb;
+        --blu-l: #e6f1fb;
+        --blu-m: #b5d4f4;
+        --blu-t: #0c447c;
+        --amb-l: #faeeda;
+        --amb-m: #fac775;
+        --amb-t: #633806;
+        --amb-d: #854f0b;
+        --pur-l: #eeedfe;
+        --pur-t: #3c3489;
+        --bg: #f4f2ee;
+        --srf: #ffffff;
+        --srf2: #f0eee9;
+        --bdr: rgba(0, 0, 0, 0.08);
+        --bdr-m: rgba(0, 0, 0, 0.14);
+        --bdr-s: rgba(0, 0, 0, 0.22);
+        --tx1: #1a1a1a;
+        --tx2: #555;
+        --tx3: #999;
+        --font: "DM Sans", system-ui, sans-serif;
+        --r1: 7px;
+        --r2: 10px;
+        --r3: 14px;
+      }
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+        font-family: var(--font);
+        font-size: 14px;
+        color: var(--tx1);
+        background: var(--bg);
+      }
+      .app {
+        display: flex;
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+      }
+
+      /* ── SIDEBAR ── */
+      .sb {
+        width: 220px;
+        flex-shrink: 0;
+        background: var(--srf);
+        border-right: 1px solid var(--bdr);
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
+      .sb-logo {
+        padding: 15px 16px 12px;
+        border-bottom: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .logo-ic {
+        width: 28px;
+        height: 28px;
+        background: var(--red);
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .sb-user {
+        padding: 11px 16px;
+        border-bottom: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .av {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--teal-m);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--grn-d);
+        flex-shrink: 0;
+      }
+      .u-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .u-sub {
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .u-plan {
+        font-size: 11px;
+        color: var(--grn-d);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-top: 2px;
+      }
+      .pdot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--grn);
+      }
+      .nav {
+        flex: 1;
+        overflow-y: auto;
+        padding: 8px 0;
+      }
+      .nav-sec {
+        padding: 5px 16px 3px;
+        font-size: 10px;
+        color: var(--tx3);
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        font-weight: 600;
+      }
+      .ni {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        font-size: 13px;
+        color: var(--tx2);
+        cursor: pointer;
+        border-left: 2.5px solid transparent;
+        transition: background 0.1s;
+      }
+      .ni:hover {
+        background: var(--srf2);
+      }
+      .ni.on {
+        background: var(--srf2);
+        color: var(--tx1);
+        font-weight: 600;
+        border-left-color: var(--red);
+      }
+      .ni svg {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+        opacity: 0.5;
+      }
+      .ni.on svg {
+        opacity: 1;
+      }
+      .ni-badge {
+        margin-left: auto;
+        background: var(--red);
+        color: #fff;
+        font-size: 10px;
+        padding: 1px 7px;
+        border-radius: 20px;
+        font-weight: 700;
+      }
+      .sb-ps {
+        margin: 0 10px 14px;
+        padding: 10px 12px;
+        background: var(--srf2);
+        border-radius: var(--r2);
+      }
+      .ps-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 4px;
+      }
+      .ps-lbl {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .ps-pct {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--grn);
+      }
+      .ps-track {
+        height: 4px;
+        background: var(--bdr-m);
+        border-radius: 2px;
+      }
+      .ps-fill {
+        height: 4px;
+        background: var(--grn);
+        border-radius: 2px;
+        width: 92%;
+      }
+      .ps-note {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-top: 4px;
+      }
+
+      /* ── MAIN ── */
+      .main {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+      }
+      .topbar {
+        height: 52px;
+        background: var(--srf);
+        border-bottom: 1px solid var(--bdr);
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+      }
+      .tb-t {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--tx1);
+        letter-spacing: -0.2px;
+      }
+      .tb-r {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .badge-prem {
+        background: var(--teal-l);
+        color: var(--grn-d);
+        font-size: 11px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-weight: 700;
+      }
+      .icon-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: var(--r1);
+        border: 1px solid var(--bdr-m);
+        background: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        position: relative;
+      }
+      .notif-dot {
+        width: 7px;
+        height: 7px;
+        background: var(--red);
+        border-radius: 50%;
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        border: 1.5px solid var(--srf);
+      }
+
+      /* ── CONTENT SCROLL ── */
+      .content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 18px 20px 28px;
+      }
+
+      /* ── COMMON ── */
+      .panel {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        border-radius: var(--r3);
+        padding: 14px 17px;
+        margin-bottom: 11px;
+      }
+      .panel:last-child {
+        margin-bottom: 0;
+      }
+      .ph {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+      .pt {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .pn {
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .pe {
+        font-size: 12px;
+        color: var(--red);
+        cursor: pointer;
+        font-weight: 500;
+      }
+      .sec {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 16px 0 9px;
+      }
+      .sec:first-child {
+        margin-top: 0;
+      }
+      .sec-t {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .sec-l {
+        font-size: 12px;
+        color: var(--red);
+        cursor: pointer;
+        font-weight: 500;
+      }
+      .divider {
+        height: 1px;
+        background: var(--bdr);
+        margin: 11px 0;
+      }
+      .two {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 11px;
+      }
+      .ins {
+        font-size: 12px;
+        padding: 8px 11px;
+        border-radius: var(--r1);
+        display: flex;
+        align-items: flex-start;
+        gap: 7px;
+        line-height: 1.55;
+        margin-top: 9px;
+      }
+      .ins svg {
+        width: 12px;
+        height: 12px;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .ins-g {
+        background: var(--grn-l);
+        color: var(--grn-t);
+      }
+      .ins-a {
+        background: var(--amb-l);
+        color: var(--amb-t);
+      }
+      .ins-b {
+        background: var(--blu-l);
+        color: var(--blu-t);
+      }
+      .stag {
+        font-size: 11px;
+        padding: 2px 9px;
+        border-radius: 20px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .t-ch {
+        background: var(--grn-l);
+        color: var(--grn-3);
+      }
+      .t-vi {
+        background: var(--amb-l);
+        color: var(--amb-t);
+      }
+      .t-pe {
+        background: var(--srf2);
+        color: var(--tx2);
+      }
+      .t-cl {
+        background: var(--blu-l);
+        color: var(--blu-t);
+      }
+      .t-ac {
+        background: var(--teal-l);
+        color: var(--grn-d);
+      }
+      .t-de {
+        background: var(--red-l);
+        color: #791f1f;
+      }
+      .vbdg {
+        font-size: 10px;
+        padding: 1px 6px;
+        border-radius: 20px;
+        background: var(--grn-l);
+        color: var(--grn-3);
+        margin-left: 5px;
+        font-weight: 700;
+        vertical-align: middle;
+      }
+      .stars {
+        display: flex;
+        gap: 2px;
+      }
+      .sf {
+        width: 11px;
+        height: 11px;
+        background: #ef9f27;
+        clip-path: polygon(
+          50% 0%,
+          61% 35%,
+          98% 35%,
+          68% 57%,
+          79% 91%,
+          50% 70%,
+          21% 91%,
+          32% 57%,
+          2% 35%,
+          39% 35%
+        );
+      }
+      .se {
+        width: 11px;
+        height: 11px;
+        background: #ddd;
+        clip-path: polygon(
+          50% 0%,
+          61% 35%,
+          98% 35%,
+          68% 57%,
+          79% 91%,
+          50% 70%,
+          21% 91%,
+          32% 57%,
+          2% 35%,
+          39% 35%
+        );
+      }
+      .btn-g {
+        padding: 6px 13px;
+        background: var(--grn-l);
+        border: 1px solid var(--grn-m);
+        border-radius: var(--r1);
+        color: var(--grn-t);
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .btn-b {
+        padding: 6px 13px;
+        background: var(--blu-l);
+        border: 1px solid var(--blu-m);
+        border-radius: var(--r1);
+        color: var(--blu-t);
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .btn-ghost {
+        padding: 5px 11px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        background: transparent;
+        color: var(--tx2);
+        font-size: 12px;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .btn-r {
+        padding: 7px 15px;
+        background: var(--red);
+        border: none;
+        border-radius: var(--r1);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .inp {
+        padding: 7px 10px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        background: var(--srf);
+        color: var(--tx1);
+        font-size: 13px;
+        width: 100%;
+        font-family: var(--font);
+      }
+      .inp:focus {
+        outline: none;
+        border-color: var(--grn);
+      }
+      .inp-l {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-bottom: 3px;
+      }
+
+      /* ── NOTIF BAR ── */
+      .notif {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        border-radius: var(--r2);
+        padding: 9px 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 7px;
+      }
+      .nd {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .nd-g {
+        background: var(--grn);
+      }
+      .nd-a {
+        background: #ef9f27;
+      }
+      .nd-r {
+        background: var(--red);
+      }
+      .n-t {
+        font-size: 13px;
+        color: var(--tx1);
+        flex: 1;
+        line-height: 1.45;
+      }
+      .n-t b {
+        font-weight: 700;
+      }
+      .n-a {
+        font-size: 12px;
+        color: var(--red);
+        cursor: pointer;
+        font-weight: 600;
+        flex-shrink: 0;
+        white-space: nowrap;
+      }
+
+      /* ── 7 METRIC CARDS ── */
+      .mc7 {
+        display: grid;
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        gap: 8px;
+        margin-bottom: 14px;
+      }
+      .mc {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        border-radius: var(--r3);
+        padding: 12px 12px 11px;
+      }
+      .mc-l {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-bottom: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        line-height: 1.3;
+      }
+      .mc-v {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--tx1);
+        line-height: 1;
+      }
+      .mc-n {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-top: 3px;
+      }
+      .mc-gr {
+        background: var(--grn-l);
+        border-color: var(--grn-m);
+      }
+      .mc-gr .mc-l {
+        color: var(--grn-3);
+      }
+      .mc-gr .mc-v {
+        color: var(--grn-d);
+      }
+      .mc-gr .mc-n {
+        color: var(--grn-3);
+      }
+      .mc-tl {
+        background: var(--teal-l);
+        border-color: var(--teal-m);
+      }
+      .mc-tl .mc-l {
+        color: #0f6e56;
+      }
+      .mc-tl .mc-v {
+        color: var(--grn-d);
+      }
+      .mc-locked {
+        background: var(--srf2);
+        border-color: var(--bdr);
+        opacity: 0.6;
+      }
+      .mc-locked .mc-v {
+        color: var(--tx3);
+      }
+      .mc-locked .mc-n {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+      }
+
+      /* ── APPLICATION ROWS ── */
+      .ar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 9px 0;
+        border-bottom: 1px solid var(--bdr);
+      }
+      .ar:last-child {
+        border-bottom: none;
+      }
+      .ar-logo {
+        width: 26px;
+        height: 26px;
+        border-radius: 6px;
+        background: var(--srf2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 9px;
+        font-weight: 700;
+        color: var(--tx2);
+        flex-shrink: 0;
+        margin-right: 9px;
+        border: 1px solid var(--bdr);
+      }
+      .ar-brand {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .ar-camp {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-top: 1px;
+      }
+      .ar-r {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-shrink: 0;
+      }
+      .sbar {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .sbg {
+        width: 42px;
+        height: 4px;
+        background: var(--srf2);
+        border-radius: 2px;
+        overflow: hidden;
+      }
+      .sbf {
+        height: 100%;
+        border-radius: 2px;
+      }
+      .fhi {
+        background: var(--grn-3);
+      }
+      .fmd {
+        background: #ef9f27;
+      }
+      .sbn {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+
+      /* ── PIPELINE CARDS ── */
+      .pc {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        border-radius: var(--r3);
+        padding: 14px 16px;
+        margin-bottom: 9px;
+      }
+      .pc:last-child {
+        margin-bottom: 0;
+      }
+      .pc-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 11px;
+      }
+      .pc-brand {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .pc-camp {
+        font-size: 12px;
+        color: var(--tx2);
+        margin-top: 2px;
+      }
+      .pc-right {
+        text-align: right;
+        flex-shrink: 0;
+      }
+      .pc-amt {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--grn-3);
+      }
+      .pc-esc {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-top: 3px;
+      }
+      .stages {
+        display: flex;
+        align-items: flex-start;
+        margin: 10px 0 11px;
+      }
+      .stage {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+      }
+      .stage:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        top: 9px;
+        left: 50%;
+        width: 100%;
+        height: 1.5px;
+        background: var(--bdr-m);
+        z-index: 0;
+      }
+      .stage.done:not(:last-child)::after {
+        background: var(--grn-m);
+      }
+      .sd {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 1.5px solid var(--bdr-m);
+        background: var(--srf);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 1;
+      }
+      .sd.done {
+        background: var(--grn-l);
+        border-color: var(--grn-m);
+      }
+      .sd.now {
+        background: var(--blu-l);
+        border-color: #378add;
+      }
+      .sl {
+        font-size: 9px;
+        color: var(--tx3);
+        margin-top: 3px;
+        text-align: center;
+        line-height: 1.3;
+        max-width: 50px;
+      }
+      .sl.done {
+        color: var(--grn-3);
+      }
+      .sl.now {
+        color: #185fa5;
+        font-weight: 700;
+      }
+      .pc-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 10px;
+        border-top: 1px solid var(--bdr);
+      }
+      .pc-eta {
+        font-size: 11px;
+        color: var(--grn);
+        font-weight: 600;
+      }
+      .pc-eta-r {
+        font-size: 11px;
+        color: var(--red);
+        font-weight: 600;
+      }
+
+      /* ── DEAL HISTORY ── */
+      .hi {
+        padding: 12px 0;
+        border-bottom: 1px solid var(--bdr);
+      }
+      .hi:last-child {
+        border-bottom: none;
+      }
+      .hi-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 7px;
+      }
+      .hi-brand {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .hi-meta {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-top: 2px;
+      }
+      .hi-comment {
+        font-size: 12px;
+        color: var(--tx2);
+        line-height: 1.65;
+        padding: 7px 11px;
+        background: var(--srf2);
+        border-radius: var(--r1);
+        border-left: 2px solid var(--bdr-s);
+      }
+      .hi-by {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-top: 4px;
+      }
+
+      /* ── EARNINGS ── */
+      .earn-hero {
+        background: var(--grn-l);
+        border: 1px solid var(--grn-m);
+        border-radius: var(--r3);
+        padding: 15px 18px;
+        margin-bottom: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+      .eh-v {
+        font-size: 26px;
+        font-weight: 700;
+        color: var(--grn-d);
+        line-height: 1;
+      }
+      .eh-l {
+        font-size: 11px;
+        color: var(--grn-3);
+        margin-bottom: 3px;
+      }
+      .eh-n {
+        font-size: 11px;
+        color: var(--grn-3);
+        margin-top: 3px;
+      }
+      .eh-stats {
+        display: flex;
+        gap: 20px;
+      }
+      .es-l {
+        font-size: 10px;
+        color: var(--grn-3);
+        margin-bottom: 2px;
+      }
+      .es-v {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--grn-d);
+      }
+      .bar-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 5px;
+      }
+      .bar-mo {
+        font-size: 11px;
+        color: var(--tx2);
+        width: 28px;
+        text-align: right;
+        flex-shrink: 0;
+      }
+      .bar-t {
+        flex: 1;
+        height: 16px;
+        background: var(--srf2);
+        border-radius: 3px;
+        overflow: hidden;
+      }
+      .bar-f {
+        height: 100%;
+        border-radius: 3px;
+        display: flex;
+        align-items: center;
+        padding-right: 7px;
+        justify-content: flex-end;
+        min-width: 4px;
+        transition: width 0.3s;
+      }
+      .bar-lbl {
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--grn-d);
+        white-space: nowrap;
+      }
+      .bar-lbl-o {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-left: 5px;
+      }
+      .dl-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 7px 0;
+        border-bottom: 1px solid var(--bdr);
+      }
+      .dl-row:last-child {
+        border-bottom: none;
+      }
+      .dl-brand {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .dl-meta {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-top: 1px;
+      }
+      .dl-amt {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--grn-3);
+      }
+      .del-btn {
+        padding: 2px 8px;
+        border: 1px solid var(--red-m);
+        border-radius: 5px;
+        background: transparent;
+        font-size: 11px;
+        color: #791f1f;
+        cursor: pointer;
+        margin-left: 7px;
+      }
+
+      /* ── COMPAT SCORE ── */
+      .compat-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 8px;
+        margin-bottom: 0;
+      }
+      .compat-dim {
+        background: var(--srf2);
+        border-radius: var(--r2);
+        padding: 11px 12px;
+      }
+      .cd-lbl {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-bottom: 6px;
+        line-height: 1.3;
+      }
+      .cd-bar-t {
+        height: 6px;
+        background: var(--bdr-m);
+        border-radius: 3px;
+        overflow: hidden;
+        margin-bottom: 4px;
+      }
+      .cd-bar-f {
+        height: 100%;
+        border-radius: 3px;
+      }
+      .cd-val {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .cd-max {
+        font-size: 10px;
+        color: var(--tx3);
+      }
+      .big-score {
+        font-size: 36px;
+        font-weight: 700;
+        color: var(--grn-d);
+        line-height: 1;
+      }
+      .score-ring {
+        width: 80px;
+        height: 80px;
+        position: relative;
+        flex-shrink: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- ════ SIDEBAR ════ -->
+      <div class="sb">
+        <div class="sb-logo">
+          <div class="logo-ic">
+            <svg viewBox="0 0 16 16" fill="none" width="15" height="15">
+              <path
+                d="M3 8a5 5 0 1010 0A5 5 0 003 8z"
+                fill="white"
+                opacity="0.25"
+              />
+              <path
+                d="M8 5v3l2 2"
+                stroke="white"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+          <div>
+            <div
+              style="
+                font-size: 14px;
+                font-weight: 700;
+                color: var(--tx1);
+                letter-spacing: -0.2px;
+              "
+            >
+              SponzoBD
+            </div>
+            <div style="font-size: 10px; color: var(--tx3)">Creator portal</div>
+          </div>
+        </div>
+        <div class="sb-user">
+          <div class="av">LA</div>
+          <div>
+            <div class="u-name">Lamia Akter</div>
+            <div class="u-sub">Health &amp; wellness · 52K</div>
+            <div class="u-plan"><span class="pdot"></span>Premium plan</div>
+          </div>
+        </div>
+        <nav class="nav">
+          <div class="nav-sec">Main</div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'sponsee_home_feed (1).html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <path
+                d="M1.5 6.5L7.5 1.5L13.5 6.5V13H9.5V9.5H5.5V13H1.5V6.5Z"
+              ></path>
+            </svg>
+            Home
+          </div>
+          <div
+            class="ni on"
+            onclick="window.location.href = 'dashboard_analytics.html'"
+          >
+            <svg viewBox="0 0 15 15" fill="currentColor">
+              <rect x="1" y="1" width="5" height="5" rx="1"></rect>
+              <rect x="9" y="1" width="5" height="5" rx="1"></rect>
+              <rect x="1" y="9" width="5" height="5" rx="1"></rect>
+              <rect x="9" y="9" width="5" height="5" rx="1"></rect>
+            </svg>
+            Dashboard &amp; analytics
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'browse_campaigns.html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <rect x="1.5" y="2.5" width="12" height="10" rx="1.5"></rect>
+              <path d="M5 6h5M5 9h3"></path>
+            </svg>
+            Browse campaigns
+          </div>
+          <div
+            class="ni"
+            onclick="
+              window.location.href = 'Sponsee_ my_applications_deals.html'
+            "
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <circle cx="7.5" cy="7.5" r="5.5"></circle>
+              <path d="M7.5 4.5v3l2 1.5"></path>
+            </svg>
+            My applications &amp; deals
+          </div>
+          <div class="ni" onclick="window.location.href = 'messages.html'">
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <path d="M2 2h11v8H8l-3 2.5V10H2V2z"></path>
+            </svg>
+            Messages<span class="ni-badge">2</span>
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'ai_pitch_generator.html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <path d="M3 12l2-2 2 1 4-5"></path>
+              <circle
+                cx="11.5"
+                cy="3.5"
+                r="1.8"
+                fill="currentColor"
+                opacity="0.35"
+              ></circle>
+            </svg>
+            AI pitch generator
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'sponsee Profile.html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <circle cx="7.5" cy="5" r="2.5"></circle>
+              <path d="M2 13c0-3 2.5-4.5 5.5-4.5S13 10 13 13"></path>
+            </svg>
+            My profile
+          </div>
+        </nav>
+        <div class="sb-ps">
+          <div class="ps-row">
+            <span class="ps-lbl">Profile strength</span
+            ><span class="ps-pct">92%</span>
+          </div>
+          <div class="ps-track"><div class="ps-fill"></div></div>
+          <div class="ps-note">Add 1 portfolio sample to reach 100%</div>
+        </div>
+      </div>
+
+      <!-- ════ MAIN ════ -->
+      <div class="main">
+        <div class="topbar">
+          <div class="tb-t">Dashboard &amp; analytics</div>
+          <div class="tb-r">
+            <div class="icon-btn" title="Notifications">
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 15 15"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.3"
+              >
+                <path
+                  d="M7.5 1.5A4 4 0 0111.5 5.5v2l1.5 2H2L3.5 7.5V5.5A4 4 0 017.5 1.5z"
+                />
+                <path d="M6 11.5a1.5 1.5 0 003 0" />
+              </svg>
+              <div class="notif-dot"></div>
+            </div>
+            <span class="badge-prem">Premium plan</span>
+          </div>
+        </div>
+
+        <div class="content">
+          <!-- GREETING -->
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              margin-bottom: 14px;
+            "
+          >
+            <div>
+              <div
+                style="
+                  font-size: 17px;
+                  font-weight: 700;
+                  color: var(--tx1);
+                  letter-spacing: -0.2px;
+                "
+              >
+                Good morning, Lamia
+              </div>
+              <div style="font-size: 13px; color: var(--tx2); margin-top: 2px">
+                Saturday, March 21, 2025 · Here's what's happening today
+              </div>
+            </div>
+            <div
+              style="
+                font-size: 11px;
+                padding: 4px 12px;
+                border-radius: 20px;
+                background: var(--blu-l);
+                color: var(--blu-t);
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                gap: 5px;
+              "
+            >
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+                <path
+                  d="M6 1L7.5 4.5H11L8.5 6.5L9.5 9.5L6 7.5L2.5 9.5L3.5 6.5L1 4.5H4.5Z"
+                  fill="#0C447C"
+                  opacity=".5"
+                />
+              </svg>
+              Top 4% in Health &amp; Wellness · BD
+            </div>
+          </div>
+
+          <!-- NOTIFICATIONS -->
+          <div class="notif">
+            <div class="nd nd-g"></div>
+            <div class="n-t">
+              <b>GreenFresh BD</b> — you have early access to their new National
+              Health Week campaign. 19 hours left before it opens to all
+              creators.
+            </div>
+            <div
+              class="n-a"
+              onclick="window.location.href = 'browse_campaigns.html'"
+            >
+              Apply now
+            </div>
+          </div>
+          <div class="notif">
+            <div class="nd nd-r"></div>
+            <div class="n-t">
+              <b>GreenFresh BD deal</b> — content submission due in 4 days
+              (March 22). Submit before the deadline to release your ৳35,000
+              escrow.
+            </div>
+            <div
+              class="n-a"
+              onclick="
+                window.location.href = 'Sponsee_ my_applications_deals.html'
+              "
+            >
+              View deal
+            </div>
+          </div>
+          <div class="notif" style="margin-bottom: 16px">
+            <div class="nd nd-a"></div>
+            <div class="n-t">
+              <b>NutriLife BD</b> — accepted your application and replied.
+              Propose your terms to move to the deal signing stage.
+            </div>
+            <div class="n-a" onclick="window.location.href = 'messages.html'">
+              Reply now
+            </div>
+          </div>
+
+          <!-- 7 METRIC CARDS -->
+          <div class="mc7">
+            <div class="mc">
+              <div class="mc-l">Applications</div>
+              <div class="mc-v">11</div>
+              <div class="mc-n">Unlimited · Premium</div>
+            </div>
+            <div class="mc">
+              <div class="mc-l">Active chats</div>
+              <div class="mc-v">3</div>
+              <div class="mc-n" style="color: #ef9f27">2 need reply</div>
+            </div>
+            <div class="mc">
+              <div class="mc-l">Deals pipeline</div>
+              <div class="mc-v">3</div>
+              <div class="mc-n" style="color: var(--grn-3)">
+                ৳91K total value
+              </div>
+            </div>
+            <div class="mc">
+              <div class="mc-l">Profile views</div>
+              <div class="mc-v">342</div>
+              <div class="mc-n" style="color: var(--grn-3)">
+                +124 this month
+              </div>
+            </div>
+            <div class="mc mc-tl">
+              <div class="mc-l">Avg match score</div>
+              <div class="mc-v">91</div>
+              <div class="mc-n">Up from 78 last month</div>
+            </div>
+            <div class="mc">
+              <div class="mc-l">Profile rank</div>
+              <div class="mc-v" style="font-size: 14px">Top 4%</div>
+              <div class="mc-n">Health &amp; wellness · BD</div>
+            </div>
+            <div class="mc mc-gr">
+              <div class="mc-l">Earned this month</div>
+              <div class="mc-v">৳47K</div>
+              <div class="mc-n">Best month on record</div>
+            </div>
+          </div>
+
+          <!-- MY APPLICATIONS (latest 5) -->
+          <div class="sec">
+            <div class="sec-t">My applications</div>
+            <div
+              class="sec-l"
+              onclick="
+                window.location.href = 'Sponsee_ my_applications_deals.html'
+              "
+            >
+              View all 11 →
+            </div>
+          </div>
+          <div class="panel" id="applications-panel">
+            <div style="font-size: 12px; color: var(--tx3); margin-bottom: 9px">
+              Latest first · in-chat and accepted shown at top
+            </div>
+            <div class="ar">
+              <div style="display: flex; align-items: center">
+                <div
+                  class="ar-logo"
+                  style="background: var(--grn-l); color: var(--grn-3)"
+                >
+                  GF
+                </div>
+                <div>
+                  <div class="ar-brand">GreenFresh BD</div>
+                  <div class="ar-camp">
+                    National Health Week · Instagram, YouTube
+                  </div>
+                </div>
+              </div>
+              <div class="ar-r">
+                <div class="sbar">
+                  <div class="sbg">
+                    <div class="sbf fhi" style="width: 91%"></div>
+                  </div>
+                  <span class="sbn">91</span>
+                </div>
+                <span class="stag t-ch">In chat</span>
+                <button
+                  class="btn-b"
+                  onclick="window.location.href = 'messages.html'"
+                >
+                  Open chat
+                </button>
+              </div>
+            </div>
+            <div class="ar">
+              <div style="display: flex; align-items: center">
+                <div
+                  class="ar-logo"
+                  style="background: var(--blu-l); color: var(--blu-t)"
+                >
+                  NL
+                </div>
+                <div>
+                  <div class="ar-brand">NutriLife Bangladesh</div>
+                  <div class="ar-camp">Ramadan Wellness Series · Instagram</div>
+                </div>
+              </div>
+              <div class="ar-r">
+                <div class="sbar">
+                  <div class="sbg">
+                    <div class="sbf fhi" style="width: 84%"></div>
+                  </div>
+                  <span class="sbn">84</span>
+                </div>
+                <span class="stag t-ac">Accepted</span>
+                <button
+                  class="btn-g"
+                  onclick="window.location.href = 'messages.html'"
+                >
+                  Propose terms
+                </button>
+              </div>
+            </div>
+            <div class="ar">
+              <div style="display: flex; align-items: center">
+                <div
+                  class="ar-logo"
+                  style="background: var(--amb-l); color: var(--amb-d)"
+                >
+                  TB
+                </div>
+                <div>
+                  <div class="ar-brand">Tasty Bites BD</div>
+                  <div class="ar-camp">Eid Menu Launch · TikTok · Dhaka</div>
+                </div>
+              </div>
+              <div class="ar-r">
+                <div class="sbar">
+                  <div class="sbg">
+                    <div class="sbf fhi" style="width: 88%"></div>
+                  </div>
+                  <span class="sbn">88</span>
+                </div>
+                <span class="stag t-pe">Pending · 4 days</span>
+              </div>
+            </div>
+            <div class="ar">
+              <div style="display: flex; align-items: center">
+                <div
+                  class="ar-logo"
+                  style="background: var(--pur-l); color: var(--pur-t)"
+                >
+                  SB
+                </div>
+                <div>
+                  <div class="ar-brand">StyleBox BD</div>
+                  <div class="ar-camp">
+                    Summer Collection Drop · TikTok, Instagram
+                  </div>
+                </div>
+              </div>
+              <div class="ar-r">
+                <div class="sbar">
+                  <div class="sbg">
+                    <div class="sbf fmd" style="width: 62%"></div>
+                  </div>
+                  <span class="sbn">62</span>
+                </div>
+                <span class="stag t-vi">Viewed · no reply</span>
+              </div>
+            </div>
+            <div class="ar">
+              <div style="display: flex; align-items: center">
+                <div
+                  class="ar-logo"
+                  style="background: var(--teal-l); color: var(--grn-d)"
+                >
+                  OB
+                </div>
+                <div>
+                  <div class="ar-brand">OrganicBD</div>
+                  <div class="ar-camp">
+                    Health Food Launch · Instagram · Nationwide
+                  </div>
+                </div>
+              </div>
+              <div class="ar-r">
+                <div class="sbar">
+                  <div class="sbg">
+                    <div class="sbf fhi" style="width: 79%"></div>
+                  </div>
+                  <span class="sbn">79</span>
+                </div>
+                <span class="stag t-cl">Deal closed</span>
+                <button
+                  class="btn-ghost"
+                  onclick="
+                    window.location.href = 'Sponsee_ my_applications_deals.html'
+                  "
+                >
+                  View deal
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ACTIVE DEAL PIPELINE -->
+          <div class="sec">
+            <div class="sec-t">Active deal pipeline</div>
+            <div
+              class="sec-l"
+              onclick="
+                window.location.href = 'Sponsee_ my_applications_deals.html'
+              "
+            >
+              View all deals →
+            </div>
+          </div>
+
+          <div class="pc">
+            <div class="pc-top">
+              <div
+                style="
+                  display: flex;
+                  align-items: flex-start;
+                  gap: 10px;
+                  flex: 1;
+                  min-width: 0;
+                "
+              >
+                <div
+                  style="
+                    width: 34px;
+                    height: 34px;
+                    border-radius: var(--r2);
+                    background: var(--grn-l);
+                    color: var(--grn-3);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 11px;
+                    font-weight: 700;
+                    flex-shrink: 0;
+                    border: 1px solid var(--bdr);
+                  "
+                >
+                  GF
+                </div>
+                <div>
+                  <div class="pc-brand">GreenFresh BD</div>
+                  <div class="pc-camp">
+                    National Health Week · Instagram, YouTube · Nationwide
+                  </div>
+                </div>
+              </div>
+              <div class="pc-right">
+                <div class="pc-amt">৳35,000</div>
+                <div class="pc-esc">Escrow held</div>
+              </div>
+            </div>
+            <div class="stages">
+              <div class="stage done">
+                <div class="sd done">
+                  <svg width="8" height="8" viewBox="0 0 9 9" fill="none">
+                    <path
+                      d="M1.5 4.5l2 2L7.5 2"
+                      stroke="#3B6D11"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </div>
+                <div class="sl done">Applied</div>
+              </div>
+              <div class="stage done">
+                <div class="sd done">
+                  <svg width="8" height="8" viewBox="0 0 9 9" fill="none">
+                    <path
+                      d="M1.5 4.5l2 2L7.5 2"
+                      stroke="#3B6D11"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </div>
+                <div class="sl done">Accepted</div>
+              </div>
+              <div class="stage done">
+                <div class="sd done">
+                  <svg width="8" height="8" viewBox="0 0 9 9" fill="none">
+                    <path
+                      d="M1.5 4.5l2 2L7.5 2"
+                      stroke="#3B6D11"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </div>
+                <div class="sl done">Deal signed</div>
+              </div>
+              <div class="stage done">
+                <div class="sd done">
+                  <svg width="8" height="8" viewBox="0 0 9 9" fill="none">
+                    <path
+                      d="M1.5 4.5l2 2L7.5 2"
+                      stroke="#3B6D11"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </div>
+                <div class="sl done">Payment held</div>
+              </div>
+              <div class="stage">
+                <div class="sd now">
+                  <svg width="7" height="7" viewBox="0 0 7 7">
+                    <circle cx="3.5" cy="3.5" r="2.5" fill="#378ADD" />
+                  </svg>
+                </div>
+                <div class="sl now">Work in progress</div>
+              </div>
+              <div class="stage">
+                <div class="sd"></div>
+                <div class="sl">Work verified</div>
+              </div>
+              <div class="stage">
+                <div class="sd"></div>
+                <div class="sl">Paid out</div>
+              </div>
+            </div>
+            <div class="pc-foot">
+              <div class="pc-eta-r">
+                Content due March 22 · 4 days remaining · est. payout March 26
+              </div>
+              <div style="display: flex; gap: 7px">
+                <button
+                  class="btn-ghost"
+                  onclick="window.location.href = 'messages.html'"
+                >
+                  Open chat
+                </button>
+                <button
+                  class="btn-g"
+                  onclick="
+                    window.location.href = '../Log in/deal_journey (1).html'
+                  "
+                >
+                  Submit content
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="pc">
+            <div class="pc-top">
+              <div
+                style="
+                  display: flex;
+                  align-items: flex-start;
+                  gap: 10px;
+                  flex: 1;
+                  min-width: 0;
+                "
+              >
+                <div
+                  style="
+                    width: 34px;
+                    height: 34px;
+                    border-radius: var(--r2);
+                    background: var(--blu-l);
+                    color: var(--blu-t);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 11px;
+                    font-weight: 700;
+                    flex-shrink: 0;
+                    border: 1px solid var(--bdr);
+                  "
+                >
+                  NL
+                </div>
+                <div>
+                  <div class="pc-brand">NutriLife Bangladesh</div>
+                  <div class="pc-camp">
+                    Ramadan Wellness Series · Instagram · Dhaka, Chittagong
+                  </div>
+                </div>
+              </div>
+              <div class="pc-right">
+                <div
+                  class="pc-amt"
+                  style="color: var(--tx3); font-weight: 500; font-size: 13px"
+                >
+                  TBD
+                </div>
+                <div class="pc-esc">Awaiting terms</div>
+              </div>
+            </div>
+            <div class="stages">
+              <div class="stage done">
+                <div class="sd done">
+                  <svg width="8" height="8" viewBox="0 0 9 9" fill="none">
+                    <path
+                      d="M1.5 4.5l2 2L7.5 2"
+                      stroke="#3B6D11"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </div>
+                <div class="sl done">Applied</div>
+              </div>
+              <div class="stage done">
+                <div class="sd done">
+                  <svg width="8" height="8" viewBox="0 0 9 9" fill="none">
+                    <path
+                      d="M1.5 4.5l2 2L7.5 2"
+                      stroke="#3B6D11"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </div>
+                <div class="sl done">Accepted</div>
+              </div>
+              <div class="stage">
+                <div class="sd now">
+                  <svg width="7" height="7" viewBox="0 0 7 7">
+                    <circle cx="3.5" cy="3.5" r="2.5" fill="#378ADD" />
+                  </svg>
+                </div>
+                <div class="sl now">Deal signing</div>
+              </div>
+              <div class="stage">
+                <div class="sd"></div>
+                <div class="sl">Payment held</div>
+              </div>
+              <div class="stage">
+                <div class="sd"></div>
+                <div class="sl">Work in progress</div>
+              </div>
+              <div class="stage">
+                <div class="sd"></div>
+                <div class="sl">Work verified</div>
+              </div>
+              <div class="stage">
+                <div class="sd"></div>
+                <div class="sl">Paid out</div>
+              </div>
+            </div>
+            <div class="pc-foot">
+              <div class="pc-eta">
+                Sponsor replied · agree terms to sign the deal
+              </div>
+              <button
+                class="btn-b"
+                onclick="window.location.href = 'messages.html'"
+              >
+                Open chat &amp; propose terms
+              </button>
+            </div>
+          </div>
+
+          <!-- APPLICATION PERFORMANCE ANALYTICS -->
+          <div class="sec">
+            <div class="sec-t">Application performance analytics</div>
+          </div>
+          <div class="panel">
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                gap: 9px;
+                margin-bottom: 12px;
+              "
+            >
+              <div
+                style="
+                  background: var(--srf2);
+                  border-radius: var(--r2);
+                  padding: 11px 13px;
+                "
+              >
+                <div
+                  style="
+                    font-size: 10px;
+                    color: var(--tx3);
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                    margin-bottom: 4px;
+                  "
+                >
+                  Applications sent
+                </div>
+                <div
+                  style="font-size: 20px; font-weight: 700; color: var(--tx1)"
+                >
+                  11
+                </div>
+                <div
+                  style="font-size: 10px; color: var(--tx3); margin-top: 2px"
+                >
+                  This month
+                </div>
+              </div>
+              <div
+                style="
+                  background: var(--grn-l);
+                  border: 1px solid var(--grn-m);
+                  border-radius: var(--r2);
+                  padding: 11px 13px;
+                "
+              >
+                <div
+                  style="
+                    font-size: 10px;
+                    color: var(--grn-3);
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                    margin-bottom: 4px;
+                  "
+                >
+                  Response rate
+                </div>
+                <div
+                  style="font-size: 20px; font-weight: 700; color: var(--grn-d)"
+                >
+                  64%
+                </div>
+                <div
+                  style="font-size: 10px; color: var(--grn-3); margin-top: 2px"
+                >
+                  Platform avg 21%
+                </div>
+              </div>
+              <div
+                style="
+                  background: var(--grn-l);
+                  border: 1px solid var(--grn-m);
+                  border-radius: var(--r2);
+                  padding: 11px 13px;
+                "
+              >
+                <div
+                  style="
+                    font-size: 10px;
+                    color: var(--grn-3);
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                    margin-bottom: 4px;
+                  "
+                >
+                  Acceptance rate
+                </div>
+                <div
+                  style="font-size: 20px; font-weight: 700; color: var(--grn-d)"
+                >
+                  55%
+                </div>
+                <div
+                  style="font-size: 10px; color: var(--grn-3); margin-top: 2px"
+                >
+                  Of responses received
+                </div>
+              </div>
+              <div
+                style="
+                  background: var(--grn-l);
+                  border: 1px solid var(--grn-m);
+                  border-radius: var(--r2);
+                  padding: 11px 13px;
+                "
+              >
+                <div
+                  style="
+                    font-size: 10px;
+                    color: var(--grn-3);
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                    margin-bottom: 4px;
+                  "
+                >
+                  Chat to deal rate
+                </div>
+                <div
+                  style="font-size: 20px; font-weight: 700; color: var(--grn-d)"
+                >
+                  43%
+                </div>
+                <div
+                  style="font-size: 10px; color: var(--grn-3); margin-top: 2px"
+                >
+                  Of chats become deals
+                </div>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <div
+              style="
+                font-size: 12px;
+                font-weight: 600;
+                color: var(--tx1);
+                margin-bottom: 8px;
+              "
+            >
+              Score distribution across all applications
+            </div>
+            <div style="display: flex; gap: 8px; margin-bottom: 10px">
+              <div
+                style="
+                  flex: 1;
+                  background: var(--grn-l);
+                  border: 1px solid var(--grn-m);
+                  border-radius: var(--r2);
+                  padding: 10px 12px;
+                  text-align: center;
+                "
+              >
+                <div
+                  style="font-size: 20px; font-weight: 700; color: var(--grn-d)"
+                >
+                  5
+                </div>
+                <div
+                  style="font-size: 11px; color: var(--grn-3); margin-top: 2px"
+                >
+                  Strong match
+                </div>
+                <div style="font-size: 10px; color: var(--grn-3)">
+                  Score 80–100
+                </div>
+              </div>
+              <div
+                style="
+                  flex: 1;
+                  background: var(--amb-l);
+                  border: 1px solid var(--amb-m);
+                  border-radius: var(--r2);
+                  padding: 10px 12px;
+                  text-align: center;
+                "
+              >
+                <div
+                  style="font-size: 20px; font-weight: 700; color: var(--amb-t)"
+                >
+                  4
+                </div>
+                <div
+                  style="font-size: 11px; color: var(--amb-t); margin-top: 2px"
+                >
+                  Good match
+                </div>
+                <div style="font-size: 10px; color: var(--amb-t)">
+                  Score 60–79
+                </div>
+              </div>
+              <div
+                style="
+                  flex: 1;
+                  background: var(--srf2);
+                  border: 1px solid var(--bdr-m);
+                  border-radius: var(--r2);
+                  padding: 10px 12px;
+                  text-align: center;
+                "
+              >
+                <div
+                  style="font-size: 20px; font-weight: 700; color: var(--tx2)"
+                >
+                  2
+                </div>
+                <div
+                  style="font-size: 11px; color: var(--tx3); margin-top: 2px"
+                >
+                  Moderate match
+                </div>
+                <div style="font-size: 10px; color: var(--tx3)">
+                  Score 40–59
+                </div>
+              </div>
+            </div>
+            <div class="ins ins-g">
+              <svg viewBox="0 0 14 14" fill="none">
+                <circle cx="7" cy="7" r="6" fill="#C0DD97" />
+                <path
+                  d="M4.5 7l2 2 3-3"
+                  stroke="#27500A"
+                  stroke-width="1.2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              Your response rate is 3× the platform average. Applications above
+              score 80 convert to deals at 71% — keep targeting strong matches
+              and use the AI pitch generator for every application above score
+              75.
+            </div>
+          </div>
+
+          <!-- COMPATIBILITY SCORE BREAKDOWN (Premium) -->
+          <div class="sec">
+            <div class="sec-t">
+              Compatibility score — how you are being matched
+            </div>
+            <span
+              style="
+                font-size: 11px;
+                background: var(--teal-l);
+                color: var(--grn-d);
+                padding: 2px 9px;
+                border-radius: 20px;
+                font-weight: 700;
+              "
+              >Premium</span
+            >
+          </div>
+          <div class="panel">
+            <div
+              style="
+                display: flex;
+                align-items: flex-start;
+                gap: 18px;
+                margin-bottom: 14px;
+              "
+            >
+              <div style="text-align: center; flex-shrink: 0">
+                <div
+                  style="
+                    font-size: 10px;
+                    color: var(--tx3);
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                    margin-bottom: 5px;
+                  "
+                >
+                  Avg score this month
+                </div>
+                <div class="big-score">91</div>
+                <div
+                  style="
+                    font-size: 11px;
+                    color: var(--grn-3);
+                    margin-top: 3px;
+                    font-weight: 600;
+                  "
+                >
+                  Excellent match quality
+                </div>
+              </div>
+              <div style="flex: 1; min-width: 0">
+                <div
+                  style="
+                    font-size: 12px;
+                    color: var(--tx2);
+                    line-height: 1.65;
+                    margin-bottom: 8px;
+                  "
+                >
+                  Your score reflects how well your profile aligns with
+                  campaigns you apply to. It is calculated across five
+                  dimensions. Premium plan shows the full breakdown — use this
+                  to understand which areas to improve to match more campaigns.
+                </div>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap">
+                  <span
+                    style="
+                      font-size: 11px;
+                      padding: 3px 9px;
+                      border-radius: 20px;
+                      background: var(--grn-l);
+                      color: var(--grn-3);
+                      font-weight: 700;
+                    "
+                    >Score 80–100 = Excellent</span
+                  >
+                  <span
+                    style="
+                      font-size: 11px;
+                      padding: 3px 9px;
+                      border-radius: 20px;
+                      background: #eaf3de;
+                      color: #3b6d11;
+                    "
+                    >60–79 = Good</span
+                  >
+                  <span
+                    style="
+                      font-size: 11px;
+                      padding: 3px 9px;
+                      border-radius: 20px;
+                      background: var(--amb-l);
+                      color: var(--amb-t);
+                    "
+                    >40–59 = Moderate</span
+                  >
+                  <span
+                    style="
+                      font-size: 11px;
+                      padding: 3px 9px;
+                      border-radius: 20px;
+                      background: var(--srf2);
+                      color: var(--tx3);
+                    "
+                    >&lt;40 = Low</span
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="compat-grid">
+              <div class="compat-dim">
+                <div class="cd-lbl">Niche &amp; category match</div>
+                <div class="cd-bar-t">
+                  <div
+                    class="cd-bar-f"
+                    style="
+                      width: 96%;
+                      background: var(--grn-3);
+                      height: 100%;
+                      border-radius: 3px;
+                    "
+                  ></div>
+                </div>
+                <div style="display: flex; align-items: baseline; gap: 3px">
+                  <span class="cd-val">24</span
+                  ><span class="cd-max"> / 25 pts</span>
+                </div>
+                <div
+                  style="font-size: 10px; color: var(--grn-3); margin-top: 3px"
+                >
+                  Excellent · Primary niche match
+                </div>
+              </div>
+              <div class="compat-dim">
+                <div class="cd-lbl">Audience demographics</div>
+                <div class="cd-bar-t">
+                  <div
+                    class="cd-bar-f"
+                    style="
+                      width: 88%;
+                      background: #3b6d11;
+                      height: 100%;
+                      border-radius: 3px;
+                      opacity: 0.75;
+                    "
+                  ></div>
+                </div>
+                <div style="display: flex; align-items: baseline; gap: 3px">
+                  <span class="cd-val">22</span
+                  ><span class="cd-max"> / 25 pts</span>
+                </div>
+                <div
+                  style="font-size: 10px; color: var(--grn-3); margin-top: 3px"
+                >
+                  Strong · Age &amp; gender aligned
+                </div>
+              </div>
+              <div class="compat-dim">
+                <div class="cd-lbl">Budget compatibility</div>
+                <div class="cd-bar-t">
+                  <div
+                    class="cd-bar-f"
+                    style="
+                      width: 85%;
+                      background: #ef9f27;
+                      height: 100%;
+                      border-radius: 3px;
+                    "
+                  ></div>
+                </div>
+                <div style="display: flex; align-items: baseline; gap: 3px">
+                  <span class="cd-val">17</span
+                  ><span class="cd-max"> / 20 pts</span>
+                </div>
+                <div
+                  style="font-size: 10px; color: var(--amb-d); margin-top: 3px"
+                >
+                  Good · Rates within range
+                </div>
+              </div>
+              <div class="compat-dim">
+                <div class="cd-lbl">Follower range fit</div>
+                <div class="cd-bar-t">
+                  <div
+                    class="cd-bar-f"
+                    style="
+                      width: 100%;
+                      background: var(--grn-3);
+                      height: 100%;
+                      border-radius: 3px;
+                    "
+                  ></div>
+                </div>
+                <div style="display: flex; align-items: baseline; gap: 3px">
+                  <span class="cd-val">15</span
+                  ><span class="cd-max"> / 15 pts</span>
+                </div>
+                <div
+                  style="font-size: 10px; color: var(--grn-3); margin-top: 3px"
+                >
+                  Perfect · 52K within range
+                </div>
+              </div>
+              <div class="compat-dim">
+                <div class="cd-lbl">Platform match</div>
+                <div class="cd-bar-t">
+                  <div
+                    class="cd-bar-f"
+                    style="
+                      width: 87%;
+                      background: #ef9f27;
+                      height: 100%;
+                      border-radius: 3px;
+                    "
+                  ></div>
+                </div>
+                <div style="display: flex; align-items: baseline; gap: 3px">
+                  <span class="cd-val">13</span
+                  ><span class="cd-max"> / 15 pts</span>
+                </div>
+                <div
+                  style="font-size: 10px; color: var(--amb-d); margin-top: 3px"
+                >
+                  Good · No YouTube yet
+                </div>
+              </div>
+            </div>
+            <div class="ins ins-a" style="margin-top: 10px">
+              <svg viewBox="0 0 14 14" fill="none">
+                <circle cx="7" cy="7" r="6" fill="#FAC775" />
+                <path
+                  d="M7 4.5v3M7 9v.5"
+                  stroke="#633806"
+                  stroke-width="1.2"
+                  stroke-linecap="round"
+                />
+              </svg>
+              Adding a YouTube channel to your profile would increase your
+              platform match score by 2 points and make you eligible for 6 more
+              tech and education campaigns currently live on SponzoBD.
+            </div>
+          </div>
+
+          <!-- VERIFIED DEAL HISTORY -->
+          <div class="sec">
+            <div class="sec-t">Verified deal history</div>
+            <div style="font-size: 11px; color: var(--tx3)">
+              7 total · 3 shown · public on your profile
+            </div>
+          </div>
+          <div class="panel">
+            <div class="hi">
+              <div class="hi-top">
+                <div>
+                  <div class="hi-brand">
+                    GreenFresh BD<span class="vbdg">Verified</span>
+                  </div>
+                  <div class="hi-meta">
+                    Health &amp; wellness · Mar 2025 · Instagram, YouTube ·
+                    Nationwide
+                  </div>
+                </div>
+                <div class="stars">
+                  <div class="sf"></div>
+                  <div class="sf"></div>
+                  <div class="sf"></div>
+                  <div class="sf"></div>
+                  <div class="sf"></div>
+                </div>
+              </div>
+              <div class="hi-comment">
+                "Outstanding content — engagement was 4× our benchmark. Her
+                audience genuinely trusts her recommendations. Will work with
+                her again without hesitation."
+              </div>
+              <div class="hi-by">— Marketing Manager, GreenFresh BD</div>
+            </div>
+            <div class="hi">
+              <div class="hi-top">
+                <div>
+                  <div class="hi-brand">
+                    StyleBox BD<span class="vbdg">Verified</span>
+                  </div>
+                  <div class="hi-meta">Fashion · Feb 2025 · TikTok · Dhaka</div>
+                </div>
+                <div class="stars">
+                  <div class="sf"></div>
+                  <div class="sf"></div>
+                  <div class="sf"></div>
+                  <div class="sf"></div>
+                  <div class="sf"></div>
+                </div>
+              </div>
+              <div class="hi-comment">
+                "Professional and on-brief. The reel drove a 22% traffic spike
+                to our store the week it went live. Highly recommended."
+              </div>
+              <div class="hi-by">— Founder, StyleBox BD</div>
+            </div>
+            <div class="hi">
+              <div class="hi-top">
+                <div>
+                  <div class="hi-brand">
+                    NutriLife BD<span class="vbdg">Verified</span>
+                  </div>
+                  <div class="hi-meta">
+                    Health &amp; wellness · Jan 2025 · Instagram · Dhaka
+                  </div>
+                </div>
+                <div class="stars">
+                  <div class="sf"></div>
+                  <div class="sf"></div>
+                  <div class="sf"></div>
+                  <div class="sf"></div>
+                  <div class="se"></div>
+                </div>
+              </div>
+              <div class="hi-comment">
+                "Good collaboration. Content quality was strong but delivery was
+                two days late. Would work together again with clearer timeline
+                agreements upfront."
+              </div>
+              <div class="hi-by">— Campaign Lead, NutriLife BD</div>
+            </div>
+          </div>
+
+          <!-- EARNINGS ANALYTICS -->
+          <div class="sec">
+            <div class="sec-t">Earnings analytics</div>
+            <div class="sec-l" onclick="alert('Exporting earnings data...')">
+              Export CSV
+            </div>
+          </div>
+          <div class="earn-hero">
+            <div>
+              <div class="eh-l">Total tracked earnings</div>
+              <div class="eh-v">৳1,84,000</div>
+              <div class="eh-n">Lifetime · all logged deals</div>
+            </div>
+            <div class="eh-stats">
+              <div>
+                <div class="es-l">This month</div>
+                <div class="es-v">৳47,000</div>
+              </div>
+              <div>
+                <div class="es-l">Avg deal value</div>
+                <div class="es-v">৳23,500</div>
+              </div>
+              <div>
+                <div class="es-l">Deals this month</div>
+                <div class="es-v">2</div>
+              </div>
+              <div>
+                <div class="es-l">Best niche</div>
+                <div class="es-v">Health</div>
+              </div>
+            </div>
+          </div>
+          <div class="two" style="margin-bottom: 11px">
+            <div class="panel" style="margin-bottom: 0">
+              <div
+                style="
+                  font-size: 13px;
+                  font-weight: 700;
+                  color: var(--tx1);
+                  margin-bottom: 4px;
+                "
+              >
+                Log a deal manually
+              </div>
+              <div
+                style="font-size: 11px; color: var(--tx3); margin-bottom: 10px"
+              >
+                SponzoBD escrow deals are auto-added · log external deals here
+              </div>
+              <div style="margin-bottom: 7px">
+                <div class="inp-l">Brand name</div>
+                <input
+                  class="inp"
+                  id="i-brand"
+                  type="text"
+                  placeholder="e.g. FreshMart BD"
+                />
+              </div>
+              <div style="margin-bottom: 7px">
+                <div class="inp-l">Amount (৳)</div>
+                <input
+                  class="inp"
+                  id="i-amt"
+                  type="number"
+                  placeholder="e.g. 18000"
+                />
+              </div>
+              <div style="margin-bottom: 10px">
+                <div class="inp-l">Month</div>
+                <input
+                  class="inp"
+                  id="i-mo"
+                  type="text"
+                  placeholder="e.g. Apr 2025"
+                />
+              </div>
+              <div style="display: flex; justify-content: flex-end">
+                <button class="btn-g" onclick="addDeal()">Add deal</button>
+              </div>
+            </div>
+            <div class="panel" style="margin-bottom: 0">
+              <div
+                style="
+                  font-size: 13px;
+                  font-weight: 700;
+                  color: var(--tx1);
+                  margin-bottom: 4px;
+                "
+              >
+                Monthly earnings chart
+              </div>
+              <div
+                style="font-size: 11px; color: var(--tx3); margin-bottom: 10px"
+              >
+                Updates live as you add or remove deals
+              </div>
+              <div id="earn-chart"></div>
+              <div class="ins ins-g" id="earn-ins" style="margin-top: 8px">
+                <svg viewBox="0 0 14 14" fill="none">
+                  <circle cx="7" cy="7" r="6" fill="#C0DD97" />
+                  <path
+                    d="M4.5 7l2 2 3-3"
+                    stroke="#27500A"
+                    stroke-width="1.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                Loading chart...
+              </div>
+            </div>
+          </div>
+          <div class="panel" style="margin-bottom: 0">
+            <div
+              style="
+                font-size: 13px;
+                font-weight: 700;
+                color: var(--tx1);
+                margin-bottom: 4px;
+              "
+            >
+              Deal log
+            </div>
+            <div id="deal-log">
+              <div class="dl-row">
+                <div>
+                  <div class="dl-brand">
+                    GreenFresh BD
+                    <span
+                      style="
+                        font-size: 10px;
+                        padding: 1px 6px;
+                        border-radius: 10px;
+                        background: var(--grn-l);
+                        color: var(--grn-3);
+                        margin-left: 4px;
+                        font-weight: 700;
+                      "
+                      >Verified</span
+                    >
+                  </div>
+                  <div class="dl-meta">Health &amp; wellness · Mar 2025</div>
+                </div>
+                <div style="display: flex; align-items: center">
+                  <span class="dl-amt">৳35,000</span>
+                </div>
+              </div>
+              <div class="dl-row">
+                <div>
+                  <div class="dl-brand">
+                    StyleBox BD
+                    <span
+                      style="
+                        font-size: 10px;
+                        padding: 1px 6px;
+                        border-radius: 10px;
+                        background: var(--grn-l);
+                        color: var(--grn-3);
+                        margin-left: 4px;
+                        font-weight: 700;
+                      "
+                      >Verified</span
+                    >
+                  </div>
+                  <div class="dl-meta">Fashion · Feb 2025</div>
+                </div>
+                <div style="display: flex; align-items: center">
+                  <span class="dl-amt">৳28,000</span>
+                </div>
+              </div>
+              <div class="dl-row">
+                <div>
+                  <div class="dl-brand">
+                    NutriLife BD
+                    <span
+                      style="
+                        font-size: 10px;
+                        padding: 1px 6px;
+                        border-radius: 10px;
+                        background: var(--grn-l);
+                        color: var(--grn-3);
+                        margin-left: 4px;
+                        font-weight: 700;
+                      "
+                      >Verified</span
+                    >
+                  </div>
+                  <div class="dl-meta">Health &amp; wellness · Jan 2025</div>
+                </div>
+                <div style="display: flex; align-items: center">
+                  <span class="dl-amt">৳22,000</span>
+                </div>
+              </div>
+              <div class="dl-row">
+                <div>
+                  <div class="dl-brand">
+                    OrganicBD
+                    <span
+                      style="
+                        font-size: 10px;
+                        padding: 1px 6px;
+                        border-radius: 10px;
+                        background: var(--teal-l);
+                        color: var(--grn-d);
+                        margin-left: 4px;
+                        font-weight: 700;
+                      "
+                      >Verified</span
+                    >
+                  </div>
+                  <div class="dl-meta">Health &amp; food · Dec 2024</div>
+                </div>
+                <div style="display: flex; align-items: center">
+                  <span class="dl-amt">৳18,000</span>
+                </div>
+              </div>
+              <div class="dl-row">
+                <div>
+                  <div class="dl-brand">
+                    HealthPlus BD
+                    <span
+                      style="
+                        font-size: 10px;
+                        padding: 1px 6px;
+                        border-radius: 10px;
+                        background: var(--blu-l);
+                        color: var(--blu-t);
+                        margin-left: 4px;
+                        font-weight: 700;
+                      "
+                      >Manual</span
+                    >
+                  </div>
+                  <div class="dl-meta">Supplement · Nov 2024</div>
+                </div>
+                <div style="display: flex; align-items: center">
+                  <span class="dl-amt">৳25,000</span
+                  ><button class="del-btn" onclick="removeRow(this)">
+                    Remove
+                  </button>
+                </div>
+              </div>
+              <div class="dl-row">
+                <div>
+                  <div class="dl-brand">
+                    YogaLife Dhaka
+                    <span
+                      style="
+                        font-size: 10px;
+                        padding: 1px 6px;
+                        border-radius: 10px;
+                        background: var(--blu-l);
+                        color: var(--blu-t);
+                        margin-left: 4px;
+                        font-weight: 700;
+                      "
+                      >Manual</span
+                    >
+                  </div>
+                  <div class="dl-meta">Fitness · Oct 2024</div>
+                </div>
+                <div style="display: flex; align-items: center">
+                  <span class="dl-amt">৳20,000</span
+                  ><button class="del-btn" onclick="removeRow(this)">
+                    Remove
+                  </button>
+                </div>
+              </div>
+              <div class="dl-row">
+                <div>
+                  <div class="dl-brand">
+                    NatureCare BD
+                    <span
+                      style="
+                        font-size: 10px;
+                        padding: 1px 6px;
+                        border-radius: 10px;
+                        background: var(--blu-l);
+                        color: var(--blu-t);
+                        margin-left: 4px;
+                        font-weight: 700;
+                      "
+                      >Manual</span
+                    >
+                  </div>
+                  <div class="dl-meta">Skincare · Sep 2024</div>
+                </div>
+                <div style="display: flex; align-items: center">
+                  <span class="dl-amt">৳16,000</span
+                  ><button class="del-btn" onclick="removeRow(this)">
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function formatCurrency(value) {
+        return `৳${Number(value || 0).toLocaleString("en-US")}`;
+      }
+
+      function parseCurrency(text) {
+        const cleaned = String(text || "").replace(/[^0-9.-]/g, "");
+        const amount = Number(cleaned);
+        return Number.isFinite(amount) ? amount : 0;
+      }
+
+      function parseMonthKey(label) {
+        const trimmed = String(label || "").trim();
+        const match = trimmed.match(/^([A-Za-z]{3,9})\s+(\d{4})$/);
+        if (!match) return null;
+
+        const monthIndex = new Date(`${match[1]} 1, ${match[2]}`).getMonth();
+        if (!Number.isInteger(monthIndex)) return null;
+
+        const month = String(monthIndex + 1).padStart(2, "0");
+        return `${match[2]}-${month}`;
+      }
+
+      function keyToMonthLabel(key) {
+        const parts = String(key || "").split("-");
+        if (parts.length !== 2) return "";
+        const year = Number(parts[0]);
+        const month = Number(parts[1]);
+        if (!Number.isInteger(year) || !Number.isInteger(month)) return "";
+        if (month < 1 || month > 12) return "";
+
+        const date = new Date(year, month - 1, 1);
+        return date.toLocaleDateString("en-US", {
+          month: "short",
+          year: "numeric",
+        });
+      }
+
+      function compactCurrency(value) {
+        const n = Number(value || 0);
+        if (n >= 1000) return `৳${Math.round(n / 1000)}K`;
+        return `৳${Math.round(n)}`;
+      }
+
+      function computeDealsByMonth() {
+        const rows = document.querySelectorAll("#deal-log .dl-row");
+        const monthlyTotals = {};
+        const monthDealCounts = {};
+        const nicheCounts = {};
+
+        rows.forEach((row) => {
+          const meta = row.querySelector(".dl-meta")?.textContent || "";
+          const amountText = row.querySelector(".dl-amt")?.textContent || "";
+          const amount = parseCurrency(amountText);
+
+          const segments = meta
+            .split("·")
+            .map((value) => value.trim())
+            .filter(Boolean);
+          if (segments.length < 2) return;
+
+          const niche = segments[0];
+          if (niche) {
+            nicheCounts[niche] = (nicheCounts[niche] || 0) + 1;
+          }
+
+          const monthLabel = segments[segments.length - 1];
+          const monthKey = parseMonthKey(monthLabel);
+          if (!monthKey) return;
+
+          monthlyTotals[monthKey] = (monthlyTotals[monthKey] || 0) + amount;
+          monthDealCounts[monthKey] = (monthDealCounts[monthKey] || 0) + 1;
+        });
+
+        return {
+          monthlyTotals,
+          monthDealCounts,
+          nicheCounts,
+          totalDeals: rows.length,
+        };
+      }
+
+      function updateTopDateAndGreeting(displayName) {
+        const greeting = document.querySelector(
+          ".content > div:first-child > div:first-child > div:first-child",
+        );
+        if (greeting) {
+          const firstName = String(displayName || "Lamia")
+            .trim()
+            .split(/\s+/)[0];
+          greeting.textContent = `Good morning, ${firstName}`;
+        }
+
+        const dateLine = document.querySelector(
+          ".content > div:first-child > div:first-child > div:nth-child(2)",
+        );
+        if (dateLine) {
+          const now = new Date();
+          const pretty = now.toLocaleDateString("en-US", {
+            weekday: "long",
+            month: "long",
+            day: "numeric",
+            year: "numeric",
+          });
+          dateLine.textContent = `${pretty} · Here's what's happening today`;
+        }
+      }
+
+      function parseBudgetMidpoint(budgetText) {
+        const numbers = String(budgetText || "")
+          .match(/\d+/g)
+          ?.map((value) => Number(value))
+          .filter((value) => Number.isFinite(value));
+
+        if (!numbers || !numbers.length) return 0;
+        if (numbers.length === 1) return numbers[0];
+        return Math.round((numbers[0] + numbers[1]) / 2);
+      }
+
+      function updateSummaryCards(snapshot) {
+        const metrics = document.querySelectorAll(".mc7 .mc");
+        if (!metrics.length) return;
+
+        const campaigns = Array.isArray(snapshot?.campaigns)
+          ? snapshot.campaigns
+          : [];
+        const counts = snapshot?.counts || {};
+        const followersText = snapshot?.user?.followers || "0";
+
+        const applicationsCount =
+          Number(counts.applications) || campaigns.length || 0;
+        const activeChatsCount = Math.max(
+          0,
+          Number(counts.unreadMessages) || 0,
+        );
+        const activePipeline = campaigns.filter(
+          (campaign) => campaign.status !== "closed",
+        );
+        const pipelineValue = activePipeline.reduce(
+          (sum, campaign) => sum + parseBudgetMidpoint(campaign.budget),
+          0,
+        );
+
+        const followersCount = (() => {
+          const raw = String(followersText).trim().toUpperCase();
+          const value = Number(raw.replace(/[^0-9.]/g, ""));
+          if (!Number.isFinite(value)) return 0;
+          if (raw.includes("M")) return Math.round(value * 1000000);
+          if (raw.includes("K")) return Math.round(value * 1000);
+          return Math.round(value);
+        })();
+
+        const profileViews = Math.max(120, Math.round(followersCount * 0.65));
+        const avgMatchScore = campaigns.length
+          ? Math.round(
+              campaigns.reduce((sum, campaign) => {
+                const status = String(campaign.status || "").toLowerCase();
+                const statusScore =
+                  status === "active" ? 90 : status === "pending" ? 82 : 74;
+                return sum + statusScore;
+              }, 0) / campaigns.length,
+            )
+          : 0;
+
+        const rankLabel =
+          followersCount >= 100000
+            ? "Top 2%"
+            : followersCount >= 50000
+              ? "Top 4%"
+              : followersCount >= 25000
+                ? "Top 8%"
+                : "Top 15%";
+
+        const setCard = (cardIndex, value, note) => {
+          const card = metrics[cardIndex];
+          if (!card) return;
+          const valueEl = card.querySelector(".mc-v");
+          const noteEl = card.querySelector(".mc-n");
+          if (valueEl) valueEl.textContent = value;
+          if (noteEl && note) noteEl.textContent = note;
+        };
+
+        setCard(
+          0,
+          String(applicationsCount),
+          "Updated from your live activity",
+        );
+        setCard(
+          1,
+          String(activeChatsCount),
+          activeChatsCount
+            ? `${activeChatsCount} need reply`
+            : "No unread chats",
+        );
+        setCard(
+          2,
+          String(activePipeline.length),
+          `${formatCurrency(pipelineValue)} total value`,
+        );
+        setCard(
+          3,
+          profileViews.toLocaleString("en-US"),
+          "Estimated from audience size",
+        );
+        setCard(4, String(avgMatchScore || 0), "Based on current campaign mix");
+        setCard(5, rankLabel, `${snapshot?.user?.category || "Creator"} · BD`);
+
+        const viewAllLink = document.querySelector(
+          ".sec-l[onclick*='Sponsee_ my_applications_deals.html']",
+        );
+        if (viewAllLink) {
+          viewAllLink.textContent = `View all ${applicationsCount} →`;
+        }
+      }
+
+      function updateApplicationRows(campaigns) {
+        const rows = document.querySelectorAll("#applications-panel .ar");
+        if (!rows.length || !Array.isArray(campaigns)) return;
+
+        const statusLabelMap = {
+          active: { label: "In chat", className: "t-ch" },
+          pending: { label: "Pending", className: "t-pe" },
+          closed: { label: "Deal closed", className: "t-cl" },
+        };
+
+        rows.forEach((row, index) => {
+          const campaign = campaigns[index];
+          if (!campaign) {
+            row.style.display = "none";
+            return;
+          }
+
+          row.style.display = "flex";
+          const brandEl = row.querySelector(".ar-brand");
+          const campEl = row.querySelector(".ar-camp");
+          const logoEl = row.querySelector(".ar-logo");
+          const scoreEl = row.querySelector(".sbn");
+          const scoreFill = row.querySelector(".sbf");
+          const statusEl = row.querySelector(".stag");
+
+          const channels = Array.isArray(campaign.channels)
+            ? campaign.channels.join(", ")
+            : campaign.channels || "";
+          const campMeta = [campaign.title, channels, campaign.location]
+            .filter(Boolean)
+            .join(" · ");
+
+          if (brandEl) brandEl.textContent = campaign.brand || "Unknown brand";
+          if (campEl) campEl.textContent = campMeta;
+          if (logoEl) {
+            logoEl.textContent = String(campaign.brand || "XX")
+              .split(/\s+/)
+              .slice(0, 2)
+              .map((part) => part[0])
+              .join("")
+              .toUpperCase();
+          }
+
+          const computedScore = Math.max(
+            55,
+            Math.min(
+              95,
+              60 + Math.round(parseBudgetMidpoint(campaign.budget) / 1000),
+            ),
+          );
+          if (scoreEl) scoreEl.textContent = String(computedScore);
+          if (scoreFill) scoreFill.style.width = `${computedScore}%`;
+
+          const status = statusLabelMap[
+            String(campaign.status || "").toLowerCase()
+          ] || {
+            label: "Open",
+            className: "t-pe",
+          };
+          if (statusEl) {
+            statusEl.textContent = status.label;
+            statusEl.className = `stag ${status.className}`;
+          }
+        });
+      }
+
+      function updateEarningsFromDeals() {
+        const { monthlyTotals, monthDealCounts, nicheCounts, totalDeals } =
+          computeDealsByMonth();
+        const monthKeys = Object.keys(monthlyTotals).sort();
+        const max = Math.max(...Object.values(monthlyTotals), 1);
+        const chart = document.getElementById("earn-chart");
+
+        if (chart) {
+          chart.innerHTML = monthKeys
+            .map((monthKey) => {
+              const amount = monthlyTotals[monthKey];
+              const pct = Math.round((amount / max) * 100);
+              const isPeak = amount === max;
+              const compact = compactCurrency(amount);
+              const monthLabel = keyToMonthLabel(monthKey);
+              const shortMonth = monthLabel ? monthLabel.split(" ")[0] : "-";
+              return `<div class="bar-row"><span class="bar-mo">${shortMonth}</span><div class="bar-t"><div class="bar-f" style="width:${pct}%;background:${isPeak ? "#E24B4A" : "#1D9E75"};">${pct > 22 ? `<span class="bar-lbl">${compact}</span>` : ""}</div></div>${pct <= 22 ? `<span class="bar-lbl-o">${compact}</span>` : ""}</div>`;
+            })
+            .join("");
+        }
+
+        const total = Object.values(monthlyTotals).reduce(
+          (sum, amount) => sum + amount,
+          0,
+        );
+        const bestMonthKey = monthKeys.length
+          ? monthKeys.reduce((a, b) =>
+              monthlyTotals[a] > monthlyTotals[b] ? a : b,
+            )
+          : null;
+        const currentMonthKey = (() => {
+          const now = new Date();
+          const month = String(now.getMonth() + 1).padStart(2, "0");
+          return `${now.getFullYear()}-${month}`;
+        })();
+        const effectiveMonthKey = monthlyTotals[currentMonthKey]
+          ? currentMonthKey
+          : bestMonthKey;
+
+        const thisMonthValue = effectiveMonthKey
+          ? monthlyTotals[effectiveMonthKey] || 0
+          : 0;
+        const thisMonthDeals = effectiveMonthKey
+          ? monthDealCounts[effectiveMonthKey] || 0
+          : 0;
+        const avgDeal = totalDeals ? Math.round(total / totalDeals) : 0;
+
+        const bestNiche = Object.keys(nicheCounts).length
+          ? Object.keys(nicheCounts).reduce((a, b) =>
+              nicheCounts[a] >= nicheCounts[b] ? a : b,
+            )
+          : "General";
+
+        const heroValue = document.querySelector(".earn-hero .eh-v");
+        if (heroValue) {
+          heroValue.textContent = formatCurrency(total);
+        }
+
+        const heroStats = document.querySelectorAll(".earn-hero .es-v");
+        if (heroStats[0])
+          heroStats[0].textContent = formatCurrency(thisMonthValue);
+        if (heroStats[1]) heroStats[1].textContent = formatCurrency(avgDeal);
+        if (heroStats[2]) heroStats[2].textContent = String(thisMonthDeals);
+        if (heroStats[3])
+          heroStats[3].textContent = bestNiche.split("&")[0].trim();
+
+        const earnedCardValue = document.querySelector(".mc7 .mc-gr .mc-v");
+        if (earnedCardValue) {
+          earnedCardValue.textContent = compactCurrency(thisMonthValue);
+        }
+
+        const insight = document.getElementById("earn-ins");
+        if (insight) {
+          if (!bestMonthKey) {
+            insight.textContent =
+              "Add at least one deal to build your analytics.";
+          } else {
+            const bestMonthLabel = keyToMonthLabel(bestMonthKey);
+            insight.innerHTML = `<svg viewBox="0 0 14 14" fill="none" style="width:12px;height:12px;flex-shrink:0;margin-top:1px;"><circle cx="7" cy="7" r="6" fill="#C0DD97"/><path d="M4.5 7l2 2 3-3" stroke="#27500A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Best month: ${bestMonthLabel} at ${formatCurrency(monthlyTotals[bestMonthKey])}. Total logged: ${formatCurrency(total)} across ${monthKeys.length} months.`;
+          }
+        }
+      }
+
+      function removeRow(btn) {
+        btn.closest(".dl-row")?.remove();
+        updateEarningsFromDeals();
+      }
+
+      function addDeal() {
+        const brandInput = document.getElementById("i-brand");
+        const amountInput = document.getElementById("i-amt");
+        const monthInput = document.getElementById("i-mo");
+        if (!brandInput || !amountInput || !monthInput) return;
+
+        const brand = brandInput.value.trim().slice(0, 60);
+        const amount = Number(amountInput.value);
+        const monthLabel = monthInput.value.trim();
+        if (!brand || !Number.isFinite(amount) || amount <= 0) return;
+        if (!parseMonthKey(monthLabel)) return;
+
+        const log = document.getElementById("deal-log");
+        if (!log) return;
+
+        const row = document.createElement("div");
+        row.className = "dl-row";
+
+        const left = document.createElement("div");
+        const brandLine = document.createElement("div");
+        brandLine.className = "dl-brand";
+        brandLine.append(document.createTextNode(`${brand} `));
+
+        const badge = document.createElement("span");
+        badge.textContent = "Manual";
+        badge.style.fontSize = "10px";
+        badge.style.padding = "1px 6px";
+        badge.style.borderRadius = "10px";
+        badge.style.background = "var(--blu-l)";
+        badge.style.color = "var(--blu-t)";
+        badge.style.marginLeft = "4px";
+        badge.style.fontWeight = "700";
+        brandLine.appendChild(badge);
+
+        const meta = document.createElement("div");
+        meta.className = "dl-meta";
+        meta.textContent = `General · ${monthLabel}`;
+        left.appendChild(brandLine);
+        left.appendChild(meta);
+
+        const right = document.createElement("div");
+        right.style.display = "flex";
+        right.style.alignItems = "center";
+
+        const amountEl = document.createElement("span");
+        amountEl.className = "dl-amt";
+        amountEl.textContent = formatCurrency(amount);
+
+        const removeButton = document.createElement("button");
+        removeButton.className = "del-btn";
+        removeButton.textContent = "Remove";
+        removeButton.addEventListener("click", () => {
+          row.remove();
+          updateEarningsFromDeals();
+        });
+
+        right.appendChild(amountEl);
+        right.appendChild(removeButton);
+        row.appendChild(left);
+        row.appendChild(right);
+        log.prepend(row);
+
+        brandInput.value = "";
+        amountInput.value = "";
+        monthInput.value = "";
+        updateEarningsFromDeals();
+      }
+
+      function applySnapshot(snapshot) {
+        if (!snapshot) return;
+        updateTopDateAndGreeting(snapshot?.user?.displayName || "Lamia");
+        updateSummaryCards(snapshot);
+        updateApplicationRows(
+          Array.isArray(snapshot.campaigns) ? snapshot.campaigns : [],
+        );
+      }
+
+      document.addEventListener("sponsee:snapshot", (event) => {
+        applySnapshot(event?.detail?.snapshot || null);
+      });
+
+      updateTopDateAndGreeting("Lamia");
+      updateEarningsFromDeals();
+      window.addDeal = addDeal;
+      window.removeRow = removeRow;
+    </script>
+    <script src="sponsee_dynamic.js"></script>
+  </body>
+</html>

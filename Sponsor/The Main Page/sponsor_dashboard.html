@@ -1,0 +1,2501 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SponzoBD — Dashboard & Analytics</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --red: #e24b4a;
+        --red-l: #fcebeb;
+        --red-m: #f7c1c1;
+        --grn: #1d9e75;
+        --grn-l: #eaf3de;
+        --grn-m: #c0dd97;
+        --grn-d: #085041;
+        --grn-3: #3b6d11;
+        --grn-t: #27500a;
+        --teal-l: #e1f5ee;
+        --teal-m: #9fe1cb;
+        --blu-l: #e6f1fb;
+        --blu-m: #b5d4f4;
+        --blu-t: #0c447c;
+        --amb-l: #faeeda;
+        --amb-m: #fac775;
+        --amb-t: #633806;
+        --amb-d: #854f0b;
+        --pur-l: #eeedfe;
+        --pur-t: #3c3489;
+        --bg: #f4f2ee;
+        --srf: #ffffff;
+        --srf2: #f0eee9;
+        --bdr: rgba(0, 0, 0, 0.08);
+        --bdr-m: rgba(0, 0, 0, 0.14);
+        --tx1: #1a1a1a;
+        --tx2: #555;
+        --tx3: #999;
+        --font: "DM Sans", system-ui, sans-serif;
+        --r1: 7px;
+        --r2: 10px;
+        --r3: 14px;
+      }
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+        font-family: var(--font);
+        font-size: 14px;
+        color: var(--tx1);
+        background: var(--bg);
+      }
+      .app {
+        display: flex;
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+      }
+
+      /* SIDEBAR */
+      .sb {
+        width: 220px;
+        flex-shrink: 0;
+        background: var(--srf);
+        border-right: 1px solid var(--bdr);
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
+      .sb-logo {
+        padding: 15px 16px 12px;
+        border-bottom: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .logo-ic {
+        width: 28px;
+        height: 28px;
+        background: var(--red);
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .sb-user {
+        padding: 11px 16px;
+        border-bottom: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .av-s {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: var(--blu-l);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--blu-t);
+        flex-shrink: 0;
+      }
+      .u-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .u-sub {
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .u-plan {
+        font-size: 11px;
+        color: var(--blu-t);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-top: 2px;
+      }
+      .pdot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--blu-t);
+      }
+      .nav {
+        flex: 1;
+        overflow-y: auto;
+        padding: 8px 0;
+      }
+      .nav-sec {
+        padding: 5px 16px 3px;
+        font-size: 10px;
+        color: var(--tx3);
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        font-weight: 600;
+      }
+      .ni {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        font-size: 13px;
+        color: var(--tx2);
+        cursor: pointer;
+        border-left: 2.5px solid transparent;
+        transition: background 0.1s;
+      }
+      .ni:hover {
+        background: var(--srf2);
+      }
+      .ni.on {
+        background: var(--srf2);
+        color: var(--tx1);
+        font-weight: 600;
+        border-left-color: var(--red);
+      }
+      .ni svg {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+        opacity: 0.5;
+      }
+      .ni.on svg {
+        opacity: 1;
+      }
+      .ni-badge {
+        margin-left: auto;
+        background: var(--red);
+        color: #fff;
+        font-size: 10px;
+        padding: 1px 7px;
+        border-radius: 20px;
+        font-weight: 700;
+      }
+      .sb-tier {
+        margin: 0 10px 14px;
+        padding: 10px 12px;
+        background: var(--blu-l);
+        border-radius: var(--r2);
+      }
+      .st-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 4px;
+      }
+      .st-lbl {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--blu-t);
+      }
+      .st-plan {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--blu-t);
+        background: var(--blu-m);
+        padding: 1px 8px;
+        border-radius: 20px;
+      }
+      .st-track {
+        height: 3px;
+        background: rgba(0, 0, 0, 0.12);
+        border-radius: 2px;
+        margin: 4px 0;
+      }
+      .st-fill {
+        height: 3px;
+        background: var(--blu-t);
+        border-radius: 2px;
+      }
+      .st-note {
+        font-size: 11px;
+        color: var(--blu-t);
+        opacity: 0.75;
+      }
+
+      /* MAIN */
+      .main {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+      }
+      .topbar {
+        height: 52px;
+        background: var(--srf);
+        border-bottom: 1px solid var(--bdr);
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+      }
+      .tb-t {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--tx1);
+        letter-spacing: -0.2px;
+      }
+      .tb-r {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .badge-pro {
+        background: var(--blu-l);
+        color: var(--blu-t);
+        font-size: 11px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-weight: 700;
+      }
+      .icon-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: var(--r1);
+        border: 1px solid var(--bdr-m);
+        background: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        position: relative;
+      }
+      .notif-dot {
+        width: 7px;
+        height: 7px;
+        background: var(--red);
+        border-radius: 50%;
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        border: 1.5px solid var(--srf);
+      }
+      .run-btn {
+        padding: 8px 16px;
+        background: var(--red);
+        border: none;
+        border-radius: var(--r1);
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: var(--font);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .run-btn:hover {
+        background: #c73c3b;
+      }
+
+      /* CONTENT */
+      .content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 18px 20px 28px;
+      }
+
+      /* COMMON */
+      .panel {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        border-radius: var(--r3);
+        padding: 14px 17px;
+        margin-bottom: 11px;
+      }
+      .panel:last-child {
+        margin-bottom: 0;
+      }
+      .ph {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 11px;
+      }
+      .pt {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .pn {
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .pe {
+        font-size: 12px;
+        color: var(--red);
+        cursor: pointer;
+        font-weight: 500;
+      }
+      .sec {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 18px 0 10px;
+      }
+      .sec-t {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .sec-l {
+        font-size: 12px;
+        color: var(--red);
+        cursor: pointer;
+        font-weight: 500;
+      }
+      .sec:first-child {
+        margin-top: 0;
+      }
+      .divider {
+        height: 1px;
+        background: var(--bdr);
+        margin: 11px 0;
+      }
+      .two {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 11px;
+      }
+      .three {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 11px;
+      }
+      .btn-r {
+        padding: 7px 14px;
+        background: var(--red);
+        border: none;
+        border-radius: var(--r1);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .btn-r:hover {
+        background: #c73c3b;
+      }
+      .btn-g {
+        padding: 7px 14px;
+        background: var(--grn-l);
+        border: 1px solid var(--grn-m);
+        border-radius: var(--r1);
+        color: var(--grn-t);
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .btn-b {
+        padding: 7px 14px;
+        background: var(--blu-l);
+        border: 1px solid var(--blu-m);
+        border-radius: var(--r1);
+        color: var(--blu-t);
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .btn-amb {
+        padding: 7px 14px;
+        background: var(--amb-l);
+        border: 1px solid var(--amb-m);
+        border-radius: var(--r1);
+        color: var(--amb-t);
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .btn-ghost {
+        padding: 6px 12px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        background: transparent;
+        color: var(--tx2);
+        font-size: 12px;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .btn-ghost:hover {
+        background: var(--srf2);
+      }
+
+      /* GREETING */
+      .greeting {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+      }
+      .gr-t {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--tx1);
+        letter-spacing: -0.2px;
+      }
+      .gr-s {
+        font-size: 13px;
+        color: var(--tx2);
+        margin-top: 2px;
+      }
+
+      /* URGENT ALERTS */
+      .alert-card {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        border-radius: var(--r3);
+        padding: 12px 15px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 8px;
+        transition: border-color 0.12s;
+      }
+      .alert-card:hover {
+        border-color: var(--bdr-m);
+      }
+      .alert-card:last-child {
+        margin-bottom: 0;
+      }
+      .al-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .al-r {
+        background: var(--red);
+      }
+      .al-a {
+        background: #ef9f27;
+      }
+      .al-b {
+        background: var(--blu-t);
+      }
+      .al-g {
+        background: var(--grn);
+      }
+      .al-body {
+        flex: 1;
+        min-width: 0;
+      }
+      .al-label {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 2px;
+      }
+      .al-r-t .al-label {
+        color: var(--red);
+      }
+      .al-a-t .al-label {
+        color: var(--amb-d);
+      }
+      .al-b-t .al-label {
+        color: var(--blu-t);
+      }
+      .al-g-t .al-label {
+        color: var(--grn-3);
+      }
+      .al-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .al-meta {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-top: 2px;
+      }
+      .al-action {
+        flex-shrink: 0;
+      }
+
+      /* METRIC CARDS */
+      .mc5 {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 9px;
+        margin-bottom: 0;
+      }
+      .mc {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        border-radius: var(--r3);
+        padding: 13px 14px;
+      }
+      .mc-l {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-bottom: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        line-height: 1.3;
+      }
+      .mc-v {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--tx1);
+        line-height: 1;
+      }
+      .mc-n {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-top: 3px;
+      }
+      .mc-r {
+        background: var(--red-l);
+        border-color: var(--red-m);
+      }
+      .mc-r .mc-l {
+        color: var(--red);
+      }
+      .mc-r .mc-v {
+        color: #791f1f;
+      }
+      .mc-g {
+        background: var(--grn-l);
+        border-color: var(--grn-m);
+      }
+      .mc-g .mc-l {
+        color: var(--grn-3);
+      }
+      .mc-g .mc-v {
+        color: var(--grn-d);
+      }
+      .mc-g .mc-n {
+        color: var(--grn-3);
+      }
+      .mc-b {
+        background: var(--blu-l);
+        border-color: var(--blu-m);
+      }
+      .mc-b .mc-l {
+        color: var(--blu-t);
+      }
+      .mc-b .mc-v {
+        color: var(--blu-t);
+      }
+      .mc-a {
+        background: var(--amb-l);
+        border-color: var(--amb-m);
+      }
+      .mc-a .mc-l {
+        color: var(--amb-d);
+      }
+      .mc-a .mc-v {
+        color: var(--amb-t);
+      }
+
+      /* APPLICANT ROWS */
+      .app-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 0;
+        border-bottom: 1px solid var(--bdr);
+      }
+      .app-row:last-child {
+        border-bottom: none;
+      }
+      .app-av {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .app-body {
+        flex: 1;
+        min-width: 0;
+      }
+      .app-cat {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .app-meta {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-top: 1px;
+      }
+      .app-r {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        flex-shrink: 0;
+      }
+      .compat-badge {
+        font-size: 11px;
+        padding: 2px 9px;
+        border-radius: 20px;
+        font-weight: 700;
+      }
+      .cb-s {
+        background: var(--grn-l);
+        color: var(--grn-3);
+      }
+      .cb-g {
+        background: var(--teal-l);
+        color: #0f6e56;
+      }
+      .cb-m {
+        background: var(--amb-l);
+        color: var(--amb-t);
+      }
+      .camp-tag {
+        font-size: 10px;
+        padding: 2px 8px;
+        border-radius: 20px;
+        background: var(--srf2);
+        color: var(--tx3);
+      }
+
+      /* PIPELINE */
+      .pipe-card {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        border-radius: var(--r3);
+        padding: 13px 15px;
+        margin-bottom: 9px;
+      }
+      .pipe-card:last-child {
+        margin-bottom: 0;
+      }
+      .pc-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 10px;
+      }
+      .pc-cat {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .pc-camp {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-top: 2px;
+      }
+      .pc-r {
+        text-align: right;
+        flex-shrink: 0;
+      }
+      .pc-amt {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--grn-3);
+      }
+      .pc-stage {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-top: 2px;
+      }
+      .stages {
+        display: flex;
+        align-items: flex-start;
+        margin: 10px 0;
+      }
+      .stage {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+      }
+      .stage:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        top: 9px;
+        left: 50%;
+        width: 100%;
+        height: 1.5px;
+        background: var(--bdr-m);
+        z-index: 0;
+      }
+      .stage.done:not(:last-child)::after {
+        background: var(--grn-m);
+      }
+      .sd {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 1.5px solid var(--bdr-m);
+        background: var(--srf);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 1;
+      }
+      .sd.done {
+        background: var(--grn-l);
+        border-color: var(--grn-m);
+      }
+      .sd.now {
+        background: var(--blu-l);
+        border-color: #378add;
+      }
+      .sl {
+        font-size: 9px;
+        color: var(--tx3);
+        margin-top: 3px;
+        text-align: center;
+        line-height: 1.3;
+        max-width: 50px;
+      }
+      .sl.done {
+        color: var(--grn-3);
+      }
+      .sl.now {
+        color: #185fa5;
+        font-weight: 700;
+      }
+      .pc-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 10px;
+        border-top: 1px solid var(--bdr);
+      }
+      .pc-eta {
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .pc-eta-r {
+        font-size: 11px;
+        color: var(--red);
+        font-weight: 600;
+      }
+      .pc-eta-g {
+        font-size: 11px;
+        color: var(--grn-3);
+        font-weight: 600;
+      }
+
+      /* CAMPAIGN PERFORMANCE TABLE */
+      .perf-hd {
+        display: grid;
+        grid-template-columns: 1fr 80px 70px 70px 80px;
+        gap: 8px;
+        padding: 0 0 8px;
+        border-bottom: 1px solid var(--bdr);
+      }
+      .perf-hd div {
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--tx3);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .perf-hd div:not(:first-child) {
+        text-align: right;
+      }
+      .perf-row {
+        display: grid;
+        grid-template-columns: 1fr 80px 70px 70px 80px;
+        gap: 8px;
+        padding: 9px 0;
+        border-bottom: 1px solid var(--bdr);
+        align-items: center;
+      }
+      .perf-row:last-child {
+        border-bottom: none;
+      }
+      .pr-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .pr-cat {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-top: 2px;
+      }
+      .pr-num {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--tx1);
+        text-align: right;
+      }
+      .pr-num.g {
+        color: var(--grn-3);
+      }
+      .pr-status {
+        text-align: right;
+      }
+      .ps-live {
+        font-size: 11px;
+        padding: 2px 8px;
+        border-radius: 20px;
+        background: var(--grn-l);
+        color: var(--grn-3);
+        font-weight: 700;
+      }
+      .ps-closed {
+        font-size: 11px;
+        padding: 2px 8px;
+        border-radius: 20px;
+        background: var(--srf2);
+        color: var(--tx3);
+        font-weight: 600;
+      }
+
+      /* SPEND CHART */
+      .bar-row {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin-bottom: 6px;
+      }
+      .bar-mo {
+        font-size: 11px;
+        color: var(--tx2);
+        width: 26px;
+        text-align: right;
+        flex-shrink: 0;
+      }
+      .bar-track {
+        flex: 1;
+        height: 18px;
+        background: var(--srf2);
+        border-radius: 3px;
+        overflow: hidden;
+      }
+      .bar-fill {
+        height: 100%;
+        border-radius: 3px;
+        display: flex;
+        align-items: center;
+        padding-right: 8px;
+        justify-content: flex-end;
+        min-width: 4px;
+      }
+      .bar-lbl {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--blu-t);
+        white-space: nowrap;
+      }
+      .bar-lbl-out {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-left: 6px;
+      }
+
+      /* TOAST */
+      .toast {
+        position: fixed;
+        bottom: 22px;
+        right: 22px;
+        background: var(--grn-d);
+        color: #fff;
+        padding: 10px 16px;
+        border-radius: var(--r2);
+        font-size: 13px;
+        font-weight: 600;
+        display: none;
+        z-index: 200;
+        align-items: center;
+        gap: 7px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+      }
+      .toast.on {
+        display: flex;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- SIDEBAR -->
+      <div class="sb">
+        <div class="sb-logo">
+          <div class="logo-ic">
+            <svg viewBox="0 0 16 16" fill="none" width="15" height="15">
+              <path
+                d="M3 8a5 5 0 1010 0A5 5 0 003 8z"
+                fill="white"
+                opacity="0.25"
+              />
+              <path
+                d="M8 5v3l2 2"
+                stroke="white"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+          <div>
+            <div
+              style="
+                font-size: 14px;
+                font-weight: 700;
+                color: var(--tx1);
+                letter-spacing: -0.2px;
+              "
+            >
+              SponzoBD
+            </div>
+            <div style="font-size: 10px; color: var(--tx3)">Sponsor portal</div>
+          </div>
+        </div>
+        <div class="sb-user">
+          <div class="av-s">GF</div>
+          <div>
+            <div class="u-name">GreenFresh BD</div>
+            <div class="u-sub">Health &amp; food · Dhaka</div>
+            <div class="u-plan"><span class="pdot"></span>Pro plan</div>
+          </div>
+        </div>
+        <nav class="nav">
+          <div class="nav-sec">Main</div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'sponsor_home_feed (2).html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <path
+                d="M1.5 6.5L7.5 1.5L13.5 6.5V13H9.5V9.5H5.5V13H1.5V6.5Z"
+              /></svg
+            >Home
+          </div>
+          <div class="ni on">
+            <svg viewBox="0 0 15 15" fill="currentColor">
+              <rect x="1" y="1" width="5" height="5" rx="1" />
+              <rect x="9" y="1" width="5" height="5" rx="1" />
+              <rect x="1" y="9" width="5" height="5" rx="1" />
+              <rect x="9" y="9" width="5" height="5" rx="1" /></svg
+            >Dashboard &amp; analytics
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'sponsor_campaigns_deals.html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <rect x="1.5" y="2.5" width="12" height="10" rx="1.5" />
+              <path d="M5 6h5M5 9h3" /></svg
+            >My campaigns &amp; deals
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'applicant_review (2).html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <circle cx="5.5" cy="5" r="2.5" />
+              <path d="M1 12c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4" />
+              <path d="M11 7l2 2 2-3" stroke-width="1.4" /></svg
+            >Applicant review
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'sponsor_messages.html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <path d="M2 2h11v8H8l-3 2.5V10H2V2z" /></svg
+            >Messages<span class="ni-badge">3</span>
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'sponsor_brand_settings (4).html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <circle cx="7.5" cy="7.5" r="2" />
+              <path
+                d="M7.5 1v1M7.5 13v1M1 7.5h1M13 7.5h1M3 3l.7.7M11.3 11.3l.7.7M3 12l.7-.7M11.3 3.7l.7-.7"
+              /></svg
+            >Brand settings
+          </div>
+        </nav>
+        <div class="sb-tier">
+          <div class="st-row">
+            <span class="st-lbl">Campaigns used</span
+            ><span class="st-plan">Pro</span>
+          </div>
+          <div class="st-track">
+            <div class="st-fill" style="width: 66%"></div>
+          </div>
+          <div class="st-note">4 of 6 campaigns this month</div>
+        </div>
+      </div>
+
+      <!-- MAIN -->
+      <div class="main">
+        <div class="topbar">
+          <div class="tb-t">Dashboard &amp; analytics</div>
+          <div class="tb-r">
+            <div class="icon-btn">
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 15 15"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.3"
+              >
+                <path
+                  d="M7.5 1.5A4 4 0 0111.5 5.5v2l1.5 2H2L3.5 7.5V5.5A4 4 0 017.5 1.5z"
+                />
+                <path d="M6 11.5a1.5 1.5 0 003 0" />
+              </svg>
+              <div class="notif-dot"></div>
+            </div>
+            <button
+              class="run-btn"
+              onclick="showToast('Opening campaign creation form...')"
+            >
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                <path
+                  d="M6.5 1.5v11M1.5 6.5h11"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+              Post a campaign
+            </button>
+            <span class="badge-pro">Pro plan</span>
+          </div>
+        </div>
+
+        <div class="content">
+          <!-- GREETING -->
+          <div class="greeting">
+            <div>
+              <div class="gr-t">Good morning, GreenFresh BD</div>
+              <div class="gr-s">
+                Saturday, March 21, 2025 · 3 things need your attention today
+              </div>
+            </div>
+          </div>
+
+          <!-- URGENT ACTIONS -->
+          <div class="sec" style="margin-top: 0">
+            <div class="sec-t">Actions needed</div>
+            <div style="font-size: 11px; color: var(--tx3)">
+              3 items require your decision today
+            </div>
+          </div>
+          <div>
+            <div class="alert-card al-r-t">
+              <div class="al-dot al-r"></div>
+              <div class="al-body">
+                <div class="al-label">Content awaiting approval · overdue</div>
+                <div class="al-title">
+                  National Health Week — Lamia Akter submitted 2 reels and 3
+                  stories
+                </div>
+                <div class="al-meta">
+                  Submitted March 19 · 2 days ago · ৳35,000 in escrow waiting to
+                  be released
+                </div>
+              </div>
+              <div class="al-action">
+                <button
+                  class="btn-r"
+                  onclick="
+                    showToast(
+                      'Opening content review for National Health Week...',
+                    )
+                  "
+                >
+                  Review &amp; approve
+                </button>
+              </div>
+            </div>
+            <div class="alert-card al-a-t">
+              <div class="al-dot al-a"></div>
+              <div class="al-body">
+                <div class="al-label">Terms proposal received</div>
+                <div class="al-title">
+                  Ramadan Wellness Series — NutriLife creator proposed ৳28,000
+                  for 2 reels
+                </div>
+                <div class="al-meta">
+                  Received March 20 · 1 day ago · Accept, counter, or decline to
+                  move forward
+                </div>
+              </div>
+              <div class="al-action">
+                <button
+                  class="btn-amb"
+                  onclick="showToast('Opening negotiation with creator...')"
+                >
+                  Review proposal
+                </button>
+              </div>
+            </div>
+            <div class="alert-card al-b-t">
+              <div class="al-dot al-b"></div>
+              <div class="al-body">
+                <div class="al-label">Applicants waiting · unreviewed</div>
+                <div class="al-title">
+                  Organic Superfoods Launch — 41 applicants, 8 strong matches
+                  not yet reviewed
+                </div>
+                <div class="al-meta">
+                  Campaign closes March 30 · 9 days left · top matches may
+                  accept other offers
+                </div>
+              </div>
+              <div class="al-action">
+                <button
+                  class="btn-b"
+                  onclick="
+                    showToast(
+                      'Opening applicant review for Organic Superfoods...',
+                    )
+                  "
+                >
+                  Review applicants
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- SNAPSHOT METRICS -->
+          <div class="sec"><div class="sec-t">Live snapshot</div></div>
+          <div class="mc5" style="margin-bottom: 14px">
+            <div class="mc">
+              <div class="mc-l">Active campaigns</div>
+              <div class="mc-v">3</div>
+              <div class="mc-n">2 of 6 slots remaining</div>
+            </div>
+            <div class="mc mc-a">
+              <div class="mc-l">Unreviewed applicants</div>
+              <div class="mc-v">47</div>
+              <div class="mc-n">Across 2 campaigns</div>
+            </div>
+            <div class="mc">
+              <div class="mc-l">Deals in progress</div>
+              <div class="mc-v">3</div>
+              <div class="mc-n">৳91,000 total value</div>
+            </div>
+            <div class="mc mc-g">
+              <div class="mc-l">Spent this month</div>
+              <div class="mc-v">৳63K</div>
+              <div class="mc-n">Via escrow · verified</div>
+            </div>
+            <div class="mc mc-b">
+              <div class="mc-l">Campaigns remaining</div>
+              <div class="mc-v">2</div>
+              <div class="mc-n">
+                <span
+                  style="color: var(--red); cursor: pointer"
+                  onclick="
+                    showToast('Upgrade to Premium for unlimited campaigns')
+                  "
+                  >Upgrade for unlimited</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- TWO COLUMN: APPLICANTS + PIPELINE -->
+          <div class="two" style="margin-bottom: 11px">
+            <!-- TOP APPLICANTS -->
+            <div class="panel" style="margin-bottom: 0">
+              <div class="ph">
+                <div>
+                  <div class="pt">Top applicants to review</div>
+                  <div class="pn" style="margin-top: 2px">
+                    Best match first · across all live campaigns
+                  </div>
+                </div>
+                <button
+                  class="btn-ghost"
+                  onclick="showToast('Opening full applicant review...')"
+                >
+                  View all 47 →
+                </button>
+              </div>
+
+              <div class="app-row">
+                <div
+                  class="app-av"
+                  style="background: var(--teal-m); color: var(--grn-d)"
+                >
+                  LA
+                </div>
+                <div class="app-body">
+                  <div class="app-cat">Health &amp; wellness creator · 52K</div>
+                  <div class="app-meta">
+                    Instagram, TikTok · Dhaka · 4.8% engagement · 7 deals done
+                  </div>
+                </div>
+                <div class="app-r">
+                  <span class="compat-badge cb-s">Strong</span>
+                  <span class="camp-tag">Superfoods</span>
+                  <button
+                    class="btn-g"
+                    onclick="showToast('Opening applicant profile...')"
+                  >
+                    Review
+                  </button>
+                </div>
+              </div>
+
+              <div class="app-row">
+                <div
+                  class="app-av"
+                  style="background: var(--grn-l); color: var(--grn-3)"
+                >
+                  FA
+                </div>
+                <div class="app-body">
+                  <div class="app-cat">Health &amp; wellness creator · 38K</div>
+                  <div class="app-meta">
+                    Instagram · Dhaka · 4.2% engagement · 5 deals done
+                  </div>
+                </div>
+                <div class="app-r">
+                  <span class="compat-badge cb-s">Strong</span>
+                  <span class="camp-tag">Superfoods</span>
+                  <button
+                    class="btn-g"
+                    onclick="showToast('Opening applicant profile...')"
+                  >
+                    Review
+                  </button>
+                </div>
+              </div>
+
+              <div class="app-row">
+                <div
+                  class="app-av"
+                  style="background: var(--blu-l); color: var(--blu-t)"
+                >
+                  RK
+                </div>
+                <div class="app-body">
+                  <div class="app-cat">Food &amp; lifestyle creator · 28K</div>
+                  <div class="app-meta">
+                    TikTok · Dhaka · 3.9% engagement · 5 deals done
+                  </div>
+                </div>
+                <div class="app-r">
+                  <span class="compat-badge cb-g">Good</span>
+                  <span class="camp-tag">Wellness</span>
+                  <button
+                    class="btn-g"
+                    onclick="showToast('Opening applicant profile...')"
+                  >
+                    Review
+                  </button>
+                </div>
+              </div>
+
+              <div class="app-row">
+                <div
+                  class="app-av"
+                  style="background: var(--pur-l); color: var(--pur-t)"
+                >
+                  NI
+                </div>
+                <div class="app-body">
+                  <div class="app-cat">Fashion &amp; beauty creator · 44K</div>
+                  <div class="app-meta">
+                    Instagram · Dhaka · 4.1% engagement · 4 deals done
+                  </div>
+                </div>
+                <div class="app-r">
+                  <span class="compat-badge cb-m">Moderate</span>
+                  <span class="camp-tag">Superfoods</span>
+                  <button
+                    class="btn-ghost"
+                    onclick="showToast('Opening applicant profile...')"
+                  >
+                    Review
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- ACTIVE DEAL PIPELINE -->
+            <div style="display: flex; flex-direction: column; gap: 0">
+              <div class="sec" style="margin-top: 0">
+                <div class="sec-t">Active deal pipeline</div>
+                <div
+                  class="sec-l"
+                  onclick="showToast('Opening My campaigns & deals...')"
+                >
+                  View all →
+                </div>
+              </div>
+
+              <div class="pipe-card">
+                <div class="pc-top">
+                  <div>
+                    <div class="pc-cat">National Health Week</div>
+                    <div class="pc-camp">
+                      Health &amp; wellness · Lamia Akter · Instagram
+                    </div>
+                  </div>
+                  <div class="pc-r">
+                    <div class="pc-amt">৳35,000</div>
+                    <div class="pc-stage">Escrow held</div>
+                  </div>
+                </div>
+                <div class="stages">
+                  <div class="stage done">
+                    <div class="sd done">
+                      <svg width="8" height="8" viewBox="0 0 9 9" fill="none">
+                        <path
+                          d="M1.5 4.5l2 2L7.5 2"
+                          stroke="#3B6D11"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <div class="sl done">Accepted</div>
+                  </div>
+                  <div class="stage done">
+                    <div class="sd done">
+                      <svg width="8" height="8" viewBox="0 0 9 9" fill="none">
+                        <path
+                          d="M1.5 4.5l2 2L7.5 2"
+                          stroke="#3B6D11"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <div class="sl done">Terms agreed</div>
+                  </div>
+                  <div class="stage done">
+                    <div class="sd done">
+                      <svg width="8" height="8" viewBox="0 0 9 9" fill="none">
+                        <path
+                          d="M1.5 4.5l2 2L7.5 2"
+                          stroke="#3B6D11"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <div class="sl done">Escrow funded</div>
+                  </div>
+                  <div class="stage done">
+                    <div class="sd done">
+                      <svg width="8" height="8" viewBox="0 0 9 9" fill="none">
+                        <path
+                          d="M1.5 4.5l2 2L7.5 2"
+                          stroke="#3B6D11"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <div class="sl done">Content submitted</div>
+                  </div>
+                  <div class="stage">
+                    <div class="sd now">
+                      <svg width="7" height="7" viewBox="0 0 7 7">
+                        <circle cx="3.5" cy="3.5" r="2.5" fill="#378ADD" />
+                      </svg>
+                    </div>
+                    <div class="sl now">Your approval</div>
+                  </div>
+                  <div class="stage">
+                    <div class="sd"></div>
+                    <div class="sl">Payment released</div>
+                  </div>
+                </div>
+                <div class="pc-foot">
+                  <div class="pc-eta-r">
+                    Awaiting your approval · submitted 2 days ago
+                  </div>
+                  <button
+                    class="btn-r"
+                    onclick="showToast('Opening content review...')"
+                  >
+                    Review &amp; approve
+                  </button>
+                </div>
+              </div>
+
+              <div class="pipe-card">
+                <div class="pc-top">
+                  <div>
+                    <div class="pc-cat">Ramadan Wellness Series</div>
+                    <div class="pc-camp">
+                      Health &amp; wellness · Creator · Instagram
+                    </div>
+                  </div>
+                  <div class="pc-r">
+                    <div
+                      class="pc-amt"
+                      style="
+                        color: var(--tx3);
+                        font-size: 13px;
+                        font-weight: 500;
+                      "
+                    >
+                      TBD
+                    </div>
+                    <div class="pc-stage">Negotiating terms</div>
+                  </div>
+                </div>
+                <div class="stages">
+                  <div class="stage done">
+                    <div class="sd done">
+                      <svg width="8" height="8" viewBox="0 0 9 9" fill="none">
+                        <path
+                          d="M1.5 4.5l2 2L7.5 2"
+                          stroke="#3B6D11"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <div class="sl done">Accepted</div>
+                  </div>
+                  <div class="stage">
+                    <div class="sd now">
+                      <svg width="7" height="7" viewBox="0 0 7 7">
+                        <circle cx="3.5" cy="3.5" r="2.5" fill="#378ADD" />
+                      </svg>
+                    </div>
+                    <div class="sl now">Negotiating</div>
+                  </div>
+                  <div class="stage">
+                    <div class="sd"></div>
+                    <div class="sl">Terms agreed</div>
+                  </div>
+                  <div class="stage">
+                    <div class="sd"></div>
+                    <div class="sl">Escrow funded</div>
+                  </div>
+                  <div class="stage">
+                    <div class="sd"></div>
+                    <div class="sl">Content submitted</div>
+                  </div>
+                  <div class="stage">
+                    <div class="sd"></div>
+                    <div class="sl">Payment released</div>
+                  </div>
+                </div>
+                <div class="pc-foot">
+                  <div class="pc-eta">
+                    Creator proposed ৳28,000 — respond to move forward
+                  </div>
+                  <button
+                    class="btn-amb"
+                    onclick="showToast('Opening negotiation...')"
+                  >
+                    Review proposal
+                  </button>
+                </div>
+              </div>
+
+              <div class="pipe-card" style="margin-bottom: 0">
+                <div class="pc-top">
+                  <div>
+                    <div class="pc-cat">Health Food Awareness</div>
+                    <div class="pc-camp">
+                      Health &amp; wellness · Creator · TikTok
+                    </div>
+                  </div>
+                  <div class="pc-r">
+                    <div class="pc-amt">৳22,000</div>
+                    <div class="pc-stage">Escrow pending</div>
+                  </div>
+                </div>
+                <div class="stages">
+                  <div class="stage done">
+                    <div class="sd done">
+                      <svg width="8" height="8" viewBox="0 0 9 9" fill="none">
+                        <path
+                          d="M1.5 4.5l2 2L7.5 2"
+                          stroke="#3B6D11"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <div class="sl done">Accepted</div>
+                  </div>
+                  <div class="stage done">
+                    <div class="sd done">
+                      <svg width="8" height="8" viewBox="0 0 9 9" fill="none">
+                        <path
+                          d="M1.5 4.5l2 2L7.5 2"
+                          stroke="#3B6D11"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <div class="sl done">Terms agreed</div>
+                  </div>
+                  <div class="stage">
+                    <div class="sd now">
+                      <svg width="7" height="7" viewBox="0 0 7 7">
+                        <circle cx="3.5" cy="3.5" r="2.5" fill="#378ADD" />
+                      </svg>
+                    </div>
+                    <div class="sl now">Fund escrow</div>
+                  </div>
+                  <div class="stage">
+                    <div class="sd"></div>
+                    <div class="sl">Content submitted</div>
+                  </div>
+                  <div class="stage">
+                    <div class="sd"></div>
+                    <div class="sl">Your approval</div>
+                  </div>
+                  <div class="stage">
+                    <div class="sd"></div>
+                    <div class="sl">Payment released</div>
+                  </div>
+                </div>
+                <div class="pc-foot">
+                  <div class="pc-eta-r">
+                    Awaiting your escrow payment · creator cannot start without
+                    it
+                  </div>
+                  <button
+                    class="btn-r"
+                    onclick="showToast('Opening escrow payment for ৳22,000...')"
+                  >
+                    Fund escrow now
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ANALYTICS -->
+          <div class="sec">
+            <div class="sec-t">Campaign performance</div>
+            <div class="pn">Platform-verified data only</div>
+          </div>
+          <div class="two">
+            <!-- CAMPAIGN TABLE -->
+            <div class="panel" style="margin-bottom: 0">
+              <div class="ph">
+                <div class="pt">Campaigns this year</div>
+                <button
+                  class="btn-ghost"
+                  style="font-size: 11px"
+                  onclick="showToast('Exporting campaign data as CSV...')"
+                >
+                  Export CSV
+                </button>
+              </div>
+              <div class="perf-hd">
+                <div>Campaign</div>
+                <div>Applicants</div>
+                <div>Deals</div>
+                <div>Spent</div>
+                <div>Status</div>
+              </div>
+              <div class="perf-row">
+                <div>
+                  <div class="pr-name">National Health Week</div>
+                  <div class="pr-cat">Health · Instagram · Mar 2025</div>
+                </div>
+                <div class="pr-num">34</div>
+                <div class="pr-num g">2</div>
+                <div class="pr-num g">৳63K</div>
+                <div class="pr-status"><span class="ps-live">Live</span></div>
+              </div>
+              <div class="perf-row">
+                <div>
+                  <div class="pr-name">Organic Superfoods Launch</div>
+                  <div class="pr-cat">
+                    Health · Instagram, TikTok · Mar 2025
+                  </div>
+                </div>
+                <div class="pr-num">41</div>
+                <div class="pr-num">0</div>
+                <div class="pr-num">৳0</div>
+                <div class="pr-status"><span class="ps-live">Live</span></div>
+              </div>
+              <div class="perf-row">
+                <div>
+                  <div class="pr-name">Ramadan Wellness Series</div>
+                  <div class="pr-cat">Health · Instagram · Mar 2025</div>
+                </div>
+                <div class="pr-num">19</div>
+                <div class="pr-num">1</div>
+                <div class="pr-num">৳0</div>
+                <div class="pr-status"><span class="ps-live">Live</span></div>
+              </div>
+              <div class="perf-row">
+                <div>
+                  <div class="pr-name">Health Food Awareness</div>
+                  <div class="pr-cat">Health · TikTok · Feb 2025</div>
+                </div>
+                <div class="pr-num">22</div>
+                <div class="pr-num g">2</div>
+                <div class="pr-num g">৳37K</div>
+                <div class="pr-status">
+                  <span class="ps-closed">Closed</span>
+                </div>
+              </div>
+              <div class="perf-row">
+                <div>
+                  <div class="pr-name">Supplement Awareness</div>
+                  <div class="pr-cat">Health · Instagram · Jan 2025</div>
+                </div>
+                <div class="pr-num">18</div>
+                <div class="pr-num g">1</div>
+                <div class="pr-num g">৳20K</div>
+                <div class="pr-status">
+                  <span class="ps-closed">Closed</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- SPEND TALLY -->
+            <div class="panel" style="margin-bottom: 0">
+              <div class="ph">
+                <div>
+                  <div class="pt">Spending tally</div>
+                  <div class="pn" style="margin-top: 2px">
+                    Your own record · log every deal · chart updates live
+                  </div>
+                </div>
+                <div style="display: flex; gap: 7px; align-items: center">
+                  <button
+                    class="btn-ghost"
+                    style="font-size: 11px"
+                    onclick="exportTallyCSV()"
+                  >
+                    Export CSV
+                  </button>
+                  <button
+                    class="btn-ghost"
+                    style="font-size: 11px"
+                    onclick="clearTally()"
+                  >
+                    Clear all
+                  </button>
+                </div>
+              </div>
+
+              <!-- 4 SUMMARY CARDS -->
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: repeat(4, minmax(0, 1fr));
+                  gap: 7px;
+                  margin-bottom: 12px;
+                "
+              >
+                <div
+                  style="
+                    background: var(--grn-l);
+                    border: 1px solid var(--grn-m);
+                    border-radius: var(--r2);
+                    padding: 9px 11px;
+                  "
+                >
+                  <div
+                    style="
+                      font-size: 10px;
+                      color: var(--grn-3);
+                      text-transform: uppercase;
+                      letter-spacing: 0.05em;
+                      margin-bottom: 3px;
+                    "
+                  >
+                    Total spent
+                  </div>
+                  <div
+                    style="
+                      font-size: 18px;
+                      font-weight: 700;
+                      color: var(--grn-d);
+                      line-height: 1;
+                    "
+                    id="tally-total"
+                  >
+                    ৳0
+                  </div>
+                </div>
+                <div
+                  style="
+                    background: var(--srf2);
+                    border: 1px solid var(--bdr-m);
+                    border-radius: var(--r2);
+                    padding: 9px 11px;
+                  "
+                >
+                  <div
+                    style="
+                      font-size: 10px;
+                      color: var(--tx3);
+                      text-transform: uppercase;
+                      letter-spacing: 0.05em;
+                      margin-bottom: 3px;
+                    "
+                  >
+                    Deals logged
+                  </div>
+                  <div
+                    style="
+                      font-size: 18px;
+                      font-weight: 700;
+                      color: var(--tx1);
+                      line-height: 1;
+                    "
+                    id="tally-count"
+                  >
+                    0
+                  </div>
+                </div>
+                <div
+                  style="
+                    background: var(--srf2);
+                    border: 1px solid var(--bdr-m);
+                    border-radius: var(--r2);
+                    padding: 9px 11px;
+                  "
+                >
+                  <div
+                    style="
+                      font-size: 10px;
+                      color: var(--tx3);
+                      text-transform: uppercase;
+                      letter-spacing: 0.05em;
+                      margin-bottom: 3px;
+                    "
+                  >
+                    Avg per deal
+                  </div>
+                  <div
+                    style="
+                      font-size: 18px;
+                      font-weight: 700;
+                      color: var(--tx1);
+                      line-height: 1;
+                    "
+                    id="tally-avg"
+                  >
+                    —
+                  </div>
+                </div>
+                <div
+                  id="tally-budget-card"
+                  style="
+                    background: var(--srf2);
+                    border: 1px solid var(--bdr-m);
+                    border-radius: var(--r2);
+                    padding: 9px 11px;
+                    cursor: pointer;
+                  "
+                  onclick="document.getElementById('tally-goal-inp').focus()"
+                >
+                  <div
+                    style="
+                      font-size: 10px;
+                      color: var(--tx3);
+                      text-transform: uppercase;
+                      letter-spacing: 0.05em;
+                      margin-bottom: 3px;
+                    "
+                  >
+                    Budget goal
+                  </div>
+                  <div
+                    style="
+                      font-size: 18px;
+                      font-weight: 700;
+                      color: var(--tx1);
+                      line-height: 1;
+                    "
+                    id="tally-budget-disp"
+                  >
+                    Set goal
+                  </div>
+                </div>
+              </div>
+
+              <!-- BUDGET GOAL PROGRESS BAR (shows when goal is set) -->
+              <div
+                id="tally-goal-bar-wrap"
+                style="display: none; margin-bottom: 11px"
+              >
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 4px;
+                  "
+                >
+                  <span
+                    style="font-size: 11px; color: var(--tx2); font-weight: 600"
+                    >Budget used</span
+                  >
+                  <span
+                    style="font-size: 11px; color: var(--tx3)"
+                    id="tally-goal-pct-lbl"
+                    >0%</span
+                  >
+                </div>
+                <div
+                  style="
+                    height: 6px;
+                    background: var(--srf2);
+                    border-radius: 3px;
+                    overflow: hidden;
+                  "
+                >
+                  <div
+                    id="tally-goal-bar"
+                    style="
+                      height: 100%;
+                      border-radius: 3px;
+                      background: var(--grn);
+                      transition: width 0.3s;
+                      width: 0%;
+                    "
+                  ></div>
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    margin-top: 3px;
+                  "
+                >
+                  <span
+                    style="font-size: 10px; color: var(--tx3)"
+                    id="tally-goal-spent-lbl"
+                    >৳0 spent</span
+                  >
+                  <span
+                    style="font-size: 10px; color: var(--tx3)"
+                    id="tally-goal-rem-lbl"
+                    >৳0 remaining</span
+                  >
+                </div>
+              </div>
+
+              <!-- LOG FORM -->
+              <div
+                style="
+                  background: var(--srf2);
+                  border-radius: var(--r2);
+                  padding: 11px 13px;
+                  margin-bottom: 11px;
+                "
+              >
+                <div
+                  style="
+                    font-size: 11px;
+                    font-weight: 600;
+                    color: var(--tx2);
+                    margin-bottom: 9px;
+                  "
+                >
+                  Log a deal
+                </div>
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: minmax(0, 1.8fr) minmax(
+                        0,
+                        1fr
+                      ) minmax(0, 1fr) minmax(0, 1fr) 60px;
+                    gap: 8px;
+                    align-items: end;
+                  "
+                >
+                  <div>
+                    <div
+                      style="
+                        font-size: 11px;
+                        color: var(--tx3);
+                        margin-bottom: 3px;
+                      "
+                    >
+                      Description
+                    </div>
+                    <input
+                      id="tally-desc"
+                      style="
+                        width: 100%;
+                        padding: 7px 9px;
+                        border: 1px solid var(--bdr-m);
+                        border-radius: var(--r1);
+                        background: var(--srf);
+                        color: var(--tx1);
+                        font-size: 12px;
+                        font-family: var(--font);
+                      "
+                      type="text"
+                      placeholder="e.g. Lamia – Health Week"
+                    />
+                  </div>
+                  <div>
+                    <div
+                      style="
+                        font-size: 11px;
+                        color: var(--tx3);
+                        margin-bottom: 3px;
+                      "
+                    >
+                      Amount (৳)
+                    </div>
+                    <input
+                      id="tally-amt"
+                      style="
+                        width: 100%;
+                        padding: 7px 9px;
+                        border: 1px solid var(--bdr-m);
+                        border-radius: var(--r1);
+                        background: var(--srf);
+                        color: var(--tx1);
+                        font-size: 12px;
+                        font-family: var(--font);
+                      "
+                      type="number"
+                      placeholder="35000"
+                      onkeydown="if (event.key === 'Enter') addTallyEntry();"
+                    />
+                  </div>
+                  <div>
+                    <div
+                      style="
+                        font-size: 11px;
+                        color: var(--tx3);
+                        margin-bottom: 3px;
+                      "
+                    >
+                      Niche
+                    </div>
+                    <select
+                      id="tally-niche"
+                      style="
+                        width: 100%;
+                        padding: 7px 9px;
+                        border: 1px solid var(--bdr-m);
+                        border-radius: var(--r1);
+                        background: var(--srf);
+                        color: var(--tx1);
+                        font-size: 12px;
+                        font-family: var(--font);
+                      "
+                    >
+                      <option value="Health">Health</option>
+                      <option value="Food">Food</option>
+                      <option value="Fashion">Fashion</option>
+                      <option value="Fitness">Fitness</option>
+                      <option value="Tech">Tech</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <div
+                      style="
+                        font-size: 11px;
+                        color: var(--tx3);
+                        margin-bottom: 3px;
+                      "
+                    >
+                      Month
+                    </div>
+                    <select
+                      id="tally-month"
+                      style="
+                        width: 100%;
+                        padding: 7px 9px;
+                        border: 1px solid var(--bdr-m);
+                        border-radius: var(--r1);
+                        background: var(--srf);
+                        color: var(--tx1);
+                        font-size: 12px;
+                        font-family: var(--font);
+                      "
+                    >
+                      <option>Jan 2025</option>
+                      <option>Feb 2025</option>
+                      <option selected>Mar 2025</option>
+                      <option>Apr 2025</option>
+                    </select>
+                  </div>
+                  <button
+                    class="btn-g"
+                    onclick="addTallyEntry()"
+                    style="padding: 7px 0; width: 100%"
+                  >
+                    Add
+                  </button>
+                </div>
+                <div
+                  style="
+                    margin-top: 8px;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                  "
+                >
+                  <span style="font-size: 11px; color: var(--tx3)"
+                    >Monthly budget goal (৳)</span
+                  >
+                  <input
+                    id="tally-goal-inp"
+                    style="
+                      width: 110px;
+                      padding: 5px 9px;
+                      border: 1px solid var(--bdr-m);
+                      border-radius: var(--r1);
+                      background: var(--srf);
+                      color: var(--tx1);
+                      font-size: 12px;
+                      font-family: var(--font);
+                    "
+                    type="number"
+                    placeholder="e.g. 100000"
+                    oninput="updateGoal()"
+                  />
+                  <span style="font-size: 11px; color: var(--tx3)"
+                    >· Set a ceiling to track how much of your budget is used
+                    each month</span
+                  >
+                </div>
+              </div>
+
+              <!-- CHART -->
+              <div style="margin-bottom: 11px">
+                <div
+                  style="
+                    font-size: 11px;
+                    font-weight: 600;
+                    color: var(--tx2);
+                    margin-bottom: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                  "
+                >
+                  <span>Spend by month</span>
+                  <div style="display: flex; gap: 6px">
+                    <span
+                      id="view-month-btn"
+                      style="
+                        font-size: 11px;
+                        padding: 2px 9px;
+                        border-radius: 20px;
+                        background: var(--blu-l);
+                        color: var(--blu-t);
+                        font-weight: 700;
+                        cursor: pointer;
+                      "
+                      onclick="setChartView('month')"
+                      >By month</span
+                    >
+                    <span
+                      id="view-niche-btn"
+                      style="
+                        font-size: 11px;
+                        padding: 2px 9px;
+                        border-radius: 20px;
+                        background: var(--srf2);
+                        color: var(--tx3);
+                        cursor: pointer;
+                      "
+                      onclick="setChartView('niche')"
+                      >By niche</span
+                    >
+                  </div>
+                </div>
+                <div id="tally-chart"></div>
+              </div>
+
+              <!-- TALLY ROWS -->
+              <div
+                style="
+                  font-size: 11px;
+                  font-weight: 600;
+                  color: var(--tx2);
+                  margin-bottom: 6px;
+                  display: flex;
+                  justify-content: space-between;
+                "
+              >
+                <span>Deal log</span
+                ><span
+                  style="color: var(--tx3); font-weight: 400"
+                  id="tally-log-count"
+                ></span>
+              </div>
+              <div id="tally-rows" style="max-height: 160px; overflow-y: auto">
+                <div
+                  style="
+                    text-align: center;
+                    padding: 18px 0;
+                    font-size: 13px;
+                    color: var(--tx3);
+                  "
+                  id="tally-empty"
+                >
+                  No deals logged yet — add your first deal above
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+        <path
+          d="M2 7l3 3 7-7"
+          stroke="white"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      <span id="toast-msg">Done!</span>
+    </div>
+
+    <script>
+      function showToast(msg) {
+        const t = document.getElementById("toast");
+        document.getElementById("toast-msg").textContent = msg;
+        t.classList.add("on");
+        setTimeout(() => t.classList.remove("on"), 2800);
+      }
+
+      // ── TALLY SYSTEM ──
+      const NICHE_COLORS = {
+        Health: "#1D9E75",
+        Food: "#EF9F27",
+        Fashion: "#7F77DD",
+        Fitness: "#E24B4A",
+        Tech: "#378ADD",
+        Other: "#999",
+      };
+
+      let tallyEntries = [
+        {
+          desc: "National Health Week · Lamia Akter",
+          amt: 35000,
+          niche: "Health",
+          month: "Mar 2025",
+        },
+        {
+          desc: "Ramadan Wellness Series · Creator",
+          amt: 28000,
+          niche: "Health",
+          month: "Mar 2025",
+        },
+        {
+          desc: "Health Food Awareness · Creator 1",
+          amt: 22000,
+          niche: "Health",
+          month: "Feb 2025",
+        },
+        {
+          desc: "Supplement Campaign · Creator 2",
+          amt: 20000,
+          niche: "Health",
+          month: "Jan 2025",
+        },
+        {
+          desc: "Food Eid Launch · Tasty Bites",
+          amt: 18000,
+          niche: "Food",
+          month: "Feb 2025",
+        },
+      ];
+
+      let chartView = "month";
+      let budgetGoal = 0;
+
+      function setChartView(view) {
+        chartView = view;
+        document.getElementById("view-month-btn").style.cssText =
+          "font-size:11px;padding:2px 9px;border-radius:20px;cursor:pointer;" +
+          (view === "month"
+            ? "background:var(--blu-l);color:var(--blu-t);font-weight:700;"
+            : "background:var(--srf2);color:var(--tx3);");
+        document.getElementById("view-niche-btn").style.cssText =
+          "font-size:11px;padding:2px 9px;border-radius:20px;cursor:pointer;" +
+          (view === "niche"
+            ? "background:var(--blu-l);color:var(--blu-t);font-weight:700;"
+            : "background:var(--srf2);color:var(--tx3);");
+        renderChart();
+      }
+
+      function updateGoal() {
+        budgetGoal =
+          parseInt(document.getElementById("tally-goal-inp").value) || 0;
+        const disp = budgetGoal
+          ? "৳" + budgetGoal.toLocaleString()
+          : "Set goal";
+        document.getElementById("tally-budget-disp").textContent = disp;
+        renderTally();
+      }
+
+      function renderChart() {
+        const chart = document.getElementById("tally-chart");
+        if (!tallyEntries.length) {
+          chart.innerHTML =
+            '<div style="text-align:center;padding:14px 0;font-size:12px;color:var(--tx3);">Add deals to see the chart</div>';
+          return;
+        }
+
+        if (chartView === "month") {
+          // group by month
+          const monthOrder = ["Jan 2025", "Feb 2025", "Mar 2025", "Apr 2025"];
+          const groups = {};
+          tallyEntries.forEach((e) => {
+            groups[e.month] = (groups[e.month] || 0) + e.amt;
+          });
+          const months = monthOrder.filter((m) => groups[m]);
+          const max = Math.max(...months.map((m) => groups[m]));
+          chart.innerHTML = months
+            .map((m) => {
+              const val = groups[m];
+              const pct = Math.round((val / max) * 100);
+              const isPeak = val === max;
+              const disp =
+                "৳" + (val >= 1000 ? Math.round(val / 1000) + "K" : val);
+              const shortMo = m.split(" ")[0];
+              return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
+        <span style="font-size:11px;color:var(--tx2);width:26px;text-align:right;flex-shrink:0;">${shortMo}</span>
+        <div style="flex:1;height:18px;background:var(--srf2);border-radius:3px;overflow:hidden;">
+          <div style="height:100%;border-radius:3px;width:${pct}%;background:${isPeak ? "#E24B4A" : "#378ADD"};display:flex;align-items:center;padding-right:7px;justify-content:flex-end;min-width:4px;">
+            ${pct > 28 ? `<span style="font-size:10px;font-weight:700;color:#fff;">${disp}</span>` : ""}
+          </div>
+        </div>
+        ${pct <= 28 ? `<span style="font-size:10px;color:var(--tx3);white-space:nowrap;">${disp}</span>` : ""}
+      </div>`;
+            })
+            .join("");
+        } else {
+          // group by niche
+          const groups = {};
+          tallyEntries.forEach((e) => {
+            groups[e.niche] = (groups[e.niche] || 0) + e.amt;
+          });
+          const niches = Object.keys(groups).sort(
+            (a, b) => groups[b] - groups[a],
+          );
+          const max = Math.max(...niches.map((n) => groups[n]));
+          const total = Object.values(groups).reduce((s, v) => s + v, 0);
+          chart.innerHTML = niches
+            .map((n) => {
+              const val = groups[n];
+              const pct = Math.round((val / max) * 100);
+              const sharePct = Math.round((val / total) * 100);
+              const disp =
+                "৳" + (val >= 1000 ? Math.round(val / 1000) + "K" : val);
+              const col = NICHE_COLORS[n] || "#999";
+              return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
+        <span style="font-size:11px;color:var(--tx2);width:46px;text-align:right;flex-shrink:0;">${n}</span>
+        <div style="flex:1;height:18px;background:var(--srf2);border-radius:3px;overflow:hidden;">
+          <div style="height:100%;border-radius:3px;width:${pct}%;background:${col};display:flex;align-items:center;padding-right:7px;justify-content:flex-end;min-width:4px;">
+            ${pct > 30 ? `<span style="font-size:10px;font-weight:700;color:#fff;">${disp}</span>` : ""}
+          </div>
+        </div>
+        ${pct <= 30 ? `<span style="font-size:10px;color:var(--tx3);white-space:nowrap;">${disp}</span>` : ""}
+        <span style="font-size:10px;color:var(--tx3);flex-shrink:0;width:28px;">${sharePct}%</span>
+      </div>`;
+            })
+            .join("");
+        }
+      }
+
+      function renderTally() {
+        const rows = document.getElementById("tally-rows");
+        const empty = document.getElementById("tally-empty");
+        const total = tallyEntries.reduce((s, e) => s + e.amt, 0);
+        const count = tallyEntries.length;
+        const avg = count ? Math.round(total / count) : 0;
+
+        document.getElementById("tally-total").textContent =
+          "৳" + total.toLocaleString();
+        document.getElementById("tally-count").textContent = count;
+        document.getElementById("tally-avg").textContent = count
+          ? "৳" + avg.toLocaleString()
+          : "—";
+
+        // budget goal bar
+        const goalWrap = document.getElementById("tally-goal-bar-wrap");
+        if (budgetGoal > 0) {
+          goalWrap.style.display = "block";
+          const usedPct = Math.min(Math.round((total / budgetGoal) * 100), 100);
+          const bar = document.getElementById("tally-goal-bar");
+          bar.style.width = usedPct + "%";
+          bar.style.background =
+            usedPct >= 90
+              ? "var(--red)"
+              : usedPct >= 70
+                ? "#EF9F27"
+                : "var(--grn)";
+          document.getElementById("tally-goal-pct-lbl").textContent =
+            usedPct + "% of ৳" + budgetGoal.toLocaleString() + " goal";
+          document.getElementById("tally-goal-spent-lbl").textContent =
+            "৳" + total.toLocaleString() + " spent";
+          const rem = budgetGoal - total;
+          document.getElementById("tally-goal-rem-lbl").textContent =
+            rem >= 0
+              ? "৳" + rem.toLocaleString() + " remaining"
+              : "৳" + Math.abs(rem).toLocaleString() + " over budget";
+          document.getElementById("tally-goal-rem-lbl").style.color =
+            rem < 0 ? "var(--red)" : "var(--tx3)";
+        } else {
+          goalWrap.style.display = "none";
+        }
+
+        document.getElementById("tally-log-count").textContent =
+          count +
+          " deal" +
+          (count !== 1 ? "s" : "") +
+          " · ৳" +
+          total.toLocaleString() +
+          " total";
+
+        // rows
+        if (!count) {
+          empty.style.display = "block";
+          [...rows.querySelectorAll(".tally-row")].forEach((r) => r.remove());
+          renderChart();
+          return;
+        }
+        empty.style.display = "none";
+        [...rows.querySelectorAll(".tally-row")].forEach((r) => r.remove());
+        tallyEntries.forEach((e, i) => {
+          const div = document.createElement("div");
+          div.className = "tally-row";
+          div.style.cssText =
+            "display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--bdr);gap:8px;";
+          const col = NICHE_COLORS[e.niche] || "#999";
+          div.innerHTML = `
+      <div style="width:7px;height:7px;border-radius:50%;background:${col};flex-shrink:0;"></div>
+      <span style="font-size:12px;color:var(--tx2);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${e.desc}</span>
+      <span style="font-size:10px;padding:1px 7px;border-radius:20px;background:var(--srf2);color:var(--tx3);flex-shrink:0;">${e.niche}</span>
+      <span style="font-size:10px;color:var(--tx3);flex-shrink:0;width:56px;text-align:right;">${e.month}</span>
+      <span style="font-size:12px;font-weight:700;color:var(--grn-3);flex-shrink:0;width:58px;text-align:right;">৳${e.amt.toLocaleString()}</span>
+      <button onclick="removeTallyEntry(${i})" style="padding:2px 7px;border:1px solid var(--red-m);border-radius:5px;background:transparent;font-size:10px;color:#791F1F;cursor:pointer;flex-shrink:0;">✕</button>
+    `;
+          rows.appendChild(div);
+        });
+        renderChart();
+      }
+
+      function addTallyEntry() {
+        const desc = document.getElementById("tally-desc").value.trim();
+        const amt = parseInt(document.getElementById("tally-amt").value) || 0;
+        const niche = document.getElementById("tally-niche").value;
+        const month = document.getElementById("tally-month").value;
+        if (!amt) {
+          const inp = document.getElementById("tally-amt");
+          inp.style.borderColor = "var(--red)";
+          setTimeout(() => (inp.style.borderColor = ""), 1500);
+          return;
+        }
+        tallyEntries.unshift({
+          desc: desc || "Unnamed deal",
+          amt,
+          niche,
+          month,
+        });
+        document.getElementById("tally-desc").value = "";
+        document.getElementById("tally-amt").value = "";
+        renderTally();
+        showToast("Deal added — tally updated");
+      }
+
+      function removeTallyEntry(idx) {
+        tallyEntries.splice(idx, 1);
+        renderTally();
+      }
+
+      function clearTally() {
+        if (!tallyEntries.length) return;
+        tallyEntries = [];
+        renderTally();
+        showToast("Tally cleared");
+      }
+
+      function exportTallyCSV() {
+        if (!tallyEntries.length) {
+          showToast("No deals to export");
+          return;
+        }
+        const header = "Description,Niche,Month,Amount (BDT)";
+        const rows = tallyEntries.map(
+          (e) => `"${e.desc}","${e.niche}","${e.month}",${e.amt}`,
+        );
+        const csv = [header, ...rows].join("\n");
+        const blob = new Blob([csv], { type: "text/csv" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "sponzobd_spending_tally.csv";
+        a.click();
+        showToast("CSV downloaded");
+      }
+
+      renderTally();
+    </script>
+  </body>
+</html>

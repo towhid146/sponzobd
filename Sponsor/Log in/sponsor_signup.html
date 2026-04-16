@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SponzoBD — Join as Sponsor</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --red:#E24B4A;--red-l:#FCEBEB;--red-m:#F7C1C1;
+  --grn:#1D9E75;--grn-l:#EAF3DE;--grn-m:#C0DD97;--grn-d:#085041;--grn-3:#3B6D11;
+  --teal-l:#E1F5EE;--teal-m:#9FE1CB;
+  --blu-l:#E6F1FB;--blu-m:#B5D4F4;--blu-t:#0C447C;--blu-d:#042C53;
+  --amb-l:#FAEEDA;--amb-m:#FAC775;--amb-t:#633806;
+  --bg:#F4F2EE;--srf:#FFFFFF;--srf2:#F0EEE9;
+  --bdr:rgba(0,0,0,.09);--bdr-m:rgba(0,0,0,.15);
+  --tx1:#1A1A1A;--tx2:#555;--tx3:#999;
+  --font:'DM Sans',system-ui,sans-serif;
+  --r1:7px;--r2:10px;--r3:14px;
+}
+html,body{min-height:100vh;font-family:var(--font);background:var(--bg);color:var(--tx1);}
+.page{display:flex;min-height:100vh;}
+
+/* LEFT PANEL — navy/blue for sponsors */
+.left{width:420px;flex-shrink:0;background:var(--blu-d);display:flex;flex-direction:column;justify-content:space-between;padding:40px 44px;position:relative;overflow:hidden;}
+.lp-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 20% 80%,rgba(12,68,124,.5) 0%,transparent 60%),radial-gradient(ellipse at 85% 10%,rgba(181,212,244,.1) 0%,transparent 50%);pointer-events:none;}
+.lp-logo{display:flex;align-items:center;gap:10px;margin-bottom:48px;}
+.lp-logo-ic{width:36px;height:36px;background:var(--red);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.lp-logo-name{font-size:20px;font-weight:700;color:#fff;letter-spacing:-.3px;}
+.lp-logo-sub{font-size:11px;color:rgba(255,255,255,.45);margin-top:1px;}
+.lp-headline{font-size:29px;font-weight:700;color:#fff;line-height:1.25;letter-spacing:-.4px;margin-bottom:14px;}
+.lp-headline span{color:var(--teal-m);}
+.lp-sub{font-size:14px;color:rgba(255,255,255,.6);line-height:1.7;margin-bottom:36px;}
+.lp-stats{display:flex;flex-direction:column;gap:12px;}
+.lp-stat{display:flex;align-items:center;gap:12px;}
+.lp-stat-ic{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.lp-stat-t{font-size:13px;color:rgba(255,255,255,.72);}
+.lp-stat-t b{color:#fff;font-weight:600;}
+.lp-switch{margin-top:28px;padding-top:22px;border-top:1px solid rgba(255,255,255,.1);font-size:12px;color:rgba(255,255,255,.45);}
+.lp-switch a{color:var(--teal-m);text-decoration:none;font-weight:600;}
+.lp-bottom{font-size:11px;color:rgba(255,255,255,.3);}
+
+/* RIGHT PANEL */
+.right{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 24px;}
+.form-box{width:100%;max-width:440px;}
+.fb-step{font-size:11px;font-weight:700;color:var(--blu-t);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.step-dots{display:flex;gap:4px;}
+.sdot{width:18px;height:4px;border-radius:2px;background:var(--bdr-m);}
+.sdot.on{background:var(--blu-t);}
+.sdot.done{background:var(--grn-m);}
+.fb-title{font-size:24px;font-weight:700;color:var(--tx1);letter-spacing:-.3px;margin-bottom:5px;}
+.fb-sub{font-size:13px;color:var(--tx3);line-height:1.6;margin-bottom:22px;}
+.progress-bar{height:3px;background:var(--bdr-m);border-radius:2px;margin-bottom:22px;overflow:hidden;}
+.pb-fill{height:100%;border-radius:2px;background:var(--blu-t);transition:width .3s;}
+
+/* form elements */
+.field{margin-bottom:15px;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:15px;}
+.f-lbl{font-size:12px;font-weight:600;color:var(--tx2);margin-bottom:5px;display:flex;align-items:center;gap:5px;}
+.f-req{color:var(--red);font-size:10px;}
+.f-inp{width:100%;padding:10px 13px;border:1.5px solid var(--bdr-m);border-radius:var(--r2);background:var(--srf);color:var(--tx1);font-size:14px;font-family:var(--font);transition:border-color .15s;}
+.f-inp:focus{outline:none;border-color:var(--blu-t);}
+.f-inp.ok{border-color:var(--grn-m);}
+.f-sel{width:100%;padding:10px 13px;border:1.5px solid var(--bdr-m);border-radius:var(--r2);background:var(--srf);color:var(--tx1);font-size:14px;font-family:var(--font);}
+.f-sel:focus{outline:none;border-color:var(--blu-t);}
+.f-hint{font-size:11px;color:var(--tx3);margin-top:4px;line-height:1.5;}
+/* phone */
+.phone-wrap{display:flex;}
+.phone-pre{padding:10px 12px;border:1.5px solid var(--bdr-m);border-right:none;border-radius:var(--r2) 0 0 var(--r2);background:var(--srf2);font-size:14px;color:var(--tx2);font-family:var(--font);white-space:nowrap;}
+.phone-inp{flex:1;padding:10px 13px;border:1.5px solid var(--bdr-m);border-radius:0 var(--r2) var(--r2) 0;background:var(--srf);color:var(--tx1);font-size:14px;font-family:var(--font);}
+.phone-inp:focus{outline:none;border-color:var(--blu-t);}
+/* OTP */
+.otp-wrap{display:flex;gap:8px;}
+.otp-inp{flex:1;padding:10px 13px;border:1.5px solid var(--bdr-m);border-radius:var(--r2);background:var(--srf);color:var(--tx1);font-size:14px;font-family:var(--font);letter-spacing:.2em;}
+.otp-inp:focus{outline:none;border-color:var(--blu-t);}
+.send-btn{padding:10px 14px;border:1.5px solid var(--blu-m);border-radius:var(--r2);background:var(--blu-l);color:var(--blu-t);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font);white-space:nowrap;flex-shrink:0;}
+.send-btn:hover{background:var(--blu-m);}
+.send-btn:disabled{opacity:.5;cursor:default;}
+.otp-verified{display:none;align-items:center;gap:5px;font-size:12px;color:var(--grn-3);font-weight:600;padding:10px 0;}
+/* budget chips */
+.budget-chips{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.bchip{padding:10px 14px;border:1.5px solid var(--bdr-m);border-radius:var(--r2);cursor:pointer;background:var(--srf);transition:all .12s;}
+.bchip:hover{border-color:var(--blu-m);background:var(--blu-l);}
+.bchip.on{border-color:var(--blu-t);background:var(--blu-l);}
+.bchip-val{font-size:13px;font-weight:700;color:var(--tx1);margin-bottom:2px;}
+.bchip.on .bchip-val{color:var(--blu-t);}
+.bchip-lbl{font-size:11px;color:var(--tx3);}
+/* cat chips */
+.chips{display:flex;flex-wrap:wrap;gap:7px;}
+.chip{padding:7px 13px;border:1.5px solid var(--bdr-m);border-radius:20px;font-size:12px;font-weight:500;color:var(--tx2);cursor:pointer;background:var(--srf);}
+.chip:hover{border-color:var(--blu-m);background:var(--blu-l);color:var(--blu-t);}
+.chip.on{border-color:var(--blu-t);background:var(--blu-l);color:var(--blu-t);font-weight:600;}
+/* password */
+.pw-wrap{position:relative;}
+.pw-wrap .f-inp{padding-right:42px;}
+.pw-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--tx3);}
+/* submit */
+.submit-btn{width:100%;padding:13px;border:none;border-radius:var(--r2);color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--font);margin-top:8px;transition:background .12s;}
+.submit-btn.blue{background:var(--blu-t);}
+.submit-btn.blue:hover{background:var(--blu-d);}
+.submit-btn.red{background:var(--red);}
+.submit-btn.red:hover{background:#c73c3b;}
+.skip-btn{width:100%;padding:11px;border:1.5px solid var(--bdr-m);border-radius:var(--r2);background:var(--srf);color:var(--tx2);font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font);margin-top:8px;}
+.skip-btn:hover{background:var(--srf2);}
+.back-btn{display:flex;align-items:center;gap:5px;font-size:13px;color:var(--tx3);cursor:pointer;margin-bottom:20px;background:none;border:none;font-family:var(--font);padding:0;}
+.back-btn:hover{color:var(--tx1);}
+.terms-note{font-size:11px;color:var(--tx3);text-align:center;margin-top:14px;line-height:1.6;}
+.terms-note a{color:var(--blu-t);text-decoration:none;}
+.signin-link{text-align:center;margin-top:18px;font-size:13px;color:var(--tx3);}
+.signin-link a{color:var(--red);font-weight:600;text-decoration:none;}
+.or-div{display:flex;align-items:center;gap:10px;margin:14px 0;font-size:12px;color:var(--tx3);}
+.or-div::before,.or-div::after{content:'';flex:1;height:1px;background:var(--bdr-m);}
+.notice{background:var(--blu-l);border:1px solid var(--blu-m);border-radius:var(--r2);padding:10px 13px;font-size:12px;color:var(--blu-t);line-height:1.6;margin-bottom:16px;display:flex;gap:8px;}
+.notice svg{flex-shrink:0;margin-top:1px;}
+/* verif code box */
+.verif-box{background:var(--blu-l);border:1.5px solid var(--blu-m);border-radius:var(--r3);padding:16px 18px;margin-bottom:16px;}
+.vb-code{font-size:22px;font-weight:700;font-family:monospace;letter-spacing:.12em;color:var(--blu-d);background:var(--srf);padding:9px 17px;border-radius:var(--r2);border:1.5px solid var(--blu-m);display:inline-block;margin-bottom:12px;}
+/* screen */
+.screen{display:none;}
+.screen.on{display:block;}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- LEFT PANEL -->
+<div class="left">
+  <div class="lp-bg"></div>
+  <div>
+    <div class="lp-logo">
+      <div class="lp-logo-ic"><svg viewBox="0 0 16 16" fill="none" width="18" height="18"><path d="M3 8a5 5 0 1010 0A5 5 0 003 8z" fill="white" opacity="0.3"/><path d="M8 5v3l2 2" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+      <div><div class="lp-logo-name">SponzoBD</div><div class="lp-logo-sub">Sponsor portal</div></div>
+    </div>
+    <div class="lp-headline">Reach the right creators. <span>Every time.</span></div>
+    <div class="lp-sub">Bangladesh's first AI-powered sponsorship marketplace. Connect with verified micro-influencers matched to your exact audience — no cold outreach, no wasted budget.</div>
+    <div class="lp-stats">
+      <div class="lp-stat">
+        <div class="lp-stat-ic"><svg viewBox="0 0 15 15" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.3"><circle cx="7.5" cy="5" r="2.5"/><path d="M2 13c0-3 2.5-4.5 5.5-4.5S13 10 13 13"/></svg></div>
+        <div class="lp-stat-t"><b>350K+ verified creators</b> across Bangladesh</div>
+      </div>
+      <div class="lp-stat">
+        <div class="lp-stat-ic"><svg viewBox="0 0 15 15" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.3"><path d="M7.5 1.5L9 5.5H13.5L10 8L11.5 12L7.5 9.5L3.5 12L5 8L1.5 5.5H6Z"/></svg></div>
+        <div class="lp-stat-t">AI compatibility matching — <b>find your audience's creators</b></div>
+      </div>
+      <div class="lp-stat">
+        <div class="lp-stat-ic"><svg viewBox="0 0 15 15" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.3"><rect x="2" y="5" width="11" height="7.5" rx="1"/><path d="M5 5V3.5a2.5 2.5 0 115 0V5"/></svg></div>
+        <div class="lp-stat-t">Secure escrow — <b>pay only when you approve</b></div>
+      </div>
+      <div class="lp-stat">
+        <div class="lp-stat-ic"><svg viewBox="0 0 15 15" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.3"><rect x="1.5" y="2.5" width="12" height="10" rx="1.5"/><path d="M5 6h5M5 9h3"/></svg></div>
+        <div class="lp-stat-t">Full campaign management — <b>terms, content, payment in one place</b></div>
+      </div>
+    </div>
+    <div class="lp-switch">Looking to earn as a creator? <a href="sponsee_signup.html">Join as creator →</a></div>
+  </div>
+  <div class="lp-bottom">© 2025 SponzoBD · Bangladesh's creator economy platform</div>
+</div>
+
+<!-- RIGHT PANEL -->
+<div class="right">
+  <div class="form-box">
+
+    <!-- SCREEN 1: Account basics -->
+    <div class="screen on" id="sc1">
+      <div class="fb-step">Step 1 of 3 · Account setup<div class="step-dots"><div class="sdot on"></div><div class="sdot"></div><div class="sdot"></div></div></div>
+      <div class="fb-title">Create your sponsor account</div>
+      <div class="fb-sub">Takes about 60 seconds. No documents needed yet.</div>
+      <div class="progress-bar"><div class="pb-fill" style="width:33%"></div></div>
+
+      <div class="field">
+        <div class="f-lbl">Phone number <span class="f-req">Required</span></div>
+        <div class="phone-wrap">
+          <div class="phone-pre">🇧🇩 +880</div>
+          <input class="phone-inp" id="phone" type="tel" placeholder="01XXXXXXXXX" maxlength="11">
+        </div>
+        <div class="f-hint">We'll send a one-time code to verify this number.</div>
+      </div>
+
+      <div class="field" id="otp-field" style="display:none;">
+        <div class="f-lbl">Verification code <span class="f-req">Required</span></div>
+        <div class="otp-wrap">
+          <input class="otp-inp" id="otp" type="text" placeholder="• • • • • •" maxlength="6">
+          <button class="send-btn" id="resend-btn" disabled onclick="resendOTP()">Resend</button>
+        </div>
+        <div class="otp-verified" id="otp-ok"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" fill="#C0DD97"/><path d="M3.5 6.5l2 2L9.5 4" stroke="#27500A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Phone verified</div>
+      </div>
+
+      <button class="send-btn" id="send-btn" style="width:100%;padding:11px;margin-bottom:14px;border-radius:var(--r2);font-size:13px;" onclick="sendOTP()">Send verification code</button>
+
+      <div id="details" style="display:none;">
+        <div class="field-row">
+          <div>
+            <div class="f-lbl">Brand name <span class="f-req">Required</span></div>
+            <input class="f-inp" id="brand-name" type="text" placeholder="e.g. GreenFresh BD">
+          </div>
+          <div>
+            <div class="f-lbl">Industry <span class="f-req">Required</span></div>
+            <select class="f-sel" id="industry">
+              <option value="">Select industry</option>
+              <option>Food & beverage</option>
+              <option>Health & wellness</option>
+              <option>Fashion & beauty</option>
+              <option>Tech & gadgets</option>
+              <option>Education</option>
+              <option>Finance & fintech</option>
+              <option>E-commerce / retail</option>
+              <option>Real estate</option>
+              <option>Entertainment</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="f-lbl">Monthly campaign budget <span class="f-req">Required</span></div>
+          <div class="budget-chips" id="budget-chips">
+            <div class="bchip" onclick="selectBudget(this,'under20k')"><div class="bchip-val">Under ৳20,000</div><div class="bchip-lbl">Per campaign · micro-budget</div></div>
+            <div class="bchip" onclick="selectBudget(this,'20-50k')"><div class="bchip-val">৳20,000–৳50,000</div><div class="bchip-lbl">Per campaign · growing brand</div></div>
+            <div class="bchip" onclick="selectBudget(this,'50-200k')"><div class="bchip-val">৳50,000–৳2,00,000</div><div class="bchip-lbl">Per campaign · established</div></div>
+            <div class="bchip" onclick="selectBudget(this,'above200k')"><div class="bchip-val">Above ৳2,00,000</div><div class="bchip-lbl">Per campaign · large brand</div></div>
+          </div>
+          <div class="f-hint">Used to match you with creators in your budget range. You can change this anytime.</div>
+        </div>
+
+        <div class="field">
+          <div class="f-lbl">Password <span class="f-req">Required</span></div>
+          <div class="pw-wrap">
+            <input class="f-inp" id="pw" type="password" placeholder="At least 8 characters">
+            <div class="pw-eye" onclick="togglePw()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><ellipse cx="8" cy="8" rx="6" ry="4"/><circle cx="8" cy="8" r="1.5" fill="currentColor"/></svg></div>
+          </div>
+        </div>
+
+        <button class="submit-btn blue" onclick="goSc(2)">Continue →</button>
+        <div class="terms-note">By continuing you agree to SponzoBD's <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</div>
+      </div>
+      <div class="signin-link">Already have an account? <a href="sponsor_login.html">Sign in</a></div>
+    </div>
+
+    <!-- SCREEN 2: Brand profile setup -->
+    <div class="screen" id="sc2">
+      <button class="back-btn" onclick="goSc(1)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 2L5 7l4 5"/></svg>Back</button>
+      <div class="fb-step">Step 2 of 3 · Brand setup<div class="step-dots"><div class="sdot done"></div><div class="sdot on"></div><div class="sdot"></div></div></div>
+      <div class="fb-title">Set up your brand profile</div>
+      <div class="fb-sub">Helps creators evaluate you as a serious sponsor. You can skip this and come back — but verified brands get <strong>4× more quality applications.</strong></div>
+      <div class="progress-bar"><div class="pb-fill" style="width:66%"></div></div>
+
+      <div class="notice">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" fill="var(--blu-m)"/><path d="M7 5v4M7 4v.5" stroke="var(--blu-t)" stroke-width="1.3" stroke-linecap="round"/></svg>
+        You can post a campaign after adding your brand page URL. Handle verification adds the <strong>Identity Verified</strong> badge and builds creator trust.
+      </div>
+
+      <!-- profile completeness -->
+      <div style="background:var(--srf);border:1px solid var(--bdr);border-radius:var(--r3);padding:12px 15px;margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+          <span style="font-size:12px;font-weight:600;color:var(--tx1);">Brand profile completeness</span>
+          <span style="font-size:12px;font-weight:700;color:var(--blu-t);" id="brand-pct">0%</span>
+        </div>
+        <div style="height:5px;background:var(--srf2);border-radius:3px;overflow:hidden;"><div id="brand-bar" style="height:100%;background:var(--blu-t);border-radius:3px;width:0%;transition:width .3s;"></div></div>
+        <div style="font-size:11px;color:var(--tx3);margin-top:4px;" id="brand-note">Add brand page URL to activate campaign posting.</div>
+      </div>
+
+      <div class="field">
+        <div class="f-lbl">Brand description</div>
+        <textarea class="f-inp" id="brand-desc" rows="3" style="resize:none;" placeholder="e.g. GreenFresh BD is a Dhaka-based organic food brand helping health-conscious Bangladeshis eat better since 2022." oninput="updateBrandPct()"></textarea>
+        <div class="f-hint">2–3 sentences. Shown on your public sponsor profile — creators read this before applying.</div>
+      </div>
+
+      <div class="field-row">
+        <div>
+          <div class="f-lbl">Brand page URL <span class="f-req">Required to post</span></div>
+          <input class="f-inp" id="brand-url" type="url" placeholder="facebook.com/yourbrand" oninput="updateBrandPct()">
+          <div class="f-hint">Facebook page or Instagram business account.</div>
+        </div>
+        <div>
+          <div class="f-lbl">Website (optional)</div>
+          <input class="f-inp" id="brand-web" type="url" placeholder="yourbrand.com" oninput="updateBrandPct()">
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="f-lbl">Target audience — primary platforms</div>
+        <div class="chips" id="plat-chips">
+          <div class="chip" onclick="toggleChip(this)">Instagram</div>
+          <div class="chip" onclick="toggleChip(this)">TikTok</div>
+          <div class="chip" onclick="toggleChip(this)">YouTube</div>
+          <div class="chip" onclick="toggleChip(this)">Facebook</div>
+        </div>
+        <div class="f-hint" style="margin-top:7px;">Which platforms do you want your campaigns to run on?</div>
+      </div>
+
+      <div class="field-row">
+        <div>
+          <div class="f-lbl">Target age range</div>
+          <select class="f-sel" id="age-range">
+            <option value="">Any age</option>
+            <option>18–24</option>
+            <option>25–34</option>
+            <option>18–34</option>
+            <option>25–44</option>
+            <option>35+</option>
+          </select>
+        </div>
+        <div>
+          <div class="f-lbl">Primary location focus</div>
+          <select class="f-sel" id="loc-focus">
+            <option value="">Nationwide</option>
+            <option>Dhaka only</option>
+            <option>Dhaka + Chittagong</option>
+            <option>Urban BD</option>
+            <option>Specific city</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-top:6px;">
+        <button class="skip-btn" style="flex:1;" onclick="goSc(3)">Skip for now →</button>
+        <button class="submit-btn blue" style="flex:2;margin-top:0;" onclick="goSc(3)">Save & continue →</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 3: Brand page verification -->
+    <div class="screen" id="sc3">
+      <button class="back-btn" onclick="goSc(2)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 2L5 7l4 5"/></svg>Back</button>
+      <div class="fb-step">Step 3 of 3 · Brand verification<div class="step-dots"><div class="sdot done"></div><div class="sdot done"></div><div class="sdot on"></div></div></div>
+      <div class="fb-title">Verify your brand page</div>
+      <div class="fb-sub">Proves you're authorised to run campaigns for this brand. Unlocks the <strong>Identity Verified</strong> badge — creators trust verified sponsors significantly more.</div>
+      <div class="progress-bar"><div class="pb-fill" style="width:90%"></div></div>
+
+      <!-- brand display -->
+      <div style="background:var(--srf);border:1px solid var(--bdr);border-radius:var(--r3);padding:14px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
+        <div style="width:38px;height:38px;border-radius:8px;background:var(--blu-l);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--blu-t);flex-shrink:0;" id="brand-av">GF</div>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--tx1);" id="brand-name-disp">Your brand</div>
+          <div style="font-size:11px;color:var(--tx3);" id="brand-url-disp">Page URL not set</div>
+        </div>
+        <div style="margin-left:auto;"><span style="font-size:11px;padding:3px 9px;border-radius:20px;background:var(--amb-l);color:var(--amb-t);font-weight:600;">Not yet verified</span></div>
+      </div>
+
+      <div class="verif-box">
+        <div style="font-size:12px;font-weight:700;color:var(--blu-t);margin-bottom:8px;">Your verification code</div>
+        <div class="vb-code">SBD-GF7X</div>
+        <div style="font-size:13px;font-weight:600;color:var(--blu-d);margin-bottom:10px;">How to verify in 3 steps:</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:flex-start;gap:9px;font-size:12px;color:var(--blu-t);">
+            <div style="width:18px;height:18px;border-radius:50%;background:var(--blu-t);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px;">1</div>
+            Open your Facebook page → <strong>Edit page info → About</strong> (or Instagram business bio)
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:9px;font-size:12px;color:var(--blu-t);">
+            <div style="width:18px;height:18px;border-radius:50%;background:var(--blu-t);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px;">2</div>
+            Paste the code <strong>SBD-GF7X</strong> anywhere in the About or Description section and save
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:9px;font-size:12px;color:var(--blu-t);">
+            <div style="width:18px;height:18px;border-radius:50%;background:var(--blu-t);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px;">3</div>
+            Come back and click <strong>Verify now</strong> — then remove the code from your page
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;" id="verif-btns">
+        <button class="skip-btn" style="flex:1;" onclick="skipVerif()">Skip for now</button>
+        <button class="submit-btn blue" style="flex:2;margin-top:0;" onclick="verifyBrand()">Verify now →</button>
+      </div>
+
+      <div style="display:none;" id="verif-done">
+        <div style="background:var(--grn-l);border:1.5px solid var(--grn-m);border-radius:var(--r3);padding:16px;text-align:center;margin-bottom:14px;">
+          <div style="font-size:26px;margin-bottom:8px;">✓</div>
+          <div style="font-size:15px;font-weight:700;color:var(--grn-d);margin-bottom:4px;">Brand verified!</div>
+          <div style="font-size:12px;color:var(--grn-3);">Identity Verified badge added to your sponsor profile.</div>
+        </div>
+        <button class="submit-btn red" onclick="done()">Enter SponzoBD →</button>
+      </div>
+
+      <div class="terms-note" style="margin-top:14px;">Platform fetches your public page to check for the code. We never access private page data or require admin credentials.</div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<script>
+let otpSent=false, budgetSel=null;
+
+function sendOTP(){
+  const p=document.getElementById('phone').value.trim();
+  if(p.length<10){alert('Enter a valid phone number.');return;}
+  document.getElementById('otp-field').style.display='block';
+  document.getElementById('send-btn').textContent='✓ Code sent';
+  document.getElementById('send-btn').disabled=true;
+  otpSent=true;
+  let t=60;
+  const iv=setInterval(()=>{t--;if(t<=0){clearInterval(iv);document.getElementById('resend-btn').disabled=false;}},1000);
+  document.getElementById('otp').addEventListener('input',function(){
+    if(this.value.length===6){
+      setTimeout(()=>{
+        document.getElementById('otp-ok').style.display='flex';
+        this.classList.add('ok');
+        document.getElementById('details').style.display='block';
+      },400);
+    }
+  });
+}
+
+function resendOTP(){document.getElementById('resend-btn').disabled=true;let t=60;const iv=setInterval(()=>{t--;if(t<=0){clearInterval(iv);document.getElementById('resend-btn').disabled=false;}},1000);}
+function togglePw(){const i=document.getElementById('pw');i.type=i.type==='password'?'text':'password';}
+function selectBudget(el,val){document.querySelectorAll('.bchip').forEach(c=>c.classList.remove('on'));el.classList.add('on');budgetSel=val;}
+function toggleChip(el){el.classList.toggle('on');}
+
+function updateBrandPct(){
+  const fields=[document.getElementById('brand-desc').value.trim(),document.getElementById('brand-url').value.trim(),document.getElementById('brand-web').value.trim()];
+  const f=fields.filter(Boolean).length;
+  const pct=Math.round((f/fields.length)*100);
+  document.getElementById('brand-bar').style.width=pct+'%';
+  document.getElementById('brand-pct').textContent=pct+'%';
+  document.getElementById('brand-note').textContent=
+    document.getElementById('brand-url').value.trim()
+      ? '✓ Brand page URL added — verification available on next step.'
+      : 'Add brand page URL to activate campaign posting.';
+}
+
+function goSc(n){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+  document.getElementById('sc'+n).classList.add('on');
+  window.scrollTo(0,0);
+  if(n===3){
+    const bn=document.getElementById('brand-name').value||'Your brand';
+    document.getElementById('brand-name-disp').textContent=bn;
+    document.getElementById('brand-av').textContent=bn.substring(0,2).toUpperCase();
+    const bu=document.getElementById('brand-url').value;
+    document.getElementById('brand-url-disp').textContent=bu||'Page URL not set';
+  }
+}
+
+function copyCode(){navigator.clipboard.writeText('SBD-GF7X').catch(()=>{});event.target.textContent='✓ Copied';setTimeout(()=>event.target.textContent='Copy',1500);}
+
+function verifyBrand(){
+  const btn=document.querySelector('#verif-btns .submit-btn');
+  btn.textContent='Checking page...';btn.disabled=true;
+  setTimeout(()=>{
+    document.getElementById('verif-btns').style.display='none';
+    document.getElementById('verif-done').style.display='block';
+  },1800);
+}
+
+function skipVerif(){done();}
+function done(){alert('Welcome to SponzoBD! Taking you to your dashboard...');}
+</script>
+</body>
+</html>

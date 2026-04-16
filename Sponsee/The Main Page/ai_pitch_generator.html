@@ -1,0 +1,1869 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SponzoBD — AI Pitch Generator</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --red: #e24b4a;
+        --red-l: #fcebeb;
+        --red-m: #f7c1c1;
+        --grn: #1d9e75;
+        --grn-l: #eaf3de;
+        --grn-m: #c0dd97;
+        --grn-d: #085041;
+        --grn-3: #3b6d11;
+        --grn-t: #27500a;
+        --teal-l: #e1f5ee;
+        --teal-m: #9fe1cb;
+        --blu-l: #e6f1fb;
+        --blu-m: #b5d4f4;
+        --blu-t: #0c447c;
+        --amb-l: #faeeda;
+        --amb-m: #fac775;
+        --amb-t: #633806;
+        --amb-d: #854f0b;
+        --pur-l: #eeedfe;
+        --pur-t: #3c3489;
+        --bg: #f4f2ee;
+        --srf: #ffffff;
+        --srf2: #f0eee9;
+        --bdr: rgba(0, 0, 0, 0.08);
+        --bdr-m: rgba(0, 0, 0, 0.14);
+        --bdr-s: rgba(0, 0, 0, 0.22);
+        --tx1: #1a1a1a;
+        --tx2: #555;
+        --tx3: #999;
+        --font: "DM Sans", system-ui, sans-serif;
+        --mono: "DM Mono", monospace;
+        --r1: 7px;
+        --r2: 10px;
+        --r3: 14px;
+      }
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+        font-family: var(--font);
+        font-size: 14px;
+        color: var(--tx1);
+        background: var(--bg);
+      }
+      .app {
+        display: flex;
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+      }
+
+      /* SIDEBAR */
+      .sb {
+        width: 220px;
+        flex-shrink: 0;
+        background: var(--srf);
+        border-right: 1px solid var(--bdr);
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
+      .sb-logo {
+        padding: 15px 16px 12px;
+        border-bottom: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .logo-ic {
+        width: 28px;
+        height: 28px;
+        background: var(--red);
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .sb-user {
+        padding: 11px 16px;
+        border-bottom: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .av-s {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--teal-m);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--grn-d);
+        flex-shrink: 0;
+      }
+      .u-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .u-sub {
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .u-plan {
+        font-size: 11px;
+        color: var(--grn-d);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-top: 2px;
+      }
+      .pdot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--grn);
+      }
+      .nav {
+        flex: 1;
+        overflow-y: auto;
+        padding: 8px 0;
+      }
+      .nav-sec {
+        padding: 5px 16px 3px;
+        font-size: 10px;
+        color: var(--tx3);
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        font-weight: 600;
+      }
+      .ni {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        font-size: 13px;
+        color: var(--tx2);
+        cursor: pointer;
+        border-left: 2.5px solid transparent;
+        transition: background 0.1s;
+      }
+      .ni:hover {
+        background: var(--srf2);
+      }
+      .ni.on {
+        background: var(--srf2);
+        color: var(--tx1);
+        font-weight: 600;
+        border-left-color: var(--red);
+      }
+      .ni svg {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+        opacity: 0.5;
+      }
+      .ni.on svg {
+        opacity: 1;
+      }
+      .ni-badge {
+        margin-left: auto;
+        background: var(--red);
+        color: #fff;
+        font-size: 10px;
+        padding: 1px 7px;
+        border-radius: 20px;
+        font-weight: 700;
+      }
+      .sb-ps {
+        margin: 0 10px 14px;
+        padding: 10px 12px;
+        background: var(--srf2);
+        border-radius: var(--r2);
+      }
+      .ps-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 4px;
+      }
+      .ps-lbl {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .ps-pct {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--grn);
+      }
+      .ps-track {
+        height: 4px;
+        background: var(--bdr-m);
+        border-radius: 2px;
+      }
+      .ps-fill {
+        height: 4px;
+        background: var(--grn);
+        border-radius: 2px;
+        width: 92%;
+      }
+      .ps-note {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-top: 4px;
+      }
+
+      /* MAIN */
+      .main {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+      }
+      .topbar {
+        height: 52px;
+        background: var(--srf);
+        border-bottom: 1px solid var(--bdr);
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+      }
+      .tb-t {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--tx1);
+        letter-spacing: -0.2px;
+      }
+      .tb-r {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .badge-prem {
+        background: var(--teal-l);
+        color: var(--grn-d);
+        font-size: 11px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-weight: 700;
+      }
+
+      /* LAYOUT */
+      .body {
+        display: flex;
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+      }
+      .left-col {
+        width: 420px;
+        flex-shrink: 0;
+        border-right: 1px solid var(--bdr);
+        background: var(--srf);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .right-col {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background: var(--bg);
+      }
+
+      /* LEFT COL — generator form */
+      .lc-hd {
+        padding: 14px 18px 12px;
+        border-bottom: 1px solid var(--bdr);
+        flex-shrink: 0;
+      }
+      .lc-t {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--tx1);
+        margin-bottom: 2px;
+      }
+      .lc-s {
+        font-size: 12px;
+        color: var(--tx3);
+        line-height: 1.45;
+      }
+      .form-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 16px 18px;
+      }
+
+      .field {
+        margin-bottom: 13px;
+      }
+      .field:last-child {
+        margin-bottom: 0;
+      }
+      .fl {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--tx1);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .fl-req {
+        color: var(--red);
+        font-size: 12px;
+      }
+      .fl-opt {
+        font-size: 10px;
+        color: var(--tx3);
+        font-weight: 400;
+        text-transform: none;
+        letter-spacing: 0;
+      }
+      .inp {
+        width: 100%;
+        padding: 8px 11px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        background: var(--srf);
+        color: var(--tx1);
+        font-size: 13px;
+        font-family: var(--font);
+        transition: border-color 0.1s;
+      }
+      .inp:focus {
+        outline: none;
+        border-color: var(--grn);
+      }
+      .inp.err {
+        border-color: var(--red);
+      }
+      .sel {
+        width: 100%;
+        padding: 8px 11px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        background: var(--srf);
+        color: var(--tx1);
+        font-size: 13px;
+        font-family: var(--font);
+        cursor: pointer;
+      }
+      .sel:focus {
+        outline: none;
+        border-color: var(--grn);
+      }
+      .ta {
+        width: 100%;
+        padding: 8px 11px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        background: var(--srf);
+        color: var(--tx1);
+        font-size: 13px;
+        font-family: var(--font);
+        resize: none;
+        line-height: 1.55;
+        transition: border-color 0.1s;
+      }
+      .ta:focus {
+        outline: none;
+        border-color: var(--grn);
+      }
+      .char-hint {
+        font-size: 11px;
+        color: var(--tx3);
+        text-align: right;
+        margin-top: 3px;
+      }
+      .char-hint.warn {
+        color: var(--amb-d);
+      }
+      .tone-chips {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+      .tone-chip {
+        padding: 5px 12px;
+        border: 1px solid var(--bdr-m);
+        border-radius: 20px;
+        font-size: 12px;
+        color: var(--tx2);
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.1s;
+      }
+      .tone-chip:hover {
+        background: var(--srf2);
+      }
+      .tone-chip.on {
+        background: var(--blu-l);
+        border-color: var(--blu-m);
+        color: var(--blu-t);
+        font-weight: 700;
+      }
+      .profile-chip {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 11px;
+        background: var(--grn-l);
+        border: 1px solid var(--grn-m);
+        border-radius: var(--r2);
+        margin-bottom: 13px;
+      }
+      .pc-ic {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: var(--teal-m);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--grn-d);
+        flex-shrink: 0;
+      }
+      .pc-body {
+        flex: 1;
+        min-width: 0;
+      }
+      .pc-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--grn-d);
+      }
+      .pc-stats {
+        font-size: 11px;
+        color: var(--grn-3);
+        margin-top: 2px;
+      }
+      .pc-badge {
+        font-size: 10px;
+        padding: 2px 8px;
+        border-radius: 20px;
+        background: var(--grn-m);
+        color: var(--grn-t);
+        font-weight: 700;
+      }
+      .gen-btn {
+        width: 100%;
+        padding: 11px;
+        background: var(--red);
+        border: none;
+        border-radius: var(--r2);
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: var(--font);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: background 0.1s;
+      }
+      .gen-btn:hover {
+        background: #c73c3b;
+      }
+      .gen-btn:disabled {
+        background: #ccc;
+        cursor: default;
+      }
+      .err-msg {
+        font-size: 12px;
+        color: var(--red);
+        margin-top: 5px;
+        display: none;
+      }
+
+      /* RIGHT COL — output */
+      .rc-empty {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 32px;
+        text-align: center;
+      }
+      .rce-ic {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 14px;
+      }
+      .rce-t {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--tx1);
+        margin-bottom: 7px;
+      }
+      .rce-s {
+        font-size: 13px;
+        color: var(--tx2);
+        line-height: 1.6;
+        max-width: 320px;
+      }
+
+      .rc-output {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        display: none;
+      }
+      .out-hd {
+        padding: 13px 18px;
+        border-bottom: 1px solid var(--bdr);
+        background: var(--srf);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+      }
+      .out-hd-t {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .out-hd-r {
+        display: flex;
+        gap: 7px;
+      }
+      .out-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 16px 18px;
+      }
+      .pitch-box {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        border-radius: var(--r3);
+        padding: 18px 20px;
+        margin-bottom: 12px;
+        line-height: 1.75;
+        font-size: 13px;
+        color: var(--tx1);
+        white-space: pre-wrap;
+        font-family: var(--font);
+      }
+      .pitch-meta {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 12px;
+      }
+      .pm-chip {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 11px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        background: var(--srf2);
+        color: var(--tx2);
+        font-weight: 500;
+      }
+      .pm-chip svg {
+        width: 11px;
+        height: 11px;
+        opacity: 0.5;
+      }
+      .tips-panel {
+        background: var(--blu-l);
+        border: 1px solid var(--blu-m);
+        border-radius: var(--r3);
+        padding: 14px 16px;
+        margin-bottom: 12px;
+      }
+      .tips-t {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--blu-t);
+        margin-bottom: 9px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .tip-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 7px;
+        font-size: 12px;
+        color: var(--blu-t);
+        margin-bottom: 6px;
+        line-height: 1.5;
+      }
+      .tip-row:last-child {
+        margin-bottom: 0;
+      }
+      .tip-row svg {
+        width: 12px;
+        height: 12px;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+
+      /* LOG */
+      .log-hd {
+        padding: 12px 18px 10px;
+        border-bottom: 1px solid var(--bdr);
+        background: var(--srf);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+      }
+      .log-t {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .log-pn {
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .log-body {
+        overflow-y: auto;
+      }
+      .log-empty {
+        padding: 28px 18px;
+        text-align: center;
+        font-size: 13px;
+        color: var(--tx3);
+      }
+      .log-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 18px;
+        border-bottom: 1px solid var(--bdr);
+        gap: 12px;
+        cursor: pointer;
+        transition: background 0.1s;
+      }
+      .log-row:hover {
+        background: var(--srf2);
+      }
+      .log-row:last-child {
+        border-bottom: none;
+      }
+      .lr-brand {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .lr-meta {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-top: 2px;
+      }
+      .lr-r {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-shrink: 0;
+      }
+      .pm-ai {
+        font-size: 11px;
+        padding: 2px 8px;
+        border-radius: 20px;
+        background: var(--blu-l);
+        color: var(--blu-t);
+        font-weight: 600;
+      }
+      .lr-words {
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .lr-status {
+        font-size: 11px;
+        font-weight: 600;
+      }
+      .ls-win {
+        color: var(--grn-3);
+      }
+      .ls-pend {
+        color: var(--tx3);
+      }
+      .ls-rep {
+        color: var(--blu-t);
+      }
+
+      /* TOAST */
+      .toast {
+        position: fixed;
+        bottom: 22px;
+        right: 22px;
+        background: var(--grn-d);
+        color: #fff;
+        padding: 10px 16px;
+        border-radius: var(--r2);
+        font-size: 13px;
+        font-weight: 600;
+        display: none;
+        z-index: 200;
+        align-items: center;
+        gap: 7px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+      }
+      .toast.on {
+        display: flex;
+      }
+
+      /* BUTTONS */
+      .btn-g {
+        padding: 7px 13px;
+        background: var(--grn-l);
+        border: 1px solid var(--grn-m);
+        border-radius: var(--r1);
+        color: var(--grn-t);
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .btn-b {
+        padding: 7px 13px;
+        background: var(--blu-l);
+        border: 1px solid var(--blu-m);
+        border-radius: var(--r1);
+        color: var(--blu-t);
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .btn-ghost {
+        padding: 6px 12px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        background: transparent;
+        color: var(--tx2);
+        font-size: 12px;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .btn-ghost:hover {
+        background: var(--srf2);
+      }
+      .btn-red {
+        padding: 7px 13px;
+        background: var(--red);
+        border: none;
+        border-radius: var(--r1);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .btn-red:hover {
+        background: #c73c3b;
+      }
+
+      /* DIVIDER */
+      .divider {
+        height: 1px;
+        background: var(--bdr);
+        margin: 12px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- SIDEBAR -->
+      <div class="sb">
+        <div class="sb-logo">
+          <div class="logo-ic">
+            <svg viewBox="0 0 16 16" fill="none" width="15" height="15">
+              <path
+                d="M3 8a5 5 0 1010 0A5 5 0 003 8z"
+                fill="white"
+                opacity="0.25"
+              />
+              <path
+                d="M8 5v3l2 2"
+                stroke="white"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+          <div>
+            <div
+              style="
+                font-size: 14px;
+                font-weight: 700;
+                color: var(--tx1);
+                letter-spacing: -0.2px;
+              "
+            >
+              SponzoBD
+            </div>
+            <div style="font-size: 10px; color: var(--tx3)">Creator portal</div>
+          </div>
+        </div>
+        <div class="sb-user">
+          <div class="av-s">LA</div>
+          <div>
+            <div class="u-name">Lamia Akter</div>
+            <div class="u-sub">Health &amp; wellness · 52K</div>
+            <div class="u-plan"><span class="pdot"></span>Premium plan</div>
+          </div>
+        </div>
+        <nav class="nav">
+          <div class="nav-sec">Main</div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'sponsee_home_feed (1).html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <path
+                d="M1.5 6.5L7.5 1.5L13.5 6.5V13H9.5V9.5H5.5V13H1.5V6.5Z"
+              ></path>
+            </svg>
+            Home
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'dashboard_analytics.html'"
+          >
+            <svg viewBox="0 0 15 15" fill="currentColor">
+              <rect x="1" y="1" width="5" height="5" rx="1"></rect>
+              <rect x="9" y="1" width="5" height="5" rx="1"></rect>
+              <rect x="1" y="9" width="5" height="5" rx="1"></rect>
+              <rect x="9" y="9" width="5" height="5" rx="1"></rect>
+            </svg>
+            Dashboard &amp; analytics
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'browse_campaigns.html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <rect x="1.5" y="2.5" width="12" height="10" rx="1.5"></rect>
+              <path d="M5 6h5M5 9h3"></path>
+            </svg>
+            Browse campaigns
+          </div>
+          <div
+            class="ni"
+            onclick="
+              window.location.href = 'Sponsee_ my_applications_deals.html'
+            "
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <circle cx="7.5" cy="7.5" r="5.5"></circle>
+              <path d="M7.5 4.5v3l2 1.5"></path>
+            </svg>
+            My applications &amp; deals
+          </div>
+          <div class="ni" onclick="window.location.href = 'messages.html'">
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <path d="M2 2h11v8H8l-3 2.5V10H2V2z"></path>
+            </svg>
+            Messages<span class="ni-badge">2</span>
+          </div>
+          <div
+            class="ni on"
+            onclick="window.location.href = 'ai_pitch_generator.html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <path d="M3 12l2-2 2 1 4-5"></path>
+              <circle
+                cx="11.5"
+                cy="3.5"
+                r="1.8"
+                fill="currentColor"
+                opacity="0.35"
+              ></circle>
+            </svg>
+            AI pitch generator
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'sponsee Profile.html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <circle cx="7.5" cy="5" r="2.5"></circle>
+              <path d="M2 13c0-3 2.5-4.5 5.5-4.5S13 10 13 13"></path>
+            </svg>
+            My profile
+          </div>
+        </nav>
+        <div class="sb-ps">
+          <div class="ps-row">
+            <span class="ps-lbl">Profile strength</span
+            ><span class="ps-pct">92%</span>
+          </div>
+          <div class="ps-track"><div class="ps-fill"></div></div>
+          <div class="ps-note">Add 1 portfolio sample to reach 100%</div>
+        </div>
+      </div>
+
+      <!-- MAIN -->
+      <div class="main">
+        <div class="topbar">
+          <div class="tb-t">AI pitch generator</div>
+          <div class="tb-r">
+            <span
+              style="
+                font-size: 11px;
+                background: var(--blu-l);
+                color: var(--blu-t);
+                padding: 3px 10px;
+                border-radius: 20px;
+                font-weight: 700;
+              "
+              >Template-based · MVP</span
+            >
+            <span class="badge-prem">Unlimited · Premium</span>
+          </div>
+        </div>
+
+        <div class="body">
+          <!-- LEFT: FORM -->
+          <div class="left-col">
+            <div class="lc-hd">
+              <div class="lc-t">Generate a sponsorship pitch</div>
+              <div class="lc-s">
+                Fill in the campaign details. Your verified profile data is used
+                automatically.
+              </div>
+            </div>
+            <div class="form-body">
+              <!-- Profile pulled automatically -->
+              <div class="profile-chip">
+                <div class="pc-ic">LA</div>
+                <div class="pc-body">
+                  <div class="pc-name">Lamia Akter · Health &amp; wellness</div>
+                  <div class="pc-stats">
+                    52,400 followers · 4.8% engagement · 7 verified deals · 4.8★
+                  </div>
+                </div>
+                <span class="pc-badge">Auto-filled</span>
+              </div>
+
+              <div class="field">
+                <div class="fl">
+                  Sponsor brand name <span class="fl-req">*</span>
+                </div>
+                <input
+                  class="inp"
+                  id="f-brand"
+                  type="text"
+                  placeholder="e.g. GreenFresh BD"
+                  oninput="clearErr(this)"
+                />
+                <div class="err-msg" id="err-brand">
+                  Please enter the sponsor's brand name
+                </div>
+              </div>
+
+              <div class="field">
+                <div class="fl">
+                  Campaign name / type <span class="fl-req">*</span>
+                </div>
+                <input
+                  class="inp"
+                  id="f-campaign"
+                  type="text"
+                  placeholder="e.g. National Health Week · Instagram reel"
+                  oninput="clearErr(this)"
+                />
+                <div class="err-msg" id="err-campaign">
+                  Please describe the campaign
+                </div>
+              </div>
+
+              <div class="field">
+                <div class="fl">Campaign niche</div>
+                <select class="sel" id="f-niche">
+                  <option value="health">Health &amp; wellness</option>
+                  <option value="food">Food &amp; beverage</option>
+                  <option value="fashion">Fashion &amp; beauty</option>
+                  <option value="fitness">Sports &amp; fitness</option>
+                  <option value="tech">Technology</option>
+                  <option value="edu">Education</option>
+                  <option value="travel">Travel &amp; lifestyle</option>
+                  <option value="social">Social causes</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <div class="fl">
+                  Campaign budget range <span class="fl-opt">optional</span>
+                </div>
+                <input
+                  class="inp"
+                  id="f-budget"
+                  type="text"
+                  placeholder="e.g. ৳20,000 – ৳40,000"
+                />
+              </div>
+
+              <div class="field">
+                <div class="fl">
+                  Match score
+                  <span class="fl-opt">optional · from campaign browse</span>
+                </div>
+                <input
+                  class="inp"
+                  id="f-score"
+                  type="number"
+                  min="1"
+                  max="100"
+                  placeholder="e.g. 91"
+                />
+              </div>
+
+              <div class="field">
+                <div class="fl">
+                  Your unique angle
+                  <span class="fl-opt">optional but recommended</span>
+                </div>
+                <textarea
+                  class="ta"
+                  id="f-angle"
+                  rows="3"
+                  maxlength="200"
+                  placeholder="e.g. My audience is 72% female aged 18–34 in Dhaka — exactly your target demographic. My last health campaign drove 5.1% engagement."
+                  oninput="updateAngleCount()"
+                ></textarea>
+                <div class="char-hint" id="angle-count">0 / 200 characters</div>
+              </div>
+
+              <div class="field">
+                <div class="fl">Pitch tone</div>
+                <div class="tone-chips">
+                  <div
+                    class="tone-chip on"
+                    data-tone="professional"
+                    onclick="selectTone(this)"
+                  >
+                    Professional
+                  </div>
+                  <div
+                    class="tone-chip"
+                    data-tone="warm"
+                    onclick="selectTone(this)"
+                  >
+                    Warm &amp; personal
+                  </div>
+                  <div
+                    class="tone-chip"
+                    data-tone="concise"
+                    onclick="selectTone(this)"
+                  >
+                    Short &amp; direct
+                  </div>
+                </div>
+              </div>
+
+              <div class="divider"></div>
+
+              <button class="gen-btn" id="gen-btn" onclick="generatePitch()">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path
+                    d="M8 1L10 6H15L11 9.5L12.5 14.5L8 11.5L3.5 14.5L5 9.5L1 6H6Z"
+                    fill="white"
+                    opacity=".9"
+                  />
+                </svg>
+                Generate pitch
+              </button>
+            </div>
+          </div>
+
+          <!-- RIGHT: OUTPUT + LOG -->
+          <div class="right-col">
+            <!-- Empty state -->
+            <div class="rc-empty" id="rc-empty">
+              <div class="rce-ic">
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 22 22"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.3"
+                  opacity=".4"
+                >
+                  <path
+                    d="M11 2L13.5 8H20L14.5 12L16.5 18.5L11 15L5.5 18.5L7.5 12L2 8H8.5Z"
+                  />
+                </svg>
+              </div>
+              <div class="rce-t">Your pitch will appear here</div>
+              <div class="rce-s">
+                Fill in the campaign details on the left and click Generate
+                pitch. The generator uses your verified profile data to write a
+                professional sponsorship note tailored to the campaign.
+              </div>
+              <div
+                style="
+                  margin-top: 20px;
+                  display: flex;
+                  flex-direction: column;
+                  gap: 7px;
+                  text-align: left;
+                  max-width: 320px;
+                "
+              >
+                <div
+                  style="
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 8px;
+                    font-size: 12px;
+                    color: var(--tx2);
+                  "
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                    style="flex-shrink: 0; margin-top: 1px"
+                  >
+                    <circle cx="7" cy="7" r="6" fill="#C0DD97" />
+                    <path
+                      d="M4.5 7l2 2 3-3"
+                      stroke="#27500A"
+                      stroke-width="1.2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  Pulls your follower count, engagement rate, deal history, and
+                  rating automatically
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 8px;
+                    font-size: 12px;
+                    color: var(--tx2);
+                  "
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                    style="flex-shrink: 0; margin-top: 1px"
+                  >
+                    <circle cx="7" cy="7" r="6" fill="#C0DD97" />
+                    <path
+                      d="M4.5 7l2 2 3-3"
+                      stroke="#27500A"
+                      stroke-width="1.2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  Adapts the language to the niche and tone you select
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 8px;
+                    font-size: 12px;
+                    color: var(--tx2);
+                  "
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                    style="flex-shrink: 0; margin-top: 1px"
+                  >
+                    <circle cx="7" cy="7" r="6" fill="#C0DD97" />
+                    <path
+                      d="M4.5 7l2 2 3-3"
+                      stroke="#27500A"
+                      stroke-width="1.2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  Saved to your pitch log automatically for reference
+                </div>
+              </div>
+            </div>
+
+            <!-- Output panel (shown after generate) -->
+            <div class="rc-output" id="rc-output">
+              <div class="out-hd">
+                <div class="out-hd-t" id="out-title">Pitch for —</div>
+                <div class="out-hd-r">
+                  <button class="btn-ghost" onclick="copyPitch()">Copy</button>
+                  <button class="btn-ghost" onclick="regenerate()">
+                    Regenerate
+                  </button>
+                  <button
+                    class="btn-red"
+                    onclick="
+                      alert(
+                        'Pitch attached to application — navigate to Browse Campaigns to send it with your application.',
+                      )
+                    "
+                  >
+                    Use in application
+                  </button>
+                </div>
+              </div>
+              <div class="out-body">
+                <div class="pitch-meta" id="pitch-meta"></div>
+                <div class="pitch-box" id="pitch-box"></div>
+                <div class="tips-panel">
+                  <div class="tips-t">
+                    <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+                      <circle cx="7" cy="7" r="6" fill="#B5D4F4" />
+                      <path
+                        d="M7 5v4M7 4v.5"
+                        stroke="#042C53"
+                        stroke-width="1.2"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                    Tips to improve this pitch before sending
+                  </div>
+                  <div class="tip-row">
+                    <svg viewBox="0 0 12 12" fill="none">
+                      <path
+                        d="M2 6l2.5 2.5L10 3"
+                        stroke="#0C447C"
+                        stroke-width="1.4"
+                        stroke-linecap="round"
+                      /></svg
+                    >Personalise it further — mention something specific about
+                    the brand that you genuinely like or have used.
+                  </div>
+                  <div class="tip-row">
+                    <svg viewBox="0 0 12 12" fill="none">
+                      <path
+                        d="M2 6l2.5 2.5L10 3"
+                        stroke="#0C447C"
+                        stroke-width="1.4"
+                        stroke-linecap="round"
+                      /></svg
+                    >Keep it under 300 characters when submitting as your
+                    application note — paste the full pitch in your first chat
+                    message.
+                  </div>
+                  <div class="tip-row">
+                    <svg viewBox="0 0 12 12" fill="none">
+                      <path
+                        d="M2 6l2.5 2.5L10 3"
+                        stroke="#0C447C"
+                        stroke-width="1.4"
+                        stroke-linecap="round"
+                      /></svg
+                    >If you added a unique angle above, make sure that sentence
+                    appears early in the pitch — it is your strongest hook.
+                  </div>
+                </div>
+                <div style="display: flex; gap: 8px">
+                  <button class="btn-ghost" onclick="clearOutput()">
+                    Clear &amp; start over
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pitch log (always visible at bottom) -->
+            <div
+              style="
+                flex-shrink: 0;
+                border-top: 1px solid var(--bdr);
+                background: var(--srf);
+              "
+            >
+              <div class="log-hd">
+                <div class="log-t">Pitch log — this month</div>
+                <div class="log-pn">
+                  Unlimited on Premium · all pitches saved here
+                </div>
+              </div>
+              <div
+                class="log-body"
+                style="max-height: 220px; overflow-y: auto"
+                id="pitch-log"
+              >
+                <div class="log-row" onclick="loadLogEntry(0)">
+                  <div>
+                    <div class="lr-brand">
+                      GreenFresh BD — National Health Week
+                    </div>
+                    <div class="lr-meta">
+                      Generated Mar 6 · Health &amp; wellness · Professional
+                      tone
+                    </div>
+                  </div>
+                  <div class="lr-r">
+                    <span class="pm-ai">AI generated</span
+                    ><span class="lr-words">312 words</span
+                    ><span class="lr-status ls-win">Deal in pipeline</span>
+                  </div>
+                </div>
+                <div class="log-row" onclick="loadLogEntry(1)">
+                  <div>
+                    <div class="lr-brand">
+                      NutriLife Bangladesh — Ramadan Wellness Series
+                    </div>
+                    <div class="lr-meta">
+                      Generated Mar 9 · Health &amp; wellness · Warm &amp;
+                      personal tone
+                    </div>
+                  </div>
+                  <div class="lr-r">
+                    <span class="pm-ai">AI generated</span
+                    ><span class="lr-words">287 words</span
+                    ><span class="lr-status ls-rep">Sponsor replied</span>
+                  </div>
+                </div>
+                <div class="log-row" onclick="loadLogEntry(2)">
+                  <div>
+                    <div class="lr-brand">Tasty Bites BD — Eid Menu Launch</div>
+                    <div class="lr-meta">
+                      Generated Mar 12 · Food &amp; beverage · Short &amp;
+                      direct tone
+                    </div>
+                  </div>
+                  <div class="lr-r">
+                    <span class="pm-ai">AI generated</span
+                    ><span class="lr-words">198 words</span
+                    ><span class="lr-status ls-pend">Pending response</span>
+                  </div>
+                </div>
+                <div class="log-row" onclick="loadLogEntry(3)">
+                  <div>
+                    <div class="lr-brand">
+                      OrganicBD — Organic Superfoods Launch
+                    </div>
+                    <div class="lr-meta">
+                      Generated Mar 14 · Health &amp; wellness · Professional
+                      tone
+                    </div>
+                  </div>
+                  <div class="lr-r">
+                    <span class="pm-ai">AI generated</span
+                    ><span class="lr-words">274 words</span
+                    ><span class="lr-status ls-win">Deal closed ৳18,000</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+        <path
+          d="M2 7l3 3 7-7"
+          stroke="white"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      <span id="toast-msg">Copied!</span>
+    </div>
+
+    <script>
+      let activeTone = "professional";
+      let currentPitch = "";
+      let currentBrand = "";
+      let logEntries = [];
+
+      // Pre-built log pitches for clicking existing log rows
+      const savedPitches = [
+        {
+          brand: "GreenFresh BD",
+          campaign: "National Health Week · Instagram reel",
+          tone: "Professional",
+          niche: "health",
+          score: 91,
+          pitch: `Dear GreenFresh BD Team,
+
+I am Lamia Akter, a health and wellness content creator based in Dhaka with 52,400 followers across Instagram and TikTok. My audience is primarily women aged 18 to 34, 72% female, concentrated in Dhaka with strong secondary reach in Chittagong and Sylhet — exactly the demographic your National Health Week campaign is targeting.
+
+My content focuses on authentic, educational health storytelling. I do not produce scripted ads. Every brand partnership I take feels like a genuine recommendation to my audience — because it is.
+
+Here is why I am a strong fit for this campaign:
+
+My recent health campaigns have averaged 4.2 to 5.1% engagement, well above the platform average of 1.9%. I have completed 7 verified deals through SponzoBD with an average sponsor rating of 4.8 out of 5. My last health food campaign drove measurable results within the first week.
+
+My match score for your campaign is 91 out of 100, reflecting strong alignment on niche, audience demographics, platform, and budget range.
+
+I deliver on brief, on time, and in a tone that resonates with your target audience. I would love to discuss how we can bring the National Health Week campaign to life in a way that feels authentic to my community.
+
+Looking forward to connecting.
+
+Warm regards,
+Lamia Akter
+Instagram: @lamia.wellness · TikTok: @lamia_health`,
+        },
+        {
+          brand: "NutriLife Bangladesh",
+          campaign: "Ramadan Wellness Series · Instagram",
+          tone: "Warm & personal",
+          niche: "health",
+          score: 84,
+          pitch: `Assalamu Alaikum NutriLife Bangladesh Team,
+
+Ramadan is one of my favourite times to create health content — and I have been genuinely looking for a nutrition brand that understands Bangladeshi wellness culture to collaborate with this season.
+
+I am Lamia Akter, a health and wellness creator with 52,400 followers, primarily women aged 18 to 34 in Dhaka and Chittagong. My audience follows me because they trust my honest take on health — not because I push products at them.
+
+When I saw your Ramadan Wellness Series, it felt like a natural fit. Your focus on mindful nutrition during Ramadan aligns perfectly with the kind of content my audience has been asking me to make this month.
+
+My track record: 7 completed brand deals through SponzoBD, average 4.8-star sponsor rating, and an engagement rate that consistently runs 3 to 4 times the platform average.
+
+I would love to create content that feels genuinely useful for your audience this Ramadan — something they will save and share, not scroll past.
+
+Can we connect this week?
+
+Warmly,
+Lamia Akter`,
+        },
+        {
+          brand: "Tasty Bites BD",
+          campaign: "Eid Menu Launch · TikTok",
+          tone: "Short & direct",
+          niche: "food",
+          score: 58,
+          pitch: `Hi Tasty Bites BD,
+
+Lamia Akter here — health and wellness creator, 52K followers, Dhaka-based.
+
+My audience loves food content during Eid season and your launch timing is perfect. I can do 1 TikTok reel and a story series that feels celebratory and authentic — not like a TV commercial.
+
+Stats: 4.8% avg engagement · 7 verified deals · 4.8★ average rating.
+
+Ready to move quickly if timelines are tight. Let's talk.
+
+Lamia
+@lamia_health on TikTok`,
+        },
+        {
+          brand: "OrganicBD",
+          campaign: "Organic Superfoods Launch · Instagram, TikTok",
+          tone: "Professional",
+          niche: "health",
+          score: 88,
+          pitch: `Dear OrganicBD Team,
+
+I am Lamia Akter, a health and wellness content creator based in Dhaka with 52,400 followers across Instagram and TikTok, and a match score of 88 for your Organic Superfoods Launch campaign.
+
+My audience — 72% female, 18 to 34, primarily urban Bangladesh — is exactly the consumer segment that chooses organic. They are health-conscious, research-driven, and they trust my recommendations because I only promote products I would genuinely use myself.
+
+For your superfoods launch, I would create content showing the products as a natural part of everyday meals and routines. No studio setups. No scripted lines. Real food, real lifestyle, real results.
+
+What I bring to this partnership: 7 verified deals with an average 4.8-star sponsor rating. 5.1% engagement rate on my last health campaign. Bilingual content delivery in Bangla and English.
+
+I would love to discuss how we can make the launch feel native to my community while delivering the brand awareness you need.
+
+Best regards,
+Lamia Akter`,
+        },
+      ];
+
+      function selectTone(el) {
+        document
+          .querySelectorAll(".tone-chip")
+          .forEach((c) => c.classList.remove("on"));
+        el.classList.add("on");
+        activeTone = el.dataset.tone;
+      }
+
+      function updateAngleCount() {
+        const len = document.getElementById("f-angle").value.length;
+        const el = document.getElementById("angle-count");
+        el.textContent = len + " / 200 characters";
+        el.classList.toggle("warn", len > 170);
+      }
+
+      function clearErr(inp) {
+        inp.classList.remove("err");
+        const err = document.getElementById("err-" + inp.id.replace("f-", ""));
+        if (err) err.style.display = "none";
+      }
+
+      function showErr(id, msg) {
+        const inp = document.getElementById("f-" + id);
+        const err = document.getElementById("err-" + id);
+        inp.classList.add("err");
+        if (err) {
+          err.textContent = msg;
+          err.style.display = "block";
+        }
+        inp.focus();
+      }
+
+      function generatePitch() {
+        const brand = document.getElementById("f-brand").value.trim();
+        const campaign = document.getElementById("f-campaign").value.trim();
+        const niche = document.getElementById("f-niche").value;
+        const budget = document.getElementById("f-budget").value.trim();
+        const scoreRaw = document.getElementById("f-score").value.trim();
+        const angle = document.getElementById("f-angle").value.trim();
+        const score = parseInt(scoreRaw) || null;
+
+        let valid = true;
+        if (!brand) {
+          showErr("brand", "Please enter the brand name");
+          valid = false;
+        }
+        if (!campaign) {
+          showErr("campaign", "Please describe the campaign");
+          valid = false;
+        }
+        if (!valid) return;
+
+        const btn = document.getElementById("gen-btn");
+        btn.disabled = true;
+        btn.innerHTML =
+          '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="animation:spin 1s linear infinite;"><circle cx="7" cy="7" r="5.5" stroke="white" stroke-width="1.5" stroke-dasharray="12 22"/></svg> Generating...';
+
+        setTimeout(() => {
+          const pitch = buildPitch(
+            brand,
+            campaign,
+            niche,
+            budget,
+            score,
+            angle,
+            activeTone,
+          );
+          currentPitch = pitch;
+          currentBrand = brand;
+          showOutput(brand, campaign, niche, budget, score, activeTone, pitch);
+          saveToPitchLog(brand, campaign, niche, activeTone, pitch);
+          btn.disabled = false;
+          btn.innerHTML =
+            '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L10 6H15L11 9.5L12.5 14.5L8 11.5L3.5 14.5L5 9.5L1 6H6Z" fill="white" opacity=".9"/></svg> Generate pitch';
+        }, 900);
+      }
+
+      function buildPitch(brand, campaign, niche, budget, score, angle, tone) {
+        const nicheMap = {
+          health: {
+            adj: "health and wellness",
+            audience: "health-conscious women aged 18 to 34",
+            hook: "authentic health storytelling",
+          },
+          food: {
+            adj: "food and lifestyle",
+            audience: "food-loving urban Bangladeshi audience",
+            hook: "vibrant food content",
+          },
+          fashion: {
+            adj: "fashion and beauty",
+            audience: "style-conscious women aged 18 to 34",
+            hook: "genuine style storytelling",
+          },
+          fitness: {
+            adj: "sports and fitness",
+            audience: "active Bangladeshi audience",
+            hook: "real workout and fitness content",
+          },
+          tech: {
+            adj: "technology",
+            audience: "tech-curious urban Bangladeshis",
+            hook: "accessible tech content",
+          },
+          edu: {
+            adj: "education and career",
+            audience: "career-driven Bangladeshi audience",
+            hook: "practical learning content",
+          },
+          travel: {
+            adj: "travel and lifestyle",
+            audience: "travel-curious urban Bangladeshis",
+            hook: "inspiring travel storytelling",
+          },
+          social: {
+            adj: "social impact",
+            audience: "socially conscious Bangladeshis",
+            hook: "purpose-driven content",
+          },
+        };
+        const n = nicheMap[niche] || nicheMap["health"];
+        const scoreStr = score
+          ? ` My compatibility score for your campaign is ${score} out of 100, reflecting strong alignment on niche, audience, and platform.`
+          : "";
+        const budgetStr = budget
+          ? ` Your campaign budget of ${budget} works for my deliverables.`
+          : "";
+        const angleStr = angle ? `\n\n${angle}` : "";
+
+        if (tone === "concise") {
+          return `Hi ${brand},
+
+Lamia Akter here — ${n.adj} creator, 52K followers, Dhaka-based.${scoreStr}
+
+My audience: 72% female · 18–34 · primarily urban Bangladesh. Exactly who you are targeting.${angleStr}
+
+Why me: 4.8% avg engagement · 7 verified deals · 4.8★ average rating.${budgetStr}
+
+I create ${n.hook} that drives real engagement — not just impressions. Happy to discuss ${campaign} further.
+
+Lamia · @lamia.wellness`;
+        }
+
+        if (tone === "warm") {
+          return `Dear ${brand} Team,
+
+I came across your ${campaign} campaign and I genuinely connected with what you are doing. As a ${n.adj} content creator in Dhaka, this feels like a natural fit for me and my community.${angleStr}
+
+I am Lamia Akter. I have 52,400 followers across Instagram and TikTok, 72% of whom are women aged 18 to 34 in Dhaka and nearby cities — your target audience.${scoreStr}
+
+My followers trust me because I am honest. I only partner with brands I believe in, which is why my engagement rate of 4.8% is consistently 2 to 3 times above the platform average.
+
+I have completed 7 verified brand deals through SponzoBD, each rated an average of 4.8 stars by the sponsors themselves.${budgetStr}
+
+I would love to create content for ${campaign} that feels genuinely authentic to my audience and delivers real value for your brand. Can we find time to connect this week?
+
+Warmly,
+Lamia Akter
+@lamia.wellness · @lamia_health`;
+        }
+
+        // professional (default)
+        return `Dear ${brand} Team,
+
+I am Lamia Akter, a ${n.adj} content creator based in Dhaka with 52,400 followers across Instagram and TikTok. My audience is 72% female, aged 18 to 34, concentrated in Dhaka with strong secondary reach in Chittagong and Sylhet.${angleStr}
+
+I am writing to express my interest in your ${campaign} campaign.${scoreStr}
+
+Here is why I am a strong fit:
+
+My content focuses on ${n.hook} — I do not produce scripted advertisements. Every partnership I take is one I genuinely believe in, which is reflected in my 4.8% average engagement rate across recent campaigns — well above the platform average of 1.9%.
+
+I have completed 7 verified sponsorship deals through SponzoBD with an average sponsor rating of 4.8 out of 5. My ${n.adj} campaigns consistently drive measurable results within the first week of going live.${budgetStr}
+
+I deliver on brief, on time, and in a tone that resonates with your target ${n.audience}. I would be glad to discuss how we can bring this campaign to life authentically.
+
+Looking forward to hearing from you.
+
+Best regards,
+Lamia Akter
+Instagram: @lamia.wellness · TikTok: @lamia_health`;
+      }
+
+      function showOutput(brand, campaign, niche, budget, score, tone, pitch) {
+        document.getElementById("rc-empty").style.display = "none";
+        const out = document.getElementById("rc-output");
+        out.style.display = "flex";
+        out.style.flexDirection = "column";
+        document.getElementById("out-title").textContent = "Pitch for " + brand;
+        document.getElementById("pitch-box").textContent = pitch;
+        const words = pitch.split(/\s+/).length;
+        const toneLabel =
+          {
+            professional: "Professional",
+            warm: "Warm & personal",
+            concise: "Short & direct",
+          }[tone] || tone;
+        const nicheLabel =
+          document.getElementById("f-niche").options[
+            document.getElementById("f-niche").selectedIndex
+          ].text;
+        document.getElementById("pitch-meta").innerHTML = `
+    <div class="pm-chip"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="6" cy="6" r="4.5"/><path d="M6 3.5v2.5l1.5 1"/></svg>Generated just now</div>
+    <div class="pm-chip"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M2 4h8M2 7h6M2 10h4"/></svg>${words} words</div>
+    <div class="pm-chip">${toneLabel} tone</div>
+    <div class="pm-chip">${nicheLabel}</div>
+    ${score ? `<div class="pm-chip" style="background:var(--grn-l);color:var(--grn-3);font-weight:700;">Match score ${score}</div>` : ""}
+  `;
+      }
+
+      function saveToPitchLog(brand, campaign, niche, tone, pitch) {
+        const toneLabel =
+          {
+            professional: "Professional",
+            warm: "Warm & personal",
+            concise: "Short & direct",
+          }[tone] || tone;
+        const nicheLabel =
+          document.getElementById("f-niche").options[
+            document.getElementById("f-niche").selectedIndex
+          ].text;
+        const words = pitch.split(/\s+/).length;
+        const log = document.getElementById("pitch-log");
+        const row = document.createElement("div");
+        row.className = "log-row";
+        const idx = logEntries.length;
+        logEntries.push({
+          brand,
+          campaign,
+          tone: toneLabel,
+          niche: nicheLabel,
+          pitch,
+        });
+        row.innerHTML = `
+    <div><div class="lr-brand">${brand} — ${campaign}</div><div class="lr-meta">Generated just now · ${nicheLabel} · ${toneLabel} tone</div></div>
+    <div class="lr-r"><span class="pm-ai">AI generated</span><span class="lr-words">${words} words</span><span class="lr-status ls-pend">Just sent</span></div>
+  `;
+        row.onclick = () => loadUserLogEntry(idx);
+        log.insertBefore(row, log.firstChild);
+        showToast("Pitch saved to log");
+      }
+
+      function loadLogEntry(idx) {
+        const e = savedPitches[idx];
+        currentPitch = e.pitch;
+        currentBrand = e.brand;
+        document.getElementById("rc-empty").style.display = "none";
+        const out = document.getElementById("rc-output");
+        out.style.display = "flex";
+        out.style.flexDirection = "column";
+        document.getElementById("out-title").textContent =
+          "Pitch for " + e.brand;
+        document.getElementById("pitch-box").textContent = e.pitch;
+        const words = e.pitch.split(/\s+/).length;
+        document.getElementById("pitch-meta").innerHTML = `
+    <div class="pm-chip">From pitch log</div>
+    <div class="pm-chip">${words} words</div>
+    <div class="pm-chip">${e.tone} tone</div>
+    ${e.score ? `<div class="pm-chip" style="background:var(--grn-l);color:var(--grn-3);font-weight:700;">Match score ${e.score}</div>` : ""}
+  `;
+      }
+
+      function loadUserLogEntry(idx) {
+        const e = logEntries[idx];
+        currentPitch = e.pitch;
+        currentBrand = e.brand;
+        document.getElementById("rc-empty").style.display = "none";
+        const out = document.getElementById("rc-output");
+        out.style.display = "flex";
+        out.style.flexDirection = "column";
+        document.getElementById("out-title").textContent =
+          "Pitch for " + e.brand;
+        document.getElementById("pitch-box").textContent = e.pitch;
+        const words = e.pitch.split(/\s+/).length;
+        document.getElementById("pitch-meta").innerHTML = `
+    <div class="pm-chip">From pitch log</div>
+    <div class="pm-chip">${words} words</div>
+    <div class="pm-chip">${e.tone} tone</div>
+  `;
+      }
+
+      function regenerate() {
+        const brand = document.getElementById("f-brand").value.trim();
+        const campaign = document.getElementById("f-campaign").value.trim();
+        if (!brand || !campaign) {
+          showToast("Fill in the form on the left first");
+          return;
+        }
+        generatePitch();
+      }
+
+      function copyPitch() {
+        if (!currentPitch) return;
+        navigator.clipboard
+          .writeText(currentPitch)
+          .then(() => {
+            showToast("Pitch copied to clipboard");
+          })
+          .catch(() => {
+            showToast("Select the text and copy manually");
+          });
+      }
+
+      function clearOutput() {
+        document.getElementById("rc-output").style.display = "none";
+        document.getElementById("rc-empty").style.display = "flex";
+        document.getElementById("f-brand").value = "";
+        document.getElementById("f-campaign").value = "";
+        document.getElementById("f-budget").value = "";
+        document.getElementById("f-score").value = "";
+        document.getElementById("f-angle").value = "";
+        document.getElementById("angle-count").textContent =
+          "0 / 200 characters";
+        currentPitch = "";
+        currentBrand = "";
+      }
+
+      function showToast(msg) {
+        const t = document.getElementById("toast");
+        document.getElementById("toast-msg").textContent = msg;
+        t.classList.add("on");
+        setTimeout(() => t.classList.remove("on"), 2800);
+      }
+
+      // spin animation
+      const style = document.createElement("style");
+      style.textContent = "@keyframes spin{to{transform:rotate(360deg)}}";
+      document.head.appendChild(style);
+    </script>
+    <script src="sponsee_dynamic.js"></script>
+  </body>
+</html>

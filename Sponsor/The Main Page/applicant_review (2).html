@@ -1,0 +1,3319 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SponzoBD — Applicant Review</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --red: #e24b4a;
+        --red-l: #fcebeb;
+        --red-m: #f7c1c1;
+        --grn: #1d9e75;
+        --grn-l: #eaf3de;
+        --grn-m: #c0dd97;
+        --grn-d: #085041;
+        --grn-3: #3b6d11;
+        --grn-t: #27500a;
+        --teal-l: #e1f5ee;
+        --teal-m: #9fe1cb;
+        --blu-l: #e6f1fb;
+        --blu-m: #b5d4f4;
+        --blu-t: #0c447c;
+        --amb-l: #faeeda;
+        --amb-m: #fac775;
+        --amb-t: #633806;
+        --amb-d: #854f0b;
+        --pur-l: #eeedfe;
+        --pur-t: #3c3489;
+        --bg: #f4f2ee;
+        --srf: #ffffff;
+        --srf2: #f0eee9;
+        --bdr: rgba(0, 0, 0, 0.08);
+        --bdr-m: rgba(0, 0, 0, 0.14);
+        --bdr-s: rgba(0, 0, 0, 0.22);
+        --tx1: #1a1a1a;
+        --tx2: #555;
+        --tx3: #999;
+        --font: "DM Sans", system-ui, sans-serif;
+        --r1: 7px;
+        --r2: 10px;
+        --r3: 14px;
+      }
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+        font-family: var(--font);
+        font-size: 14px;
+        color: var(--tx1);
+        background: var(--bg);
+      }
+      .app {
+        display: flex;
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+      }
+
+      /* SIDEBAR */
+      .sb {
+        width: 220px;
+        flex-shrink: 0;
+        background: var(--srf);
+        border-right: 1px solid var(--bdr);
+        display: flex;
+        flex-direction: column;
+      }
+      .sb-logo {
+        padding: 15px 16px 12px;
+        border-bottom: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .logo-ic {
+        width: 28px;
+        height: 28px;
+        background: var(--red);
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .sb-user {
+        padding: 11px 16px;
+        border-bottom: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .av-s {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: var(--blu-l);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--blu-t);
+        flex-shrink: 0;
+      }
+      .u-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .u-sub {
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .u-plan {
+        font-size: 11px;
+        color: var(--blu-t);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-top: 2px;
+      }
+      .pdot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--blu-t);
+      }
+      .nav {
+        flex: 1;
+        overflow-y: auto;
+        padding: 8px 0;
+      }
+      .nav-sec {
+        padding: 5px 16px 3px;
+        font-size: 10px;
+        color: var(--tx3);
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        font-weight: 600;
+      }
+      .ni {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        font-size: 13px;
+        color: var(--tx2);
+        cursor: pointer;
+        border-left: 2.5px solid transparent;
+        transition: background 0.1s;
+      }
+      .ni:hover {
+        background: var(--srf2);
+      }
+      .ni.on {
+        background: var(--srf2);
+        color: var(--tx1);
+        font-weight: 600;
+        border-left-color: var(--red);
+      }
+      .ni svg {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+        opacity: 0.5;
+      }
+      .ni.on svg {
+        opacity: 1;
+      }
+      .ni-badge {
+        margin-left: auto;
+        background: var(--red);
+        color: #fff;
+        font-size: 10px;
+        padding: 1px 7px;
+        border-radius: 20px;
+        font-weight: 700;
+      }
+      .sb-tier {
+        margin: 0 10px 14px;
+        padding: 10px 12px;
+        background: var(--blu-l);
+        border-radius: var(--r2);
+      }
+      .st-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 4px;
+      }
+      .st-lbl {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--blu-t);
+      }
+      .st-plan {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--blu-t);
+        background: var(--blu-m);
+        padding: 1px 8px;
+        border-radius: 20px;
+      }
+      .st-bar {
+        height: 3px;
+        background: rgba(0, 0, 0, 0.12);
+        border-radius: 2px;
+        margin: 4px 0;
+      }
+      .st-fill {
+        height: 3px;
+        background: var(--blu-t);
+        border-radius: 2px;
+        width: 66%;
+      }
+      .st-note {
+        font-size: 11px;
+        color: var(--blu-t);
+        opacity: 0.8;
+      }
+
+      /* MAIN */
+      .main {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+      }
+      .topbar {
+        height: 52px;
+        background: var(--srf);
+        border-bottom: 1px solid var(--bdr);
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+      }
+      .tb-t {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--tx1);
+        letter-spacing: -0.2px;
+      }
+      .tb-r {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .badge-pro {
+        background: var(--blu-l);
+        color: var(--blu-t);
+        font-size: 11px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-weight: 700;
+      }
+
+      /* CAMPAIGN BAR */
+      .camp-bar {
+        background: var(--srf);
+        border-bottom: 1px solid var(--bdr);
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+      }
+      .camp-sel {
+        padding: 7px 12px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r2);
+        background: var(--srf);
+        color: var(--tx1);
+        font-size: 13px;
+        font-family: var(--font);
+        cursor: pointer;
+        font-weight: 600;
+        min-width: 300px;
+      }
+      .camp-sel:focus {
+        outline: none;
+        border-color: var(--grn);
+      }
+      .camp-summary {
+        display: flex;
+        gap: 10px;
+        margin-left: auto;
+      }
+      .cs-item {
+        font-size: 11px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-weight: 600;
+      }
+      .cs-strong {
+        background: var(--grn-l);
+        color: var(--grn-3);
+      }
+      .cs-good {
+        background: var(--teal-l);
+        color: #0f6e56;
+      }
+      .cs-mod {
+        background: var(--amb-l);
+        color: var(--amb-t);
+      }
+      .cs-low {
+        background: var(--srf2);
+        color: var(--tx3);
+      }
+
+      /* TOOLBAR */
+      .toolbar {
+        background: var(--srf);
+        border-bottom: 1px solid var(--bdr);
+        padding: 9px 20px;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        flex-shrink: 0;
+        flex-wrap: wrap;
+      }
+      .f-chip {
+        padding: 5px 12px;
+        border: 1px solid var(--bdr-m);
+        border-radius: 20px;
+        font-size: 12px;
+        color: var(--tx2);
+        cursor: pointer;
+        background: transparent;
+        font-family: var(--font);
+      }
+      .f-chip:hover {
+        background: var(--srf2);
+      }
+      .f-chip.on {
+        background: var(--grn-l);
+        border-color: var(--grn-m);
+        color: var(--grn-3);
+        font-weight: 600;
+      }
+      .sort-sel {
+        padding: 6px 11px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r2);
+        background: var(--srf);
+        color: var(--tx2);
+        font-size: 12px;
+        font-family: var(--font);
+        cursor: pointer;
+      }
+      .tb-right {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        margin-left: auto;
+      }
+      .compare-bar {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        padding: 5px 12px;
+        background: var(--blu-l);
+        border-radius: 20px;
+        font-size: 12px;
+        color: var(--blu-t);
+        font-weight: 600;
+      }
+      .compare-bar span {
+        font-size: 11px;
+      }
+
+      /* LAYOUT */
+      .body-wrap {
+        flex: 1;
+        display: flex;
+        overflow: hidden;
+        min-height: 0;
+      }
+      .list-col {
+        flex: 1;
+        min-width: 0;
+        overflow-y: auto;
+        padding: 14px 20px 28px;
+      }
+
+      /* APPLICANT CARD */
+      .ac {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        border-radius: var(--r3);
+        margin-bottom: 9px;
+        overflow: hidden;
+        transition:
+          border-color 0.12s,
+          box-shadow 0.12s;
+        cursor: pointer;
+      }
+      .ac:hover {
+        border-color: var(--bdr-m);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      }
+      .ac:last-child {
+        margin-bottom: 0;
+      }
+      .ac.compare-a {
+        border-color: var(--red-m);
+        box-shadow: 0 0 0 2px var(--red-l);
+      }
+      .ac.compare-b {
+        border-color: var(--pur-t);
+        box-shadow: 0 0 0 2px var(--pur-l);
+      }
+      .ac-inner {
+        padding: 13px 16px;
+      }
+      .ac-top {
+        display: flex;
+        align-items: flex-start;
+        gap: 11px;
+      }
+      .ac-av {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .ac-body {
+        flex: 1;
+        min-width: 0;
+      }
+      .ac-name {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--tx1);
+        margin-bottom: 2px;
+      }
+      .ac-niche {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-bottom: 6px;
+      }
+      .ac-pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-bottom: 7px;
+      }
+      .pill {
+        font-size: 11px;
+        padding: 2px 8px;
+        border-radius: 20px;
+        font-weight: 500;
+      }
+      .p-plat {
+        background: var(--blu-l);
+        color: var(--blu-t);
+      }
+      .p-loc {
+        background: var(--srf2);
+        color: var(--tx2);
+      }
+      .p-deal {
+        background: var(--grn-l);
+        color: var(--grn-3);
+      }
+      .ac-stats {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+      .stat {
+        display: flex;
+        flex-direction: column;
+      }
+      .stat-v {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .stat-l {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-top: 1px;
+      }
+      .stat-v.grn {
+        color: var(--grn-3);
+      }
+      .ac-right {
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 7px;
+      }
+      .compat-badge {
+        font-size: 11px;
+        padding: 3px 11px;
+        border-radius: 20px;
+        font-weight: 700;
+      }
+      .cb-strong {
+        background: var(--grn-l);
+        color: var(--grn-3);
+      }
+      .cb-good {
+        background: var(--teal-l);
+        color: #0f6e56;
+      }
+      .cb-mod {
+        background: var(--amb-l);
+        color: var(--amb-t);
+      }
+      .cb-low {
+        background: var(--srf2);
+        color: var(--tx3);
+      }
+      .ac-note {
+        font-size: 12px;
+        color: var(--tx2);
+        background: var(--srf2);
+        border-radius: var(--r1);
+        padding: 8px 11px;
+        margin-top: 10px;
+        line-height: 1.6;
+        border-left: 2px solid var(--bdr-m);
+      }
+      .ac-note-lbl {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-bottom: 3px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 600;
+      }
+      .ac-footer {
+        padding: 10px 16px;
+        border-top: 1px solid var(--bdr);
+        background: var(--srf2);
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .ac-applied {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-right: auto;
+      }
+      .compare-check {
+        width: 20px;
+        height: 20px;
+        border-radius: 5px;
+        border: 1.5px solid var(--bdr-m);
+        background: var(--srf);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: all 0.1s;
+      }
+      .compare-check:hover {
+        border-color: var(--blu-t);
+      }
+      .compare-check.checked-a {
+        background: var(--red);
+        border-color: var(--red);
+      }
+      .compare-check.checked-b {
+        background: var(--pur-t);
+        border-color: var(--pur-t);
+      }
+      .compare-lbl {
+        font-size: 11px;
+        color: var(--tx3);
+        cursor: pointer;
+      }
+
+      /* STATUS TAGS */
+      .ac-status {
+        font-size: 10px;
+        padding: 2px 8px;
+        border-radius: 20px;
+        font-weight: 600;
+      }
+      .st-new {
+        background: var(--blu-l);
+        color: var(--blu-t);
+      }
+      .st-shortlist {
+        background: var(--amb-l);
+        color: var(--amb-t);
+      }
+      .st-accepted {
+        background: var(--grn-l);
+        color: var(--grn-3);
+      }
+      .st-declined {
+        background: var(--srf2);
+        color: var(--tx3);
+      }
+
+      /* COMPAT BREAKDOWN */
+      .compat-dim {
+        margin-bottom: 8px;
+      }
+      .cd-lbl {
+        font-size: 11px;
+        color: var(--tx2);
+        margin-bottom: 3px;
+        display: flex;
+        justify-content: space-between;
+      }
+      .cd-bar {
+        height: 5px;
+        background: var(--srf2);
+        border-radius: 3px;
+        overflow: hidden;
+      }
+      .cd-fill {
+        height: 100%;
+        border-radius: 3px;
+      }
+
+      /* COMPARE MODAL */
+      .compare-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 100;
+        display: none;
+        align-items: flex-end;
+        justify-content: center;
+        padding-bottom: 0;
+      }
+      .compare-overlay.on {
+        display: flex;
+      }
+      .compare-modal {
+        background: var(--srf);
+        width: 100%;
+        max-width: 780px;
+        border-radius: var(--r3) var(--r3) 0 0;
+        max-height: 88vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        animation: slideUp 0.22s ease;
+      }
+      @keyframes slideUp {
+        from {
+          transform: translateY(40px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+      .cm-hd {
+        padding: 14px 20px;
+        border-bottom: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+      }
+      .cm-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .cm-close {
+        width: 30px;
+        height: 30px;
+        border-radius: var(--r1);
+        border: 1px solid var(--bdr-m);
+        background: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+      .cm-body {
+        overflow-y: auto;
+        padding: 16px 20px 24px;
+      }
+      .cm-grid {
+        display: grid;
+        grid-template-columns: 160px 1fr 1fr;
+        gap: 0;
+      }
+      .cm-label-col {
+        padding-top: 52px;
+      }
+      .cm-creator-col {
+        padding: 0 10px 0 0;
+      }
+      .cm-creator-col:last-child {
+        padding: 0 0 0 10px;
+      }
+      .cm-creator-hd {
+        padding: 12px 14px;
+        border-radius: var(--r3);
+        margin-bottom: 10px;
+        text-align: center;
+      }
+      .cc-hd-a {
+        background: var(--red-l);
+      }
+      .cc-hd-b {
+        background: var(--pur-l);
+      }
+      .cm-av {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: 700;
+        margin: 0 auto 6px;
+      }
+      .cm-av-name {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .cm-av-niche {
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .cm-row {
+        display: grid;
+        grid-template-columns: 160px 1fr 1fr;
+        gap: 0;
+        margin-bottom: 7px;
+        align-items: center;
+      }
+      .cm-row-lbl {
+        font-size: 11px;
+        color: var(--tx3);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 8px 0;
+      }
+      .cm-cell {
+        padding: 8px 12px;
+        border-radius: var(--r2);
+        text-align: center;
+        margin: 2px;
+      }
+      .cm-val {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .cm-sub {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-top: 2px;
+      }
+      .cm-cell.win {
+        background: var(--grn-l);
+        border: 1px solid var(--grn-m);
+      }
+      .cm-cell.win .cm-val {
+        color: var(--grn-3);
+      }
+      .cm-cell.neutral {
+        background: var(--srf2);
+      }
+      .cm-cell.lose {
+        background: var(--srf2);
+        opacity: 0.7;
+      }
+      .cm-compat-row {
+        display: grid;
+        grid-template-columns: 160px 1fr 1fr;
+        gap: 0;
+        margin-bottom: 4px;
+        align-items: center;
+      }
+      .cm-compat-bar-wrap {
+        padding: 4px 12px;
+      }
+      .cm-compat-bar {
+        height: 6px;
+        background: var(--srf2);
+        border-radius: 3px;
+        overflow: hidden;
+      }
+      .cm-compat-fill {
+        height: 100%;
+        border-radius: 3px;
+        background: var(--grn-3);
+      }
+      .cm-footer {
+        border-top: 1px solid var(--bdr);
+        padding: 14px 20px;
+        display: flex;
+        gap: 10px;
+        flex-shrink: 0;
+      }
+
+      /* EMPTY STATE */
+      .empty {
+        text-align: center;
+        padding: 52px 20px;
+      }
+      .empty-ic {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 12px;
+      }
+
+      /* TOAST */
+      .toast {
+        position: fixed;
+        bottom: 22px;
+        right: 22px;
+        background: var(--grn-d);
+        color: #fff;
+        padding: 10px 16px;
+        border-radius: var(--r2);
+        font-size: 13px;
+        font-weight: 600;
+        display: none;
+        z-index: 300;
+        align-items: center;
+        gap: 7px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+      }
+      .toast.on {
+        display: flex;
+      }
+
+      /* ── CREATOR PROFILE MODAL (matches sponsee My Profile design) ── */
+      .pm-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 200;
+        overflow-y: auto;
+        display: none;
+        padding: 24px 16px;
+      }
+      .pm-overlay.on {
+        display: block;
+      }
+      .pm-wrap {
+        max-width: 860px;
+        margin: 0 auto;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+      }
+      .pm-topbar {
+        background: var(--srf);
+        padding: 11px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        border-bottom: 1px solid var(--bdr);
+      }
+      .pm-topbar-t {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .pm-topbar-r {
+        display: flex;
+        gap: 7px;
+      }
+      .pm-x {
+        width: 28px;
+        height: 28px;
+        border-radius: var(--r1);
+        border: 1px solid var(--bdr-m);
+        background: transparent;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .pm-x:hover {
+        background: var(--srf2);
+      }
+      /* cover */
+      .pm-cover {
+        height: 120px;
+        background: var(--grn-l);
+        position: relative;
+        overflow: hidden;
+      }
+      .pm-cover-inner {
+        width: 100%;
+        height: 100%;
+        background: var(--teal-m);
+        opacity: 0.35;
+      }
+      .pm-cover-stripe {
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 18px,
+          rgba(255, 255, 255, 0.07) 18px,
+          rgba(255, 255, 255, 0.07) 20px
+        );
+      }
+      /* identity */
+      .pm-identity {
+        background: var(--srf);
+        border-bottom: 1px solid var(--bdr);
+        padding: 0 22px 14px;
+      }
+      .pm-ib-row {
+        display: flex;
+        align-items: flex-end;
+        gap: 14px;
+        margin-top: -34px;
+        margin-bottom: 11px;
+      }
+      .pm-av {
+        width: 68px;
+        height: 68px;
+        border-radius: 50%;
+        border: 3px solid var(--srf);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        font-weight: 700;
+        flex-shrink: 0;
+        position: relative;
+      }
+      .pm-av-tick {
+        position: absolute;
+        bottom: 1px;
+        right: 1px;
+        width: 19px;
+        height: 19px;
+        border-radius: 50%;
+        background: var(--grn);
+        border: 2.5px solid var(--srf);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .pm-name {
+        font-size: 19px;
+        font-weight: 700;
+        color: var(--tx1);
+        margin-bottom: 2px;
+        letter-spacing: -0.2px;
+      }
+      .pm-sub {
+        font-size: 12px;
+        color: var(--tx2);
+      }
+      .pm-ib-right {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 5px;
+        padding-bottom: 4px;
+        margin-left: auto;
+      }
+      .pm-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .pm-m {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .pm-m.grn {
+        color: var(--grn-3);
+      }
+      .pm-m svg {
+        width: 12px;
+        height: 12px;
+        opacity: 0.45;
+      }
+      .pm-m.grn svg {
+        opacity: 1;
+      }
+      /* badges */
+      .pm-badges {
+        background: var(--srf);
+        border-bottom: 1px solid var(--bdr);
+        padding: 9px 22px;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        flex-wrap: wrap;
+      }
+      .pm-bdg {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 11px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+        border: 1px solid var(--grn-m);
+        background: var(--grn-l);
+        color: var(--grn-3);
+      }
+      .pm-bdg svg {
+        width: 11px;
+        height: 11px;
+      }
+      /* stats bar */
+      .pm-stats-bar {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        background: var(--srf);
+        border-bottom: 1px solid var(--bdr);
+      }
+      .pm-sbi {
+        padding: 12px 20px;
+        border-right: 1px solid var(--bdr);
+      }
+      .pm-sbi:last-child {
+        border-right: none;
+      }
+      .pm-sbv {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--tx1);
+        margin-bottom: 2px;
+      }
+      .pm-sbl {
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .pm-sbn {
+        font-size: 10px;
+        color: var(--grn-3);
+        margin-top: 2px;
+        font-weight: 500;
+      }
+      /* content grid */
+      .pm-content {
+        display: grid;
+        grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+        gap: 14px;
+        padding: 15px 22px;
+        background: var(--bg);
+      }
+      .pm-panel {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        border-radius: 14px;
+        padding: 14px 17px;
+        margin-bottom: 11px;
+      }
+      .pm-panel:last-child {
+        margin-bottom: 0;
+      }
+      .pm-pt {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--tx1);
+        margin-bottom: 9px;
+      }
+      .pm-divider {
+        height: 1px;
+        background: var(--bdr);
+        margin: 10px 0;
+      }
+      /* platform rows */
+      .pm-plat-row {
+        display: flex;
+        align-items: center;
+        padding: 9px 0;
+        border-bottom: 1px solid var(--bdr);
+      }
+      .pm-plat-row:last-child {
+        border-bottom: none;
+      }
+      .pm-plat-ic {
+        width: 28px;
+        height: 28px;
+        border-radius: var(--r1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-right: 10px;
+      }
+      .pm-plat-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--tx1);
+        flex: 1;
+      }
+      .pm-plat-handle {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-top: 1px;
+      }
+      .pm-plat-stats {
+        display: flex;
+        gap: 14px;
+        margin-left: auto;
+      }
+      .pm-ps-item {
+        text-align: right;
+      }
+      .pm-ps-v {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .pm-ps-l {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-top: 1px;
+      }
+      /* audience */
+      .pm-age-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 5px;
+      }
+      .pm-age-lbl {
+        font-size: 11px;
+        color: var(--tx2);
+        width: 70px;
+        flex-shrink: 0;
+      }
+      .pm-age-track {
+        flex: 1;
+        height: 6px;
+        background: var(--srf2);
+        border-radius: 3px;
+        overflow: hidden;
+      }
+      .pm-age-fill {
+        height: 100%;
+        border-radius: 3px;
+        background: var(--grn);
+      }
+      .pm-age-desc {
+        font-size: 10px;
+        color: var(--tx3);
+        width: 30px;
+        text-align: right;
+      }
+      .pm-gender-bar {
+        height: 13px;
+        border-radius: 3px;
+        overflow: hidden;
+        display: flex;
+        margin-bottom: 4px;
+      }
+      .pm-gf {
+        background: var(--grn);
+      }
+      .pm-gm {
+        background: var(--teal-m);
+      }
+      .pm-loc-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 5px 0;
+        border-bottom: 1px solid var(--bdr);
+      }
+      .pm-loc-row:last-child {
+        border-bottom: none;
+      }
+      .pm-loc-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .pm-loc-name {
+        font-size: 12px;
+        color: var(--tx1);
+        flex: 1;
+      }
+      .pm-loc-tag {
+        font-size: 10px;
+        padding: 1px 7px;
+        border-radius: 20px;
+        font-weight: 500;
+      }
+      .lt-p {
+        background: var(--grn-l);
+        color: var(--grn-3);
+      }
+      .lt-s {
+        background: var(--teal-l);
+        color: #0f6e56;
+      }
+      .lt-t {
+        background: var(--srf2);
+        color: var(--tx3);
+      }
+      /* niche chips */
+      .pm-nc-p {
+        font-size: 12px;
+        padding: 4px 12px;
+        border-radius: 20px;
+        background: var(--grn-l);
+        color: var(--grn-3);
+        font-weight: 700;
+        display: inline-block;
+        margin-bottom: 8px;
+      }
+      .pm-nc-s {
+        font-size: 12px;
+        padding: 4px 12px;
+        border-radius: 20px;
+        background: var(--srf2);
+        color: var(--tx2);
+        display: inline-block;
+        margin: 2px;
+      }
+      /* rates */
+      .pm-rate-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px solid var(--bdr);
+      }
+      .pm-rate-row:last-child {
+        border-bottom: none;
+      }
+      .pm-rr-t {
+        font-size: 12px;
+        color: var(--tx2);
+      }
+      .pm-rr-v {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      /* deal history */
+      .pm-hist-item {
+        padding: 12px 0;
+        border-bottom: 1px solid var(--bdr);
+      }
+      .pm-hist-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+      .pm-hi-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 8px;
+      }
+      .pm-hi-brand {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .pm-hi-meta {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-top: 2px;
+      }
+      .pm-hi-comment {
+        font-size: 12px;
+        color: var(--tx2);
+        line-height: 1.65;
+        padding: 8px 11px;
+        background: var(--srf2);
+        border-radius: var(--r1);
+        border-left: 2px solid var(--bdr-m);
+      }
+      .pm-hi-by {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-top: 4px;
+      }
+      /* footer */
+      .pm-foot {
+        background: var(--srf);
+        padding: 12px 18px;
+        border-top: 1px solid var(--bdr);
+        display: flex;
+        gap: 7px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- SIDEBAR -->
+      <div class="sb">
+        <div class="sb-logo">
+          <div class="logo-ic">
+            <svg viewBox="0 0 16 16" fill="none" width="15" height="15">
+              <path
+                d="M3 8a5 5 0 1010 0A5 5 0 003 8z"
+                fill="white"
+                opacity="0.25"
+              />
+              <path
+                d="M8 5v3l2 2"
+                stroke="white"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+          <div>
+            <div
+              style="
+                font-size: 14px;
+                font-weight: 700;
+                color: var(--tx1);
+                letter-spacing: -0.2px;
+              "
+            >
+              SponzoBD
+            </div>
+            <div style="font-size: 10px; color: var(--tx3)">Sponsor portal</div>
+          </div>
+        </div>
+        <div class="sb-user">
+          <div class="av-s">GF</div>
+          <div>
+            <div class="u-name">GreenFresh BD</div>
+            <div class="u-sub">Health &amp; food · Dhaka</div>
+            <div class="u-plan"><span class="pdot"></span>Pro plan</div>
+          </div>
+        </div>
+        <nav class="nav">
+          <div class="nav-sec">Main</div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'sponsor_home_feed (2).html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <path
+                d="M1.5 6.5L7.5 1.5L13.5 6.5V13H9.5V9.5H5.5V13H1.5V6.5Z"
+              /></svg
+            >Home
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'sponsor_dashboard.html'"
+          >
+            <svg viewBox="0 0 15 15" fill="currentColor">
+              <rect x="1" y="1" width="5" height="5" rx="1" />
+              <rect x="9" y="1" width="5" height="5" rx="1" />
+              <rect x="1" y="9" width="5" height="5" rx="1" />
+              <rect x="9" y="9" width="5" height="5" rx="1" /></svg
+            >Dashboard &amp; analytics
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'sponsor_campaigns_deals.html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <rect x="1.5" y="2.5" width="12" height="10" rx="1.5" />
+              <path d="M5 6h5M5 9h3" /></svg
+            >My campaigns &amp; deals
+          </div>
+          <div class="ni on">
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <circle cx="5.5" cy="5" r="2.5" />
+              <path d="M1 12c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4" />
+              <path d="M11 7l2 2 2-3" stroke-width="1.4" /></svg
+            >Applicant review
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'sponsor_messages.html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <path d="M2 2h11v8H8l-3 2.5V10H2V2z" /></svg
+            >Messages<span class="ni-badge">3</span>
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'sponsor_brand_settings (4).html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <circle cx="7.5" cy="7.5" r="2" />
+              <path
+                d="M7.5 1v1M7.5 13v1M1 7.5h1M13 7.5h1M3 3l.7.7M11.3 11.3l.7.7M3 12l.7-.7M11.3 3.7l.7-.7"
+              /></svg
+            >Brand settings
+          </div>
+        </nav>
+        <div class="sb-tier">
+          <div class="st-row">
+            <span class="st-lbl">Campaigns used</span
+            ><span class="st-plan">Pro</span>
+          </div>
+          <div class="st-bar"><div class="st-fill"></div></div>
+          <div class="st-note">4 of 6 campaigns this month</div>
+        </div>
+      </div>
+
+      <!-- MAIN -->
+      <div class="main">
+        <div class="topbar">
+          <div class="tb-t">Applicant review</div>
+          <div class="tb-r"><span class="badge-pro">Pro plan</span></div>
+        </div>
+
+        <!-- CAMPAIGN SELECTOR -->
+        <div class="camp-bar">
+          <select
+            class="camp-sel"
+            id="camp-sel"
+            onchange="changeCamp(this.value)"
+          >
+            <option value="c1">
+              National Health Week Campaign 2025 — 34 applicants
+            </option>
+            <option value="c2">
+              Organic Superfoods Launch — 41 applicants
+            </option>
+            <option value="c3">Ramadan Wellness Series — 19 applicants</option>
+          </select>
+          <div class="camp-summary" id="camp-summary"></div>
+        </div>
+
+        <!-- TOOLBAR -->
+        <div class="toolbar">
+          <button class="f-chip on" data-f="all" onclick="fApp('all', this)">
+            All
+          </button>
+          <button class="f-chip" data-f="strong" onclick="fApp('strong', this)">
+            Strong match
+          </button>
+          <button class="f-chip" data-f="good" onclick="fApp('good', this)">
+            Good match
+          </button>
+          <button
+            class="f-chip"
+            data-f="shortlisted"
+            onclick="fApp('shortlisted', this)"
+          >
+            Shortlisted
+          </button>
+          <button
+            class="f-chip"
+            data-f="accepted"
+            onclick="fApp('accepted', this)"
+          >
+            Accepted
+          </button>
+          <select class="sort-sel" onchange="sortApp(this.value)">
+            <option value="compat">Best match first</option>
+            <option value="followers">Most followers</option>
+            <option value="engagement">Highest engagement</option>
+            <option value="recent">Most recent</option>
+          </select>
+          <div class="tb-right">
+            <div class="compare-bar" id="compare-bar" style="display: none">
+              <span id="compare-count">0 selected</span>
+              <button
+                class="btn-r"
+                style="padding: 4px 12px; font-size: 11px"
+                onclick="openCompare()"
+              >
+                Compare now
+              </button>
+              <button
+                onclick="clearCompare()"
+                style="
+                  background: none;
+                  border: none;
+                  cursor: pointer;
+                  color: var(--blu-t);
+                  font-size: 16px;
+                  line-height: 1;
+                "
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- BODY -->
+        <div class="body-wrap">
+          <div class="list-col" id="app-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CREATOR PROFILE MODAL -->
+    <div
+      class="pm-overlay"
+      id="pm-overlay"
+      onclick="if (event.target === this) closePM();"
+    >
+      <div class="pm-wrap">
+        <div class="pm-topbar">
+          <div class="pm-topbar-t" id="pm-title">Creator profile</div>
+          <div class="pm-topbar-r">
+            <button
+              class="btn-r"
+              style="padding: 6px 14px; flex: none"
+              id="pm-accept-btn"
+            >
+              Accept applicant
+            </button>
+            <button class="pm-x" onclick="closePM()">
+              <svg
+                width="10"
+                height="10"
+                viewBox="0 0 12 12"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <path d="M1 1l10 10M11 1L1 11" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div id="pm-content"></div>
+      </div>
+    </div>
+    <!-- COMPARE MODAL -->
+    <div
+      class="compare-overlay"
+      id="compare-overlay"
+      onclick="handleOverlayClick(event)"
+    >
+      <div class="compare-modal" onclick="event.stopPropagation()">
+        <div class="cm-hd">
+          <div class="cm-title">Creator comparison</div>
+          <button class="cm-close" onclick="closeCompare()">
+            <svg
+              width="10"
+              height="10"
+              viewBox="0 0 12 12"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <path d="M1 1l10 10M11 1L1 11" />
+            </svg>
+          </button>
+        </div>
+        <div class="cm-body" id="cm-body"></div>
+        <div class="cm-footer" id="cm-footer"></div>
+      </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="tst">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+        <path
+          d="M2 7l3 3 7-7"
+          stroke="white"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        /></svg
+      ><span id="tm"></span>
+    </div>
+
+    <script>
+      const APPLICANTS = {
+        c1: [
+          {
+            id: "a1",
+            name: "Lamia Akter",
+            niche: "Health & wellness",
+            plats: ["Instagram", "TikTok"],
+            loc: "Dhaka",
+            fol: "52,400",
+            folNum: 52400,
+            eng: "4.8%",
+            engNum: 4.8,
+            deals: 7,
+            rating: 4.8,
+            compat: "strong",
+            compatScore: 91,
+            status: "pending",
+            avBg: "var(--teal-m)",
+            avCol: "var(--grn-d)",
+            avIn: "LA",
+            applied: "Mar 18",
+            note: "I create health and wellness content for 52K followers — 72% female aged 18–34 in Dhaka. My last health campaign drove 5.1% engagement. This is exactly the kind of authentic campaign my audience responds to.",
+            dims: [24, 22, 17, 15, 13],
+            badges: ["id", "esc", "rat"],
+          },
+          {
+            id: "a2",
+            name: "Faria Ahmed",
+            niche: "Health & wellness",
+            plats: ["Instagram"],
+            loc: "Dhaka",
+            fol: "38,200",
+            folNum: 38200,
+            eng: "4.2%",
+            engNum: 4.2,
+            deals: 5,
+            rating: 4.6,
+            compat: "strong",
+            compatScore: 88,
+            status: "shortlisted",
+            avBg: "var(--grn-l)",
+            avCol: "var(--grn-3)",
+            avIn: "FA",
+            applied: "Mar 17",
+            note: "Health and nutrition content creator. My audience is primarily women aged 22–35 in Dhaka. I have run 5 similar campaigns — always delivered on time and on brief.",
+            dims: [22, 21, 17, 14, 14],
+            badges: ["id", "esc"],
+          },
+          {
+            id: "a3",
+            name: "Nadia Islam",
+            niche: "Health & beauty",
+            plats: ["Instagram", "TikTok"],
+            loc: "Chittagong",
+            fol: "44,100",
+            folNum: 44100,
+            eng: "4.1%",
+            engNum: 4.1,
+            deals: 4,
+            rating: 4.7,
+            compat: "good",
+            compatScore: 74,
+            status: "pending",
+            avBg: "var(--pur-l)",
+            avCol: "var(--pur-t)",
+            avIn: "NI",
+            applied: "Mar 17",
+            note: "Fashion and health content creator based in Chittagong. Strong female audience 18–34. Happy to create Bangla-language content for this campaign.",
+            dims: [18, 20, 16, 14, 6],
+            badges: ["id"],
+          },
+          {
+            id: "a4",
+            name: "Sabbir Khan",
+            niche: "Fitness & lifestyle",
+            plats: ["Instagram", "TikTok"],
+            loc: "Dhaka",
+            fol: "41,000",
+            folNum: 41000,
+            eng: "3.9%",
+            engNum: 3.9,
+            deals: 6,
+            rating: 4.5,
+            compat: "good",
+            compatScore: 71,
+            status: "accepted",
+            avBg: "var(--blu-l)",
+            avCol: "var(--blu-t)",
+            avIn: "SK",
+            applied: "Mar 16",
+            note: "Fitness and lifestyle creator. My audience skews male but I have a strong health-conscious female segment too. 6 completed deals with excellent ratings.",
+            dims: [16, 18, 18, 12, 7],
+            badges: ["id", "esc", "rat"],
+          },
+          {
+            id: "a5",
+            name: "Rafi Khan",
+            niche: "Food & lifestyle",
+            plats: ["TikTok"],
+            loc: "Dhaka",
+            fol: "28,200",
+            folNum: 28200,
+            eng: "3.9%",
+            engNum: 3.9,
+            deals: 5,
+            rating: 4.6,
+            compat: "moderate",
+            compatScore: 58,
+            status: "pending",
+            avBg: "var(--amb-l)",
+            avCol: "var(--amb-d)",
+            avIn: "RK",
+            applied: "Mar 16",
+            note: "Food and lifestyle creator. Health content is adjacent to my niche — I have done supplement and wellness campaigns before with good results.",
+            dims: [12, 16, 14, 11, 5],
+            badges: ["id", "esc"],
+          },
+          {
+            id: "a6",
+            name: "Tania Begum",
+            niche: "Lifestyle & parenting",
+            plats: ["Facebook", "Instagram"],
+            loc: "Sylhet",
+            fol: "19,400",
+            folNum: 19400,
+            eng: "5.1%",
+            engNum: 5.1,
+            deals: 2,
+            rating: 4.9,
+            compat: "moderate",
+            compatScore: 52,
+            status: "pending",
+            avBg: "var(--teal-l)",
+            avCol: "var(--grn-d)",
+            avIn: "TB",
+            applied: "Mar 15",
+            note: "Lifestyle and parenting creator with a very engaged audience. High engagement rate because my followers are a tight-knit community. Health content for mothers is my strength.",
+            dims: [11, 15, 12, 8, 6],
+            badges: ["id"],
+          },
+          {
+            id: "a7",
+            name: "Mehedi Hassan",
+            niche: "Tech & lifestyle",
+            plats: ["YouTube", "Instagram"],
+            loc: "Dhaka",
+            fol: "34,000",
+            folNum: 34000,
+            eng: "2.8%",
+            engNum: 2.8,
+            deals: 3,
+            rating: 4.2,
+            compat: "low",
+            compatScore: 38,
+            status: "pending",
+            avBg: "var(--srf2)",
+            avCol: "var(--tx2)",
+            avIn: "MH",
+            applied: "Mar 14",
+            note: "Tech and lifestyle creator. I am expanding into health content and this campaign would be a great fit for that direction.",
+            dims: [7, 9, 10, 11, 1],
+            badges: ["id"],
+          },
+        ],
+        c2: [
+          {
+            id: "b1",
+            name: "Lamia Akter",
+            niche: "Health & wellness",
+            plats: ["Instagram", "TikTok"],
+            loc: "Dhaka",
+            fol: "52,400",
+            folNum: 52400,
+            eng: "4.8%",
+            engNum: 4.8,
+            deals: 7,
+            rating: 4.8,
+            compat: "strong",
+            compatScore: 88,
+            status: "pending",
+            avBg: "var(--teal-m)",
+            avCol: "var(--grn-d)",
+            avIn: "LA",
+            applied: "Mar 19",
+            note: "My food and health crossover content performs very well. The superfoods category is something my audience has been asking about.",
+            dims: [22, 22, 18, 14, 12],
+            badges: ["id", "esc", "rat"],
+          },
+          {
+            id: "b2",
+            name: "Rafi Khan",
+            niche: "Food & lifestyle",
+            plats: ["TikTok"],
+            loc: "Dhaka",
+            fol: "28,200",
+            folNum: 28200,
+            eng: "3.9%",
+            engNum: 3.9,
+            deals: 5,
+            rating: 4.6,
+            compat: "strong",
+            compatScore: 84,
+            status: "pending",
+            avBg: "var(--amb-l)",
+            avCol: "var(--amb-d)",
+            avIn: "RK",
+            applied: "Mar 18",
+            note: "Food content is my primary niche. Superfoods and organic products perform very well with my TikTok audience.",
+            dims: [20, 19, 16, 12, 17],
+            badges: ["id", "esc"],
+          },
+          {
+            id: "b3",
+            name: "Nadia Islam",
+            niche: "Health & beauty",
+            plats: ["Instagram", "TikTok"],
+            loc: "Chittagong",
+            fol: "44,100",
+            folNum: 44100,
+            eng: "4.1%",
+            engNum: 4.1,
+            deals: 4,
+            rating: 4.7,
+            compat: "good",
+            compatScore: 72,
+            status: "pending",
+            avBg: "var(--pur-l)",
+            avCol: "var(--pur-t)",
+            avIn: "NI",
+            applied: "Mar 17",
+            note: "Health and beauty creator. Superfoods and nutrition crossover nicely with my beauty and skincare audience.",
+            dims: [17, 20, 16, 14, 5],
+            badges: ["id"],
+          },
+        ],
+        c3: [
+          {
+            id: "c1",
+            name: "Faria Ahmed",
+            niche: "Health & wellness",
+            plats: ["Instagram"],
+            loc: "Dhaka",
+            fol: "38,200",
+            folNum: 38200,
+            eng: "4.2%",
+            engNum: 4.2,
+            deals: 5,
+            rating: 4.6,
+            compat: "strong",
+            compatScore: 86,
+            status: "pending",
+            avBg: "var(--grn-l)",
+            avCol: "var(--grn-3)",
+            avIn: "FA",
+            applied: "Mar 16",
+            note: "Ramadan content is something I plan and create every year. My audience engages highly with wellness and nutrition content during Ramadan specifically.",
+            dims: [22, 20, 17, 13, 14],
+            badges: ["id", "esc"],
+          },
+          {
+            id: "c2",
+            name: "Nadia Islam",
+            niche: "Health & beauty",
+            plats: ["Instagram", "TikTok"],
+            loc: "Chittagong",
+            fol: "44,100",
+            folNum: 44100,
+            eng: "4.1%",
+            engNum: 4.1,
+            deals: 4,
+            rating: 4.7,
+            compat: "good",
+            compatScore: 74,
+            status: "pending",
+            avBg: "var(--pur-l)",
+            avCol: "var(--pur-t)",
+            avIn: "NI",
+            applied: "Mar 15",
+            note: "Ramadan wellness content is a strong theme for me. My Chittagong audience is very engaged during Ramadan.",
+            dims: [18, 20, 16, 14, 6],
+            badges: ["id"],
+          },
+          {
+            id: "c3",
+            name: "Lamia Akter",
+            niche: "Health & wellness",
+            plats: ["Instagram", "TikTok"],
+            loc: "Dhaka",
+            fol: "52,400",
+            folNum: 52400,
+            eng: "4.8%",
+            engNum: 4.8,
+            deals: 7,
+            rating: 4.8,
+            compat: "strong",
+            compatScore: 91,
+            status: "pending",
+            avBg: "var(--teal-m)",
+            avCol: "var(--grn-d)",
+            avIn: "LA",
+            applied: "Mar 14",
+            note: "My Ramadan health series last year was my best-performing content of the year. This campaign is a natural fit.",
+            dims: [24, 22, 17, 15, 13],
+            badges: ["id", "esc", "rat"],
+          },
+        ],
+      };
+
+      let currentCamp = "c1";
+      let appFilter = "all";
+      let appSort = "compat";
+      let compareA = null;
+      let compareB = null;
+
+      function changeCamp(id) {
+        currentCamp = id;
+        clearCompare();
+        renderList();
+        renderSummary();
+      }
+
+      function renderSummary() {
+        const apps = APPLICANTS[currentCamp] || [];
+        const strong = apps.filter((a) => a.compat === "strong").length;
+        const good = apps.filter((a) => a.compat === "good").length;
+        const mod = apps.filter((a) => a.compat === "moderate").length;
+        const low = apps.filter((a) => a.compat === "low").length;
+        document.getElementById("camp-summary").innerHTML =
+          '<span class="cs-item cs-strong">' +
+          strong +
+          " Strong</span>" +
+          '<span class="cs-item cs-good">' +
+          good +
+          " Good</span>" +
+          '<span class="cs-item cs-mod">' +
+          mod +
+          " Moderate</span>" +
+          (low ? '<span class="cs-item cs-low">' + low + " Low</span>" : "");
+      }
+
+      function fApp(f, el) {
+        appFilter = f;
+        document
+          .querySelectorAll("[data-f]")
+          .forEach((b) => b.classList.remove("on"));
+        el.classList.add("on");
+        renderList();
+      }
+
+      function sortApp(v) {
+        appSort = v;
+        renderList();
+      }
+
+      function renderList() {
+        let list = [...(APPLICANTS[currentCamp] || [])];
+        if (appFilter === "strong")
+          list = list.filter((a) => a.compat === "strong");
+        else if (appFilter === "good")
+          list = list.filter((a) => a.compat === "good");
+        else if (appFilter === "shortlisted")
+          list = list.filter((a) => a.status === "shortlisted");
+        else if (appFilter === "accepted")
+          list = list.filter((a) => a.status === "accepted");
+        if (appSort === "compat")
+          list.sort((a, b) => b.compatScore - a.compatScore);
+        else if (appSort === "followers")
+          list.sort((a, b) => b.folNum - a.folNum);
+        else if (appSort === "engagement")
+          list.sort((a, b) => b.engNum - a.engNum);
+        const el = document.getElementById("app-list");
+        if (!list.length) {
+          el.innerHTML =
+            '<div class="empty"><div class="empty-ic"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.3" opacity=".4"><circle cx="9" cy="7" r="4"/><path d="M2 16c0-3.5 3-5.5 7-5.5s7 2 7 5.5"/></svg></div><div style="font-size:14px;font-weight:600;color:var(--tx1);margin-bottom:6px;">No applicants match this filter</div><div style="font-size:13px;color:var(--tx2);">Try a different filter above.</div></div>';
+          return;
+        }
+        el.innerHTML = list.map((a) => buildCard(a)).join("");
+      }
+
+      function buildCard(a) {
+        const cc = {
+          strong: "cb-strong",
+          good: "cb-good",
+          moderate: "cb-mod",
+          low: "cb-low",
+        }[a.compat];
+        const cl = {
+          strong: "Strong match",
+          good: "Good match",
+          moderate: "Moderate",
+          low: "Low match",
+        }[a.compat];
+        const platPills = a.plats
+          .map((p) => '<span class="pill p-plat">' + p + "</span>")
+          .join("");
+        const statusHtml =
+          a.status !== "pending"
+            ? '<span class="ac-status ' +
+              {
+                shortlisted: "st-shortlist",
+                accepted: "st-accepted",
+                declined: "st-declined",
+              }[a.status] +
+              '">' +
+              a.status.charAt(0).toUpperCase() +
+              a.status.slice(1) +
+              "</span>"
+            : "";
+        const isCompA = compareA && compareA.id === a.id;
+        const isCompB = compareB && compareB.id === a.id;
+        let cardCls = "ac";
+        if (isCompA) cardCls += " compare-a";
+        if (isCompB) cardCls += " compare-b";
+        const checkCls = isCompA
+          ? "compare-check checked-a"
+          : isCompB
+            ? "compare-check checked-b"
+            : "compare-check";
+        const checkIcon = isCompA
+          ? '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2 2L8.5 2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>'
+          : isCompB
+            ? '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2 2L8.5 2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>'
+            : "";
+        const stars = Array.from({ length: 5 }, (_, i) =>
+          i < Math.round(a.rating)
+            ? '<div class="sf"></div>'
+            : '<div class="se"></div>',
+        ).join("");
+
+        return (
+          '<div class="' +
+          cardCls +
+          '" id="ac-' +
+          a.id +
+          '">' +
+          '<div class="ac-inner" onclick="openPM(\'' +
+          a.id +
+          "')\">" +
+          '<div class="ac-top">' +
+          '<div class="ac-av" style="background:' +
+          a.avBg +
+          ";color:" +
+          a.avCol +
+          ';">' +
+          a.avIn +
+          "</div>" +
+          '<div class="ac-body">' +
+          '<div class="ac-name">' +
+          a.name +
+          (statusHtml ? " " + statusHtml : "") +
+          "</div>" +
+          '<div class="ac-niche">' +
+          a.niche +
+          " · " +
+          a.loc +
+          "</div>" +
+          '<div class="ac-pills">' +
+          platPills +
+          '<span class="pill p-loc">' +
+          a.loc +
+          "</span>" +
+          (a.deals > 0
+            ? '<span class="pill p-deal">' +
+              a.deals +
+              " deals · " +
+              a.rating +
+              "★</span>"
+            : "") +
+          "</div>" +
+          '<div class="ac-stats">' +
+          '<div class="stat"><div class="stat-v">' +
+          a.fol +
+          '</div><div class="stat-l">Followers</div></div>' +
+          '<div class="stat"><div class="stat-v grn">' +
+          a.eng +
+          '</div><div class="stat-l">Engagement</div></div>' +
+          '<div class="stat"><div class="stat-v">' +
+          a.deals +
+          '</div><div class="stat-l">Deals done</div></div>' +
+          "</div>" +
+          "</div>" +
+          '<div class="ac-right">' +
+          '<span class="compat-badge ' +
+          cc +
+          '">' +
+          cl +
+          " · " +
+          a.compatScore +
+          "</span>" +
+          '<div style="display:flex;gap:5px;">' +
+          '<button class="btn-ghost-s" onclick="event.stopPropagation();openDetail(\'' +
+          a.id +
+          "')\">View profile</button>" +
+          "</div>" +
+          '<div class="dh-stars">' +
+          stars +
+          "</div>" +
+          "</div>" +
+          "</div>" +
+          '<div class="ac-note"><div class="ac-note-lbl">Application note</div>' +
+          a.note +
+          "</div>" +
+          "</div>" +
+          '<div class="ac-footer">' +
+          '<span class="ac-applied">Applied ' +
+          a.applied +
+          "</span>" +
+          (a.status === "accepted"
+            ? '<span style="font-size:11px;color:var(--grn-3);font-weight:700;display:flex;align-items:center;gap:4px;"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M1.5 5.5l2 2L9.5 2" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round"/></svg>Accepted</span>'
+            : a.status === "shortlisted"
+              ? '<button class="btn-r" onclick="event.stopPropagation();acceptApp(\'' +
+                a.id +
+                '\')">Accept</button><button class="btn-ghost-s" onclick="event.stopPropagation();declineApp(\'' +
+                a.id +
+                "')\">Decline</button>"
+              : '<button class="btn-r" onclick="event.stopPropagation();acceptApp(\'' +
+                a.id +
+                '\')">Accept</button><button class="btn-amb" onclick="event.stopPropagation();shortlistApp(\'' +
+                a.id +
+                '\')">Shortlist</button><button class="btn-ghost-s" onclick="event.stopPropagation();declineApp(\'' +
+                a.id +
+                "')\">Decline</button>") +
+          '<div style="display:flex;align-items:center;gap:5px;margin-left:8px;" onclick="event.stopPropagation();">' +
+          '<div class="' +
+          checkCls +
+          '" onclick="toggleCompare(\'' +
+          a.id +
+          "')\">" +
+          checkIcon +
+          "</div>" +
+          '<span class="compare-lbl" onclick="toggleCompare(\'' +
+          a.id +
+          "')\">Compare</span>" +
+          "</div>" +
+          "</div>" +
+          "</div>"
+        );
+      }
+
+      const PROFILES = {
+        a1: {
+          name: "Lamia Akter",
+          sub: "Health & wellness content creator · Dhaka, Bangladesh",
+          avBg: "var(--teal-m)",
+          avCol: "var(--grn-d)",
+          avIn: "LA",
+          rank: "Top 4% · Health & wellness · BD",
+          member: "Jan 2025",
+          response: "92%",
+          reply: "4 hours",
+          badges: [
+            "Identity verified",
+            "Handle verified",
+            "Analytics verified",
+            "7 deals completed",
+            "Sponsor rated · 4.8★",
+          ],
+          plats: [
+            {
+              ic: "IG",
+              bg: "var(--amb-l)",
+              name: "Instagram",
+              handle: "@lamia.wellness",
+              fol: "38,200",
+              eng: "5.2%",
+              reach: "~42K",
+            },
+            {
+              ic: "TT",
+              bg: "var(--red-l)",
+              name: "TikTok",
+              handle: "@lamia_health",
+              fol: "14,200",
+              eng: "3.8%",
+              reach: "~28K",
+            },
+          ],
+          about:
+            "I create health and wellness content for Bangladeshi women aged 18–35 who want to live healthier without giving up their culture. My content blends nutrition, fitness routines, and mental wellness in a relatable, non-preachy style. I work best with health food, supplement, wellness app, fitness, and personal care brands who want authentic storytelling over one-off promotional posts.",
+          style: [
+            "Educational storytelling",
+            "Product reviews",
+            "Day-in-my-life",
+            "Q&A reels",
+            "Bangla · English",
+          ],
+          age: [
+            ["18–24", 42, "Dominant"],
+            [" 25–34", 35, "Strong"],
+            ["35–44", 15, "Moderate"],
+            ["45+", 8, "Smaller"],
+          ],
+          gender: [72, 28],
+          loc: [
+            ["Dhaka", 58, "Primary", "p"],
+            ["Chittagong", 18, "Secondary", "s"],
+            ["Sylhet", 12, "Third", "t"],
+            ["Other BD", 12, "", "t"],
+          ],
+          niches: {
+            pri: "Health & wellness",
+            sec: [
+              "Nutrition",
+              "Fitness lifestyle",
+              "Mental health",
+              "Skincare",
+              "Food & beverage",
+            ],
+          },
+          rates: [
+            ["Instagram reel", "৳18,000 – ৳35,000"],
+            ["Instagram stories (3)", "৳8,000 – ৳15,000"],
+            ["TikTok video", "৳10,000 – ৳22,000"],
+            ["Full campaign package", "৳35,000 – ৳70,000"],
+          ],
+          prefs: [
+            ["Preferred deal", "Long-term partnership"],
+            ["Min budget", "৳12,000"],
+            ["Language", "Bangla · English"],
+            ["Turnaround", "5–7 business days"],
+            ["Gifting only", "No — paid only"],
+          ],
+          hist: [
+            {
+              brand: "GreenFresh BD",
+              meta: "Health & wellness · Mar 2025 · Instagram, YouTube · Nationwide",
+              r: 5,
+              comment:
+                "Lamia delivered outstanding content — engagement was 4× our benchmark. Her audience genuinely trusts her recommendations. Will work with her again without hesitation.",
+              by: "Marketing Manager, GreenFresh BD",
+            },
+            {
+              brand: "StyleBox BD",
+              meta: "Fashion · Feb 2025 · TikTok · Dhaka",
+              r: 5,
+              comment:
+                "Professional, creative, and on-brief. The reel drove a 22% traffic spike the week it went live. Highly recommended.",
+              by: "Founder, StyleBox BD",
+            },
+            {
+              brand: "NutriLife BD",
+              meta: "Health · Jan 2025 · Instagram · Dhaka",
+              r: 4,
+              comment:
+                "Good collaboration overall. Content quality was strong but delivery was 2 days late. Would work together again with clearer timeline agreements.",
+              by: "Campaign Lead, NutriLife BD",
+            },
+          ],
+        },
+        a2: {
+          name: "Faria Ahmed",
+          sub: "Nutrition and wellness creator · Dhaka, Bangladesh",
+          avBg: "var(--grn-l)",
+          avCol: "var(--grn-3)",
+          avIn: "FA",
+          rank: "Top 8% · Health & wellness · BD",
+          member: "Feb 2025",
+          response: "88%",
+          reply: "5 hours",
+          badges: [
+            "Identity verified",
+            "Handle verified",
+            "5 deals completed",
+            "Sponsor rated · 4.6★",
+          ],
+          plats: [
+            {
+              ic: "IG",
+              bg: "var(--amb-l)",
+              name: "Instagram",
+              handle: "@faria.health",
+              fol: "38,200",
+              eng: "4.2%",
+              reach: "~36K",
+            },
+          ],
+          about:
+            "Health and nutrition content creator with a highly engaged female audience in Dhaka. I specialise in making health science accessible and relatable for everyday Bangladeshis. I work best with nutrition, supplement, and wellness brands.",
+          style: [
+            "Educational reels",
+            "Recipe content",
+            "Product reviews",
+            "Bangla · English",
+          ],
+          age: [
+            ["18–24", 40, "Dominant"],
+            ["25–34", 38, "Strong"],
+            ["35–44", 14, "Moderate"],
+            ["45+", 8, "Smaller"],
+          ],
+          gender: [78, 22],
+          loc: [
+            ["Dhaka", 65, "Primary", "p"],
+            ["Chittagong", 14, "Secondary", "s"],
+            ["Other BD", 21, "", "t"],
+          ],
+          niches: {
+            pri: "Health & wellness",
+            sec: ["Nutrition", "Healthy food", "Wellness"],
+          },
+          rates: [
+            ["Instagram reel", "৳15,000 – ৳28,000"],
+            ["Instagram stories (3)", "৳6,000 – ৳12,000"],
+            ["Full campaign package", "৳25,000 – ৳50,000"],
+          ],
+          prefs: [
+            ["Min budget", "৳10,000"],
+            ["Language", "Bangla · English"],
+            ["Turnaround", "7–10 days"],
+            ["Gifting only", "No — paid only"],
+          ],
+          hist: [
+            {
+              brand: "HealthPlus BD",
+              meta: "Supplements · Dec 2024 · Instagram",
+              r: 5,
+              comment:
+                "Fantastic engagement. Content performed well above expectations. Very professional.",
+              by: "Brand Manager, HealthPlus BD",
+            },
+            {
+              brand: "OrganicBD",
+              meta: "Organic food · Nov 2024 · Instagram",
+              r: 4,
+              comment:
+                "Good quality content and on-brief. Would work with again.",
+              by: "Founder, OrganicBD",
+            },
+          ],
+        },
+        a3: {
+          name: "Nadia Islam",
+          sub: "Health, beauty and lifestyle creator · Chittagong, Bangladesh",
+          avBg: "var(--pur-l)",
+          avCol: "var(--pur-t)",
+          avIn: "NI",
+          rank: "Top 12% · Health & beauty · BD",
+          member: "Mar 2025",
+          response: "85%",
+          reply: "6 hours",
+          badges: [
+            "Identity verified",
+            "4 deals completed",
+            "Sponsor rated · 4.7★",
+          ],
+          plats: [
+            {
+              ic: "IG",
+              bg: "var(--amb-l)",
+              name: "Instagram",
+              handle: "@nadia.style",
+              fol: "28,000",
+              eng: "4.5%",
+              reach: "~24K",
+            },
+            {
+              ic: "TT",
+              bg: "var(--red-l)",
+              name: "TikTok",
+              handle: "@nadiaislam",
+              fol: "16,100",
+              eng: "3.5%",
+              reach: "~18K",
+            },
+          ],
+          about:
+            "Fashion, health and beauty creator based in Chittagong with a strong female following across Instagram and TikTok. Bangla-language content is a strength. I focus on relatable, real-life content rather than highly produced aesthetics.",
+          style: [
+            "Beauty tutorials",
+            "Product reviews",
+            "Bangla content",
+            "Lifestyle reels",
+          ],
+          age: [
+            ["18–24", 48, "Dominant"],
+            ["25–34", 30, "Strong"],
+            ["35–44", 14, "Moderate"],
+            ["45+", 8, "Smaller"],
+          ],
+          gender: [82, 18],
+          loc: [
+            ["Chittagong", 55, "Primary", "p"],
+            ["Dhaka", 22, "Secondary", "s"],
+            ["Other BD", 23, "", "t"],
+          ],
+          niches: {
+            pri: "Health & beauty",
+            sec: ["Fashion", "Skincare", "Lifestyle"],
+          },
+          rates: [
+            ["Instagram reel", "৳15,000 – ৳25,000"],
+            ["TikTok video", "৳12,000 – ৳20,000"],
+            ["Full campaign package", "৳30,000 – ৳55,000"],
+          ],
+          prefs: [
+            ["Min budget", "৳8,000"],
+            ["Language", "Bangla"],
+            ["Turnaround", "7–14 days"],
+            ["Gifting only", "Considered case by case"],
+          ],
+          hist: [
+            {
+              brand: "PureSkin BD",
+              meta: "Skincare · Jan 2025 · Instagram",
+              r: 5,
+              comment:
+                "Great content and very engaged audience. The reel performed extremely well for our product launch.",
+              by: "Marketing, PureSkin BD",
+            },
+            {
+              brand: "StyleBox BD",
+              meta: "Fashion · Nov 2024 · TikTok",
+              r: 4,
+              comment: "Creative and professional. Delivered on time.",
+              by: "Founder, StyleBox BD",
+            },
+          ],
+        },
+        a4: {
+          name: "Sabbir Khan",
+          sub: "Fitness and active lifestyle creator · Dhaka, Bangladesh",
+          avBg: "var(--blu-l)",
+          avCol: "var(--blu-t)",
+          avIn: "SK",
+          rank: "Top 10% · Fitness · BD",
+          member: "Feb 2025",
+          response: "90%",
+          reply: "4 hours",
+          badges: [
+            "Identity verified",
+            "Escrow verified · 6 deals",
+            "Sponsor rated · 4.5★",
+          ],
+          plats: [
+            {
+              ic: "IG",
+              bg: "var(--amb-l)",
+              name: "Instagram",
+              handle: "@sabbir.fit",
+              fol: "24,000",
+              eng: "4.2%",
+              reach: "~20K",
+            },
+            {
+              ic: "TT",
+              bg: "var(--red-l)",
+              name: "TikTok",
+              handle: "@sabbirfitness",
+              fol: "17,000",
+              eng: "3.5%",
+              reach: "~14K",
+            },
+          ],
+          about:
+            "Fitness and lifestyle creator focused on practical workout and health content for Bangladeshi men and women. 6 completed deals with consistent positive feedback. I make fitness feel achievable for everyday Bangladeshis.",
+          style: [
+            "Workout videos",
+            "Health tips",
+            "Product reviews",
+            "Bangla · English",
+          ],
+          age: [
+            ["18–24", 35, "Strong"],
+            ["25–34", 40, "Dominant"],
+            ["35–44", 18, "Moderate"],
+            ["45+", 7, "Smaller"],
+          ],
+          gender: [45, 55],
+          loc: [
+            ["Dhaka", 70, "Primary", "p"],
+            ["Chittagong", 12, "Secondary", "s"],
+            ["Other BD", 18, "", "t"],
+          ],
+          niches: {
+            pri: "Fitness & lifestyle",
+            sec: ["Health", "Sports", "Nutrition"],
+          },
+          rates: [
+            ["Instagram reel", "৳12,000 – ৳22,000"],
+            ["TikTok video", "৳10,000 – ৳18,000"],
+            ["Full campaign package", "৳25,000 – ৳45,000"],
+          ],
+          prefs: [
+            ["Min budget", "৳8,000"],
+            ["Language", "Bangla · English"],
+            ["Turnaround", "5–10 days"],
+            ["Gifting only", "No — paid only"],
+          ],
+          hist: [
+            {
+              brand: "FitZone BD",
+              meta: "Gym & fitness · Feb 2025 · Instagram",
+              r: 5,
+              comment:
+                "Excellent content. Drove a significant increase in gym sign-ups the week it went live.",
+              by: "Marketing, FitZone BD",
+            },
+            {
+              brand: "Supplement BD",
+              meta: "Nutrition · Jan 2025 · TikTok",
+              r: 4,
+              comment: "Professional and on-brief. Good engagement.",
+              by: "Brand Manager, Supplement BD",
+            },
+          ],
+        },
+        a5: {
+          name: "Rafi Khan",
+          sub: "Food and lifestyle content creator · Dhaka, Bangladesh",
+          avBg: "var(--amb-l)",
+          avCol: "var(--amb-d)",
+          avIn: "RK",
+          rank: "Top 15% · Food & lifestyle · BD",
+          member: "Feb 2025",
+          response: "82%",
+          reply: "8 hours",
+          badges: [
+            "Identity verified",
+            "Escrow verified · 5 deals",
+            "Sponsor rated · 4.6★",
+          ],
+          plats: [
+            {
+              ic: "TT",
+              bg: "var(--red-l)",
+              name: "TikTok",
+              handle: "@rafikhan.food",
+              fol: "28,200",
+              eng: "3.9%",
+              reach: "~22K",
+            },
+          ],
+          about:
+            "TikTok-first food and lifestyle creator. Real food, honest reviews, everyday life in Dhaka. Seasonal and occasion-based content performs best with my audience. Health content is adjacent to my niche.",
+          style: [
+            "Food reviews",
+            "Recipe videos",
+            "Occasion content",
+            "Bangla",
+          ],
+          age: [
+            ["18–24", 45, "Dominant"],
+            ["25–34", 32, "Strong"],
+            ["35–44", 15, "Moderate"],
+            ["45+", 8, "Smaller"],
+          ],
+          gender: [55, 45],
+          loc: [
+            ["Dhaka", 75, "Primary", "p"],
+            ["Chittagong", 10, "Secondary", "s"],
+            ["Other BD", 15, "", "t"],
+          ],
+          niches: {
+            pri: "Food & lifestyle",
+            sec: ["Food & beverage", "Health-adjacent", "Lifestyle"],
+          },
+          rates: [
+            ["TikTok video", "৳10,000 – ৳18,000"],
+            ["TikTok stories", "৳5,000 – ৳10,000"],
+            ["Full package", "৳20,000 – ৳35,000"],
+          ],
+          prefs: [
+            ["Min budget", "৳6,000"],
+            ["Language", "Bangla"],
+            ["Turnaround", "5–7 days"],
+            ["Gifting only", "Considered"],
+          ],
+          hist: [
+            {
+              brand: "Tasty Bites BD",
+              meta: "Food · Jan 2025 · TikTok",
+              r: 5,
+              comment:
+                "Brilliant content. Very authentic and genuinely resonated with his audience.",
+              by: "Founder, Tasty Bites BD",
+            },
+            {
+              brand: "FreshMart",
+              meta: "Grocery · Nov 2024 · TikTok",
+              r: 4,
+              comment:
+                "Good delivery and creative content. Would work with again.",
+              by: "Marketing, FreshMart",
+            },
+          ],
+        },
+        a6: {
+          name: "Tania Begum",
+          sub: "Lifestyle and parenting creator · Sylhet, Bangladesh",
+          avBg: "var(--teal-l)",
+          avCol: "var(--grn-d)",
+          avIn: "TB",
+          rank: "Top 20% · Lifestyle · BD",
+          member: "Mar 2025",
+          response: "95%",
+          reply: "3 hours",
+          badges: [
+            "Identity verified",
+            "2 deals completed",
+            "Sponsor rated · 4.9★",
+          ],
+          plats: [
+            {
+              ic: "FB",
+              bg: "var(--blu-l)",
+              name: "Facebook",
+              handle: "Tania Begum",
+              fol: "13,000",
+              eng: "5.8%",
+              reach: "~11K",
+            },
+            {
+              ic: "IG",
+              bg: "var(--amb-l)",
+              name: "Instagram",
+              handle: "@tania.lifestyle",
+              fol: "6,400",
+              eng: "3.8%",
+              reach: "~5K",
+            },
+          ],
+          about:
+            "Parenting and lifestyle creator with an exceptionally engaged community of Bangladeshi mothers. Health content for families is my core niche. My audience is a tight-knit community built on trust — the highest engagement rate in this applicant pool.",
+          style: [
+            "Parenting tips",
+            "Family lifestyle",
+            "Health for mothers",
+            "Bangla",
+          ],
+          age: [
+            ["18–24", 15, "Smaller"],
+            ["25–34", 52, "Dominant"],
+            ["35–44", 28, "Strong"],
+            ["45+", 5, "Smaller"],
+          ],
+          gender: [91, 9],
+          loc: [
+            ["Sylhet", 60, "Primary", "p"],
+            ["Dhaka", 20, "Secondary", "s"],
+            ["Other BD", 20, "", "t"],
+          ],
+          niches: {
+            pri: "Lifestyle & parenting",
+            sec: ["Health", "Family", "Wellness"],
+          },
+          rates: [
+            ["Facebook post", "৳8,000 – ৳15,000"],
+            ["Instagram reel", "৳6,000 – ৳12,000"],
+            ["Full package", "৳18,000 – ৳30,000"],
+          ],
+          prefs: [
+            ["Min budget", "৳5,000"],
+            ["Language", "Bangla"],
+            ["Turnaround", "7–14 days"],
+            ["Gifting only", "Considered"],
+          ],
+          hist: [
+            {
+              brand: "BabyBloom BD",
+              meta: "Baby products · Jan 2025 · Facebook",
+              r: 5,
+              comment:
+                "Incredible engagement rate and a very genuine connection with her audience. Perfect for family-oriented brands.",
+              by: "Brand Manager, BabyBloom BD",
+            },
+          ],
+        },
+        a7: {
+          name: "Mehedi Hassan",
+          sub: "Tech and lifestyle content creator · Dhaka, Bangladesh",
+          avBg: "var(--srf2)",
+          avCol: "var(--tx2)",
+          avIn: "MH",
+          rank: "Top 25% · Tech & lifestyle · BD",
+          member: "Feb 2025",
+          response: "78%",
+          reply: "12 hours",
+          badges: [
+            "Identity verified",
+            "3 deals completed",
+            "Sponsor rated · 4.2★",
+          ],
+          plats: [
+            {
+              ic: "YT",
+              bg: "var(--red-l)",
+              name: "YouTube",
+              handle: "@mehedi.tech",
+              fol: "22,000",
+              eng: "2.5%",
+              reach: "~18K",
+            },
+            {
+              ic: "IG",
+              bg: "var(--amb-l)",
+              name: "Instagram",
+              handle: "@mehedihassan",
+              fol: "12,000",
+              eng: "3.4%",
+              reach: "~8K",
+            },
+          ],
+          about:
+            "Tech and lifestyle content creator expanding into health content. My analytical review style works well for supplement and health product content. Dhaka-based audience with strong male following.",
+          style: [
+            "Tech reviews",
+            "Product analysis",
+            "Lifestyle vlogs",
+            "Bangla · English",
+          ],
+          age: [
+            ["18–24", 30, "Strong"],
+            ["25–34", 45, "Dominant"],
+            ["35–44", 18, "Moderate"],
+            ["45+", 7, "Smaller"],
+          ],
+          gender: [30, 70],
+          loc: [
+            ["Dhaka", 68, "Primary", "p"],
+            ["Chittagong", 14, "Secondary", "s"],
+            ["Other BD", 18, "", "t"],
+          ],
+          niches: {
+            pri: "Tech & lifestyle",
+            sec: ["Lifestyle", "Tech reviews"],
+          },
+          rates: [
+            ["YouTube review", "৳12,000 – ৳20,000"],
+            ["Instagram reel", "৳8,000 – ৳15,000"],
+            ["Full package", "৳22,000 – ৳40,000"],
+          ],
+          prefs: [
+            ["Min budget", "৳6,000"],
+            ["Language", "Bangla · English"],
+            ["Turnaround", "7–14 days"],
+            ["Gifting only", "Considered"],
+          ],
+          hist: [
+            {
+              brand: "TechMart BD",
+              meta: "Electronics · Dec 2024 · YouTube",
+              r: 4,
+              comment:
+                "Thorough review and professional delivery. Good fit for analytical product categories.",
+              by: "Marketing, TechMart BD",
+            },
+          ],
+        },
+      };
+      PD_alias = { b1: "a1", b2: "a5", b3: "a3", c1: "a2", c2: "a3", c3: "a1" };
+      function getPD(id) {
+        return PROFILES[PD_alias[id] || id] || PROFILES["a1"];
+      }
+
+      let pmCurrentId = null;
+
+      function openPM(id) {
+        const d = getPD(id);
+        pmCurrentId = id;
+        document.getElementById("pm-title").textContent = d.name;
+
+        const apps = APPLICANTS[currentCamp] || [];
+        const ap = apps.find((x) => x.id === id);
+        const st = ap ? ap.status : "pending";
+        const ab = document.getElementById("pm-accept-btn");
+        if (st === "accepted") {
+          ab.textContent = "✓ Accepted";
+          ab.style.background = "var(--grn-3)";
+          ab.disabled = true;
+        } else {
+          ab.textContent = "Accept applicant";
+          ab.style.background = "";
+          ab.disabled = false;
+        }
+        ab.onclick = function () {
+          acceptApp(id);
+          closePM();
+        };
+
+        const stars = (n) =>
+          Array.from(
+            { length: 5 },
+            (_, i) =>
+              '<div class="' + (i < Math.round(n) ? "sf" : "se") + '"></div>',
+          ).join("");
+        const ck =
+          '<svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" fill="#C0DD97"/><path d="M3.5 6l2 2L8.5 4" stroke="#27500A" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+        let h = "";
+        // COVER
+        h +=
+          '<div class="pm-cover"><div class="pm-cover-inner"></div><div class="pm-cover-stripe"></div></div>';
+        // IDENTITY
+        h +=
+          '<div class="pm-identity"><div class="pm-ib-row">' +
+          '<div class="pm-av" style="background:' +
+          d.avBg +
+          ";color:" +
+          d.avCol +
+          ';">' +
+          d.avIn +
+          '<div class="pm-av-tick"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2L8 3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>' +
+          '<div style="flex:1;min-width:0;padding-bottom:4px;"><div class="pm-name">' +
+          d.name +
+          '</div><div class="pm-sub">' +
+          d.sub +
+          "</div></div>" +
+          '<div class="pm-ib-right"><div style="font-size:11px;padding:3px 10px;border-radius:20px;background:var(--blu-l);color:var(--blu-t);font-weight:600;">' +
+          d.rank +
+          '</div><div style="font-size:11px;color:var(--tx3);">Member since ' +
+          d.member +
+          "</div></div>" +
+          "</div>" +
+          '<div class="pm-meta">' +
+          '<div class="pm-m"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M6 1C4.3 1 3 2.3 3 4c0 2.5 3 7 3 7s3-4.5 3-7c0-1.7-1.3-3-3-3z"/><circle cx="6" cy="4" r="1.2"/></svg>' +
+          d.sub.split("·")[1].trim() +
+          "</div>" +
+          '<div class="pm-m grn"><svg viewBox="0 0 12 12" fill="none" stroke="var(--grn-3)" stroke-width="1.2"><circle cx="6" cy="6" r="4.5"/><path d="M6 3.5v2.5l1.5 1"/></svg>Replies within ' +
+          d.reply +
+          "</div>" +
+          '<div class="pm-m grn"><svg viewBox="0 0 12 12" fill="none" stroke="var(--grn-3)" stroke-width="1.2"><path d="M2 6l2.5 2.5L10 3"/></svg>' +
+          d.response +
+          " response rate</div>" +
+          '<div class="pm-m"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="1.5" y="2" width="9" height="8" rx="1"/><path d="M4 2V1M8 2V1M1.5 5h9"/></svg>Member since ' +
+          d.member +
+          "</div>" +
+          "</div></div>";
+        // BADGES
+        h +=
+          '<div class="pm-badges">' +
+          d.badges
+            .map((b) => '<div class="pm-bdg">' + ck + b + "</div>")
+            .join("") +
+          "</div>";
+        // STATS BAR
+        const totalFol = d.plats
+          .reduce((s, p) => s + parseInt(p.fol.replace(/,/g, "")), 0)
+          .toLocaleString();
+        const avgEng =
+          (
+            d.plats.reduce((s, p) => s + parseFloat(p.eng), 0) / d.plats.length
+          ).toFixed(1) + "%";
+        const dealBdg =
+          d.badges.find((b) => b.includes("deals completed")) || "";
+        const dealNum = dealBdg ? dealBdg.split(" ")[0] : d.hist.length;
+        const ratBdg = d.badges.find((b) => b.includes("Sponsor rated")) || "";
+        const ratNum = ratBdg ? ratBdg.split("·")[1].trim() : "—";
+        h +=
+          '<div class="pm-stats-bar">' +
+          '<div class="pm-sbi"><div class="pm-sbv">' +
+          totalFol +
+          '</div><div class="pm-sbl">Total followers</div><div class="pm-sbn">Handle verified</div></div>' +
+          '<div class="pm-sbi"><div class="pm-sbv">' +
+          avgEng +
+          '</div><div class="pm-sbl">Avg engagement rate</div><div class="pm-sbn">Platform avg 1.9%</div></div>' +
+          '<div class="pm-sbi"><div class="pm-sbv">' +
+          dealNum +
+          '</div><div class="pm-sbl">Deals completed</div><div class="pm-sbn">Via SponzoBD escrow</div></div>' +
+          '<div class="pm-sbi"><div class="pm-sbv">' +
+          ratNum.replace("★", "") +
+          '<span style="font-size:13px;color:var(--tx3);font-weight:400;">/5</span></div><div class="pm-sbl">Avg sponsor rating</div><div class="pm-sbn">From ' +
+          dealNum +
+          " sponsors</div></div>" +
+          "</div>";
+        // CONTENT GRID
+        h += '<div class="pm-content"><div>';
+        // About
+        h +=
+          '<div class="pm-panel"><div class="pm-pt">About</div>' +
+          '<p style="font-size:13px;color:var(--tx2);line-height:1.75;margin-bottom:9px;">' +
+          d.about +
+          "</p>" +
+          '<div class="pm-divider"></div>' +
+          '<div style="font-size:11px;color:var(--tx3);margin-bottom:7px;">Content style</div>' +
+          '<div style="display:flex;flex-wrap:wrap;gap:6px;">' +
+          d.style
+            .map(
+              (s) =>
+                '<span style="font-size:11px;padding:3px 10px;border-radius:20px;background:var(--srf2);color:var(--tx2);">' +
+                s +
+                "</span>",
+            )
+            .join("") +
+          "</div>" +
+          "</div>";
+        // Platforms
+        h +=
+          '<div class="pm-panel"><div class="pm-pt">Platform presence</div>' +
+          d.plats
+            .map(
+              (p) =>
+                '<div class="pm-plat-row">' +
+                '<div class="pm-plat-ic" style="background:' +
+                p.bg +
+                ';"><span style="font-size:9px;font-weight:700;color:var(--tx2);">' +
+                p.ic +
+                "</span></div>" +
+                '<div style="flex:1;min-width:0;"><div class="pm-plat-name">' +
+                p.name +
+                '</div><div class="pm-plat-handle">' +
+                p.handle +
+                "</div></div>" +
+                '<div class="pm-plat-stats">' +
+                '<div class="pm-ps-item"><div class="pm-ps-v">' +
+                p.fol +
+                '</div><div class="pm-ps-l">Followers</div></div>' +
+                '<div class="pm-ps-item"><div class="pm-ps-v">' +
+                p.eng +
+                '</div><div class="pm-ps-l">Eng. rate</div></div>' +
+                '<div class="pm-ps-item"><div class="pm-ps-v">' +
+                p.reach +
+                '</div><div class="pm-ps-l">Avg reach</div></div>' +
+                "</div>" +
+                "</div>",
+            )
+            .join("") +
+          "</div>";
+        // Audience
+        h +=
+          '<div class="pm-panel"><div class="pm-pt">Audience demographics</div>' +
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">' +
+          '<div><div style="font-size:10px;color:var(--tx3);margin-bottom:7px;">Age distribution</div>' +
+          d.age
+            .map(
+              ([l, v, desc]) =>
+                '<div class="pm-age-row"><span class="pm-age-lbl">' +
+                l +
+                '</span><div class="pm-age-track"><div class="pm-age-fill" style="width:' +
+                v +
+                '%;"></div></div><span class="pm-age-desc">' +
+                v +
+                "%</span></div>",
+            )
+            .join("") +
+          "</div>" +
+          '<div><div style="font-size:10px;color:var(--tx3);margin-bottom:7px;">Gender</div>' +
+          '<div class="pm-gender-bar"><div class="pm-gf" style="width:' +
+          d.gender[0] +
+          '%;"></div><div class="pm-gm" style="width:' +
+          d.gender[1] +
+          '%;"></div></div>' +
+          '<div style="display:flex;justify-content:space-between;font-size:10px;color:var(--tx3);margin-bottom:10px;"><span>Female ' +
+          d.gender[0] +
+          "%</span><span>Male " +
+          d.gender[1] +
+          "%</span></div>" +
+          '<div style="font-size:10px;color:var(--tx3);margin-bottom:7px;">Top locations</div>' +
+          d.loc
+            .map(
+              ([name, v, tag, cls]) =>
+                '<div class="pm-loc-row"><div class="pm-loc-dot" style="background:' +
+                (cls === "p"
+                  ? "var(--grn)"
+                  : cls === "s"
+                    ? "var(--teal-m)"
+                    : "var(--grn-m)") +
+                '"></div><span class="pm-loc-name">' +
+                name +
+                "</span>" +
+                (tag
+                  ? '<span class="pm-loc-tag lt-' + cls + '">' + tag + "</span>"
+                  : "") +
+                "</div>",
+            )
+            .join("") +
+          "</div></div></div>";
+        h += "</div><div>";
+        // Niche
+        h +=
+          '<div class="pm-panel"><div class="pm-pt">Niche & content focus</div>' +
+          '<div style="font-size:10px;color:var(--tx3);margin-bottom:5px;">Primary niche</div>' +
+          '<div style="margin-bottom:11px;"><span class="pm-nc-p">' +
+          d.niches.pri +
+          "</span></div>" +
+          '<div style="font-size:10px;color:var(--tx3);margin-bottom:5px;">Secondary niches</div>' +
+          "<div>" +
+          d.niches.sec
+            .map((n) => '<span class="pm-nc-s">' + n + "</span>")
+            .join("") +
+          "</div>" +
+          "</div>";
+        // Rates
+        h +=
+          '<div class="pm-panel"><div class="pm-pt">Sponsorship rates</div>' +
+          '<div style="font-size:11px;color:var(--tx3);margin-bottom:8px;">Indicative rates · negotiable per brief</div>' +
+          d.rates
+            .map(
+              ([t, v]) =>
+                '<div class="pm-rate-row"><span class="pm-rr-t">' +
+                t +
+                '</span><span class="pm-rr-v">' +
+                v +
+                "</span></div>",
+            )
+            .join("") +
+          "</div>";
+        // Collab prefs
+        h +=
+          '<div class="pm-panel"><div class="pm-pt">Collaboration preferences</div>' +
+          d.prefs
+            .map(
+              ([l, v]) =>
+                '<div class="pm-rate-row"><span class="pm-rr-t">' +
+                l +
+                '</span><span style="font-size:12px;font-weight:600;color:' +
+                (v.includes("No") ? "var(--red)" : "var(--tx1)") +
+                ';">' +
+                v +
+                "</span></div>",
+            )
+            .join("") +
+          "</div>";
+        h += "</div></div>";
+        // Deal history
+        h +=
+          '<div style="padding:0 22px 16px;background:var(--bg);">' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><span style="font-size:13px;font-weight:700;color:var(--tx1);">Verified deal history</span><span style="font-size:11px;color:var(--tx3);">' +
+          d.hist.length +
+          " completed · visible to all sponsors</span></div>" +
+          d.hist
+            .map(
+              (h2) =>
+                '<div class="pm-panel"><div class="pm-hist-item" style="padding-top:0;border-bottom:none;">' +
+                '<div class="pm-hi-top"><div><div class="pm-hi-brand">' +
+                h2.brand +
+                ' <span style="font-size:10px;padding:1px 7px;border-radius:20px;background:var(--grn-l);color:var(--grn-3);font-weight:700;">Verified</span></div><div class="pm-hi-meta">' +
+                h2.meta +
+                "</div></div>" +
+                '<div style="text-align:right;flex-shrink:0;"><div class="stars">' +
+                stars(h2.r) +
+                "</div></div></div>" +
+                '<div class="pm-hi-comment">"' +
+                h2.comment +
+                '"</div>' +
+                '<div class="pm-hi-by">— ' +
+                h2.by +
+                "</div>" +
+                "</div></div>",
+            )
+            .join("") +
+          "</div>";
+
+        document.getElementById("pm-content").innerHTML = h;
+        document.getElementById("pm-overlay").classList.add("on");
+        document.getElementById("pm-overlay").scrollTop = 0;
+      }
+
+      function closePM() {
+        document.getElementById("pm-overlay").classList.remove("on");
+      }
+
+      function toggleCompare(id) {
+        const apps = APPLICANTS[currentCamp] || [];
+        const a = apps.find((x) => x.id === id);
+        if (!a) return;
+        if (compareA && compareA.id === id) {
+          compareA = null;
+        } else if (compareB && compareB.id === id) {
+          compareB = null;
+        } else if (!compareA) {
+          compareA = a;
+        } else if (!compareB) {
+          compareB = a;
+        } else {
+          T("Max 2 creators can be compared at once · clear one first");
+          return;
+        }
+        updateCompareBar();
+        renderList();
+      }
+
+      function updateCompareBar() {
+        const bar = document.getElementById("compare-bar");
+        const count = (compareA ? 1 : 0) + (compareB ? 1 : 0);
+        if (count === 0) {
+          bar.style.display = "none";
+          return;
+        }
+        bar.style.display = "flex";
+        document.getElementById("compare-count").textContent =
+          count === 1 ? "1 selected · pick 1 more" : "2 selected";
+      }
+
+      function clearCompare() {
+        compareA = null;
+        compareB = null;
+        updateCompareBar();
+        renderList();
+      }
+
+      function openCompare() {
+        if (!compareA || !compareB) {
+          T("Select 2 creators to compare");
+          return;
+        }
+        const a = compareA,
+          b = compareB;
+        const metrics = [
+          {
+            lbl: "Followers",
+            va: a.fol,
+            vb: b.fol,
+            win: a.folNum > b.folNum ? "a" : b.folNum > a.folNum ? "b" : "tie",
+          },
+          {
+            lbl: "Engagement rate",
+            va: a.eng,
+            vb: b.eng,
+            win: a.engNum > b.engNum ? "a" : b.engNum > a.engNum ? "b" : "tie",
+          },
+          {
+            lbl: "Deals completed",
+            va: a.deals + " deals",
+            vb: b.deals + " deals",
+            win: a.deals > b.deals ? "a" : b.deals > a.deals ? "b" : "tie",
+          },
+          {
+            lbl: "Avg rating",
+            va: a.rating + "★",
+            vb: b.rating + "★",
+            win: a.rating > b.rating ? "a" : b.rating > a.rating ? "b" : "tie",
+          },
+          {
+            lbl: "Compat score",
+            va: a.compatScore,
+            vb: b.compatScore,
+            win:
+              a.compatScore > b.compatScore
+                ? "a"
+                : b.compatScore > a.compatScore
+                  ? "b"
+                  : "tie",
+          },
+          { lbl: "Location", va: a.loc, vb: b.loc, win: "tie" },
+          {
+            lbl: "Platforms",
+            va: a.plats.join(", "),
+            vb: b.plats.join(", "),
+            win: "tie",
+          },
+        ];
+        const dimLabels = [
+          "Niche",
+          "Audience",
+          "Budget",
+          "Followers",
+          "Platform",
+        ];
+        let html =
+          '<div class="cm-grid">' +
+          // headers
+          "<div></div>" +
+          '<div class="cm-creator-col"><div class="cm-creator-hd cc-hd-a"><div class="cm-av" style="background:' +
+          a.avBg +
+          ";color:" +
+          a.avCol +
+          ';">' +
+          a.avIn +
+          '</div><div class="cm-av-name">' +
+          a.name +
+          '</div><div class="cm-av-niche">' +
+          a.niche +
+          "</div></div></div>" +
+          '<div class="cm-creator-col"><div class="cm-creator-hd cc-hd-b"><div class="cm-av" style="background:' +
+          b.avBg +
+          ";color:" +
+          b.avCol +
+          ';">' +
+          b.avIn +
+          '</div><div class="cm-av-name">' +
+          b.name +
+          '</div><div class="cm-av-niche">' +
+          b.niche +
+          "</div></div></div>" +
+          "</div>";
+        // metric rows
+        html += metrics
+          .map((m) => {
+            const winA = m.win === "a",
+              winB = m.win === "b";
+            return (
+              '<div class="cm-row">' +
+              '<div class="cm-row-lbl">' +
+              m.lbl +
+              "</div>" +
+              '<div class="cm-cell ' +
+              (winA ? "win" : "neutral") +
+              '"><div class="cm-val">' +
+              m.va +
+              "</div></div>" +
+              '<div class="cm-cell ' +
+              (winB ? "win" : "neutral") +
+              '"><div class="cm-val">' +
+              m.vb +
+              "</div></div>" +
+              "</div>"
+            );
+          })
+          .join("");
+        // compat bars
+        html +=
+          '<div class="cm-row"><div class="cm-row-lbl" style="padding-top:14px;">Compat breakdown</div><div></div><div></div></div>';
+        dimLabels.forEach((l, i) => {
+          const va = a.dims[i],
+            vb = b.dims[i],
+            max = [25, 25, 20, 15, 15][i];
+          html +=
+            '<div class="cm-compat-row">' +
+            '<div style="font-size:11px;color:var(--tx3);padding:0 0 0 0;">' +
+            l +
+            "</div>" +
+            '<div class="cm-compat-bar-wrap"><div class="cm-compat-bar"><div class="cm-compat-fill" style="width:' +
+            Math.round((va / max) * 100) +
+            '%;"></div></div><div style="font-size:10px;color:var(--tx3);margin-top:2px;">' +
+            va +
+            "/" +
+            max +
+            "</div></div>" +
+            '<div class="cm-compat-bar-wrap"><div class="cm-compat-bar"><div class="cm-compat-fill" style="width:' +
+            Math.round((vb / max) * 100) +
+            '%;background:var(--pur-t);"></div></div><div style="font-size:10px;color:var(--tx3);margin-top:2px;">' +
+            vb +
+            "/" +
+            max +
+            "</div></div>" +
+            "</div>";
+        });
+        document.getElementById("cm-body").innerHTML = html;
+        document.getElementById("cm-footer").innerHTML =
+          '<button class="btn-r" style="flex:1;" onclick="acceptApp(\'' +
+          a.id +
+          "');closeCompare();\">Accept " +
+          a.name +
+          "</button>" +
+          '<button class="btn-r" style="flex:1;background:var(--pur-t);border-color:var(--pur-t);" onclick="acceptApp(\'' +
+          b.id +
+          "');closeCompare();\">Accept " +
+          b.name +
+          "</button>" +
+          '<button class="btn-ghost" onclick="closeCompare()">Close</button>';
+        document.getElementById("compare-overlay").classList.add("on");
+      }
+
+      function closeCompare() {
+        document.getElementById("compare-overlay").classList.remove("on");
+      }
+      function handleOverlayClick(e) {
+        if (e.target === document.getElementById("compare-overlay"))
+          closeCompare();
+      }
+
+      function acceptApp(id) {
+        const apps = APPLICANTS[currentCamp];
+        const a = apps && apps.find((x) => x.id === id);
+        if (a) {
+          a.status = "accepted";
+          renderList();
+          T(a.name + " accepted — opening chat in Messages");
+        }
+      }
+      function shortlistApp(id) {
+        const apps = APPLICANTS[currentCamp];
+        const a = apps && apps.find((x) => x.id === id);
+        if (a && a.status === "pending") {
+          a.status = "shortlisted";
+          renderList();
+          T(a.name + " shortlisted");
+        }
+      }
+      function declineApp(id) {
+        const apps = APPLICANTS[currentCamp];
+        const a = apps && apps.find((x) => x.id === id);
+        if (a) {
+          a.status = "declined";
+          renderList();
+          T("Decline sent — creator notified politely");
+        }
+      }
+
+      function T(m) {
+        const t = document.getElementById("tst");
+        document.getElementById("tm").textContent = m;
+        t.classList.add("on");
+        setTimeout(() => t.classList.remove("on"), 2800);
+      }
+
+      renderList();
+      renderSummary();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,2373 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SponzoBD — Browse Campaigns</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --red: #e24b4a;
+        --red-l: #fcebeb;
+        --red-m: #f7c1c1;
+        --grn: #1d9e75;
+        --grn-l: #eaf3de;
+        --grn-m: #c0dd97;
+        --grn-d: #085041;
+        --grn-3: #3b6d11;
+        --grn-t: #27500a;
+        --teal-l: #e1f5ee;
+        --teal-m: #9fe1cb;
+        --blu-l: #e6f1fb;
+        --blu-m: #b5d4f4;
+        --blu-t: #0c447c;
+        --amb-l: #faeeda;
+        --amb-m: #fac775;
+        --amb-t: #633806;
+        --amb-d: #854f0b;
+        --pur-l: #eeedfe;
+        --pur-t: #3c3489;
+        --ora-l: #fef3e2;
+        --ora-t: #92400e;
+        --bg: #f4f2ee;
+        --srf: #ffffff;
+        --srf2: #f0eee9;
+        --bdr: rgba(0, 0, 0, 0.08);
+        --bdr-m: rgba(0, 0, 0, 0.14);
+        --bdr-s: rgba(0, 0, 0, 0.22);
+        --tx1: #1a1a1a;
+        --tx2: #555;
+        --tx3: #999;
+        --font: "DM Sans", system-ui, sans-serif;
+        --r1: 7px;
+        --r2: 10px;
+        --r3: 14px;
+      }
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+        font-family: var(--font);
+        font-size: 14px;
+        color: var(--tx1);
+        background: var(--bg);
+      }
+      .app {
+        display: flex;
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+      }
+
+      /* ── SIDEBAR ── */
+      .sb {
+        width: 220px;
+        flex-shrink: 0;
+        background: var(--srf);
+        border-right: 1px solid var(--bdr);
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
+      .sb-logo {
+        padding: 15px 16px 12px;
+        border-bottom: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .logo-ic {
+        width: 28px;
+        height: 28px;
+        background: var(--red);
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .sb-user {
+        padding: 11px 16px;
+        border-bottom: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .av-sb {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--teal-m);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--grn-d);
+        flex-shrink: 0;
+      }
+      .u-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .u-sub {
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .u-plan {
+        font-size: 11px;
+        color: var(--grn-d);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-top: 2px;
+      }
+      .pdot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--grn);
+      }
+      .nav {
+        flex: 1;
+        overflow-y: auto;
+        padding: 8px 0;
+      }
+      .nav-sec {
+        padding: 5px 16px 3px;
+        font-size: 10px;
+        color: var(--tx3);
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        font-weight: 600;
+      }
+      .ni {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        font-size: 13px;
+        color: var(--tx2);
+        cursor: pointer;
+        border-left: 2.5px solid transparent;
+        transition: background 0.1s;
+      }
+      .ni:hover {
+        background: var(--srf2);
+      }
+      .ni.on {
+        background: var(--srf2);
+        color: var(--tx1);
+        font-weight: 600;
+        border-left-color: var(--red);
+      }
+      .ni svg {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+        opacity: 0.5;
+      }
+      .ni.on svg {
+        opacity: 1;
+      }
+      .ni-badge {
+        margin-left: auto;
+        background: var(--red);
+        color: #fff;
+        font-size: 10px;
+        padding: 1px 7px;
+        border-radius: 20px;
+        font-weight: 700;
+      }
+      .sb-ps {
+        margin: 0 10px 14px;
+        padding: 10px 12px;
+        background: var(--srf2);
+        border-radius: var(--r2);
+      }
+      .ps-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 4px;
+      }
+      .ps-lbl {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .ps-pct {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--grn);
+      }
+      .ps-track {
+        height: 4px;
+        background: var(--bdr-m);
+        border-radius: 2px;
+      }
+      .ps-fill {
+        height: 4px;
+        background: var(--grn);
+        border-radius: 2px;
+        width: 92%;
+      }
+      .ps-note {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-top: 4px;
+      }
+
+      /* ── MAIN ── */
+      .main {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+      }
+      .topbar {
+        height: 52px;
+        background: var(--srf);
+        border-bottom: 1px solid var(--bdr);
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+      }
+      .tb-t {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--tx1);
+        letter-spacing: -0.2px;
+      }
+      .tb-r {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .badge-prem {
+        background: var(--teal-l);
+        color: var(--grn-d);
+        font-size: 11px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-weight: 700;
+      }
+      .icon-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: var(--r1);
+        border: 1px solid var(--bdr-m);
+        background: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+
+      /* ── PAGE LAYOUT ── */
+      .page-body {
+        display: flex;
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+      }
+
+      /* ── FILTER SIDEBAR ── */
+      .filter-col {
+        width: 238px;
+        flex-shrink: 0;
+        border-right: 1px solid var(--bdr);
+        background: var(--srf);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .fc-hd {
+        padding: 14px 16px 12px;
+        border-bottom: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+      }
+      .fc-t {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .fc-clear {
+        font-size: 12px;
+        color: var(--red);
+        cursor: pointer;
+        font-weight: 500;
+      }
+      .filter-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0 0 16px;
+      }
+      .fs {
+        padding: 14px 16px 12px;
+        border-bottom: 1px solid var(--bdr);
+      }
+      .fs-t {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--tx1);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 10px;
+      }
+      .cat-chip {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 6px 10px;
+        border-radius: var(--r2);
+        cursor: pointer;
+        margin-bottom: 4px;
+        border: 1px solid transparent;
+        transition: all 0.1s;
+      }
+      .cat-chip:hover {
+        background: var(--srf2);
+      }
+      .cat-chip.on {
+        background: var(--grn-l);
+        border-color: var(--grn-m);
+      }
+      .cat-chip-name {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 13px;
+        color: var(--tx2);
+      }
+      .cat-chip.on .cat-chip-name {
+        color: var(--grn-3);
+        font-weight: 600;
+      }
+      .cat-ic {
+        width: 22px;
+        height: 22px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .cat-count {
+        font-size: 11px;
+        color: var(--tx3);
+        background: var(--srf2);
+        padding: 1px 7px;
+        border-radius: 20px;
+      }
+      .cat-chip.on .cat-count {
+        background: var(--grn-m);
+        color: var(--grn-t);
+      }
+
+      .slider-wrap {
+        padding: 4px 0 8px;
+      }
+      .slider-lbl {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+      }
+      .sl-name {
+        font-size: 12px;
+        color: var(--tx2);
+      }
+      .sl-val {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      input[type="range"] {
+        width: 100%;
+        accent-color: var(--grn);
+        height: 4px;
+        cursor: pointer;
+      }
+      .slider-range-lbl {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 5px;
+      }
+      .srl {
+        font-size: 10px;
+        color: var(--tx3);
+      }
+
+      .plat-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .plat-chip {
+        padding: 5px 11px;
+        border: 1px solid var(--bdr-m);
+        border-radius: 20px;
+        font-size: 12px;
+        color: var(--tx2);
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.1s;
+      }
+      .plat-chip:hover {
+        background: var(--srf2);
+      }
+      .plat-chip.on {
+        background: var(--blu-l);
+        border-color: var(--blu-m);
+        color: var(--blu-t);
+        font-weight: 700;
+      }
+
+      .sort-select {
+        width: 100%;
+        padding: 7px 10px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        background: var(--srf);
+        color: var(--tx1);
+        font-size: 13px;
+        font-family: var(--font);
+        cursor: pointer;
+      }
+      .sort-select:focus {
+        outline: none;
+        border-color: var(--grn);
+      }
+
+      /* ── CAMPAIGN LIST ── */
+      .campaign-col {
+        flex: 1;
+        min-width: 0;
+        overflow-y: auto;
+        padding: 16px 18px;
+      }
+
+      .results-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 14px;
+      }
+      .rb-count {
+        font-size: 13px;
+        color: var(--tx2);
+      }
+      .rb-count span {
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .early-note {
+        font-size: 11px;
+        background: var(--amb-l);
+        color: var(--amb-t);
+        padding: 4px 11px;
+        border-radius: 20px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      /* CAMPAIGN CARD */
+      .cc {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        border-radius: var(--r3);
+        padding: 0;
+        margin-bottom: 10px;
+        overflow: hidden;
+        transition:
+          border-color 0.15s,
+          box-shadow 0.15s;
+        cursor: default;
+      }
+      .cc:hover {
+        border-color: var(--bdr-m);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      }
+      .cc.early {
+        border-color: var(--amb-m);
+        border-left: 3px solid #ef9f27;
+      }
+      .cc-top {
+        padding: 14px 16px 12px;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      .cc-logo {
+        width: 38px;
+        height: 38px;
+        border-radius: var(--r2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 700;
+        flex-shrink: 0;
+        border: 1px solid var(--bdr);
+      }
+      .cc-body {
+        flex: 1;
+        min-width: 0;
+      }
+      .cc-hd {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 4px;
+      }
+      .cc-brand {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .cc-title {
+        font-size: 12px;
+        color: var(--tx2);
+        margin-top: 2px;
+        line-height: 1.4;
+      }
+      .cc-right {
+        flex-shrink: 0;
+        text-align: right;
+      }
+      .cc-budget {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--grn-3);
+      }
+      .cc-budget-lbl {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-top: 1px;
+      }
+      .cc-pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-bottom: 10px;
+      }
+      .pill {
+        font-size: 11px;
+        padding: 2px 9px;
+        border-radius: 20px;
+        font-weight: 500;
+      }
+      .p-cat {
+        background: var(--grn-l);
+        color: var(--grn-3);
+      }
+      .p-plat {
+        background: var(--blu-l);
+        color: var(--blu-t);
+      }
+      .p-loc {
+        background: var(--srf2);
+        color: var(--tx2);
+      }
+      .p-fol {
+        background: var(--pur-l);
+        color: var(--pur-t);
+      }
+      .p-early {
+        background: var(--amb-l);
+        color: var(--amb-t);
+        font-weight: 700;
+      }
+      .p-hot {
+        background: var(--red-l);
+        color: var(--red);
+        font-weight: 700;
+      }
+      .cc-meta {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+      .cm {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .cm svg {
+        width: 12px;
+        height: 12px;
+        opacity: 0.45;
+      }
+      .cc-bottom {
+        padding: 10px 16px 12px;
+        border-top: 1px solid var(--bdr);
+        background: var(--srf2);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .cb-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .compat-wrap {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .compat-lbl {
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .compat-badge {
+        font-size: 11px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-weight: 700;
+      }
+      .cb-strong {
+        background: var(--grn-l);
+        color: var(--grn-3);
+      }
+      .cb-good {
+        background: var(--teal-l);
+        color: #0f6e56;
+      }
+      .cb-moderate {
+        background: var(--amb-l);
+        color: var(--amb-t);
+      }
+      .cb-low {
+        background: var(--srf2);
+        color: var(--tx3);
+      }
+      .apps-note {
+        font-size: 11px;
+        color: var(--tx3);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .cc-actions {
+        display: flex;
+        gap: 7px;
+        align-items: center;
+        flex-shrink: 0;
+      }
+      .btn-apply {
+        padding: 7px 16px;
+        background: var(--red);
+        border: none;
+        border-radius: var(--r1);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: var(--font);
+        transition: background 0.1s;
+      }
+      .btn-apply:hover {
+        background: #c73c3b;
+      }
+      .btn-save {
+        padding: 6px 12px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        background: transparent;
+        color: var(--tx2);
+        font-size: 12px;
+        cursor: pointer;
+        font-family: var(--font);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .btn-save:hover {
+        background: var(--srf2);
+      }
+      .btn-save.saved {
+        border-color: var(--amb-m);
+        background: var(--amb-l);
+        color: var(--amb-t);
+      }
+      .btn-detail {
+        padding: 6px 12px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        background: transparent;
+        color: var(--tx2);
+        font-size: 12px;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .btn-detail:hover {
+        background: var(--srf2);
+      }
+
+      /* EMPTY STATE */
+      .empty {
+        text-align: center;
+        padding: 52px 20px;
+      }
+      .empty-ic {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: var(--srf2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 14px;
+      }
+      .empty-t {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--tx1);
+        margin-bottom: 7px;
+      }
+      .empty-s {
+        font-size: 13px;
+        color: var(--tx2);
+        line-height: 1.55;
+      }
+
+      /* APPLY MODAL */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.38);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+      }
+      .modal-overlay.on {
+        display: flex;
+      }
+      .modal {
+        background: var(--srf);
+        border-radius: var(--r3);
+        padding: 22px 24px;
+        width: 480px;
+        max-width: 90vw;
+        max-height: 85vh;
+        overflow-y: auto;
+      }
+      .modal-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--tx1);
+        margin-bottom: 4px;
+        letter-spacing: -0.2px;
+      }
+      .modal-sub {
+        font-size: 12px;
+        color: var(--tx3);
+        margin-bottom: 16px;
+      }
+      .modal-sec {
+        margin-bottom: 14px;
+      }
+      .modal-lbl {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-bottom: 4px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .modal-ta {
+        width: 100%;
+        padding: 9px 12px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        font-size: 13px;
+        font-family: var(--font);
+        color: var(--tx1);
+        background: var(--srf);
+        resize: none;
+        height: 80px;
+        line-height: 1.55;
+      }
+      .modal-ta:focus {
+        outline: none;
+        border-color: var(--grn);
+      }
+      .char-count {
+        font-size: 11px;
+        color: var(--tx3);
+        text-align: right;
+        margin-top: 3px;
+      }
+      .char-count.warn {
+        color: var(--amb-d);
+      }
+      .modal-info-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 10px;
+        background: var(--srf2);
+        border-radius: var(--r1);
+        margin-bottom: 6px;
+        font-size: 12px;
+        color: var(--tx2);
+      }
+      .modal-info-row svg {
+        width: 13px;
+        height: 13px;
+        opacity: 0.45;
+        flex-shrink: 0;
+      }
+      .modal-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 12px;
+        border-top: 1px solid var(--bdr);
+        margin-top: 4px;
+      }
+      .modal-cancel {
+        padding: 8px 15px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        background: transparent;
+        color: var(--tx2);
+        font-size: 13px;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .modal-send {
+        padding: 8px 20px;
+        background: var(--red);
+        border: none;
+        border-radius: var(--r1);
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .modal-send:hover {
+        background: #c73c3b;
+      }
+      .score-preview {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 12px;
+        border-radius: var(--r1);
+        border: 1px solid var(--grn-m);
+        background: var(--grn-l);
+        margin-bottom: 14px;
+      }
+      .sp-val {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--grn-d);
+      }
+      .sp-lbl {
+        font-size: 12px;
+        color: var(--grn-3);
+        font-weight: 600;
+      }
+      .sp-sub {
+        font-size: 11px;
+        color: var(--grn-3);
+      }
+
+      /* SUCCESS TOAST */
+      .toast {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        background: var(--grn-d);
+        color: #fff;
+        padding: 11px 18px;
+        border-radius: var(--r2);
+        font-size: 13px;
+        font-weight: 600;
+        display: none;
+        z-index: 200;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+      }
+      .toast.on {
+        display: flex;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- ════ SIDEBAR ════ -->
+      <div class="sb">
+        <div class="sb-logo">
+          <div class="logo-ic">
+            <svg viewBox="0 0 16 16" fill="none" width="15" height="15">
+              <path
+                d="M3 8a5 5 0 1010 0A5 5 0 003 8z"
+                fill="white"
+                opacity="0.25"
+              />
+              <path
+                d="M8 5v3l2 2"
+                stroke="white"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+          <div>
+            <div
+              style="
+                font-size: 14px;
+                font-weight: 700;
+                color: var(--tx1);
+                letter-spacing: -0.2px;
+              "
+            >
+              SponzoBD
+            </div>
+            <div style="font-size: 10px; color: var(--tx3)">Creator portal</div>
+          </div>
+        </div>
+        <div class="sb-user">
+          <div class="av-sb">LA</div>
+          <div>
+            <div class="u-name">Lamia Akter</div>
+            <div class="u-sub">Health &amp; wellness · 52K</div>
+            <div class="u-plan"><span class="pdot"></span>Premium plan</div>
+          </div>
+        </div>
+        <nav class="nav">
+          <div class="nav-sec">Main</div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'sponsee_home_feed (1).html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <path
+                d="M1.5 6.5L7.5 1.5L13.5 6.5V13H9.5V9.5H5.5V13H1.5V6.5Z"
+              ></path>
+            </svg>
+            Home
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'dashboard_analytics.html'"
+          >
+            <svg viewBox="0 0 15 15" fill="currentColor">
+              <rect x="1" y="1" width="5" height="5" rx="1"></rect>
+              <rect x="9" y="1" width="5" height="5" rx="1"></rect>
+              <rect x="1" y="9" width="5" height="5" rx="1"></rect>
+              <rect x="9" y="9" width="5" height="5" rx="1"></rect>
+            </svg>
+            Dashboard &amp; analytics
+          </div>
+          <div
+            class="ni on"
+            onclick="window.location.href = 'browse_campaigns.html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <rect x="1.5" y="2.5" width="12" height="10" rx="1.5"></rect>
+              <path d="M5 6h5M5 9h3"></path>
+            </svg>
+            Browse campaigns
+          </div>
+          <div
+            class="ni"
+            onclick="
+              window.location.href = 'Sponsee_ my_applications_deals.html'
+            "
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <circle cx="7.5" cy="7.5" r="5.5"></circle>
+              <path d="M7.5 4.5v3l2 1.5"></path>
+            </svg>
+            My applications &amp; deals
+          </div>
+          <div class="ni" onclick="window.location.href = 'messages.html'">
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <path d="M2 2h11v8H8l-3 2.5V10H2V2z"></path>
+            </svg>
+            Messages<span class="ni-badge">2</span>
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'ai_pitch_generator.html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <path d="M3 12l2-2 2 1 4-5"></path>
+              <circle
+                cx="11.5"
+                cy="3.5"
+                r="1.8"
+                fill="currentColor"
+                opacity="0.35"
+              ></circle>
+            </svg>
+            AI pitch generator
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'sponsee Profile.html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <circle cx="7.5" cy="5" r="2.5"></circle>
+              <path d="M2 13c0-3 2.5-4.5 5.5-4.5S13 10 13 13"></path>
+            </svg>
+            My profile
+          </div>
+        </nav>
+        <div class="sb-ps">
+          <div class="ps-row">
+            <span class="ps-lbl">Profile strength</span
+            ><span class="ps-pct">92%</span>
+          </div>
+          <div class="ps-track"><div class="ps-fill"></div></div>
+          <div class="ps-note">Add 1 portfolio sample to reach 100%</div>
+        </div>
+      </div>
+
+      <!-- ════ MAIN ════ -->
+      <div class="main">
+        <div class="topbar">
+          <div class="tb-t">Browse campaigns</div>
+          <div class="tb-r">
+            <div class="icon-btn" title="Notifications">
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 15 15"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.3"
+              >
+                <path
+                  d="M7.5 1.5A4 4 0 0111.5 5.5v2l1.5 2H2L3.5 7.5V5.5A4 4 0 017.5 1.5z"
+                />
+                <path d="M6 11.5a1.5 1.5 0 003 0" />
+              </svg>
+            </div>
+            <span class="badge-prem">Premium plan · Early access active</span>
+          </div>
+        </div>
+
+        <div class="page-body">
+          <!-- ── FILTER SIDEBAR ── -->
+          <div class="filter-col">
+            <div class="fc-hd">
+              <div class="fc-t">Filters</div>
+              <div class="fc-clear" onclick="clearAll()">Clear all</div>
+            </div>
+            <div class="filter-body">
+              <!-- Category -->
+              <div class="fs">
+                <div class="fs-t">Category</div>
+                <div
+                  class="cat-chip on"
+                  data-cat="health"
+                  onclick="toggleCat(this)"
+                >
+                  <div class="cat-chip-name">
+                    <div class="cat-ic" style="background: var(--grn-l)">
+                      🌿
+                    </div>
+                    Health &amp; wellness
+                  </div>
+                  <span class="cat-count">14</span>
+                </div>
+                <div class="cat-chip" data-cat="food" onclick="toggleCat(this)">
+                  <div class="cat-chip-name">
+                    <div class="cat-ic" style="background: var(--amb-l)">
+                      🍜
+                    </div>
+                    Food &amp; beverage
+                  </div>
+                  <span class="cat-count">11</span>
+                </div>
+                <div
+                  class="cat-chip"
+                  data-cat="fashion"
+                  onclick="toggleCat(this)"
+                >
+                  <div class="cat-chip-name">
+                    <div class="cat-ic" style="background: var(--pur-l)">
+                      👗
+                    </div>
+                    Fashion &amp; beauty
+                  </div>
+                  <span class="cat-count">9</span>
+                </div>
+                <div class="cat-chip" data-cat="tech" onclick="toggleCat(this)">
+                  <div class="cat-chip-name">
+                    <div class="cat-ic" style="background: var(--blu-l)">
+                      💻
+                    </div>
+                    Technology
+                  </div>
+                  <span class="cat-count">7</span>
+                </div>
+                <div class="cat-chip" data-cat="edu" onclick="toggleCat(this)">
+                  <div class="cat-chip-name">
+                    <div class="cat-ic" style="background: var(--teal-l)">
+                      📚
+                    </div>
+                    Education
+                  </div>
+                  <span class="cat-count">6</span>
+                </div>
+                <div
+                  class="cat-chip"
+                  data-cat="sports"
+                  onclick="toggleCat(this)"
+                >
+                  <div class="cat-chip-name">
+                    <div class="cat-ic" style="background: var(--red-l)">
+                      ⚽
+                    </div>
+                    Sports &amp; fitness
+                  </div>
+                  <span class="cat-count">8</span>
+                </div>
+                <div
+                  class="cat-chip"
+                  data-cat="travel"
+                  onclick="toggleCat(this)"
+                >
+                  <div class="cat-chip-name">
+                    <div class="cat-ic" style="background: var(--ora-l)">
+                      ✈️
+                    </div>
+                    Travel &amp; lifestyle
+                  </div>
+                  <span class="cat-count">5</span>
+                </div>
+                <div
+                  class="cat-chip"
+                  data-cat="social"
+                  onclick="toggleCat(this)"
+                >
+                  <div class="cat-chip-name">
+                    <div class="cat-ic" style="background: var(--srf2)">🤝</div>
+                    Social causes
+                  </div>
+                  <span class="cat-count">4</span>
+                </div>
+              </div>
+
+              <!-- Budget slider -->
+              <div class="fs">
+                <div class="fs-t">Minimum budget</div>
+                <div class="slider-wrap">
+                  <div class="slider-lbl">
+                    <span class="sl-name">Min payout</span>
+                    <span class="sl-val" id="slider-val">৳5,000</span>
+                  </div>
+                  <input
+                    type="range"
+                    id="budget-slider"
+                    min="0"
+                    max="60000"
+                    step="1000"
+                    value="5000"
+                    oninput="updateSlider(this)"
+                  />
+                  <div class="slider-range-lbl">
+                    <span class="srl">৳0</span><span class="srl">৳60,000</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Platform -->
+              <div class="fs">
+                <div class="fs-t">Platform</div>
+                <div class="plat-chips">
+                  <div
+                    class="plat-chip on"
+                    data-plat="instagram"
+                    onclick="togglePlat(this)"
+                  >
+                    Instagram
+                  </div>
+                  <div
+                    class="plat-chip"
+                    data-plat="tiktok"
+                    onclick="togglePlat(this)"
+                  >
+                    TikTok
+                  </div>
+                  <div
+                    class="plat-chip"
+                    data-plat="youtube"
+                    onclick="togglePlat(this)"
+                  >
+                    YouTube
+                  </div>
+                  <div
+                    class="plat-chip"
+                    data-plat="facebook"
+                    onclick="togglePlat(this)"
+                  >
+                    Facebook
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sort -->
+              <div class="fs" style="border-bottom: none">
+                <div class="fs-t">Sort by</div>
+                <select
+                  class="sort-select"
+                  id="sort-sel"
+                  onchange="renderCampaigns()"
+                >
+                  <option value="match">Best match first</option>
+                  <option value="recent">Most recent</option>
+                  <option value="budget">Highest budget</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── CAMPAIGN FEED ── -->
+          <div class="campaign-col">
+            <div class="results-bar">
+              <div class="rb-count">
+                Showing <span id="result-count">0</span> campaigns
+              </div>
+              <div class="early-note">
+                <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+                  <path
+                    d="M6 1L7.5 4.5H11L8.5 6.5L9.5 9.5L6 7.5L2.5 9.5L3.5 6.5L1 4.5H4.5Z"
+                    fill="#EF9F27"
+                    opacity=".7"
+                  />
+                </svg>
+                <span id="early-note-text"
+                  >2 early access campaigns · Premium only · 19 hrs left</span
+                >
+              </div>
+            </div>
+            <div id="campaign-list"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ APPLY MODAL ═══ -->
+    <div class="modal-overlay" id="apply-modal" onclick="closeModal(event)">
+      <div class="modal" onclick="event.stopPropagation()">
+        <div class="modal-title" id="modal-brand">Apply to campaign</div>
+        <div class="modal-sub" id="modal-sub">
+          Write a short note to introduce yourself to the sponsor
+        </div>
+
+        <div class="score-preview" id="modal-score-wrap">
+          <div>
+            <div class="sp-val" id="modal-score-val">91</div>
+          </div>
+          <div>
+            <div class="sp-lbl" id="modal-score-lbl">Strong match</div>
+            <div class="sp-sub" id="modal-score-sub">
+              Your niche, audience, and budget align with this campaign
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-info-row">
+          <svg
+            viewBox="0 0 13 13"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.2"
+          >
+            <rect x="1.5" y="2" width="10" height="9" rx="1" />
+            <path d="M4.5 2V1M8.5 2V1M1.5 5.5h10" />
+          </svg>
+          <span id="modal-info-campaign">Campaign details loading...</span>
+        </div>
+
+        <div class="modal-sec">
+          <div class="modal-lbl">Your application note</div>
+          <textarea
+            class="modal-ta"
+            id="modal-note"
+            maxlength="300"
+            placeholder="e.g. I create health and wellness content for 52K followers across Instagram and TikTok. My audience is 72% female aged 18-34 in Dhaka — exactly your target demographic. I'd love to bring this campaign to life authentically."
+            oninput="updateCharCount()"
+          ></textarea>
+          <div class="char-count" id="char-count">0 / 300</div>
+        </div>
+
+        <div
+          class="modal-sec"
+          style="
+            background: var(--srf2);
+            border-radius: var(--r2);
+            padding: 10px 13px;
+          "
+        >
+          <div
+            style="
+              font-size: 11px;
+              color: var(--tx3);
+              margin-bottom: 6px;
+              font-weight: 600;
+              text-transform: uppercase;
+              letter-spacing: 0.05em;
+            "
+          >
+            Included with your application
+          </div>
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              gap: 6px;
+              font-size: 12px;
+              color: var(--tx2);
+              margin-bottom: 4px;
+            "
+          >
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path
+                d="M2 6l2.5 2.5L10 3"
+                stroke="#3B6D11"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+            Your verified profile · 52,400 followers · 4.8% engagement
+          </div>
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              gap: 6px;
+              font-size: 12px;
+              color: var(--tx2);
+              margin-bottom: 4px;
+            "
+          >
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path
+                d="M2 6l2.5 2.5L10 3"
+                stroke="#3B6D11"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+            7 completed deals · avg 4.8 star rating
+          </div>
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              gap: 6px;
+              font-size: 12px;
+              color: var(--tx2);
+            "
+          >
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path
+                d="M2 6l2.5 2.5L10 3"
+                stroke="#3B6D11"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+            All 5 verification badges · Identity, Handle, Analytics, Deals,
+            Rating
+          </div>
+        </div>
+
+        <div class="modal-foot">
+          <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+          <button class="modal-send" onclick="submitApplication()">
+            Send application
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUCCESS TOAST -->
+    <div class="toast" id="toast">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path
+          d="M2 7l3 3 7-7"
+          stroke="white"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      <span id="toast-msg">Application sent!</span>
+    </div>
+
+    <script>
+      // ── Campaign data ──
+      const fallbackCampaigns = [
+        {
+          id: "c1",
+          brand: "GreenFresh BD",
+          brandInitials: "GF",
+          brandBg: "var(--grn-l)",
+          brandColor: "var(--grn-3)",
+          title: "National Health Week Campaign 2025",
+          cat: "health",
+          catLabel: "Health & wellness",
+          platforms: ["instagram", "youtube"],
+          platLabels: ["Instagram", "YouTube"],
+          budget: 20000,
+          budgetMax: 40000,
+          location: "Nationwide",
+          followers: "20K–100K",
+          posted: "Mar 18, 2025",
+          closes: "Apr 5, 2025",
+          applications: 34,
+          days: 15,
+          compat: "strong",
+          compatScore: 91,
+          early: true,
+          desc: "Looking for a health & wellness creator to produce 2 reels and 3 stories around our National Health Week initiative. Content should feel authentic and educational.",
+        },
+        {
+          id: "c2",
+          brand: "NutriLife Bangladesh",
+          brandInitials: "NL",
+          brandBg: "var(--blu-l)",
+          brandColor: "var(--blu-t)",
+          title: "Ramadan Wellness Series",
+          cat: "health",
+          catLabel: "Health & wellness",
+          platforms: ["instagram"],
+          platLabels: ["Instagram"],
+          budget: 15000,
+          budgetMax: 25000,
+          location: "Dhaka · Chittagong",
+          followers: "10K–60K",
+          posted: "Mar 16, 2025",
+          closes: "Mar 28, 2025",
+          applications: 19,
+          days: 7,
+          compat: "strong",
+          compatScore: 84,
+          early: true,
+          desc: "Ramadan-themed wellness content featuring our nutrition range. 2 posts across 3 weeks. Bangla-language content preferred. Female-skewed audience a plus.",
+        },
+        {
+          id: "c3",
+          brand: "OrganicBD",
+          brandInitials: "OB",
+          brandBg: "var(--teal-l)",
+          brandColor: "var(--grn-d)",
+          title: "Organic Superfoods Launch",
+          cat: "health",
+          catLabel: "Health & wellness",
+          platforms: ["instagram", "tiktok"],
+          platLabels: ["Instagram", "TikTok"],
+          budget: 12000,
+          budgetMax: 22000,
+          location: "Nationwide",
+          followers: "5K–80K",
+          posted: "Mar 14, 2025",
+          closes: "Mar 30, 2025",
+          applications: 41,
+          days: 9,
+          compat: "strong",
+          compatScore: 88,
+          early: false,
+          desc: "Launching our new organic superfoods range and need authentic health creators to showcase the products in everyday meals and routines.",
+        },
+        {
+          id: "c4",
+          brand: "FitZone BD",
+          brandInitials: "FZ",
+          brandBg: "var(--red-l)",
+          brandColor: "var(--red)",
+          title: "Gym Launch — Dhaka Central",
+          cat: "sports",
+          catLabel: "Sports & fitness",
+          platforms: ["instagram", "tiktok"],
+          platLabels: ["Instagram", "TikTok"],
+          budget: 8000,
+          budgetMax: 14000,
+          location: "Dhaka",
+          followers: "5K–50K",
+          posted: "Mar 13, 2025",
+          closes: "Mar 25, 2025",
+          applications: 22,
+          days: 4,
+          compat: "good",
+          compatScore: 74,
+          early: false,
+          desc: "Fitness creator needed for our new Dhaka Central gym launch. Show your workout, bring your audience. 1 reel and story series over launch week.",
+        },
+        {
+          id: "c5",
+          brand: "PureSkin BD",
+          brandInitials: "PS",
+          brandBg: "var(--pur-l)",
+          brandColor: "var(--pur-t)",
+          title: "New Skincare Range — Women 18–34",
+          cat: "fashion",
+          catLabel: "Fashion & beauty",
+          platforms: ["instagram", "tiktok"],
+          platLabels: ["Instagram", "TikTok"],
+          budget: 18000,
+          budgetMax: 32000,
+          location: "Dhaka",
+          followers: "10K–80K",
+          posted: "Mar 20, 2025",
+          closes: "Apr 10, 2025",
+          applications: 17,
+          days: 20,
+          compat: "good",
+          compatScore: 71,
+          early: false,
+          desc: "Female skincare creators needed for our new moisturiser and serum range. Content should feel honest and personal — we want real skin stories not ads.",
+        },
+        {
+          id: "c6",
+          brand: "Tasty Bites BD",
+          brandInitials: "TB",
+          brandBg: "var(--amb-l)",
+          brandColor: "var(--amb-d)",
+          title: "Eid Special Menu Launch",
+          cat: "food",
+          catLabel: "Food & beverage",
+          platforms: ["tiktok"],
+          platLabels: ["TikTok"],
+          budget: 10000,
+          budgetMax: 20000,
+          location: "Dhaka",
+          followers: "5K–60K",
+          posted: "Mar 15, 2025",
+          closes: "Mar 28, 2025",
+          applications: 28,
+          days: 7,
+          compat: "moderate",
+          compatScore: 58,
+          early: false,
+          desc: "Eid food content for our new seasonal menu. Looking for vibrant and celebratory content. Bangla language preferred. Food creator or lifestyle creator with food audience welcome.",
+        },
+        {
+          id: "c7",
+          brand: "EduTech BD",
+          brandInitials: "ET",
+          brandBg: "var(--teal-l)",
+          brandColor: "#0F6E56",
+          title: "Online Learning Platform Launch",
+          cat: "edu",
+          catLabel: "Education",
+          platforms: ["facebook", "youtube"],
+          platLabels: ["Facebook", "YouTube"],
+          budget: 14000,
+          budgetMax: 26000,
+          location: "Nationwide",
+          followers: "10K–100K",
+          posted: "Mar 17, 2025",
+          closes: "Apr 2, 2025",
+          applications: 12,
+          days: 12,
+          compat: "moderate",
+          compatScore: 52,
+          early: false,
+          desc: "Promote our new Bangla-language online learning platform. Ideal for creators with an audience interested in career development and upskilling.",
+        },
+        {
+          id: "c8",
+          brand: "StyleBox BD",
+          brandInitials: "SB",
+          brandBg: "var(--pur-l)",
+          brandColor: "var(--pur-t)",
+          title: "Summer Collection — Sustainable Fashion",
+          cat: "fashion",
+          catLabel: "Fashion & beauty",
+          platforms: ["instagram", "tiktok"],
+          platLabels: ["Instagram", "TikTok"],
+          budget: 20000,
+          budgetMax: 38000,
+          location: "Nationwide",
+          followers: "20K–120K",
+          posted: "Mar 19, 2025",
+          closes: "Apr 8, 2025",
+          applications: 31,
+          days: 18,
+          compat: "good",
+          compatScore: 66,
+          early: false,
+          desc: "Our summer sustainable fashion collection needs creators who care about conscious style. 2 posts across platforms. Engaged female audience preferred.",
+        },
+        {
+          id: "c9",
+          brand: "HealthPlus BD",
+          brandInitials: "HP",
+          brandBg: "var(--grn-l)",
+          brandColor: "var(--grn-3)",
+          title: "Supplement Awareness Campaign",
+          cat: "health",
+          catLabel: "Health & wellness",
+          platforms: ["instagram"],
+          platLabels: ["Instagram"],
+          budget: 16000,
+          budgetMax: 28000,
+          location: "Dhaka · Chittagong · Sylhet",
+          followers: "10K–70K",
+          posted: "Mar 10, 2025",
+          closes: "Mar 25, 2025",
+          applications: 38,
+          days: 4,
+          compat: "strong",
+          compatScore: 86,
+          early: false,
+          desc: "Share your honest supplement journey with our range. No scripts — just your real experience. Health and wellness creators with female-dominated audiences prioritised.",
+        },
+        {
+          id: "c10",
+          brand: "TravelBD",
+          brandInitials: "TB",
+          brandBg: "var(--ora-l)",
+          brandColor: "var(--ora-t)",
+          title: "Hidden Gems of Bangladesh",
+          cat: "travel",
+          catLabel: "Travel & lifestyle",
+          platforms: ["instagram", "youtube"],
+          platLabels: ["Instagram", "YouTube"],
+          budget: 22000,
+          budgetMax: 45000,
+          location: "Nationwide",
+          followers: "15K–100K",
+          posted: "Mar 21, 2025",
+          closes: "Apr 15, 2025",
+          applications: 9,
+          days: 25,
+          compat: "moderate",
+          compatScore: 49,
+          early: false,
+          desc: "Discover and showcase lesser-known destinations across Bangladesh. We cover travel and accommodation costs. Long-form travel content preferred.",
+        },
+      ];
+
+      const CATEGORY_LABELS = {
+        health: "Health & wellness",
+        food: "Food & beverage",
+        fashion: "Fashion & beauty",
+        tech: "Technology",
+        edu: "Education",
+        sports: "Sports & fitness",
+        travel: "Travel & lifestyle",
+        social: "Social causes",
+      };
+      const PLATFORM_LABELS = {
+        instagram: "Instagram",
+        tiktok: "TikTok",
+        youtube: "YouTube",
+        facebook: "Facebook",
+      };
+      const STORAGE_KEYS = {
+        saved: "sponzobd.campaigns.saved",
+        applied: "sponzobd.campaigns.applied",
+      };
+
+      const fallbackCampaignMap = new Map(
+        fallbackCampaigns.map((campaign) => [campaign.id, campaign]),
+      );
+      const fallbackBrandMap = new Map(
+        fallbackCampaigns.map((campaign) => [
+          campaign.brand.toLowerCase(),
+          campaign,
+        ]),
+      );
+
+      let campaigns = fallbackCampaigns.map((campaign, index) =>
+        normalizeCampaign(campaign, index),
+      );
+      let activeCats = new Set(["health"]);
+      let activePlats = new Set(["instagram"]);
+      let minBudget = 5000;
+      let savedCampaigns = loadIdSet(STORAGE_KEYS.saved);
+      let appliedCampaigns = loadIdSet(STORAGE_KEYS.applied);
+      let currentModalId = null;
+      let currentPhone = "demo-user";
+      let profileSnapshot = null;
+      let loadSequence = 0;
+
+      function loadIdSet(key) {
+        try {
+          return new Set(JSON.parse(localStorage.getItem(key) || "[]"));
+        } catch (_err) {
+          return new Set();
+        }
+      }
+
+      function persistIdSet(key, values) {
+        try {
+          localStorage.setItem(key, JSON.stringify([...values]));
+        } catch (_err) {
+          // Ignore storage failures.
+        }
+      }
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/\"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function capitalize(value) {
+        const text = String(value || "").trim();
+        if (!text) return "";
+        return text.charAt(0).toUpperCase() + text.slice(1);
+      }
+
+      function normalizeCategory(value, fallbackText = "") {
+        const raw = String(value || fallbackText || "").toLowerCase();
+        if (raw.includes("food")) return "food";
+        if (
+          raw.includes("fashion") ||
+          raw.includes("beauty") ||
+          raw.includes("skincare")
+        )
+          return "fashion";
+        if (
+          raw.includes("tech") ||
+          raw.includes("app") ||
+          raw.includes("learning") ||
+          raw.includes("edu")
+        )
+          return "edu";
+        if (raw.includes("sport") || raw.includes("fitness")) return "sports";
+        if (raw.includes("travel") || raw.includes("lifestyle"))
+          return "travel";
+        if (
+          raw.includes("social") ||
+          raw.includes("cause") ||
+          raw.includes("charity")
+        )
+          return "social";
+        return "health";
+      }
+
+      function normalizePlatforms(value, fallbackPlatforms = []) {
+        const raw = Array.isArray(value)
+          ? value
+          : String(value || "")
+              .split(/[,·|]/)
+              .map((item) => item.trim())
+              .filter(Boolean);
+        const platforms = raw.length ? raw : fallbackPlatforms;
+        return platforms
+          .map((item) =>
+            String(item || "")
+              .toLowerCase()
+              .trim(),
+          )
+          .map((item) => {
+            if (item.includes("insta")) return "instagram";
+            if (item.includes("tik")) return "tiktok";
+            if (item.includes("you")) return "youtube";
+            if (item.includes("face")) return "facebook";
+            return item;
+          })
+          .filter(Boolean);
+      }
+
+      function parseBudgetValue(value, pick = "min", fallbackValue = 0) {
+        if (typeof value === "number" && Number.isFinite(value)) {
+          return Math.max(0, Math.round(value));
+        }
+
+        const numbers = String(value || "")
+          .match(/\d+/g)
+          ?.map((item) => Number(item))
+          .filter((item) => Number.isFinite(item));
+
+        if (!numbers || numbers.length === 0) {
+          return Math.max(0, Math.round(Number(fallbackValue) || 0));
+        }
+
+        if (numbers.length === 1) {
+          return numbers[0];
+        }
+
+        return pick === "max" ? Math.max(...numbers) : Math.min(...numbers);
+      }
+
+      function formatBudgetRange(min, max) {
+        return `৳${Number(min || 0).toLocaleString()}–৳${Number(max || 0).toLocaleString()}`;
+      }
+
+      function toTimestamp(value, fallbackIndex = 0) {
+        const parsed = Date.parse(value || "");
+        if (Number.isFinite(parsed)) return parsed;
+        return Date.now() - (fallbackIndex + 1) * 86400000;
+      }
+
+      function scoreToCompatibility(score) {
+        if (score >= 80) return "strong";
+        if (score >= 65) return "good";
+        if (score >= 50) return "moderate";
+        return "low";
+      }
+
+      function buildInitials(text) {
+        return (
+          String(text || "")
+            .split(/\s+/)
+            .filter(Boolean)
+            .slice(0, 2)
+            .map((part) => part[0].toUpperCase())
+            .join("") || "CP"
+        );
+      }
+
+      function normalizeCampaign(raw, index = 0) {
+        const fallback =
+          fallbackCampaignMap.get(raw?.id) ||
+          fallbackBrandMap.get(String(raw?.brand || "").toLowerCase()) ||
+          fallbackCampaigns[index] ||
+          {};
+        const merged = { ...fallback, ...raw };
+        const brand = String(merged.brand || "Campaign").trim();
+        const title = String(merged.title || brand).trim();
+        const category = normalizeCategory(
+          merged.cat || merged.category || title || brand,
+          fallback.catLabel || fallback.category || "",
+        );
+        const platforms = normalizePlatforms(
+          merged.platforms || merged.channels,
+          fallback.platforms || [],
+        );
+        const platLabels = platforms.map(
+          (platform) => PLATFORM_LABELS[platform] || capitalize(platform),
+        );
+        const budgetMin = parseBudgetValue(
+          merged.budgetMin ?? merged.budget ?? fallback.budget ?? 0,
+          "min",
+          fallback.budget || 0,
+        );
+        const budgetMax = parseBudgetValue(
+          merged.budgetMax ?? merged.budget ?? fallback.budgetMax ?? budgetMin,
+          "max",
+          fallback.budgetMax || budgetMin,
+        );
+        const compatScore =
+          Number(merged.compatScore ?? fallback.compatScore ?? 0) || 0;
+        const score =
+          compatScore ||
+          Math.max(
+            48,
+            Math.min(92, 55 + Math.round((budgetMax - budgetMin) / 2000)),
+          );
+        return {
+          ...merged,
+          id: String(merged.id || `campaign-${index}`),
+          brand,
+          brandInitials: String(
+            merged.brandInitials ||
+              fallback.brandInitials ||
+              buildInitials(brand),
+          ),
+          brandBg: merged.brandBg || fallback.brandBg || "var(--srf2)",
+          brandColor: merged.brandColor || fallback.brandColor || "var(--tx2)",
+          title,
+          cat: category,
+          catLabel:
+            CATEGORY_LABELS[category] ||
+            merged.catLabel ||
+            fallback.catLabel ||
+            category,
+          platforms,
+          platLabels,
+          budget: budgetMin,
+          budgetMax,
+          location: String(
+            merged.location || fallback.location || "Nationwide",
+          ),
+          followers: String(
+            merged.followers || fallback.followers || "10K–100K",
+          ),
+          posted: String(merged.posted || fallback.posted || "Mar 2025"),
+          closes: String(merged.closes || fallback.closes || "Apr 2025"),
+          applications:
+            Number(merged.applications ?? fallback.applications ?? 0) || 0,
+          days: Number(merged.days ?? fallback.days ?? 0) || 0,
+          compat:
+            merged.compat || fallback.compat || scoreToCompatibility(score),
+          compatScore: score,
+          early: Boolean(merged.early ?? fallback.early ?? false),
+          desc: String(
+            merged.desc || fallback.desc || merged.description || "",
+          ),
+          postedAtMs: toTimestamp(merged.postedAt || merged.posted, index),
+        };
+      }
+
+      function mergeCampaignSources(rawCampaigns) {
+        const merged = [];
+        const seen = new Set();
+        const pushUnique = (campaign) => {
+          const key = String(campaign?.id || campaign?.brand || "")
+            .trim()
+            .toLowerCase();
+          if (!key || seen.has(key)) return;
+          seen.add(key);
+          merged.push(campaign);
+        };
+
+        (Array.isArray(rawCampaigns) ? rawCampaigns : []).forEach(pushUnique);
+        fallbackCampaigns.forEach(pushUnique);
+        return merged;
+      }
+
+      function setCampaigns(rawCampaigns) {
+        campaigns = mergeCampaignSources(rawCampaigns).map((campaign, index) =>
+          normalizeCampaign(campaign, index),
+        );
+        updateCampaignSummary();
+        renderCampaigns();
+      }
+
+      function updateCampaignSummary() {
+        const totalByCategory = campaigns.reduce((acc, campaign) => {
+          acc[campaign.cat] = (acc[campaign.cat] || 0) + 1;
+          return acc;
+        }, {});
+
+        document.querySelectorAll(".cat-chip[data-cat]").forEach((chip) => {
+          const countEl = chip.querySelector(".cat-count");
+          if (countEl) {
+            countEl.textContent = String(
+              totalByCategory[chip.dataset.cat] || 0,
+            );
+          }
+        });
+
+        const earlyCount = campaigns.filter(
+          (campaign) => campaign.early,
+        ).length;
+        const earlyDays = campaigns
+          .filter((campaign) => campaign.early)
+          .map((campaign) => Number(campaign.days) || 0)
+          .filter((value) => value > 0);
+        const minDays = earlyDays.length ? Math.min(...earlyDays) : 0;
+        const earlyNote = document.getElementById("early-note-text");
+        if (earlyNote) {
+          earlyNote.textContent = earlyCount
+            ? `${earlyCount} early access campaigns · Premium only · ${
+                minDays <= 1
+                  ? Math.max(minDays * 24, 1) + " hrs left"
+                  : minDays + " days left"
+              }`
+            : "No early access campaigns available right now";
+        }
+      }
+
+      function buildApplicationPlaceholder(campaign) {
+        const user = profileSnapshot?.user || {};
+        const followerText = user.followers || user.profile?.followers || "52K";
+        const category = user.category || "creator";
+        const primaryPlatform =
+          user.platform || user.platformPreference || "Instagram";
+        return `I create ${category.toLowerCase()} content for ${followerText} followers across ${primaryPlatform}. My audience and style align well with ${campaign.brand}, and I would love to collaborate on ${campaign.title.toLowerCase()}.`;
+      }
+
+      function updateModalContext(campaign) {
+        const info = document.getElementById("modal-info-campaign");
+        if (info) {
+          info.textContent = `${campaign.platLabels.join(", ")} · ${campaign.location} · Budget ${campaign.budgetLabel} · Closes ${campaign.closes}`;
+        }
+
+        const note = document.getElementById("modal-note");
+        if (note) {
+          note.placeholder = buildApplicationPlaceholder(campaign);
+        }
+
+        const user = profileSnapshot?.user || {};
+        const stats = profileSnapshot?.stats || {};
+        const counts = profileSnapshot?.counts || {};
+      }
+
+      async function bootstrapCampaigns(phone) {
+        const resolvedPhone =
+          String(phone || "demo-user").trim() || "demo-user";
+        currentPhone = resolvedPhone;
+        const loadId = ++loadSequence;
+        try {
+          const response = await fetch(
+            `/api/sponsee/campaigns/${encodeURIComponent(resolvedPhone)}`,
+          );
+          if (!response.ok) {
+            throw new Error("Failed to load campaigns");
+          }
+          const payload = await response.json();
+          if (loadId !== loadSequence) return;
+          setCampaigns(payload?.campaigns || fallbackCampaigns);
+        } catch (_err) {
+          if (loadId !== loadSequence) return;
+          setCampaigns(fallbackCampaigns);
+        }
+      }
+
+      document.addEventListener("sponsee:context", (event) => {
+        const phone =
+          event?.detail?.currentPhone ||
+          window.SponseeDynamic?.getCurrentPhone?.() ||
+          "demo-user";
+        bootstrapCampaigns(phone);
+      });
+
+      document.addEventListener("sponsee:snapshot", (event) => {
+        profileSnapshot = event?.detail?.snapshot || profileSnapshot;
+        if (
+          Array.isArray(profileSnapshot?.campaigns) &&
+          profileSnapshot.campaigns.length
+        ) {
+          setCampaigns(profileSnapshot.campaigns);
+        }
+        if (currentModalId) {
+          const activeCampaign = campaigns.find(
+            (campaign) => campaign.id === currentModalId,
+          );
+          if (activeCampaign) {
+            updateModalContext(activeCampaign);
+          }
+        }
+      });
+
+      function bootstrapPage() {
+        const phone = window.SponseeDynamic?.getCurrentPhone?.() || "demo-user";
+        bootstrapCampaigns(phone);
+      }
+
+      function updateSlider(el) {
+        minBudget = parseInt(el.value);
+        const formatted =
+          minBudget === 0 ? "Any" : "৳" + minBudget.toLocaleString();
+        document.getElementById("slider-val").textContent = formatted;
+        renderCampaigns();
+      }
+
+      function toggleCat(el) {
+        const cat = el.dataset.cat;
+        if (activeCats.has(cat)) {
+          activeCats.delete(cat);
+          el.classList.remove("on");
+        } else {
+          activeCats.add(cat);
+          el.classList.add("on");
+        }
+        renderCampaigns();
+      }
+
+      function togglePlat(el) {
+        const plat = el.dataset.plat;
+        if (activePlats.has(plat)) {
+          activePlats.delete(plat);
+          el.classList.remove("on");
+        } else {
+          activePlats.add(plat);
+          el.classList.add("on");
+        }
+        renderCampaigns();
+      }
+
+      function clearAll() {
+        activeCats = new Set();
+        activePlats = new Set();
+        minBudget = 0;
+        document
+          .querySelectorAll(".cat-chip.on")
+          .forEach((c) => c.classList.remove("on"));
+        document
+          .querySelectorAll(".plat-chip.on")
+          .forEach((c) => c.classList.remove("on"));
+        document.getElementById("budget-slider").value = 0;
+        document.getElementById("slider-val").textContent = "Any";
+        renderCampaigns();
+      }
+
+      function getFiltered() {
+        return campaigns.filter((c) => {
+          if (activeCats.size > 0 && !activeCats.has(c.cat)) return false;
+          if (
+            activePlats.size > 0 &&
+            !c.platforms.some((p) => activePlats.has(p))
+          )
+            return false;
+          if (c.budgetMax < minBudget) return false;
+          return true;
+        });
+      }
+
+      function renderCampaigns() {
+        const sort = document.getElementById("sort-sel").value;
+        let list = getFiltered();
+        if (sort === "match")
+          list.sort((a, b) => b.compatScore - a.compatScore);
+        else if (sort === "recent")
+          list.sort((a, b) => (b.postedAtMs || 0) - (a.postedAtMs || 0));
+        else if (sort === "budget")
+          list.sort((a, b) => b.budgetMax - a.budgetMax);
+
+        // always put early access first
+        if (sort === "match")
+          list.sort((a, b) => (b.early ? 1 : 0) - (a.early ? 1 : 0));
+
+        document.getElementById("result-count").textContent = list.length;
+        updateCampaignSummary();
+        const el = document.getElementById("campaign-list");
+
+        if (list.length === 0) {
+          el.innerHTML = `<div class="empty">
+      <div class="empty-ic"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" opacity=".4"><circle cx="10" cy="10" r="7"/><path d="M10 7v3M10 12.5v.5"/></svg></div>
+      <div class="empty-t">No campaigns match your filters</div>
+      <div class="empty-s">Try removing a category or platform filter,<br>or lower the minimum budget.</div>
+    </div>`;
+          return;
+        }
+
+        el.innerHTML = list
+          .map((c) => {
+            const isApplied = appliedCampaigns.has(c.id);
+            const isSaved = savedCampaigns.has(c.id);
+            const compatClass = {
+              strong: "cb-strong",
+              good: "cb-good",
+              moderate: "cb-moderate",
+              low: "cb-low",
+            }[c.compat];
+            const compatLabel = {
+              strong: "Strong match",
+              good: "Good match",
+              moderate: "Moderate match",
+              low: "Low match",
+            }[c.compat];
+            return `
+    <div class="cc ${c.early ? "early" : ""}" id="card-${c.id}">
+      <div class="cc-top">
+        <div class="cc-logo" style="background:${c.brandBg};color:${c.brandColor};">${c.brandInitials}</div>
+        <div class="cc-body">
+          <div class="cc-hd">
+            <div>
+              <div class="cc-brand">${escapeHtml(c.brand)}${c.early ? ' <span style="font-size:10px;padding:1px 7px;border-radius:20px;background:var(--amb-l);color:var(--amb-t);font-weight:700;margin-left:4px;">Early access</span>' : ""}</div>
+              <div class="cc-title">${escapeHtml(c.title)}</div>
+            </div>
+            <div class="cc-right">
+              <div class="cc-budget">${escapeHtml(c.budgetLabel)}</div>
+              <div class="cc-budget-lbl">Campaign budget</div>
+            </div>
+          </div>
+          <div class="cc-pills">
+            <span class="pill p-cat">${escapeHtml(c.catLabel)}</span>
+            ${c.platLabels.map((p) => `<span class="pill p-plat">${escapeHtml(p)}</span>`).join("")}
+            <span class="pill p-loc">${escapeHtml(c.location)}</span>
+            <span class="pill p-fol">${escapeHtml(c.followers)} followers</span>
+            ${c.early ? '<span class="pill p-early">⚡ Premium early access</span>' : ""}
+            ${c.days <= 5 ? '<span class="pill p-hot">🔥 Closing soon</span>' : ""}
+          </div>
+          <div class="cc-meta">
+            <div class="cm"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="1.5" y="2" width="9" height="8" rx="1"/><path d="M4 2V1M8 2V1M1.5 5h9"/></svg>Posted ${escapeHtml(c.posted)}</div>
+            <div class="cm"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="6" cy="6" r="4.5"/><path d="M6 3.5v2.5l1.5 1"/></svg>Closes ${escapeHtml(c.closes)} · ${Number(c.days) || 0} days left</div>
+            <div class="cm"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M2 9l2-2 2 1 4-5"/></svg>${Number(c.applications) || 0} applications received</div>
+          </div>
+        </div>
+      </div>
+      <div class="cc-bottom">
+        <div class="cb-left">
+          <div class="compat-wrap">
+            <span class="compat-lbl">Your match</span>
+            <span class="compat-badge ${compatClass}">${compatLabel} · ${Number(c.compatScore) || 0}</span>
+          </div>
+          <div class="apps-note"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".45"><path d="M2 9c0-2 1.5-3 4-3s4 1 4 3"/><circle cx="6" cy="4" r="2"/></svg>${Number(c.applications) || 0} applied</div>
+        </div>
+        <div class="cc-actions">
+          <button class="btn-save ${isSaved ? "saved" : ""}" id="save-${c.id}" onclick="toggleSave(${JSON.stringify(c.id)})">
+            ${
+              isSaved
+                ? '<svg width="12" height="12" viewBox="0 0 12 12" fill="#EF9F27"><path d="M6 1l1.5 3.5H11L8.3 6.5l1 3L6 7.5 2.7 9.5l1-3L1 4.5h3.5Z"/></svg> Saved'
+                : '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M6 1l1.5 3.5H11L8.3 6.5l1 3L6 7.5 2.7 9.5l1-3L1 4.5h3.5Z"/></svg> Save'
+            }
+          </button>
+          ${
+            isApplied
+              ? '<span style="font-size:12px;color:var(--grn-3);font-weight:700;display:flex;align-items:center;gap:4px;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L10 3" stroke="#3B6D11" stroke-width="1.8" stroke-linecap="round"/></svg> Applied</span>'
+              : `<button class="btn-apply" onclick="openModal(${JSON.stringify(c.id)})">Apply now</button>`
+          }
+        </div>
+      </div>
+    </div>`;
+          })
+          .join("");
+      }
+
+      function toggleSave(id) {
+        if (savedCampaigns.has(id)) {
+          savedCampaigns.delete(id);
+          showToast("Campaign removed from saved");
+        } else {
+          savedCampaigns.add(id);
+          showToast("Campaign saved!");
+        }
+        persistIdSet(STORAGE_KEYS.saved, savedCampaigns);
+        renderCampaigns();
+      }
+
+      function openModal(id) {
+        currentModalId = id;
+        const c = campaigns.find((x) => x.id === id);
+        if (!c) return;
+        document.getElementById("modal-brand").textContent =
+          "Apply to " + c.brand;
+        document.getElementById("modal-sub").textContent = c.title;
+        document.getElementById("modal-score-val").textContent = c.compatScore;
+        document.getElementById("modal-score-lbl").textContent = {
+          strong: "Strong match",
+          good: "Good match",
+          moderate: "Moderate match",
+          low: "Low match",
+        }[c.compat];
+        document.getElementById("modal-score-sub").textContent =
+          c.compat === "strong"
+            ? "Your niche, audience, and budget align with this campaign"
+            : c.compat === "good"
+              ? "Good alignment with most campaign requirements"
+              : "Partial match — some areas differ from campaign requirements";
+        document.getElementById("modal-score-wrap").className = "score-preview";
+        const scoreEl = document.getElementById("modal-score-wrap");
+        if (c.compat === "strong")
+          scoreEl.style.cssText =
+            "display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:var(--r1);border:1px solid var(--grn-m);background:var(--grn-l);margin-bottom:14px;";
+        else if (c.compat === "good")
+          scoreEl.style.cssText =
+            "display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:var(--r1);border:1px solid var(--teal-m);background:var(--teal-l);margin-bottom:14px;";
+        else
+          scoreEl.style.cssText =
+            "display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:var(--r1);border:1px solid var(--amb-m);background:var(--amb-l);margin-bottom:14px;";
+        document.getElementById("modal-info-campaign").textContent =
+          c.platLabels.join(", ") +
+          " · " +
+          c.location +
+          " · Budget " +
+          c.budgetLabel +
+          " · Closes " +
+          c.closes;
+        document.getElementById("modal-note").value = "";
+        document.getElementById("modal-note").placeholder =
+          buildApplicationPlaceholder(c);
+        document.getElementById("char-count").textContent = "0 / 300";
+        document.getElementById("char-count").classList.remove("warn");
+        updateModalContext(c);
+        document.getElementById("apply-modal").classList.add("on");
+      }
+
+      function closeModal(e) {
+        if (!e || e.target === document.getElementById("apply-modal")) {
+          document.getElementById("apply-modal").classList.remove("on");
+          currentModalId = null;
+        }
+      }
+
+      function updateCharCount() {
+        const len = document.getElementById("modal-note").value.length;
+        const el = document.getElementById("char-count");
+        el.textContent = len + " / 300";
+        el.classList.toggle("warn", len > 260);
+      }
+
+      function submitApplication() {
+        const note = document.getElementById("modal-note").value.trim();
+        if (!note) {
+          document.getElementById("modal-note").focus();
+          document.getElementById("modal-note").style.borderColor =
+            "var(--red)";
+          setTimeout(
+            () =>
+              (document.getElementById("modal-note").style.borderColor = ""),
+            1500,
+          );
+          return;
+        }
+        if (currentModalId) {
+          appliedCampaigns.add(currentModalId);
+          const c = campaigns.find((x) => x.id === currentModalId);
+          persistIdSet(STORAGE_KEYS.applied, appliedCampaigns);
+          document.getElementById("apply-modal").classList.remove("on");
+          renderCampaigns();
+          showToast("Application sent to " + (c?.brand || "campaign") + "!");
+          currentModalId = null;
+        }
+      }
+
+      function showToast(msg) {
+        const t = document.getElementById("toast");
+        document.getElementById("toast-msg").textContent = msg;
+        t.classList.add("on");
+        setTimeout(() => t.classList.remove("on"), 3000);
+      }
+
+      // Init
+      bootstrapPage();
+    </script>
+    <script src="sponsee_dynamic.js"></script>
+  </body>
+</html>

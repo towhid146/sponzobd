@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SponzoBD — Live Deal Journey</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --red:#E24B4A;--red-l:#FCEBEB;--red-m:#F7C1C1;
+  --grn:#1D9E75;--grn-l:#EAF3DE;--grn-m:#C0DD97;--grn-d:#085041;--grn-3:#3B6D11;--grn-t:#27500A;
+  --teal-l:#E1F5EE;--teal-m:#9FE1CB;
+  --blu-l:#E6F1FB;--blu-m:#B5D4F4;--blu-t:#0C447C;
+  --amb-l:#FAEEDA;--amb-m:#FAC775;--amb-t:#633806;--amb-d:#854F0B;
+  --pur-l:#EEEDFE;--pur-t:#3C3489;
+  --bg:#F4F2EE;--srf:#FFFFFF;--srf2:#F0EEE9;
+  --bdr:rgba(0,0,0,.08);--bdr-m:rgba(0,0,0,.14);
+  --tx1:#1A1A1A;--tx2:#555;--tx3:#999;
+  --font:'DM Sans',system-ui,sans-serif;
+  --r1:7px;--r2:10px;--r3:14px;
+}
+html,body{height:100%;overflow:hidden;font-family:var(--font);font-size:14px;color:var(--tx1);background:var(--bg);}
+.app{display:flex;height:100vh;width:100vw;overflow:hidden;}
+
+/* ── LEFT PANEL — step navigator ── */
+.left{width:280px;flex-shrink:0;background:var(--srf);border-right:1px solid var(--bdr);display:flex;flex-direction:column;height:100vh;}
+.left-hd{padding:16px 18px 12px;border-bottom:1px solid var(--bdr);}
+.left-title{font-size:14px;font-weight:700;color:var(--tx1);margin-bottom:2px;}
+.left-sub{font-size:11px;color:var(--tx3);}
+.steps-wrap{flex:1;overflow-y:auto;padding:10px 0;}
+.step-item{display:flex;align-items:flex-start;gap:10px;padding:10px 18px;cursor:pointer;border-left:2.5px solid transparent;transition:background .1s;}
+.step-item:hover{background:var(--srf2);}
+.step-item.on{background:var(--srf2);border-left-color:var(--red);}
+.step-item.done{opacity:.75;}
+.step-item.done .s-dot{background:var(--grn-l);border-color:var(--grn-m);}
+.step-item.done .s-dot svg{display:block;}
+.s-dot{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--bdr-m);background:var(--srf);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.s-dot svg{display:none;width:10px;height:10px;}
+.s-dot.active{background:var(--blu-l);border-color:var(--blu-t);}
+.s-dot.active svg{display:block;}
+.s-info{}
+.s-num{font-size:10px;color:var(--tx3);margin-bottom:1px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
+.s-label{font-size:13px;font-weight:600;color:var(--tx1);margin-bottom:2px;}
+.s-who{font-size:11px;color:var(--tx3);}
+.s-who.sp{color:var(--blu-t);font-weight:600;}
+.s-who.cr{color:var(--grn-3);font-weight:600;}
+.s-who.pl{color:var(--pur-t);font-weight:600;}
+.s-who.both{color:var(--amb-d);font-weight:600;}
+.step-connector{width:1.5px;height:12px;background:var(--bdr-m);margin:0 auto;margin-left:27px;}
+.step-connector.done{background:var(--grn-m);}
+.left-legend{padding:12px 18px;border-top:1px solid var(--bdr);}
+.leg-title{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.leg-row{display:flex;align-items:center;gap:7px;margin-bottom:5px;font-size:11px;color:var(--tx2);}
+.leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+/* ── RIGHT PANEL — chat simulation ── */
+.right{flex:1;min-width:0;display:flex;flex-direction:column;height:100vh;}
+.right-hd{background:var(--srf);border-bottom:1px solid var(--bdr);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.rh-title{font-size:15px;font-weight:700;color:var(--tx1);}
+.rh-sub{font-size:11px;color:var(--tx3);margin-top:2px;}
+.step-badge{font-size:11px;padding:3px 11px;border-radius:20px;font-weight:700;}
+
+/* progress pipe */
+.pipe-bar{background:var(--srf);border-bottom:1px solid var(--bdr);padding:10px 20px;display:flex;align-items:flex-start;flex-shrink:0;}
+.ps{flex:1;display:flex;flex-direction:column;align-items:center;position:relative;}
+.ps:not(:last-child)::after{content:'';position:absolute;top:9px;left:50%;width:100%;height:2px;background:var(--srf2);z-index:0;}
+.ps.done:not(:last-child)::after{background:var(--grn-m);}
+.pd{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--bdr-m);background:var(--srf);display:flex;align-items:center;justify-content:center;position:relative;z-index:1;}
+.pd.done{background:var(--grn-l);border-color:var(--grn-m);}
+.pd.now{background:var(--blu-l);border-color:var(--blu-t);}
+.pl{font-size:9px;color:var(--tx3);margin-top:3px;text-align:center;line-height:1.3;max-width:52px;}
+.pl.done{color:var(--grn-3);}
+.pl.now{color:var(--blu-t);font-weight:700;}
+
+/* chat thread */
+.thread{flex:1;overflow-y:auto;padding:16px 20px 12px;display:flex;flex-direction:column;gap:12px;}
+
+/* system events */
+.sys-ev{background:var(--srf);border:1px solid var(--bdr);border-radius:var(--r2);padding:10px 15px;max-width:480px;margin:0 auto;text-align:center;}
+.se-step{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px;}
+.se-label{font-size:12px;font-weight:700;color:var(--tx1);margin-bottom:2px;}
+.se-detail{font-size:12px;color:var(--tx2);}
+.se-time{font-size:10px;color:var(--tx3);margin-top:3px;}
+.se-platform{border-color:var(--pur-l);background:var(--pur-l);}
+.se-platform .se-step{color:var(--pur-t);}
+.se-sponsor{border-color:var(--blu-m);background:var(--blu-l);}
+.se-sponsor .se-step{color:var(--blu-t);}
+.se-creator{border-color:var(--grn-m);background:var(--grn-l);}
+.se-creator .se-step{color:var(--grn-3);}
+.se-escrow{border-color:var(--amb-m);background:var(--amb-l);}
+.se-escrow .se-step{color:var(--amb-t);}
+.se-complete{border-color:var(--grn-m);background:var(--grn-l);}
+.se-complete .se-step{color:var(--grn-3);}
+
+/* messages */
+.msg-wrap{display:flex;gap:9px;align-items:flex-end;}
+.msg-wrap.sp{flex-direction:row-reverse;}
+.m-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;}
+.av-cr{background:var(--teal-m);color:var(--grn-d);}
+.av-sp{background:var(--blu-l);color:var(--blu-t);}
+.av-pl{background:var(--pur-l);color:var(--pur-t);}
+.bubble{max-width:62%;padding:9px 13px;border-radius:16px;font-size:13px;line-height:1.6;}
+.b-cr{background:var(--srf);border:1px solid var(--bdr);color:var(--tx1);border-bottom-left-radius:4px;}
+.b-sp{background:var(--blu-l);color:var(--blu-t);border-bottom-right-radius:4px;}
+.b-pl{background:var(--pur-l);color:var(--pur-t);border-bottom-right-radius:4px;font-size:12px;}
+.msg-t{font-size:10px;color:var(--tx3);margin-top:3px;}
+.msg-t.r{text-align:right;}
+
+/* cards */
+.terms-card{background:var(--srf);border:1px solid var(--grn-m);border-radius:var(--r3);padding:13px 15px;max-width:68%;}
+.tc-hd{font-size:12px;font-weight:700;color:var(--grn-3);margin-bottom:9px;display:flex;align-items:center;gap:5px;}
+.tc-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--bdr);font-size:12px;}
+.tc-row:last-of-type{border-bottom:none;}
+.tc-l{color:var(--tx2);}
+.tc-v{font-weight:700;color:var(--tx1);}
+.tc-badge{font-size:11px;padding:3px 9px;border-radius:20px;margin-top:9px;display:inline-flex;align-items:center;gap:4px;font-weight:700;}
+.tc-pend{background:var(--amb-l);color:var(--amb-t);}
+.tc-acc{background:var(--grn-l);color:var(--grn-3);}
+.tc-actions{display:flex;gap:7px;margin-top:10px;}
+
+.deal-record{background:var(--srf);border:2px solid var(--grn-m);border-radius:var(--r3);padding:14px 16px;max-width:72%;}
+.dr-hd{font-size:13px;font-weight:700;color:var(--grn-d);margin-bottom:11px;display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--bdr);padding-bottom:9px;}
+.dr-section{margin-bottom:10px;}
+.dr-sec-t{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;}
+.dr-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--bdr);font-size:12px;}
+.dr-row:last-child{border-bottom:none;}
+.dr-l{color:var(--tx2);}
+.dr-v{font-weight:700;color:var(--tx1);}
+.dr-v.grn{color:var(--grn-3);}
+.dr-v.red{color:var(--red);}
+.dr-sig{display:flex;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid var(--bdr-m);gap:10px;}
+.dr-sig-item{flex:1;background:var(--srf2);border-radius:var(--r1);padding:8px 10px;font-size:11px;}
+.dr-sig-name{font-weight:700;color:var(--tx1);margin-bottom:2px;}
+.dr-sig-time{color:var(--tx3);}
+.dr-sig-check{color:var(--grn-3);font-weight:700;font-size:10px;margin-top:3px;}
+
+.escrow-card{background:var(--amb-l);border:1px solid var(--amb-m);border-radius:var(--r3);padding:13px 15px;max-width:68%;}
+.esc-hd{font-size:12px;font-weight:700;color:var(--amb-t);margin-bottom:8px;display:flex;align-items:center;gap:5px;}
+.esc-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);font-size:12px;}
+.esc-row:last-of-type{border-bottom:none;}
+.esc-l{color:var(--amb-t);}
+.esc-v{font-weight:700;color:var(--amb-d);}
+
+.content-card{background:var(--srf);border:1px solid var(--bdr-m);border-radius:var(--r3);overflow:hidden;max-width:68%;}
+.cc-thumb{width:100%;height:110px;background:linear-gradient(135deg,var(--grn-l) 0%,var(--teal-l) 100%);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:5px;}
+.cc-body{padding:10px 12px;}
+.cc-hd{font-size:12px;font-weight:700;color:var(--tx1);margin-bottom:6px;display:flex;align-items:center;gap:5px;}
+.cc-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--tx2);padding:3px 0;border-bottom:1px solid var(--bdr);}
+.cc-item:last-child{border-bottom:none;}
+.cc-link{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--blu-t);font-weight:600;padding:6px 10px;background:var(--blu-l);border-radius:var(--r1);margin:8px 0;text-decoration:none;}
+.cc-note{font-size:11px;color:var(--tx2);background:var(--srf2);border-radius:var(--r1);padding:7px 10px;margin-bottom:8px;line-height:1.55;border-left:2px solid var(--bdr-m);}
+.csc-pend{background:var(--amb-l);color:var(--amb-t);font-size:11px;padding:3px 9px;border-radius:20px;display:inline-flex;align-items:center;gap:4px;font-weight:700;}
+.csc-actions{display:flex;gap:7px;margin-top:8px;}
+
+.payment-card{background:var(--grn-l);border:2px solid var(--grn-m);border-radius:var(--r3);padding:14px 16px;max-width:68%;}
+.pc-hd{font-size:13px;font-weight:700;color:var(--grn-d);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.pc-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.07);font-size:12px;}
+.pc-row:last-child{border-bottom:none;font-weight:700;font-size:13px;}
+.pc-l{color:var(--grn-t);}
+.pc-v{font-weight:700;color:var(--grn-d);}
+.sf{width:11px;height:11px;background:#EF9F27;clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+
+/* nav controls */
+.nav-bar{background:var(--srf);border-top:1px solid var(--bdr);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.nav-info{font-size:12px;color:var(--tx3);}
+.nav-info b{color:var(--tx1);font-weight:700;}
+.nav-btns{display:flex;gap:8px;}
+.btn-nav{padding:8px 18px;border-radius:var(--r2);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .12s;}
+.btn-prev{background:var(--srf);border:1px solid var(--bdr-m);color:var(--tx2);}
+.btn-prev:hover{background:var(--srf2);}
+.btn-next{background:var(--red);border:none;color:#fff;}
+.btn-next:hover{background:#c73c3b;}
+.btn-next:disabled{background:var(--bdr-m);cursor:default;}
+.play-btn{padding:7px 14px;border-radius:var(--r2);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font);background:var(--grn-l);border:1px solid var(--grn-m);color:var(--grn-3);}
+.play-btn:hover{background:var(--grn-m);}
+.play-btn.playing{background:var(--amb-l);border-color:var(--amb-m);color:var(--amb-t);}
+
+/* btn-ghost, btn-g, btn-r shared */
+.btn-r{padding:7px 13px;background:var(--red);border:none;border-radius:var(--r1);color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font);}
+.btn-g{padding:7px 13px;background:var(--grn-l);border:1px solid var(--grn-m);border-radius:var(--r1);color:var(--grn-t);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font);}
+.btn-a{padding:7px 13px;background:var(--amb-l);border:1px solid var(--amb-m);border-radius:var(--r1);color:var(--amb-t);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font);}
+.btn-ghost{padding:6px 12px;border:1px solid var(--bdr-m);border-radius:var(--r1);background:transparent;color:var(--tx2);font-size:12px;cursor:pointer;font-family:var(--font);}
+.btn-ghost:hover{background:var(--srf2);}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- LEFT — step nav -->
+<div class="left">
+  <div class="left-hd">
+    <div class="left-title">Deal journey walkthrough</div>
+    <div class="left-sub">GreenFresh BD × Lamia Akter · ৳35,000</div>
+  </div>
+  <div class="steps-wrap" id="steps-wrap"></div>
+  <div class="left-legend">
+    <div class="leg-title">Who acts</div>
+    <div class="leg-row"><div class="leg-dot" style="background:var(--blu-t);"></div>Sponsor action</div>
+    <div class="leg-row"><div class="leg-dot" style="background:var(--grn-3);"></div>Creator action</div>
+    <div class="leg-row"><div class="leg-dot" style="background:var(--pur-t);"></div>Platform automated</div>
+    <div class="leg-row"><div class="leg-dot" style="background:var(--amb-d);"></div>Both parties</div>
+  </div>
+</div>
+
+<!-- RIGHT — chat view -->
+<div class="right">
+  <div class="right-hd">
+    <div>
+      <div class="rh-title" id="rh-title">Step 1 of 9</div>
+      <div class="rh-sub" id="rh-sub">National Health Week · GreenFresh BD × Lamia Akter</div>
+    </div>
+    <div id="step-badge"></div>
+  </div>
+
+  <!-- pipeline bar -->
+  <div class="pipe-bar" id="pipe-bar"></div>
+
+  <!-- thread -->
+  <div class="thread" id="thread"></div>
+
+  <!-- nav -->
+  <div class="nav-bar">
+    <div class="nav-info" id="nav-info"></div>
+    <div class="nav-btns">
+      <button class="play-btn" id="play-btn" onclick="togglePlay()">▶ Auto-play</button>
+      <button class="btn-nav btn-prev" onclick="go(-1)">← Previous</button>
+      <button class="btn-nav btn-next" id="btn-next" onclick="go(1)">Next step →</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+const PIPE_STAGES = ['Applied','Accepted','Terms proposed','Terms agreed','Deal record signed','Escrow funded','Work in progress','Content submitted','Approval','Paid out'];
+
+const STEPS = [
+  {
+    id: 0,
+    label: 'Application submitted',
+    who: 'cr',
+    whoLabel: 'Creator',
+    pipeStage: 0,
+    badge: { text: 'Stage 1 · Applied', bg: 'var(--srf2)', col: 'var(--tx2)' },
+    events: [
+      { type: 'sys', cls: 'se-creator', step: 'Stage 1 — Creator', label: 'Application submitted', detail: 'Lamia Akter applied to National Health Week Campaign 2025', time: 'Mar 14 · 9:00 AM' },
+      { type: 'msg', side: 'cr', text: 'Hi! I\'ve applied to your National Health Week campaign. My 52K health & wellness audience — 72% female, primarily Dhaka — is exactly who you\'re targeting. I\'ve completed 7 deals on SponzoBD with an avg 4.8★ rating. Compatibility score: 91/100.', time: 'Mar 14 · 9:01 AM' },
+      { type: 'sys', cls: 'se-platform', step: 'Platform · Automated', label: 'Application card delivered to sponsor', detail: 'Sponsor can now see Lamia\'s profile, compat score 91, and application note', time: 'Mar 14 · 9:01 AM' },
+    ]
+  },
+  {
+    id: 1,
+    label: 'Sponsor accepts application',
+    who: 'sp',
+    whoLabel: 'Sponsor',
+    pipeStage: 1,
+    badge: { text: 'Stage 2 · Accepted', bg: 'var(--grn-l)', col: 'var(--grn-3)' },
+    events: [
+      { type: 'sys', cls: 'se-sponsor', step: 'Stage 2 — Sponsor', label: 'Application accepted', detail: 'GreenFresh BD accepted Lamia Akter\'s application — conversation opened', time: 'Mar 15 · 10:00 AM' },
+      { type: 'msg', side: 'sp', text: 'Hi Lamia! We loved your profile — your audience is exactly who we\'re targeting for National Health Week. We\'d like to work with you. Our budget is ৳35,000 for 2 Instagram reels, 3 stories, and 1 YouTube short. Please review the brief and send your terms when ready.', time: 'Mar 15 · 10:05 AM' },
+      { type: 'msg', side: 'cr', text: 'Thank you GreenFresh! I\'ve reviewed the brief — it\'s a great fit. I\'ll send my terms proposal shortly.', time: 'Mar 15 · 11:30 AM' },
+    ]
+  },
+  {
+    id: 2,
+    label: 'Creator proposes terms',
+    who: 'cr',
+    whoLabel: 'Creator',
+    pipeStage: 2,
+    badge: { text: 'Stage 3 · Terms proposed', bg: 'var(--blu-l)', col: 'var(--blu-t)' },
+    events: [
+      { type: 'sys', cls: 'se-creator', step: 'Stage 3 — Creator', label: 'Terms proposal sent', detail: 'Lamia Akter submitted a formal terms proposal for sponsor review', time: 'Mar 15 · 12:00 PM' },
+      {
+        type: 'terms-proposed',
+        side: 'cr',
+        terms: {
+          Rate: '৳35,000',
+          Deliverables: '2 Instagram reels · 3 stories · 1 YouTube short',
+          Deadline: 'March 22, 2025',
+          'Revision rounds': '1 included · 7 days to review',
+          'Usage rights': '3 months · Bangladesh only',
+          'Content language': 'Bangla + English',
+        },
+        proposer: 'Lamia Akter',
+        status: 'pend',
+        time: 'Mar 15 · 12:00 PM'
+      },
+      { type: 'msg', side: 'pl', text: '🔔 Platform notice: Terms proposal received. GreenFresh BD can accept, counter-propose, or decline. No action taken until sponsor responds.', time: 'Mar 15 · 12:01 PM' },
+    ]
+  },
+  {
+    id: 3,
+    label: 'Both parties agree on terms',
+    who: 'both',
+    whoLabel: 'Both parties',
+    pipeStage: 3,
+    badge: { text: 'Stage 4 · Terms agreed', bg: 'var(--grn-l)', col: 'var(--grn-3)' },
+    events: [
+      { type: 'msg', side: 'sp', text: 'These terms work perfectly for us. ৳35,000 is within our budget and the deliverables match our brief exactly. Accepting now.', time: 'Mar 16 · 9:00 AM' },
+      {
+        type: 'terms-proposed',
+        side: 'cr',
+        terms: {
+          Rate: '৳35,000',
+          Deliverables: '2 Instagram reels · 3 stories · 1 YouTube short',
+          Deadline: 'March 22, 2025',
+          'Revision rounds': '1 included · 7 days to review',
+          'Usage rights': '3 months · Bangladesh only',
+          'Content language': 'Bangla + English',
+        },
+        proposer: 'Lamia Akter',
+        status: 'acc',
+        time: 'Mar 15 · 12:00 PM'
+      },
+      { type: 'sys', cls: 'se-complete', step: 'Stage 4 — Both parties', label: 'Terms agreed · deal record being generated', detail: 'Both parties have accepted the same version of the terms. Platform is generating the deal record.', time: 'Mar 16 · 9:02 AM' },
+    ]
+  },
+  {
+    id: 4,
+    label: 'Deal record signed by both',
+    who: 'both',
+    whoLabel: 'Both parties',
+    pipeStage: 4,
+    badge: { text: 'Stage 5 · Deal record', bg: 'var(--pur-l)', col: 'var(--pur-t)' },
+    events: [
+      { type: 'sys', cls: 'se-platform', step: 'Platform · Automated', label: 'Deal record generated', detail: 'A structured deal record has been created and sent to both parties for confirmation', time: 'Mar 16 · 9:03 AM' },
+      {
+        type: 'deal-record',
+        time: 'Mar 16 · 9:03 AM'
+      },
+      { type: 'msg', side: 'pl', text: '🔔 Platform notice: This deal record is a binding platform agreement. Both parties must confirm before escrow can be funded. IP addresses and timestamps are logged on confirmation.', time: 'Mar 16 · 9:04 AM' },
+      { type: 'sys', cls: 'se-complete', step: 'Stage 5 — Both confirmed', label: 'Deal record confirmed by both parties', detail: 'GreenFresh BD confirmed · 9:05 AM · Lamia Akter confirmed · 9:04 AM · Deal is locked. Terms cannot be changed.', time: 'Mar 16 · 9:05 AM' },
+    ]
+  },
+  {
+    id: 5,
+    label: 'Sponsor funds escrow',
+    who: 'sp',
+    whoLabel: 'Sponsor',
+    pipeStage: 5,
+    badge: { text: 'Stage 6 · Escrow funded', bg: 'var(--amb-l)', col: 'var(--amb-t)' },
+    events: [
+      { type: 'msg', side: 'sp', text: 'Deal record confirmed. Funding escrow now — ৳35,000 will be held by SponzoBD until we approve the content. You can start work once you receive the escrow confirmation.', time: 'Mar 16 · 9:10 AM' },
+      {
+        type: 'escrow',
+        time: 'Mar 16 · 9:30 AM'
+      },
+      { type: 'sys', cls: 'se-escrow', step: 'Stage 6 — Sponsor', label: 'Escrow funded · creator can now begin work', detail: '৳35,000 held by SponzoBD · released only on sponsor approval · auto-releases March 28 if no response', time: 'Mar 16 · 9:30 AM' },
+      { type: 'msg', side: 'cr', text: 'Escrow confirmed! Starting work today. I\'ll share a content outline before filming so we\'re aligned, then submit the final files before the deadline.', time: 'Mar 16 · 10:00 AM' },
+    ]
+  },
+  {
+    id: 6,
+    label: 'Creator works on content',
+    who: 'cr',
+    whoLabel: 'Creator',
+    pipeStage: 6,
+    badge: { text: 'Stage 7 · In progress', bg: 'var(--pur-l)', col: 'var(--pur-t)' },
+    events: [
+      { type: 'msg', side: 'cr', text: 'Here\'s my content outline before I start filming:\n\n• Reel 1 — Morning routine featuring the wellness range naturally (no scripted lines)\n• Reel 2 — Recipe-style: making a health drink using the products\n• Stories — 3 behind-the-scenes clips during filming\n• YouTube short — 60 sec summary of the wellness challenge\n\nDoes this work for you?', time: 'Mar 17 · 9:00 AM' },
+      { type: 'msg', side: 'sp', text: 'Perfect outline — exactly what we had in mind. Please make sure the brand logo is visible in Reel 2 for at least 3 seconds. Go ahead and start filming!', time: 'Mar 17 · 11:00 AM' },
+      { type: 'sys', cls: 'se-platform', step: 'Platform · Monitoring', label: 'Deadline in 5 days', detail: 'Automated reminder sent to Lamia Akter · deadline March 22, 2025 · 5 days remaining', time: 'Mar 17 · 12:00 PM' },
+    ]
+  },
+  {
+    id: 7,
+    label: 'Creator submits content',
+    who: 'cr',
+    whoLabel: 'Creator',
+    pipeStage: 7,
+    badge: { text: 'Stage 8 · Submitted', bg: 'var(--red-l)', col: 'var(--red)' },
+    events: [
+      { type: 'msg', side: 'cr', text: 'All content is ready and submitted! Reel 1 focuses on the morning routine naturally. Reel 2 has the brand logo clearly visible in the recipe section. All 3 stories are behind-the-scenes. Please let me know if any changes needed — 1 revision round included.', time: 'Mar 21 · 3:00 PM' },
+      {
+        type: 'content-card',
+        time: 'Mar 21 · 3:05 PM'
+      },
+      { type: 'sys', cls: 'se-creator', step: 'Stage 8 — Creator', label: 'Content submitted · 6 of 6 deliverables', detail: 'All files submitted via Google Drive link · awaiting sponsor review · sponsor has 5 business days to approve or request revision', time: 'Mar 21 · 3:05 PM' },
+      { type: 'msg', side: 'pl', text: '🔔 Platform notice: Review window opened March 21. If GreenFresh BD does not respond by March 28, escrow will auto-release to Lamia Akter. 1 revision round remaining.', time: 'Mar 21 · 3:06 PM' },
+    ]
+  },
+  {
+    id: 8,
+    label: 'Sponsor reviews & approves',
+    who: 'sp',
+    whoLabel: 'Sponsor',
+    pipeStage: 8,
+    badge: { text: 'Stage 9 · Approval', bg: 'var(--grn-l)', col: 'var(--grn-3)' },
+    events: [
+      { type: 'msg', side: 'sp', text: 'We\'ve reviewed all 6 files. The morning routine reel is exactly what we briefed — authentic and very on-brand. The recipe reel has the logo placement we requested. Stories are great. YouTube short is punchy and well-paced. Approving now and releasing escrow!', time: 'Mar 22 · 10:00 AM' },
+      { type: 'sys', cls: 'se-complete', step: 'Stage 9 — Sponsor', label: 'Content approved · escrow release triggered', detail: 'GreenFresh BD approved all deliverables · ৳35,000 payment release initiated', time: 'Mar 22 · 10:05 AM' },
+    ]
+  },
+  {
+    id: 9,
+    label: 'Payment released · deal closed',
+    who: 'pl',
+    whoLabel: 'Platform',
+    pipeStage: 9,
+    badge: { text: 'Stage 10 · Paid out', bg: 'var(--grn-l)', col: 'var(--grn-3)' },
+    events: [
+      {
+        type: 'payment-card',
+        time: 'Mar 22 · 10:06 AM'
+      },
+      { type: 'sys', cls: 'se-complete', step: 'Platform · Automated', label: 'Deal completed · ৳33,775 sent to Lamia Akter', detail: '৳35,000 escrow released · SponzoBD fee 3.5% (৳1,225) deducted · ৳33,775 to creator payment account', time: 'Mar 22 · 10:06 AM' },
+      { type: 'msg', side: 'cr', text: 'Payment received! Thank you GreenFresh BD — it was a pleasure working with you. The audience response to health content is always strong. I\'d love to collaborate again for your next campaign! 🌿', time: 'Mar 22 · 11:00 AM' },
+      { type: 'msg', side: 'sp', text: 'Thank you Lamia! The content is live and performing very well. We\'ve left a 5-star review on your SponzoBD profile. We\'ll definitely be back for the next campaign.', time: 'Mar 22 · 12:00 PM' },
+      { type: 'sys', cls: 'se-complete', step: 'Deal closed', label: '5-star review posted · deal record archived', detail: 'GreenFresh BD rated Lamia Akter 5★ · review is public on her profile · deal record saved for both parties', time: 'Mar 22 · 12:01 PM' },
+    ]
+  },
+];
+
+let current = 0;
+let playInterval = null;
+
+function renderStepNav() {
+  const wrap = document.getElementById('steps-wrap');
+  wrap.innerHTML = STEPS.map(function(s, i) {
+    const isDone = i < current;
+    const isOn = i === current;
+    const dotCls = isDone ? 's-dot' : isOn ? 's-dot active' : 's-dot';
+    const itemCls = 'step-item' + (isDone ? ' done' : '') + (isOn ? ' on' : '');
+    const whoCls = { sp: 'sp', cr: 'cr', pl: 'pl', both: 'both' }[s.who];
+    const whoLabel = { sp: 'Sponsor action', cr: 'Creator action', pl: 'Platform automated', both: 'Both parties' }[s.who];
+    const dotInner = isDone
+      ? '<svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2 2L8.5 2" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      : isOn
+      ? '<svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="2.5" fill="var(--blu-t)"/></svg>'
+      : '';
+    const connector = i < STEPS.length - 1
+      ? '<div class="step-connector' + (isDone ? ' done' : '') + '"></div>'
+      : '';
+    return '<div class="' + itemCls + '" onclick="jumpTo(' + i + ')">'
+      + '<div class="' + dotCls + '">' + dotInner + '</div>'
+      + '<div class="s-info"><div class="s-num">Step ' + (i+1) + ' of ' + STEPS.length + '</div><div class="s-label">' + s.label + '</div><div class="s-who ' + whoCls + '">' + whoLabel + '</div></div>'
+      + '</div>'
+      + connector;
+  }).join('');
+}
+
+function renderPipe() {
+  const s = STEPS[current];
+  const bar = document.getElementById('pipe-bar');
+  bar.innerHTML = PIPE_STAGES.map(function(name, i) {
+    const done = i < s.pipeStage;
+    const now = i === s.pipeStage;
+    const dotInner = done
+      ? '<svg width="8" height="8" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5l2 2L7.5 2" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      : now ? '<svg width="7" height="7" viewBox="0 0 7 7"><circle cx="3.5" cy="3.5" r="2.5" fill="var(--blu-t)"/></svg>' : '';
+    return '<div class="ps' + (done?' done':'') + '">'
+      + '<div class="pd' + (done?' done':now?' now':'') + '">' + dotInner + '</div>'
+      + '<div class="pl' + (done?' done':now?' now':'') + '">' + name + '</div>'
+      + '</div>';
+  }).join('');
+}
+
+function renderThread() {
+  const s = STEPS[current];
+  const thread = document.getElementById('thread');
+  let html = '';
+
+  s.events.forEach(function(ev) {
+    if (ev.type === 'sys') {
+      html += '<div class="sys-ev ' + ev.cls + '" style="max-width:500px;margin:0 auto;">'
+        + '<div class="se-step">' + ev.step + '</div>'
+        + '<div class="se-label">' + ev.label + '</div>'
+        + '<div class="se-detail">' + ev.detail + '</div>'
+        + '<div class="se-time">' + ev.time + '</div>'
+        + '</div>';
+    } else if (ev.type === 'msg') {
+      const isSp = ev.side === 'sp', isPl = ev.side === 'pl';
+      const isMe = isSp || isPl;
+      const avCls = isSp ? 'av-sp' : isPl ? 'av-pl' : 'av-cr';
+      const avTxt = isSp ? 'GF' : isPl ? 'SB' : 'LA';
+      const bCls = isSp ? 'b-sp' : isPl ? 'b-pl' : 'b-cr';
+      const msg = ev.text.replace(/\n/g, '<br>');
+      html += '<div class="msg-wrap' + (isMe ? ' sp' : '') + '">'
+        + '<div class="m-av ' + avCls + '">' + avTxt + '</div>'
+        + '<div><div class="bubble ' + bCls + '">' + msg + '</div>'
+        + '<div class="msg-t' + (isMe ? ' r' : '') + '">' + ev.time + '</div></div>'
+        + '</div>';
+    } else if (ev.type === 'terms-proposed') {
+      const rows = Object.entries(ev.terms).map(function([k,v]) {
+        return '<div class="tc-row"><span class="tc-l">' + k + '</span><span class="tc-v">' + v + '</span></div>';
+      }).join('');
+      const badge = ev.status === 'acc'
+        ? '<div class="tc-badge tc-acc"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2L8 3" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Accepted by GreenFresh BD · Mar 16</div>'
+        : '<div class="tc-badge tc-pend">Awaiting sponsor response</div>';
+      html += '<div class="msg-wrap"><div class="m-av av-cr">LA</div>'
+        + '<div style="display:flex;flex-direction:column;gap:3px;"><div class="terms-card">'
+        + '<div class="tc-hd"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#3B6D11" stroke-width="1.3"><rect x="1.5" y="1.5" width="9" height="9" rx="1"/><path d="M3.5 6h5M3.5 4h5M3.5 8h3"/></svg>Terms proposed by ' + ev.proposer + '</div>'
+        + rows + badge
+        + '</div><div class="msg-t">' + ev.time + '</div></div></div>';
+    } else if (ev.type === 'deal-record') {
+      html += '<div class="msg-wrap"><div class="m-av av-pl">SB</div>'
+        + '<div style="display:flex;flex-direction:column;gap:3px;"><div class="deal-record">'
+        + '<div class="dr-hd"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1.5" y="1.5" width="11" height="11" rx="1.5" fill="#C0DD97"/><path d="M4 7h6M4 5h6M4 9h4" stroke="#27500A" stroke-width="1.2" stroke-linecap="round"/></svg>Deal Record · SponzoBD · Auto-generated</div>'
+        + '<div class="dr-section"><div class="dr-sec-t">Parties</div>'
+        + '<div class="dr-row"><span class="dr-l">Sponsor</span><span class="dr-v">GreenFresh BD · Dhaka</span></div>'
+        + '<div class="dr-row"><span class="dr-l">Creator</span><span class="dr-v">Lamia Akter · @lamia.wellness · @lamia_health</span></div>'
+        + '<div class="dr-row"><span class="dr-l">Campaign</span><span class="dr-v">National Health Week 2025</span></div>'
+        + '</div>'
+        + '<div class="dr-section"><div class="dr-sec-t">Agreed terms</div>'
+        + '<div class="dr-row"><span class="dr-l">Total rate</span><span class="dr-v grn">৳35,000</span></div>'
+        + '<div class="dr-row"><span class="dr-l">Deliverables</span><span class="dr-v">2 IG reels · 3 stories · 1 YouTube short</span></div>'
+        + '<div class="dr-row"><span class="dr-l">Deadline</span><span class="dr-v">March 22, 2025</span></div>'
+        + '<div class="dr-row"><span class="dr-l">Revision rounds</span><span class="dr-v">1 included · 7 day review window</span></div>'
+        + '<div class="dr-row"><span class="dr-l">Usage rights</span><span class="dr-v">3 months · Bangladesh only</span></div>'
+        + '</div>'
+        + '<div class="dr-section"><div class="dr-sec-t">Escrow & default conditions</div>'
+        + '<div class="dr-row"><span class="dr-l">Escrow amount</span><span class="dr-v">৳35,000 · funded by sponsor</span></div>'
+        + '<div class="dr-row"><span class="dr-l">Release trigger</span><span class="dr-v">Sponsor approves content</span></div>'
+        + '<div class="dr-row"><span class="dr-l">Auto-release</span><span class="dr-v">March 28, 2025 if no sponsor action</span></div>'
+        + '<div class="dr-row"><span class="dr-l">If creator misses deadline</span><span class="dr-v red">Sponsor may cancel · escrow refunded</span></div>'
+        + '<div class="dr-row"><span class="dr-l">Platform fee</span><span class="dr-v">3.5% deducted at payment release</span></div>'
+        + '</div>'
+        + '<div class="dr-sig">'
+        + '<div class="dr-sig-item"><div class="dr-sig-name">GreenFresh BD</div><div class="dr-sig-time">Confirmed Mar 16, 2025 · 9:05 AM</div><div class="dr-sig-check">✓ IP logged · timestamp recorded</div></div>'
+        + '<div class="dr-sig-item"><div class="dr-sig-name">Lamia Akter</div><div class="dr-sig-time">Confirmed Mar 16, 2025 · 9:04 AM</div><div class="dr-sig-check">✓ IP logged · timestamp recorded</div></div>'
+        + '</div>'
+        + '</div><div class="msg-t">' + ev.time + '</div></div></div>';
+    } else if (ev.type === 'escrow') {
+      html += '<div class="msg-wrap sp"><div class="m-av av-sp">GF</div>'
+        + '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;"><div class="escrow-card">'
+        + '<div class="esc-hd"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="var(--amb-d)" stroke-width="1.3"><rect x="2" y="5" width="8" height="5.5" rx="1"/><path d="M4 5V3.5a2 2 0 114 0V5"/></svg>Escrow payment confirmed · ৳35,000 secured</div>'
+        + '<div class="esc-row"><span class="esc-l">Amount held</span><span class="esc-v">৳35,000</span></div>'
+        + '<div class="esc-row"><span class="esc-l">Funded by</span><span class="esc-v">GreenFresh BD</span></div>'
+        + '<div class="esc-row"><span class="esc-l">Funded on</span><span class="esc-v">March 16, 2025 · 9:30 AM</span></div>'
+        + '<div class="esc-row"><span class="esc-l">Held by</span><span class="esc-v">SponzoBD (platform escrow)</span></div>'
+        + '<div class="esc-row"><span class="esc-l">Released when</span><span class="esc-v">Sponsor approves content</span></div>'
+        + '<div class="esc-row"><span class="esc-l">Auto-release date</span><span class="esc-v">March 28, 2025</span></div>'
+        + '</div><div class="msg-t r">' + ev.time + '</div></div></div>';
+    } else if (ev.type === 'content-card') {
+      html += '<div class="msg-wrap"><div class="m-av av-cr">LA</div>'
+        + '<div style="display:flex;flex-direction:column;gap:3px;"><div class="content-card">'
+        + '<div class="cc-thumb"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".35"><rect x="2" y="2" width="24" height="24" rx="2"/><circle cx="8" cy="8" r="3"/><path d="M2 20l7-7 4 4 4-6 7 9"/></svg><span style="font-size:11px;color:var(--tx3);">Thumbnail · National Health Week content</span></div>'
+        + '<div class="cc-body">'
+        + '<div class="cc-hd"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#3B6D11" stroke-width="1.3"><rect x="1.5" y="1.5" width="9" height="9" rx="1"/><path d="M3.5 4h5M3.5 6.5h5M3.5 9h3"/></svg>Content submitted — 6 of 6 deliverables</div>'
+        + ['Instagram reel 1 · 45 sec','Instagram reel 2 · 38 sec','Instagram story 1','Instagram story 2','Instagram story 3','YouTube short · 58 sec'].map(function(i){
+            return '<div class="cc-item"><svg viewBox="0 0 11 11" fill="none" width="11" height="11"><circle cx="5.5" cy="5.5" r="4.5" fill="#C0DD97"/><path d="M3 5.5l2 2L8.5 3" stroke="#27500A" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>' + i + '</div>';
+          }).join('')
+        + '<a class="cc-link" href="#" onclick="return false;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 2H2v8h8V7M7 2h3v3M5 7l5-5"/></svg>View content files · Google Drive</a>'
+        + '<div class="cc-note">Reel 1 — morning routine angle, very natural. Reel 2 — recipe style, brand logo visible from 0:18–0:22 as briefed. All hashtags and brand tags included.</div>'
+        + '<span class="csc-pend">Awaiting sponsor approval</span>'
+        + '</div></div><div class="msg-t">' + ev.time + '</div></div></div>';
+    } else if (ev.type === 'payment-card') {
+      const stars = Array.from({length:5}, function() { return '<div class="sf"></div>'; }).join('');
+      html += '<div class="msg-wrap sp"><div class="m-av av-sp">GF</div>'
+        + '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;"><div class="payment-card">'
+        + '<div class="pc-hd"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" fill="#C0DD97"/><path d="M4 7l2 2L10 5" stroke="#27500A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Payment released · Deal completed</div>'
+        + '<div class="pc-row"><span class="pc-l">Agreed amount</span><span class="pc-v">৳35,000</span></div>'
+        + '<div class="pc-row"><span class="pc-l">SponzoBD fee (3.5%)</span><span class="pc-v">– ৳1,225</span></div>'
+        + '<div class="pc-row"><span class="pc-l">Paid to Lamia Akter</span><span class="pc-v">৳33,775</span></div>'
+        + '<div class="pc-row"><span class="pc-l">Payment method</span><span class="pc-v">Creator registered account</span></div>'
+        + '<div class="pc-row"><span class="pc-l">Released on</span><span class="pc-v">March 22, 2025 · 10:06 AM</span></div>'
+        + '<div class="pc-row"><span class="pc-l">Sponsor rating</span><span class="pc-v" style="display:flex;align-items:center;gap:5px;"><div style="display:flex;gap:2px;">' + stars + '</div>5/5</span></div>'
+        + '</div><div class="msg-t r">' + ev.time + '</div></div></div>';
+    }
+  });
+
+  thread.innerHTML = html;
+  setTimeout(function() { thread.scrollTop = thread.scrollHeight; }, 50);
+}
+
+function renderHeader() {
+  const s = STEPS[current];
+  document.getElementById('rh-title').textContent = 'Step ' + (current+1) + ' of ' + STEPS.length + ' — ' + s.label;
+  const b = s.badge;
+  document.getElementById('step-badge').innerHTML = '<span class="step-badge" style="background:' + b.bg + ';color:' + b.col + ';">' + b.text + '</span>';
+  document.getElementById('nav-info').innerHTML = '<b>' + s.label + '</b> · ' + ({ sp:'Sponsor', cr:'Creator', pl:'Platform', both:'Both parties' }[s.who]) + ' acts here';
+  document.getElementById('btn-next').disabled = current >= STEPS.length - 1;
+  document.getElementById('btn-next').textContent = current >= STEPS.length - 1 ? 'Journey complete ✓' : 'Next step →';
+}
+
+function render() {
+  renderStepNav();
+  renderPipe();
+  renderThread();
+  renderHeader();
+}
+
+function go(dir) {
+  const next = current + dir;
+  if (next < 0 || next >= STEPS.length) return;
+  current = next;
+  render();
+}
+
+function jumpTo(i) {
+  current = i;
+  render();
+}
+
+function togglePlay() {
+  const btn = document.getElementById('play-btn');
+  if (playInterval) {
+    clearInterval(playInterval);
+    playInterval = null;
+    btn.textContent = '▶ Auto-play';
+    btn.classList.remove('playing');
+  } else {
+    btn.textContent = '⏸ Pause';
+    btn.classList.add('playing');
+    playInterval = setInterval(function() {
+      if (current >= STEPS.length - 1) {
+        clearInterval(playInterval);
+        playInterval = null;
+        btn.textContent = '▶ Auto-play';
+        btn.classList.remove('playing');
+        return;
+      }
+      go(1);
+    }, 3200);
+  }
+}
+
+render();
+</script>
+</body>
+</html>

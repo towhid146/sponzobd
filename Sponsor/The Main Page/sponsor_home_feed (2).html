@@ -1,0 +1,2948 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SponzoBD — Sponsor Home</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --red: #e24b4a;
+        --red-l: #fcebeb;
+        --red-m: #f7c1c1;
+        --grn: #1d9e75;
+        --grn-l: #eaf3de;
+        --grn-m: #c0dd97;
+        --grn-d: #085041;
+        --grn-3: #3b6d11;
+        --grn-t: #27500a;
+        --teal-l: #e1f5ee;
+        --teal-m: #9fe1cb;
+        --blu-l: #e6f1fb;
+        --blu-m: #b5d4f4;
+        --blu-t: #0c447c;
+        --amb-l: #faeeda;
+        --amb-m: #fac775;
+        --amb-t: #633806;
+        --amb-d: #854f0b;
+        --pur-l: #eeedfe;
+        --pur-t: #3c3489;
+        --bg: #f4f2ee;
+        --srf: #ffffff;
+        --srf2: #f0eee9;
+        --bdr: rgba(0, 0, 0, 0.08);
+        --bdr-m: rgba(0, 0, 0, 0.14);
+        --tx1: #1a1a1a;
+        --tx2: #555;
+        --tx3: #999;
+        --font: "DM Sans", system-ui, sans-serif;
+        --r1: 7px;
+        --r2: 10px;
+        --r3: 14px;
+      }
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+        font-family: var(--font);
+        font-size: 14px;
+        color: var(--tx1);
+        background: var(--bg);
+      }
+      .app {
+        display: flex;
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+      }
+
+      /* SIDEBAR */
+      .sb {
+        width: 220px;
+        flex-shrink: 0;
+        background: var(--srf);
+        border-right: 1px solid var(--bdr);
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
+      .sb-logo {
+        padding: 15px 16px 12px;
+        border-bottom: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .logo-ic {
+        width: 28px;
+        height: 28px;
+        background: var(--red);
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .sb-user {
+        padding: 11px 16px;
+        border-bottom: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .av-s {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: var(--blu-l);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--blu-t);
+        flex-shrink: 0;
+      }
+      .u-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .u-sub {
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .u-plan {
+        font-size: 11px;
+        color: var(--blu-t);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-top: 2px;
+      }
+      .pdot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--blu-t);
+      }
+      .nav {
+        flex: 1;
+        overflow-y: auto;
+        padding: 8px 0;
+      }
+      .nav-sec {
+        padding: 5px 16px 3px;
+        font-size: 10px;
+        color: var(--tx3);
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        font-weight: 600;
+      }
+      .ni {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        font-size: 13px;
+        color: var(--tx2);
+        cursor: pointer;
+        border-left: 2.5px solid transparent;
+        transition: background 0.1s;
+      }
+      .ni:hover {
+        background: var(--srf2);
+      }
+      .ni.on {
+        background: var(--srf2);
+        color: var(--tx1);
+        font-weight: 600;
+        border-left-color: var(--red);
+      }
+      .ni svg {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+        opacity: 0.5;
+      }
+      .ni.on svg {
+        opacity: 1;
+      }
+      .ni-badge {
+        margin-left: auto;
+        background: var(--red);
+        color: #fff;
+        font-size: 10px;
+        padding: 1px 7px;
+        border-radius: 20px;
+        font-weight: 700;
+      }
+      .sb-tier {
+        margin: 0 10px 14px;
+        padding: 10px 12px;
+        background: var(--blu-l);
+        border-radius: var(--r2);
+      }
+      .st-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 4px;
+      }
+      .st-lbl {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--blu-t);
+      }
+      .st-plan {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--blu-t);
+        background: var(--blu-m);
+        padding: 1px 8px;
+        border-radius: 20px;
+      }
+      .st-usage {
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .st-track {
+        height: 3px;
+        background: var(--bdr-m);
+        border-radius: 2px;
+        margin: 4px 0;
+      }
+      .st-fill {
+        height: 3px;
+        background: var(--blu-t);
+        border-radius: 2px;
+      }
+      .st-upgrade {
+        font-size: 11px;
+        color: var(--red);
+        cursor: pointer;
+        margin-top: 3px;
+      }
+
+      /* MAIN */
+      .main {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+      }
+      .topbar {
+        height: 52px;
+        background: var(--srf);
+        border-bottom: 1px solid var(--bdr);
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+      }
+      .tb-t {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--tx1);
+        letter-spacing: -0.2px;
+      }
+      .tb-r {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .badge-pro {
+        background: var(--blu-l);
+        color: var(--blu-t);
+        font-size: 11px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-weight: 700;
+      }
+      .icon-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: var(--r1);
+        border: 1px solid var(--bdr-m);
+        background: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        position: relative;
+      }
+      .notif-dot {
+        width: 7px;
+        height: 7px;
+        background: var(--red);
+        border-radius: 50%;
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        border: 1.5px solid var(--srf);
+      }
+
+      /* THREE COLUMN */
+      .page-body {
+        display: flex;
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+      }
+      .left-rail {
+        width: 230px;
+        flex-shrink: 0;
+        overflow-y: auto;
+        padding: 16px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .feed-col {
+        flex: 1;
+        min-width: 0;
+        overflow-y: auto;
+        padding: 16px 14px;
+      }
+      .right-rail {
+        width: 240px;
+        flex-shrink: 0;
+        overflow-y: auto;
+        padding: 16px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      /* LEFT RAIL */
+      .brand-card {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        border-radius: var(--r3);
+        overflow: hidden;
+      }
+      .bc-cover {
+        height: 52px;
+        background: var(--blu-l);
+        position: relative;
+      }
+      .bc-cover-inner {
+        width: 100%;
+        height: 100%;
+        background: var(--blu-m);
+        opacity: 0.5;
+      }
+      .bc-av {
+        width: 44px;
+        height: 44px;
+        border-radius: 8px;
+        background: var(--blu-l);
+        border: 2.5px solid var(--srf);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--blu-t);
+        position: absolute;
+        bottom: -22px;
+        left: 14px;
+      }
+      .bc-body {
+        padding: 28px 14px 13px;
+      }
+      .bc-name {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--tx1);
+        margin-bottom: 1px;
+      }
+      .bc-sub {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-bottom: 10px;
+      }
+      .bc-stats {
+        display: flex;
+        gap: 0;
+        border-top: 1px solid var(--bdr);
+        padding-top: 10px;
+      }
+      .bcs {
+        text-align: center;
+        flex: 1;
+        border-right: 1px solid var(--bdr);
+      }
+      .bcs:last-child {
+        border-right: none;
+      }
+      .bcs-v {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .bcs-l {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-top: 1px;
+      }
+
+      .rail-panel {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        border-radius: var(--r3);
+        padding: 13px 14px;
+      }
+      .rp-t {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--tx1);
+        margin-bottom: 10px;
+      }
+      .stat-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 6px 0;
+        border-bottom: 1px solid var(--bdr);
+        font-size: 12px;
+      }
+      .stat-row:last-child {
+        border-bottom: none;
+      }
+      .sr-l {
+        color: var(--tx2);
+      }
+      .sr-v {
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .sr-v.red {
+        color: var(--red);
+      }
+      .sr-v.grn {
+        color: var(--grn-3);
+      }
+      .sr-v.amb {
+        color: var(--amb-d);
+      }
+
+      .filter-chip {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 5px 8px;
+        border-radius: var(--r1);
+        cursor: pointer;
+        font-size: 12px;
+        color: var(--tx2);
+        margin-bottom: 3px;
+        border: 1px solid transparent;
+      }
+      .filter-chip:hover {
+        background: var(--srf2);
+      }
+      .filter-chip.on {
+        background: var(--blu-l);
+        border-color: var(--blu-m);
+        color: var(--blu-t);
+        font-weight: 600;
+      }
+      .fc-count {
+        font-size: 10px;
+        padding: 1px 6px;
+        border-radius: 20px;
+        background: var(--srf2);
+        color: var(--tx3);
+      }
+      .filter-chip.on .fc-count {
+        background: var(--blu-m);
+        color: var(--blu-t);
+      }
+
+      /* RUN CAMPAIGN BOX */
+      .run-box {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        border-radius: var(--r3);
+        padding: 16px 18px;
+        margin-bottom: 14px;
+      }
+      .rb-top {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 13px;
+      }
+      .rb-ic {
+        width: 40px;
+        height: 40px;
+        border-radius: var(--r2);
+        background: var(--red);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .rb-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .rb-sub {
+        font-size: 12px;
+        color: var(--tx3);
+        margin-top: 2px;
+      }
+      .rb-announce {
+        margin-bottom: 11px;
+      }
+      .rb-ann-lbl {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--tx2);
+        margin-bottom: 5px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .rb-ann-lbl span {
+        font-size: 10px;
+        color: var(--tx3);
+        font-weight: 400;
+      }
+      .rb-ann-inp {
+        width: 100%;
+        padding: 9px 13px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r2);
+        background: var(--srf2);
+        color: var(--tx1);
+        font-size: 13px;
+        font-family: var(--font);
+        cursor: pointer;
+      }
+      .rb-ann-inp:focus {
+        outline: none;
+        background: var(--srf);
+        border-color: var(--red);
+      }
+      .rb-expanded {
+        display: none;
+      }
+      .rb-expanded.on {
+        display: block;
+      }
+      .rb-ta {
+        width: 100%;
+        padding: 9px 13px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r2);
+        background: var(--srf);
+        color: var(--tx1);
+        font-size: 13px;
+        font-family: var(--font);
+        resize: none;
+        height: 80px;
+        line-height: 1.55;
+        margin-bottom: 9px;
+      }
+      .rb-ta:focus {
+        outline: none;
+        border-color: var(--red);
+      }
+      .rb-tag-row {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-bottom: 9px;
+      }
+      .rtag {
+        padding: 4px 11px;
+        border: 1px solid var(--bdr-m);
+        border-radius: 20px;
+        font-size: 12px;
+        color: var(--tx2);
+        cursor: pointer;
+        font-family: var(--font);
+        background: var(--srf);
+      }
+      .rtag:hover {
+        background: var(--srf2);
+      }
+      .rtag.on {
+        background: var(--red-l);
+        border-color: var(--red-m);
+        color: var(--red);
+        font-weight: 600;
+      }
+      .rb-char {
+        font-size: 11px;
+        color: var(--tx3);
+        text-align: right;
+        margin-bottom: 8px;
+      }
+      .rb-foot {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        justify-content: flex-end;
+      }
+      .rb-divider {
+        height: 1px;
+        background: var(--bdr);
+        margin: 11px 0;
+      }
+      .run-btn {
+        width: 100%;
+        padding: 11px;
+        background: var(--red);
+        border: none;
+        border-radius: var(--r2);
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: var(--font);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: background 0.1s;
+      }
+      .run-btn:hover {
+        background: #c73c3b;
+      }
+      .run-hint {
+        font-size: 11px;
+        color: var(--tx3);
+        text-align: center;
+        margin-top: 7px;
+      }
+
+      /* FEED CARDS */
+      .feed-card {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        border-radius: var(--r3);
+        margin-bottom: 12px;
+        overflow: hidden;
+        transition: border-color 0.15s;
+      }
+      .feed-card:hover {
+        border-color: var(--bdr-m);
+      }
+      .fc-header {
+        padding: 13px 16px 11px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .fc-av {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .fc-brand-av {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .fc-brand-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .fc-brand {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .fc-meta {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-top: 1px;
+      }
+      .type-pill {
+        font-size: 10px;
+        padding: 3px 9px;
+        border-radius: 20px;
+        font-weight: 600;
+      }
+      .tp-creator {
+        background: var(--grn-l);
+        color: var(--grn-3);
+      }
+      .tp-result {
+        background: var(--blu-l);
+        color: var(--blu-t);
+      }
+      .tp-platform {
+        background: var(--srf2);
+        color: var(--tx3);
+      }
+      .tp-announce {
+        background: var(--amb-l);
+        color: var(--amb-t);
+      }
+      .fc-body {
+        padding: 0 16px 12px;
+      }
+      .fc-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--tx1);
+        margin-bottom: 5px;
+        line-height: 1.35;
+      }
+      .fc-text {
+        font-size: 13px;
+        color: var(--tx2);
+        line-height: 1.65;
+        margin-bottom: 10px;
+      }
+      .fc-pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-bottom: 10px;
+      }
+      .pill {
+        font-size: 11px;
+        padding: 2px 9px;
+        border-radius: 20px;
+        font-weight: 500;
+      }
+      .p-cat {
+        background: var(--grn-l);
+        color: var(--grn-3);
+      }
+      .p-plat {
+        background: var(--blu-l);
+        color: var(--blu-t);
+      }
+      .p-loc {
+        background: var(--srf2);
+        color: var(--tx2);
+      }
+      .p-fol {
+        background: var(--pur-l);
+        color: var(--pur-t);
+      }
+      .p-eng {
+        background: var(--teal-l);
+        color: var(--grn-d);
+        font-weight: 700;
+      }
+      .p-deal {
+        background: var(--grn-l);
+        color: var(--grn-d);
+        font-weight: 700;
+      }
+      .fc-stat-row {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+      }
+      .fsr {
+        display: flex;
+        flex-direction: column;
+      }
+      .fsr-v {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .fsr-l {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-top: 1px;
+      }
+      .fsr-v.grn {
+        color: var(--grn-3);
+      }
+      .fc-quote {
+        padding: 9px 12px;
+        background: var(--srf2);
+        border-radius: var(--r1);
+        border-left: 2px solid var(--bdr-m);
+        font-size: 12px;
+        color: var(--tx2);
+        line-height: 1.6;
+        margin-bottom: 10px;
+        font-style: italic;
+      }
+      .fc-quote-by {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-top: 4px;
+        font-style: normal;
+      }
+      .fc-foot {
+        padding: 10px 16px 12px;
+        border-top: 1px solid var(--bdr);
+        background: var(--srf2);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .fc-actions {
+        display: flex;
+        gap: 7px;
+        align-items: center;
+        flex-shrink: 0;
+      }
+      .btn-run {
+        padding: 7px 16px;
+        background: var(--red);
+        border: none;
+        border-radius: var(--r1);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .btn-run:hover {
+        background: #c73c3b;
+      }
+      .btn-outline-s {
+        padding: 6px 12px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        background: transparent;
+        color: var(--tx2);
+        font-size: 12px;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .btn-outline-s:hover {
+        background: var(--srf);
+      }
+      .btn-ghost-s {
+        padding: 5px 10px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        background: transparent;
+        color: var(--tx2);
+        font-size: 11px;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .view-creator-btn {
+        padding: 5px 11px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        background: transparent;
+        color: var(--tx2);
+        font-size: 11px;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .view-creator-btn:hover {
+        background: var(--srf2);
+      }
+      .match-label {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .ml-badge {
+        font-size: 11px;
+        padding: 3px 9px;
+        border-radius: 20px;
+        font-weight: 700;
+      }
+
+      /* ANNOUNCE POST (sponsor broadcast) */
+      .ann-card {
+        background: var(--srf);
+        border: 1px solid var(--amb-m);
+        border-left: 3px solid var(--amb-m);
+        border-radius: var(--r3);
+        margin-bottom: 12px;
+        overflow: hidden;
+      }
+
+      /* RIGHT RAIL */
+      .tr-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 6px 0;
+        border-bottom: 1px solid var(--bdr);
+      }
+      .tr-row:last-child {
+        border-bottom: none;
+      }
+      .tr-cat {
+        font-size: 12px;
+        color: var(--tx1);
+        font-weight: 500;
+      }
+      .tr-count {
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .tr-bar {
+        width: 60px;
+        height: 3px;
+        background: var(--bdr-m);
+        border-radius: 2px;
+        overflow: hidden;
+        margin: 3px 0;
+      }
+      .tr-fill {
+        height: 100%;
+        border-radius: 2px;
+        background: var(--grn);
+      }
+
+      /* CREATOR MODAL */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.38);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+      }
+      .modal-overlay.on {
+        display: flex;
+      }
+      .cr-modal {
+        background: var(--srf);
+        border-radius: var(--r3);
+        width: 420px;
+        max-width: 90vw;
+        overflow: hidden;
+      }
+      .crm-hd {
+        height: 80px;
+        background: var(--grn-l);
+        position: relative;
+      }
+      .crm-hd-inner {
+        width: 100%;
+        height: 100%;
+        background: var(--teal-m);
+        opacity: 0.38;
+      }
+      .crm-av {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: var(--teal-m);
+        border: 2.5px solid var(--srf);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--grn-d);
+        position: absolute;
+        bottom: -22px;
+        left: 16px;
+      }
+      .crm-close {
+        position: absolute;
+        top: 10px;
+        right: 12px;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.88);
+        border: none;
+        font-size: 12px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--tx2);
+      }
+      .crm-body {
+        padding: 30px 18px 18px;
+      }
+      .crm-name {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--tx1);
+        margin-bottom: 2px;
+      }
+      .crm-niche {
+        font-size: 12px;
+        color: var(--tx3);
+        margin-bottom: 3px;
+      }
+      .crm-loc {
+        font-size: 12px;
+        color: var(--tx3);
+        margin-bottom: 11px;
+      }
+      .crm-stats {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+        margin-bottom: 13px;
+      }
+      .crm-stat {
+        background: var(--srf2);
+        border-radius: var(--r1);
+        padding: 8px 10px;
+        text-align: center;
+      }
+      .crm-sv {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .crm-sl {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-top: 2px;
+      }
+      .crm-aud {
+        margin-bottom: 13px;
+        padding-bottom: 13px;
+        border-bottom: 1px solid var(--bdr);
+      }
+      .crm-aud-t {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--tx1);
+        margin-bottom: 7px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .aud-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 5px;
+      }
+      .aud-lbl {
+        font-size: 11px;
+        color: var(--tx2);
+        width: 88px;
+        flex-shrink: 0;
+      }
+      .aud-track {
+        flex: 1;
+        height: 4px;
+        background: var(--srf2);
+        border-radius: 2px;
+        overflow: hidden;
+      }
+      .aud-fill {
+        height: 100%;
+        border-radius: 2px;
+        background: var(--grn);
+      }
+      .aud-desc {
+        font-size: 10px;
+        color: var(--tx3);
+        width: 52px;
+      }
+      .crm-quote {
+        font-size: 12px;
+        color: var(--tx2);
+        line-height: 1.65;
+        padding: 8px 11px;
+        background: var(--srf2);
+        border-radius: var(--r1);
+        border-left: 2px solid var(--bdr-m);
+        font-style: italic;
+        margin-bottom: 13px;
+      }
+      .crm-quote-by {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-top: 4px;
+        font-style: normal;
+      }
+      .crm-foot {
+        display: flex;
+        gap: 8px;
+      }
+      .btn-contact {
+        flex: 1;
+        padding: 9px;
+        background: var(--red);
+        border: none;
+        border-radius: var(--r1);
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .btn-save-cr {
+        flex: 1;
+        padding: 9px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        background: transparent;
+        color: var(--tx2);
+        font-size: 13px;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+
+      /* TOAST */
+      .toast {
+        position: fixed;
+        bottom: 22px;
+        right: 22px;
+        background: var(--grn-d);
+        color: #fff;
+        padding: 10px 16px;
+        border-radius: var(--r2);
+        font-size: 13px;
+        font-weight: 600;
+        display: none;
+        z-index: 200;
+        align-items: center;
+        gap: 7px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+      }
+      .toast.on {
+        display: flex;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- SIDEBAR -->
+      <div class="sb">
+        <div class="sb-logo">
+          <div class="logo-ic">
+            <svg viewBox="0 0 16 16" fill="none" width="15" height="15">
+              <path
+                d="M3 8a5 5 0 1010 0A5 5 0 003 8z"
+                fill="white"
+                opacity="0.25"
+              />
+              <path
+                d="M8 5v3l2 2"
+                stroke="white"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+          <div>
+            <div
+              style="
+                font-size: 14px;
+                font-weight: 700;
+                color: var(--tx1);
+                letter-spacing: -0.2px;
+              "
+            >
+              SponzoBD
+            </div>
+            <div style="font-size: 10px; color: var(--tx3)">Sponsor portal</div>
+          </div>
+        </div>
+        <div class="sb-user">
+          <div class="av-s" id="sidebar-avatar">GF</div>
+          <div>
+            <div class="u-name" id="sidebar-name">GreenFresh BD</div>
+            <div class="u-sub" id="sidebar-subtitle">
+              Health &amp; food · Dhaka
+            </div>
+            <div class="u-plan" id="sidebar-plan">
+              <span class="pdot"></span>Pro plan
+            </div>
+          </div>
+        </div>
+        <nav class="nav">
+          <div class="nav-sec">Main</div>
+          <div class="ni on">
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <path d="M1.5 6.5L7.5 1.5L13.5 6.5V13H9.5V9.5H5.5V13H1.5V6.5Z" />
+            </svg>
+            Home
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'sponsor_dashboard.html'"
+          >
+            <svg viewBox="0 0 15 15" fill="currentColor">
+              <rect x="1" y="1" width="5" height="5" rx="1" />
+              <rect x="9" y="1" width="5" height="5" rx="1" />
+              <rect x="1" y="9" width="5" height="5" rx="1" />
+              <rect x="9" y="9" width="5" height="5" rx="1" />
+            </svg>
+            Dashboard &amp; analytics
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'sponsor_campaigns_deals.html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <rect x="1.5" y="2.5" width="12" height="10" rx="1.5" />
+              <path d="M5 6h5M5 9h3" />
+            </svg>
+            My campaigns &amp; deals
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'applicant_review (2).html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <circle cx="5.5" cy="5" r="2.5" />
+              <path d="M1 12c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4" />
+              <path d="M11 7l2 2 2-3" stroke-width="1.4" />
+            </svg>
+            Applicant review
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'sponsor_messages.html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <path d="M2 2h11v8H8l-3 2.5V10H2V2z" />
+            </svg>
+            Messages<span class="ni-badge">3</span>
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'sponsor_brand_settings (4).html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <circle cx="7.5" cy="7.5" r="2" />
+              <path
+                d="M7.5 1v1M7.5 13v1M1 7.5h1M13 7.5h1M3 3l.7.7M11.3 11.3l.7.7M3 12l.7-.7M11.3 3.7l.7-.7"
+              />
+            </svg>
+            Brand settings
+          </div>
+        </nav>
+        <div class="sb-tier">
+          <div class="st-row">
+            <span class="st-lbl">Campaigns used</span
+            ><span class="st-plan">Pro</span>
+          </div>
+          <div class="st-track">
+            <div class="st-fill" style="width: 66%"></div>
+          </div>
+          <div class="st-usage">4 of 6 campaigns used this month</div>
+          <div
+            class="st-upgrade"
+            onclick="alert('Upgrade to Premium for unlimited campaigns')"
+          >
+            Upgrade to Premium →
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN -->
+      <div class="main">
+        <div class="topbar">
+          <div class="tb-t">Home</div>
+          <div class="tb-r">
+            <div class="icon-btn">
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 15 15"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.3"
+              >
+                <path
+                  d="M7.5 1.5A4 4 0 0111.5 5.5v2l1.5 2H2L3.5 7.5V5.5A4 4 0 017.5 1.5z"
+                />
+                <path d="M6 11.5a1.5 1.5 0 003 0" />
+              </svg>
+              <div class="notif-dot"></div>
+            </div>
+            <span class="badge-pro" id="topbar-plan">Pro plan</span>
+          </div>
+        </div>
+
+        <div class="page-body">
+          <!-- LEFT RAIL -->
+          <div class="left-rail">
+            <div class="brand-card">
+              <div class="bc-cover"><div class="bc-cover-inner"></div></div>
+              <div class="bc-av">GF</div>
+              <div class="bc-body">
+                <div class="bc-name">GreenFresh BD</div>
+                <div class="bc-sub">Health &amp; food · Dhaka</div>
+                <div class="bc-stats">
+                  <div class="bcs">
+                    <div class="bcs-v" id="brand-live-campaigns">2</div>
+                    <div class="bcs-l">Live campaigns</div>
+                  </div>
+                  <div class="bcs">
+                    <div class="bcs-v" id="brand-applicants">47</div>
+                    <div class="bcs-l">Applicants</div>
+                  </div>
+                  <div class="bcs">
+                    <div class="bcs-v" id="brand-spent-total">৳92K</div>
+                    <div class="bcs-l">Spent total</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="rail-panel">
+              <div class="rp-t">Filter feed</div>
+              <div
+                class="filter-chip on"
+                data-filter="all"
+                onclick="filterFeed('all', this)"
+              >
+                <span>All posts</span><span class="fc-count">11</span>
+              </div>
+
+              <div
+                class="filter-chip"
+                data-filter="announce"
+                onclick="filterFeed('announce', this)"
+              >
+                <span>Creator announcements</span
+                ><span class="fc-count">2</span>
+              </div>
+              <div
+                class="filter-chip"
+                data-filter="platform"
+                onclick="filterFeed('platform', this)"
+              >
+                <span>Platform updates</span><span class="fc-count">1</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- FEED -->
+          <div class="feed-col">
+            <!-- RUN A CAMPAIGN BOX -->
+            <div class="run-box">
+              <div class="rb-top">
+                <div class="rb-ic">
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path
+                      d="M9 2L11.5 7.5H17L12.5 11L14 16.5L9 13.5L4 16.5L5.5 11L1 7.5H6.5Z"
+                      fill="white"
+                      opacity=".9"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <div class="rb-title">Run a campaign</div>
+                  <div class="rb-sub">
+                    Post a brief and get matched with the right creators in
+                    hours
+                  </div>
+                </div>
+              </div>
+
+              <!-- Pre-announce option -->
+              <div class="rb-announce">
+                <div class="rb-ann-lbl">
+                  Pre-announce to creators
+                  <span
+                    >· optional · lets creators express interest before campaign
+                    goes live</span
+                  >
+                </div>
+                <input
+                  class="rb-ann-inp"
+                  id="rb-inp"
+                  type="text"
+                  placeholder="e.g. Planning a Ramadan campaign for health creators in Dhaka — reach out if interested..."
+                  onfocus="expandAnnounce()"
+                  readonly
+                />
+              </div>
+              <div class="rb-expanded" id="rb-expanded">
+                <textarea
+                  class="rb-ta"
+                  id="rb-ta"
+                  placeholder="Describe what you are planning. e.g. GreenFresh BD is planning a 2-reel campaign for Ramadan targeting Dhaka health audiences. Budget around ৳25,000. Interested creators DM us through SponzoBD."
+                  maxlength="300"
+                  oninput="updateAnnCount()"
+                ></textarea>
+                <div class="rb-tag-row">
+                  <button
+                    class="rtag"
+                    data-tag="health"
+                    onclick="toggleRTag(this)"
+                  >
+                    Health &amp; wellness
+                  </button>
+                  <button
+                    class="rtag"
+                    data-tag="food"
+                    onclick="toggleRTag(this)"
+                  >
+                    Food &amp; beverage
+                  </button>
+                  <button
+                    class="rtag"
+                    data-tag="fashion"
+                    onclick="toggleRTag(this)"
+                  >
+                    Fashion &amp; beauty
+                  </button>
+                  <button
+                    class="rtag"
+                    data-tag="instagram"
+                    onclick="toggleRTag(this)"
+                  >
+                    Instagram
+                  </button>
+                  <button
+                    class="rtag"
+                    data-tag="tiktok"
+                    onclick="toggleRTag(this)"
+                  >
+                    TikTok
+                  </button>
+                  <button
+                    class="rtag"
+                    data-tag="dhaka"
+                    onclick="toggleRTag(this)"
+                  >
+                    Dhaka
+                  </button>
+                </div>
+                <div class="rb-char" id="rb-char">0 / 300</div>
+                <div class="rb-foot">
+                  <button class="btn-outline-s" onclick="collapseAnnounce()">
+                    Cancel
+                  </button>
+                  <button
+                    class="btn-run"
+                    style="width: auto; padding: 8px 18px; font-size: 13px"
+                    id="ann-btn"
+                    onclick="submitAnnounce()"
+                  >
+                    Post announcement
+                  </button>
+                </div>
+              </div>
+
+              <div class="rb-divider"></div>
+              <button class="run-btn" onclick="openCampaignForm()">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path
+                    d="M8 2v12M2 8h12"
+                    stroke="white"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                Post a new campaign
+              </button>
+              <div class="run-hint">
+                2 of 6 campaign slots remaining this month ·
+                <span
+                  style="color: var(--red); cursor: pointer"
+                  onclick="alert('Upgrade to Premium for unlimited campaigns')"
+                  >upgrade for unlimited</span
+                >
+              </div>
+            </div>
+
+            <!-- FEED LIST -->
+            <div id="feed-list"></div>
+          </div>
+
+          <!-- RIGHT RAIL -->
+          <div class="right-rail">
+            <div class="rail-panel">
+              <div class="rp-t">Creator supply by niche</div>
+              <div class="tr-row">
+                <div>
+                  <div class="tr-cat">Health &amp; wellness</div>
+                  <div class="tr-bar">
+                    <div class="tr-fill" style="width: 90%"></div>
+                  </div>
+                </div>
+                <span class="tr-count">142 creators</span>
+              </div>
+              <div class="tr-row">
+                <div>
+                  <div class="tr-cat">Food &amp; beverage</div>
+                  <div class="tr-bar">
+                    <div class="tr-fill" style="width: 74%"></div>
+                  </div>
+                </div>
+                <span class="tr-count">117 creators</span>
+              </div>
+              <div class="tr-row">
+                <div>
+                  <div class="tr-cat">Fashion &amp; beauty</div>
+                  <div class="tr-bar">
+                    <div class="tr-fill" style="width: 62%"></div>
+                  </div>
+                </div>
+                <span class="tr-count">98 creators</span>
+              </div>
+              <div class="tr-row">
+                <div>
+                  <div class="tr-cat">Sports &amp; fitness</div>
+                  <div class="tr-bar">
+                    <div class="tr-fill" style="width: 52%"></div>
+                  </div>
+                </div>
+                <span class="tr-count">82 creators</span>
+              </div>
+              <div class="tr-row">
+                <div>
+                  <div class="tr-cat">Technology</div>
+                  <div class="tr-bar">
+                    <div class="tr-fill" style="width: 38%"></div>
+                  </div>
+                </div>
+                <span class="tr-count">60 creators</span>
+              </div>
+            </div>
+
+            <div
+              class="rail-panel"
+              style="background: var(--grn-l); border-color: var(--grn-m)"
+            >
+              <div class="rp-t" style="color: var(--grn-3)">
+                Platform this week
+              </div>
+              <div class="stat-row" style="border-color: rgba(0, 0, 0, 0.08)">
+                <span class="sr-l" style="color: var(--grn-t)"
+                  >Live campaigns</span
+                ><span class="sr-v grn" id="platform-live-campaigns">47</span>
+              </div>
+              <div class="stat-row" style="border-color: rgba(0, 0, 0, 0.08)">
+                <span class="sr-l" style="color: var(--grn-t)"
+                  >Deals closed</span
+                ><span class="sr-v grn" id="platform-deals-closed">23</span>
+              </div>
+              <div class="stat-row" style="border-color: rgba(0, 0, 0, 0.08)">
+                <span class="sr-l" style="color: var(--grn-t)"
+                  >New creators joined</span
+                ><span class="sr-v grn" id="platform-new-creators">31</span>
+              </div>
+              <div class="stat-row" style="border-bottom: none">
+                <span class="sr-l" style="color: var(--grn-t)"
+                  >Avg deal response time</span
+                ><span class="sr-v grn" id="platform-response-time"
+                  >&lt;4 hrs</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CREATOR DETAIL MODAL -->
+    <div
+      class="modal-overlay"
+      id="creator-modal"
+      onclick="closeCreatorModal(event)"
+    >
+      <div class="cr-modal" onclick="event.stopPropagation()">
+        <div class="crm-hd">
+          <div class="crm-hd-inner"></div>
+          <div class="crm-av" id="crm-initials">LA</div>
+          <button
+            class="crm-close"
+            onclick="
+              document.getElementById('creator-modal').classList.remove('on')
+            "
+          >
+            ✕
+          </button>
+        </div>
+        <div class="crm-body">
+          <div class="crm-name" id="crm-name">Creator</div>
+          <div class="crm-niche" id="crm-niche">
+            Niche · Followers · Platform
+          </div>
+          <div class="crm-loc" id="crm-loc">Location</div>
+          <div class="crm-stats">
+            <div class="crm-stat">
+              <div class="crm-sv" id="crm-followers">—</div>
+              <div class="crm-sl">Followers</div>
+            </div>
+            <div class="crm-stat">
+              <div class="crm-sv" id="crm-eng">—</div>
+              <div class="crm-sl">Engagement</div>
+            </div>
+            <div class="crm-stat">
+              <div class="crm-sv" id="crm-deals">—</div>
+              <div class="crm-sl">Deals done</div>
+            </div>
+            <div class="crm-stat">
+              <div class="crm-sv" id="crm-rating">—</div>
+              <div class="crm-sl">Rating</div>
+            </div>
+          </div>
+          <div class="crm-aud">
+            <div class="crm-aud-t">Audience composition</div>
+            <div class="aud-row">
+              <span class="aud-lbl">Gen Z 16–24</span>
+              <div class="aud-track">
+                <div class="aud-fill" style="width: 95%" id="crm-a1"></div>
+              </div>
+              <span class="aud-desc" id="crm-a1l">Dominant</span>
+            </div>
+            <div class="aud-row">
+              <span class="aud-lbl">Adults 25–34</span>
+              <div class="aud-track">
+                <div
+                  class="aud-fill"
+                  style="width: 68%; opacity: 0.7"
+                  id="crm-a2"
+                ></div>
+              </div>
+              <span class="aud-desc">Strong</span>
+            </div>
+            <div class="aud-row">
+              <span class="aud-lbl">Primarily female</span>
+              <div class="aud-track">
+                <div
+                  class="aud-fill"
+                  style="width: 72%; background: #378add"
+                  id="crm-a3"
+                ></div>
+              </div>
+              <span class="aud-desc" id="crm-a3l">72%</span>
+            </div>
+            <div class="aud-row">
+              <span class="aud-lbl">Dhaka-based</span>
+              <div class="aud-track">
+                <div class="aud-fill" style="width: 80%" id="crm-a4"></div>
+              </div>
+              <span class="aud-desc">Primary</span>
+            </div>
+          </div>
+          <div class="crm-quote" id="crm-quote">Sponsor review loading...</div>
+          <div class="crm-quote-by" id="crm-quote-by">— Sponsor</div>
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              gap: 6px;
+              margin-bottom: 13px;
+            "
+          >
+            <span
+              style="
+                font-size: 11px;
+                padding: 3px 10px;
+                border-radius: 20px;
+                background: var(--grn-l);
+                color: var(--grn-3);
+                font-weight: 700;
+              "
+              >Verified creator</span
+            >
+            <span style="font-size: 11px; color: var(--tx3)"
+              >All deals via SponzoBD escrow</span
+            >
+          </div>
+          <div class="crm-foot">
+            <button
+              class="btn-contact"
+              onclick="
+                document.getElementById('creator-modal').classList.remove('on');
+                showToast(
+                  'Campaign form opening — post a campaign to connect with this creator',
+                );
+              "
+            >
+              Post campaign to connect
+            </button>
+            <button
+              class="btn-save-cr"
+              onclick="showToast('Creator saved to your shortlist')"
+            >
+              Save creator
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CAMPAIGN FORM MODAL -->
+    <div
+      class="modal-overlay"
+      id="campaign-modal"
+      onclick="closeCampaignModal(event)"
+    >
+      <div
+        class="cr-modal"
+        style="width: 480px"
+        onclick="event.stopPropagation()"
+      >
+        <div
+          style="
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--bdr);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <div style="font-size: 15px; font-weight: 700; color: var(--tx1)">
+            Post a new campaign
+          </div>
+          <button
+            class="crm-close"
+            style="position: static; width: 28px; height: 28px"
+            onclick="
+              document.getElementById('campaign-modal').classList.remove('on')
+            "
+          >
+            ✕
+          </button>
+        </div>
+        <div style="padding: 16px 20px; max-height: 70vh; overflow-y: auto">
+          <div
+            style="
+              display: flex;
+              gap: 8px;
+              margin-bottom: 14px;
+              background: var(--srf2);
+              border-radius: var(--r2);
+              padding: 3px;
+            "
+          >
+            <div
+              id="step-1-btn"
+              style="
+                flex: 1;
+                padding: 7px;
+                border-radius: var(--r1);
+                font-size: 12px;
+                font-weight: 600;
+                text-align: center;
+                background: var(--srf);
+                color: var(--tx1);
+                cursor: pointer;
+              "
+            >
+              1 · Basics
+            </div>
+            <div
+              id="step-2-btn"
+              style="
+                flex: 1;
+                padding: 7px;
+                border-radius: var(--r1);
+                font-size: 12px;
+                font-weight: 500;
+                text-align: center;
+                background: transparent;
+                color: var(--tx3);
+                cursor: default;
+              "
+            >
+              2 · Requirements
+            </div>
+            <div
+              id="step-3-btn"
+              style="
+                flex: 1;
+                padding: 7px;
+                border-radius: var(--r1);
+                font-size: 12px;
+                font-weight: 500;
+                text-align: center;
+                background: transparent;
+                color: var(--tx3);
+                cursor: default;
+              "
+            >
+              3 · Budget &amp; publish
+            </div>
+          </div>
+          <div id="cf-step1">
+            <div style="margin-bottom: 11px">
+              <div
+                style="
+                  font-size: 11px;
+                  font-weight: 600;
+                  color: var(--tx1);
+                  margin-bottom: 4px;
+                  text-transform: uppercase;
+                  letter-spacing: 0.05em;
+                "
+              >
+                Campaign name <span style="color: var(--red)">*</span>
+              </div>
+              <input
+                id="campaign-name"
+                style="
+                  width: 100%;
+                  padding: 8px 11px;
+                  border: 1px solid var(--bdr-m);
+                  border-radius: var(--r1);
+                  background: var(--srf);
+                  font-size: 13px;
+                  font-family: var(--font);
+                "
+                type="text"
+                placeholder="e.g. Ramadan Wellness Campaign 2025"
+              />
+            </div>
+            <div style="margin-bottom: 11px">
+              <div
+                style="
+                  font-size: 11px;
+                  font-weight: 600;
+                  color: var(--tx1);
+                  margin-bottom: 4px;
+                  text-transform: uppercase;
+                  letter-spacing: 0.05em;
+                "
+              >
+                Campaign niche <span style="color: var(--red)">*</span>
+              </div>
+              <select
+                id="campaign-niche"
+                style="
+                  width: 100%;
+                  padding: 8px 11px;
+                  border: 1px solid var(--bdr-m);
+                  border-radius: var(--r1);
+                  background: var(--srf);
+                  font-size: 13px;
+                  font-family: var(--font);
+                "
+              >
+                <option>Health &amp; wellness</option>
+                <option>Food &amp; beverage</option>
+                <option>Fashion &amp; beauty</option>
+                <option>Sports &amp; fitness</option>
+                <option>Technology</option>
+                <option>Education</option>
+                <option>Travel &amp; lifestyle</option>
+                <option>Social causes</option>
+              </select>
+            </div>
+            <div style="margin-bottom: 11px">
+              <div
+                style="
+                  font-size: 11px;
+                  font-weight: 600;
+                  color: var(--tx1);
+                  margin-bottom: 4px;
+                  text-transform: uppercase;
+                  letter-spacing: 0.05em;
+                "
+              >
+                Campaign brief <span style="color: var(--red)">*</span>
+              </div>
+              <textarea
+                id="campaign-brief"
+                style="
+                  width: 100%;
+                  padding: 8px 11px;
+                  border: 1px solid var(--bdr-m);
+                  border-radius: var(--r1);
+                  background: var(--srf);
+                  font-size: 13px;
+                  font-family: var(--font);
+                  resize: none;
+                  height: 90px;
+                  line-height: 1.55;
+                "
+                placeholder="Describe what you want creators to do, what the content should feel like, and any brand guidelines to follow. The more specific you are the better creators will apply."
+              ></textarea>
+              <div
+                style="font-size: 11px; color: var(--grn-3); margin-top: 3px"
+              >
+                Tip — briefs above 100 words get 40% better applicants
+              </div>
+            </div>
+
+            <div class="field-row" style="margin-bottom: 11px">
+              <div>
+                <div
+                  style="
+                    font-size: 11px;
+                    font-weight: 600;
+                    color: var(--tx1);
+                    margin-bottom: 4px;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                  "
+                >
+                  Target location <span style="color: var(--red)">*</span>
+                </div>
+                <input
+                  id="campaign-location"
+                  style="
+                    width: 100%;
+                    padding: 8px 11px;
+                    border: 1px solid var(--bdr-m);
+                    border-radius: var(--r1);
+                    background: var(--srf);
+                    font-size: 13px;
+                    font-family: var(--font);
+                  "
+                  type="text"
+                  placeholder="Dhaka, Chittagong, nationwide"
+                />
+              </div>
+              <div>
+                <div
+                  style="
+                    font-size: 11px;
+                    font-weight: 600;
+                    color: var(--tx1);
+                    margin-bottom: 4px;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                  "
+                >
+                  Budget <span style="color: var(--red)">*</span>
+                </div>
+                <input
+                  id="campaign-budget"
+                  style="
+                    width: 100%;
+                    padding: 8px 11px;
+                    border: 1px solid var(--bdr-m);
+                    border-radius: var(--r1);
+                    background: var(--srf);
+                    font-size: 13px;
+                    font-family: var(--font);
+                  "
+                  type="text"
+                  placeholder="৳15,000 - ৳25,000"
+                />
+              </div>
+            </div>
+
+            <div style="margin-bottom: 11px">
+              <div
+                style="
+                  font-size: 11px;
+                  font-weight: 600;
+                  color: var(--tx1);
+                  margin-bottom: 4px;
+                  text-transform: uppercase;
+                  letter-spacing: 0.05em;
+                "
+              >
+                Deliverables &amp; timeline
+                <span style="color: var(--red)">*</span>
+              </div>
+              <textarea
+                id="campaign-deliverables"
+                style="
+                  width: 100%;
+                  padding: 8px 11px;
+                  border: 1px solid var(--bdr-m);
+                  border-radius: var(--r1);
+                  background: var(--srf);
+                  font-size: 13px;
+                  font-family: var(--font);
+                  resize: none;
+                  height: 78px;
+                  line-height: 1.55;
+                "
+                placeholder="For example: 2 Instagram reels, 3 story frames, Bangla captions, draft due in 5 days, final publish window within 2 weeks."
+              ></textarea>
+            </div>
+          </div>
+        </div>
+        <div
+          style="
+            padding: 13px 20px;
+            border-top: 1px solid var(--bdr);
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+          "
+        >
+          <button
+            class="btn-outline-s"
+            onclick="
+              document.getElementById('campaign-modal').classList.remove('on')
+            "
+          >
+            Cancel
+          </button>
+          <button
+            class="btn-run"
+            style="width: auto; padding: 8px 20px; font-size: 13px"
+            onclick="submitCampaign()"
+          >
+            Create campaign
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+        <path
+          d="M2 7l3 3 7-7"
+          stroke="white"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      <span id="toast-msg">Done!</span>
+    </div>
+
+    <script>
+      const feedData = [
+        {
+          id: "p1",
+          type: "platform",
+          avatar: "📊",
+          avatarBg: "var(--srf2)",
+          avatarColor: "var(--tx2)",
+          avatarSquare: false,
+          brand: "SponzoBD Insights",
+          meta: "Weekly snapshot · March 21, 2025",
+          title: "14 new health & wellness creators joined this week",
+          text: "Your primary niche — health and wellness — is the most active category on the platform this week. 142 verified creators are currently available, with 38 having completed 3 or more deals. Your campaigns in this niche are well-positioned to attract high-quality applicants.",
+          pills: [],
+          ctaType: "post",
+          ctaLabel: "Post a campaign now",
+        },
+        {
+          id: "c1",
+          type: "creator",
+          avatar: "LA",
+          avatarBg: "var(--teal-m)",
+          avatarColor: "var(--grn-d)",
+          avatarSquare: false,
+          brand: "Creator spotlight — Health & wellness",
+          meta: "52K followers · Instagram, TikTok · Verified creator",
+          title: "Health & wellness creator · Dhaka · Top 4% in niche",
+          text: "Female-skewed health and wellness creator with a highly engaged Dhaka-based audience. Specialises in nutrition, fitness, and mental wellness content. 7 completed deals on SponzoBD with a consistent 4.8-star sponsor rating.",
+          pills: [
+            "Health & wellness",
+            "Instagram",
+            "TikTok",
+            "Dhaka · Nationwide",
+            "52K followers",
+            "4.8% engagement",
+          ],
+          pillTypes: ["p-cat", "p-plat", "p-plat", "p-loc", "p-fol", "p-eng"],
+          stats: [
+            { v: "52K", l: "Followers" },
+            { v: "4.8%", l: "Engagement" },
+            { v: "7", l: "Deals done" },
+            { v: "4.8★", l: "Rating" },
+          ],
+          quote:
+            '"Outstanding content — engagement was 4× our benchmark. Will work with her again."',
+          quoteBy: "— Previous sponsor, health brand · March 2025",
+          creatorKey: "lamia",
+          ctaType: "connect",
+        },
+        {
+          id: "r1",
+          type: "result",
+          avatar: "✅",
+          avatarBg: "var(--grn-l)",
+          avatarColor: "var(--grn-3)",
+          avatarSquare: false,
+          brand: "Completed deal · Health & wellness · Dhaka",
+          meta: "Instagram campaign · Closed February 2025",
+          title: "Health brand campaign — 4.2% engagement, 22% traffic spike",
+          text: "A Dhaka-based health food brand ran a 2-reel campaign with a verified SponzoBD creator. The content went live during National Health Week and drove measurable results within the first 72 hours.",
+          pills: ["Health & wellness", "Instagram", "Dhaka", "৳35,000 deal"],
+          pillTypes: ["p-cat", "p-plat", "p-loc", "p-deal"],
+          stats: [
+            { v: "4.2%", l: "Engagement rate" },
+            { v: "+22%", l: "Traffic spike" },
+            { v: "৳35K", l: "Deal value" },
+            { v: "5★", l: "Sponsor rating" },
+          ],
+          quote:
+            '"Best ROI from any marketing channel we tried this quarter. The creator\'s audience trusted the recommendation."',
+          quoteBy: "— Sponsor, health brand · kept anonymous",
+          ctaType: "post",
+        },
+        {
+          id: "c2",
+          type: "creator",
+          avatar: "RK",
+          avatarBg: "var(--amb-l)",
+          avatarColor: "var(--amb-d)",
+          avatarSquare: false,
+          brand: "Creator spotlight — Food & beverage",
+          meta: "28K followers · TikTok · Verified creator",
+          title: "Food & lifestyle creator · Dhaka · 3.9% engagement",
+          text: "TikTok-first food creator with a vibrant Dhaka-based audience. Known for celebratory food content around seasonal occasions. Highly active during Eid and Ramadan periods. 5 completed deals, 4.6-star average rating.",
+          pills: [
+            "Food & beverage",
+            "TikTok",
+            "Dhaka",
+            "28K followers",
+            "3.9% engagement",
+          ],
+          pillTypes: ["p-cat", "p-plat", "p-loc", "p-fol", "p-eng"],
+          stats: [
+            { v: "28K", l: "Followers" },
+            { v: "3.9%", l: "Engagement" },
+            { v: "5", l: "Deals done" },
+            { v: "4.6★", l: "Rating" },
+          ],
+          quote:
+            '"Reached exactly the Dhaka food audience we needed. The reel felt genuine — not like an ad."',
+          quoteBy: "— Previous sponsor, food brand · February 2025",
+          creatorKey: "rafi",
+          ctaType: "connect",
+        },
+        {
+          id: "a1",
+          type: "announce",
+          avatar: "SK",
+          avatarBg: "var(--pur-l)",
+          avatarColor: "var(--pur-t)",
+          avatarSquare: false,
+          brand: "Sabbir Khan — Fitness & lifestyle creator",
+          meta: "41K followers · Instagram, TikTok · Posted 3 hours ago",
+          title: null,
+          text: "Just wrapped a 3-reel fitness campaign — 4.8% engagement across all three posts. I have a window open in late March. Looking for sports, fitness, or health brands planning a campaign before Eid. Dhaka-based audience, primarily male 18–34. Open to discussing rates through SponzoBD.",
+          pills: [
+            "Sports & fitness",
+            "Instagram",
+            "TikTok",
+            "Dhaka",
+            "Open to collabs",
+          ],
+          pillTypes: ["p-cat", "p-plat", "p-plat", "p-loc", "p-eng"],
+          stats: [],
+          ctaType: "reach",
+        },
+        {
+          id: "r2",
+          type: "result",
+          avatar: "✅",
+          avatarBg: "var(--grn-l)",
+          avatarColor: "var(--grn-3)",
+          avatarSquare: false,
+          brand: "Completed deal · Fashion & beauty · Nationwide",
+          meta: "TikTok campaign · Closed March 2025",
+          title: "Fashion brand Eid campaign — 5.1% engagement rate",
+          text: "A Bangladeshi fashion brand ran a single TikTok reel campaign targeting women aged 18–34 before Eid. The creator delivered a product showcase that drove a significant traffic spike to the brand's store within the first week.",
+          pills: ["Fashion & beauty", "TikTok", "Nationwide", "৳28,000 deal"],
+          pillTypes: ["p-cat", "p-plat", "p-loc", "p-deal"],
+          stats: [
+            { v: "5.1%", l: "Engagement rate" },
+            { v: "+18%", l: "Store traffic" },
+            { v: "৳28K", l: "Deal value" },
+            { v: "5★", l: "Rating" },
+          ],
+          quote:
+            '"We were sceptical about influencer marketing. This campaign changed our minds completely."',
+          quoteBy: "— Sponsor, fashion brand · kept anonymous",
+          ctaType: "post",
+        },
+        {
+          id: "c3",
+          type: "creator",
+          avatar: "NI",
+          avatarBg: "var(--pur-l)",
+          avatarColor: "var(--pur-t)",
+          avatarSquare: false,
+          brand: "Creator spotlight — Fashion & beauty",
+          meta: "44K followers · Instagram · Verified creator",
+          title: "Fashion & beauty creator · Dhaka · 4.1% engagement",
+          text: "Instagram-first fashion and beauty creator with a strong following among young professional women in Dhaka. Known for styling content and honest product reviews. 4 completed deals with brand sponsors.",
+          pills: [
+            "Fashion & beauty",
+            "Instagram",
+            "Dhaka",
+            "44K followers",
+            "4.1% engagement",
+          ],
+          pillTypes: ["p-cat", "p-plat", "p-loc", "p-fol", "p-eng"],
+          stats: [
+            { v: "44K", l: "Followers" },
+            { v: "4.1%", l: "Engagement" },
+            { v: "4", l: "Deals done" },
+            { v: "4.7★", l: "Rating" },
+          ],
+          quote:
+            '"Professional, delivered exactly what we briefed. Her audience responded immediately."',
+          quoteBy: "— Previous sponsor, skincare brand · January 2025",
+          creatorKey: "nadia",
+          ctaType: "connect",
+        },
+        {
+          id: "a2",
+          type: "announce",
+          avatar: "FA",
+          avatarBg: "var(--grn-l)",
+          avatarColor: "var(--grn-3)",
+          avatarSquare: false,
+          brand: "Faria Ahmed — Health & wellness creator",
+          meta: "38K followers · Instagram · Posted 1 day ago",
+          title: null,
+          text: "My audience has been asking about nutritional supplements a lot lately. If any health supplement or nutrition brand is planning a campaign for Ramadan or post-Ramadan, I would love to connect. Primarily female audience aged 18–34 in Dhaka and Chittagong. 6 verified deals on SponzoBD.",
+          pills: [
+            "Health & wellness",
+            "Instagram",
+            "Dhaka · Chittagong",
+            "Open to collabs",
+          ],
+          pillTypes: ["p-cat", "p-plat", "p-loc", "p-eng"],
+          stats: [],
+          ctaType: "reach",
+        },
+        {
+          id: "sc1",
+          type: "sponsor_campaign",
+          avatar: "NL",
+          avatarBg: "var(--blu-l)",
+          avatarColor: "var(--blu-t)",
+          avatarSquare: true,
+          brand: "NutriLife Bangladesh",
+          meta: "Health & wellness · Sponsored campaign · 5 hours ago",
+          title: "Ramadan Wellness Series — Nutrition Content",
+          text: "Looking for health and wellness creators for our Ramadan nutrition campaign. 2 Instagram posts over 3 weeks. Bangla-language content preferred. Female-skewed audience a plus. Dhaka and Chittagong reach important.",
+          pills: [
+            "Health & wellness",
+            "Instagram",
+            "Dhaka · Chittagong",
+            "10K–60K followers",
+          ],
+          pillTypes: ["p-cat", "p-plat", "p-loc", "p-fol"],
+          budget: "৳15,000 – ৳25,000",
+          days: 7,
+          apps: 19,
+          ctaType: "similar",
+        },
+        {
+          id: "sc2",
+          type: "sponsor_campaign",
+          avatar: "OB",
+          avatarBg: "var(--teal-l)",
+          avatarColor: "var(--grn-d)",
+          avatarSquare: true,
+          brand: "OrganicBD",
+          meta: "Health & wellness · Sponsored campaign · 1 day ago",
+          title: "Organic Superfoods Launch — Everyday Meal Integration",
+          text: "We are launching our new organic superfoods range and need creators who can show the products as a natural part of everyday meals. No studio setups. Real food, real lifestyle. Product samples sent before filming.",
+          pills: [
+            "Health & wellness",
+            "Instagram",
+            "TikTok",
+            "Nationwide",
+            "5K–80K followers",
+          ],
+          pillTypes: ["p-cat", "p-plat", "p-plat", "p-loc", "p-fol"],
+          budget: "৳12,000 – ৳22,000",
+          days: 9,
+          apps: 41,
+          ctaType: "similar",
+        },
+        {
+          id: "sc3",
+          type: "sponsor_campaign",
+          avatar: "PS",
+          avatarBg: "var(--pur-l)",
+          avatarColor: "var(--pur-t)",
+          avatarSquare: true,
+          brand: "PureSkin BD",
+          meta: "Fashion & beauty · Sponsored campaign · 2 days ago",
+          title: "New Skincare Range — Women 18–34",
+          text: "Female skincare creators needed for our new moisturiser and serum range. Content should feel honest and personal — we want real skin stories not ads. Full product range sent before filming.",
+          pills: [
+            "Fashion & beauty",
+            "Instagram",
+            "TikTok",
+            "Dhaka",
+            "10K–80K followers",
+          ],
+          pillTypes: ["p-cat", "p-plat", "p-plat", "p-loc", "p-fol"],
+          budget: "৳18,000 – ৳32,000",
+          days: 20,
+          apps: 17,
+          ctaType: "similar",
+        },
+      ];
+
+      const creatorData = {
+        lamia: {
+          initials: "LA",
+          name: "Lamia Akter",
+          niche: "Health & wellness creator · Instagram, TikTok",
+          loc: "Dhaka, Bangladesh · Active today",
+          followers: "52,400",
+          eng: "4.8%",
+          deals: "7",
+          rating: "4.8★",
+          quote:
+            '"Outstanding content — engagement was 4× our benchmark. Her audience genuinely trusts her recommendations. Will work with her again."',
+          quoteBy: "— Marketing Manager, health brand · March 2025",
+        },
+        rafi: {
+          initials: "RK",
+          name: "Rafi Khan",
+          niche: "Food & lifestyle creator · TikTok",
+          loc: "Dhaka, Bangladesh · Active today",
+          followers: "28,200",
+          eng: "3.9%",
+          deals: "5",
+          rating: "4.6★",
+          quote:
+            '"Reached exactly the Dhaka food audience we needed. The reel felt genuine — not like an ad at all."',
+          quoteBy: "— Marketing Manager, food brand · February 2025",
+        },
+        nadia: {
+          initials: "NI",
+          name: "Nadia Islam",
+          niche: "Fashion & beauty creator · Instagram",
+          loc: "Dhaka, Bangladesh · Active 2 days ago",
+          followers: "44,100",
+          eng: "4.1%",
+          deals: "4",
+          rating: "4.7★",
+          quote:
+            '"Professional, delivered exactly what we briefed. Her audience responded immediately to the product."',
+          quoteBy: "— Campaign Lead, skincare brand · January 2025",
+        },
+      };
+
+      const SPONSOR_PHONE_KEY = "sponzobd.sponsor.phone";
+      const SPONSOR_STATE_PREFIX = "sponzobd.sponsor.home.state.";
+
+      let sponsorPhone = resolveSponsorPhone();
+      let activeFilter = "all";
+      let sponsorHomeState = buildDefaultSponsorState();
+      let saveTimer = null;
+
+      function resolveSponsorPhone() {
+        const params = new URLSearchParams(window.location.search);
+        const queryPhone = params.get("phone") || "";
+        const storedPhone = localStorage.getItem(SPONSOR_PHONE_KEY) || "";
+        const resolved =
+          queryPhone.trim() || storedPhone.trim() || "01700000000";
+        localStorage.setItem(SPONSOR_PHONE_KEY, resolved);
+        return resolved;
+      }
+
+      function buildDefaultSponsorState() {
+        return {
+          profile: {
+            phone: sponsorPhone,
+            displayName: "GreenFresh BD",
+            industry: "Health & food",
+            location: "Dhaka",
+            plan: "Pro",
+            initials: "GF",
+            subtitle: "Health & food · Dhaka",
+          },
+          metrics: {
+            baseLiveCampaigns: 2,
+            baseApplicants: 47,
+            baseSpentTotalValue: 92,
+            baseUnreadMessages: 3,
+            baseActiveDeals: 2,
+            baseCampaignsUsed: 4,
+            campaignsLimit: 6,
+            platformLiveCampaigns: 47,
+            platformDealsClosed: 23,
+            platformNewCreators: 31,
+            platformAvgResponseTime: "<4 hrs",
+          },
+          savedCreators: ["lamia"],
+          campaigns: [],
+          announcements: [],
+        };
+      }
+
+      function normalizeSponsorState(raw) {
+        const defaultState = buildDefaultSponsorState();
+        const merged = {
+          profile: {
+            ...defaultState.profile,
+            ...(raw?.profile || {}),
+          },
+          metrics: {
+            ...defaultState.metrics,
+            ...(raw?.metrics || {}),
+          },
+          savedCreators: Array.isArray(raw?.savedCreators)
+            ? raw.savedCreators.filter(Boolean)
+            : defaultState.savedCreators.slice(),
+          campaigns: Array.isArray(raw?.campaigns) ? raw.campaigns : [],
+          announcements: Array.isArray(raw?.announcements)
+            ? raw.announcements
+            : [],
+        };
+
+        merged.profile.phone = sponsorPhone;
+        merged.profile.displayName = String(
+          merged.profile.displayName || "GreenFresh BD",
+        ).trim();
+        merged.profile.industry = String(
+          merged.profile.industry || "Health & food",
+        ).trim();
+        merged.profile.location = String(
+          merged.profile.location || "Dhaka",
+        ).trim();
+        merged.profile.plan = String(merged.profile.plan || "Pro").trim();
+        merged.profile.initials = String(merged.profile.initials || "GF")
+          .trim()
+          .slice(0, 4);
+        merged.profile.subtitle = String(
+          merged.profile.subtitle ||
+            `${merged.profile.industry} · ${merged.profile.location}`,
+        ).trim();
+        return merged;
+      }
+
+      function stateStorageKey() {
+        return `${SPONSOR_STATE_PREFIX}${sponsorPhone}`;
+      }
+
+      function readLocalSponsorState() {
+        try {
+          const raw = localStorage.getItem(stateStorageKey());
+          return raw ? JSON.parse(raw) : null;
+        } catch (_err) {
+          return null;
+        }
+      }
+
+      function writeLocalSponsorState() {
+        localStorage.setItem(
+          stateStorageKey(),
+          JSON.stringify(sponsorHomeState),
+        );
+      }
+
+      function getFeedItems() {
+        const userAnnouncements = sponsorHomeState.announcements.map(
+          (item) => ({
+            ...item,
+            type: "announce",
+          }),
+        );
+        const userCampaigns = sponsorHomeState.campaigns.map((item) => ({
+          ...item,
+          type: "sponsor_campaign",
+        }));
+        return [...userAnnouncements, ...userCampaigns, ...feedData];
+      }
+
+      function updateSponsorSummary() {
+        const profile = sponsorHomeState.profile || {};
+        const metrics = sponsorHomeState.metrics || {};
+        const campaignsCount = sponsorHomeState.campaigns.length;
+        const announcementsCount = sponsorHomeState.announcements.length;
+        const planLabel = `${profile.plan || "Pro"} plan`;
+        const spentValue =
+          Number(metrics.baseSpentTotalValue || 0) + campaignsCount * 8;
+
+        document.getElementById("sidebar-avatar").textContent =
+          profile.initials || "GF";
+        document.getElementById("sidebar-name").textContent =
+          profile.displayName || "GreenFresh BD";
+        document.getElementById("sidebar-subtitle").textContent =
+          profile.subtitle ||
+          `${profile.industry || "Health & food"} · ${profile.location || "Dhaka"}`;
+        document.getElementById("sidebar-plan").innerHTML =
+          `<span class="pdot"></span>${planLabel}`;
+        document.getElementById("topbar-plan").textContent = planLabel;
+
+        document.getElementById("brand-live-campaigns").textContent = String(
+          (metrics.baseLiveCampaigns || 0) + campaignsCount,
+        );
+        document.getElementById("brand-applicants").textContent = String(
+          (metrics.baseApplicants || 0) +
+            announcementsCount * 2 +
+            campaignsCount * 3,
+        );
+        document.getElementById("brand-spent-total").textContent =
+          `৳${spentValue}K`;
+
+        document.getElementById("platform-live-campaigns").textContent = String(
+          metrics.platformLiveCampaigns || 47,
+        );
+        document.getElementById("platform-deals-closed").textContent = String(
+          metrics.platformDealsClosed || 23,
+        );
+        document.getElementById("platform-new-creators").textContent = String(
+          metrics.platformNewCreators || 31,
+        );
+        document.getElementById("platform-response-time").textContent =
+          metrics.platformAvgResponseTime || "<4 hrs";
+      }
+
+      function updateFilterCounts(items) {
+        const counts = {
+          all: items.length,
+          announce: items.filter((item) => item.type === "announce").length,
+          platform: items.filter((item) => item.type === "platform").length,
+        };
+
+        document.querySelector('[data-filter="all"] .fc-count').textContent =
+          counts.all;
+        document.querySelector(
+          '[data-filter="announce"] .fc-count',
+        ).textContent = counts.announce;
+        document.querySelector(
+          '[data-filter="platform"] .fc-count',
+        ).textContent = counts.platform;
+      }
+
+      async function persistSponsorState() {
+        writeLocalSponsorState();
+        try {
+          await fetch(`/api/sponsor/home/${encodeURIComponent(sponsorPhone)}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(sponsorHomeState),
+          });
+        } catch (_err) {
+          return;
+        }
+      }
+
+      function renderFeed(filter) {
+        const list = document.getElementById("feed-list");
+        const items = getFeedItems();
+        updateFilterCounts(items);
+        updateSponsorSummary();
+        const visibleItems =
+          filter === "all"
+            ? items
+            : items.filter((item) => item.type === filter);
+        list.innerHTML = visibleItems.map((item) => renderCard(item)).join("");
+      }
+
+      function renderCard(f) {
+        const avStyle = f.avatarSquare
+          ? `border-radius:8px;`
+          : `border-radius:50%;`;
+        const savedCreators = new Set(sponsorHomeState.savedCreators || []);
+
+        const typeConfig = {
+          creator: { cls: "tp-creator", label: "Creator spotlight" },
+          result: { cls: "tp-result", label: "Campaign result" },
+          announce: { cls: "tp-announce", label: "Creator available" },
+          platform: { cls: "tp-platform", label: "Platform update" },
+          sponsor_campaign: { cls: "tp-result", label: "Active campaign" },
+        };
+        const tc = typeConfig[f.type] || typeConfig.platform;
+        const pills = (f.pills || [])
+          .map(
+            (p, i) =>
+              `<span class="pill ${(f.pillTypes || [])[i] || "p-loc"}">${p}</span>`,
+          )
+          .join("");
+
+        let statsHtml = "";
+        if (f.stats && f.stats.length) {
+          statsHtml = `<div class="fc-stat-row">${f.stats
+            .map(
+              (s) =>
+                `<div class="fsr"><div class="fsr-v ${s.v.includes("%") || s.v.includes("★") ? "grn" : ""}">${s.v}</div><div class="fsr-l">${s.l}</div></div>`,
+            )
+            .join("")}</div>`;
+        }
+
+        let quoteHtml = f.quote
+          ? `<div class="fc-quote">${f.quote}<div class="fc-quote-by">${f.quoteBy || ""}</div></div>`
+          : "";
+
+        let footHtml = "";
+        if (f.type === "creator") {
+          const saved = savedCreators.has(f.creatorKey);
+          footHtml = `<div class="fc-foot">
+      <div style="font-size:11px;color:var(--tx3);">Verified creator · available for campaigns</div>
+      <div class="fc-actions">
+        <button class="btn-outline-s" onclick="openCreatorModal('${f.creatorKey}')">View profile</button>
+        <button class="btn-run" onclick="openCampaignForm()">Run a campaign</button>
+      </div>
+    </div>`;
+          if (saved) {
+            footHtml = `<div class="fc-foot">
+      <div style="font-size:11px;color:var(--tx3);">Saved to shortlist · verified creator</div>
+      <div class="fc-actions">
+        <button class="btn-outline-s" onclick="openCreatorModal('${f.creatorKey}')">View profile</button>
+        <button class="btn-run" onclick="openCampaignForm()">Run a campaign</button>
+      </div>
+    </div>`;
+          }
+        } else if (f.type === "result") {
+          footHtml = `<div class="fc-foot">
+      <div style="font-size:11px;color:var(--tx3);">Results anonymised · sponsor consented to share</div>
+      <div class="fc-actions">
+        <button class="btn-run" onclick="openCampaignForm()">Run a similar campaign</button>
+      </div>
+    </div>`;
+        } else if (f.type === "announce") {
+          footHtml = `<div class="fc-foot">
+      <div style="font-size:11px;color:var(--tx3);">Creator posted this on SponzoBD</div>
+      <div class="fc-actions">
+        <button class="btn-outline-s" onclick="showToast('Creator profile opened in the matching workflow')">View profile</button>
+      </div>
+    </div>`;
+        } else if (f.type === "platform" && f.ctaType === "post") {
+          footHtml = `<div class="fc-foot">
+      <div style="font-size:11px;color:var(--tx3);">Updated weekly by the SponzoBD team</div>
+      <div class="fc-actions">
+        <button class="btn-run" onclick="openCampaignForm()">${f.ctaLabel}</button>
+      </div>
+    </div>`;
+        } else if (f.type === "sponsor_campaign") {
+          footHtml = `<div class="fc-foot">
+      <div class="match-label" style="flex:1;flex-wrap:wrap;gap:8px;">
+        <span style="font-size:11px;color:var(--tx3);">${f.apps} applicants · ${f.days} days left · Budget ${f.budget}</span>
+      </div>
+      <div class="fc-actions">
+        <button class="btn-run" onclick="openCampaignForm()">Run a similar campaign</button>
+      </div>
+    </div>`;
+        }
+
+        const borderStyle =
+          f.type === "announce"
+            ? "border-left:3px solid var(--amb-m);"
+            : f.type === "result"
+              ? "border-left:3px solid var(--grn-m);"
+              : f.type === "platform"
+                ? "border-left:3px solid var(--blu-m);"
+                : f.type === "sponsor_campaign"
+                  ? "border-left:3px solid var(--blu-m);"
+                  : "";
+
+        return `<div class="feed-card" style="${borderStyle}" id="card-${f.id}">
+    <div class="fc-header">
+      <div class="fc-av" style="background:${f.avatarBg};color:${f.avatarColor};${avStyle}font-size:${String(f.avatar || "").length > 2 ? "18px" : "12px"}">${f.avatar}</div>
+      <div class="fc-brand-info">
+        <div class="fc-brand">${f.brand}</div>
+        <div class="fc-meta">${f.meta}</div>
+      </div>
+      <span class="type-pill ${tc.cls}">${tc.label}</span>
+    </div>
+    <div class="fc-body">
+      ${f.title ? `<div class="fc-title">${f.title}</div>` : ""}
+      <div class="fc-text">${f.text}</div>
+      ${pills ? `<div class="fc-pills">${pills}</div>` : ""}
+      ${statsHtml}
+      ${quoteHtml}
+    </div>
+    ${footHtml}
+  </div>`;
+      }
+
+      function filterFeed(type, el) {
+        document
+          .querySelectorAll(".filter-chip")
+          .forEach((c) => c.classList.remove("on"));
+        el.classList.add("on");
+        activeFilter = type;
+        renderFeed(type);
+      }
+
+      function openCreatorModal(key) {
+        const d = creatorData[key];
+        if (!d) return;
+        document.getElementById("crm-initials").textContent = d.initials;
+        document.getElementById("crm-name").textContent = d.name;
+        document.getElementById("crm-niche").textContent = d.niche;
+        document.getElementById("crm-loc").textContent = d.loc;
+        document.getElementById("crm-followers").textContent = d.followers;
+        document.getElementById("crm-eng").textContent = d.eng;
+        document.getElementById("crm-deals").textContent = d.deals;
+        document.getElementById("crm-rating").textContent = d.rating;
+        document.getElementById("crm-quote").textContent = d.quote;
+        document.getElementById("crm-quote-by").textContent = d.quoteBy;
+
+        const saveBtn = document.querySelector("#creator-modal .btn-save-cr");
+        const contactBtn = document.querySelector(
+          "#creator-modal .btn-contact",
+        );
+        const isSaved = (sponsorHomeState.savedCreators || []).includes(key);
+
+        saveBtn.textContent = isSaved
+          ? "Remove from shortlist"
+          : "Save creator";
+        saveBtn.onclick = () => toggleCreatorSave(key);
+        contactBtn.onclick = () => {
+          document.getElementById("creator-modal").classList.remove("on");
+          openCampaignForm({
+            creatorKey: key,
+            creatorName: d.name,
+            creatorNiche: d.niche,
+            creatorLocation: d.loc,
+          });
+        };
+
+        document.getElementById("creator-modal").classList.add("on");
+      }
+
+      function toggleCreatorSave(key) {
+        const saved = new Set(sponsorHomeState.savedCreators || []);
+        if (saved.has(key)) {
+          saved.delete(key);
+          showToast("Creator removed from your shortlist");
+        } else {
+          saved.add(key);
+          showToast("Creator saved to your shortlist");
+        }
+        sponsorHomeState.savedCreators = [...saved];
+        persistSponsorState();
+        renderFeed(activeFilter);
+      }
+
+      function closeCreatorModal(e) {
+        if (!e || e.target === document.getElementById("creator-modal")) {
+          document.getElementById("creator-modal").classList.remove("on");
+        }
+      }
+
+      function openCampaignForm(preset = {}) {
+        const nicheSelect = document.getElementById("campaign-niche");
+        const normalizedNiche = String(preset.creatorNiche || "")
+          .split("·")[0]
+          .trim();
+        const normalizedLocation = String(preset.creatorLocation || "")
+          .split("·")[0]
+          .trim();
+
+        document.getElementById("campaign-name").value = preset.creatorName
+          ? `${preset.creatorName} collab`
+          : document.getElementById("campaign-name").value || "";
+
+        if (
+          normalizedNiche &&
+          [...nicheSelect.options].some(
+            (option) =>
+              option.value === normalizedNiche ||
+              option.text === normalizedNiche,
+          )
+        ) {
+          nicheSelect.value = normalizedNiche;
+        }
+
+        document.getElementById("campaign-brief").value = preset.creatorKey
+          ? `Campaign planning for ${preset.creatorName || "a shortlisted creator"}.`
+          : document.getElementById("campaign-brief").value || "";
+        document.getElementById("campaign-location").value =
+          normalizedLocation ||
+          document.getElementById("campaign-location").value ||
+          "Dhaka";
+        document.getElementById("campaign-budget").value =
+          document.getElementById("campaign-budget").value ||
+          "৳15,000 - ৳25,000";
+        document.getElementById("campaign-deliverables").value =
+          document.getElementById("campaign-deliverables").value ||
+          "2 reels, 3 stories, Bangla captions, creator usage rights for 30 days.";
+        document.getElementById("campaign-modal").classList.add("on");
+      }
+
+      function closeCampaignModal(e) {
+        if (!e || e.target === document.getElementById("campaign-modal")) {
+          document.getElementById("campaign-modal").classList.remove("on");
+        }
+      }
+
+      function expandAnnounce() {
+        document.getElementById("rb-expanded").classList.add("on");
+        document.getElementById("rb-inp").style.display = "none";
+        setTimeout(() => document.getElementById("rb-ta").focus(), 50);
+      }
+
+      function collapseAnnounce() {
+        document.getElementById("rb-expanded").classList.remove("on");
+        document.getElementById("rb-inp").style.display = "";
+        document.getElementById("rb-ta").value = "";
+        document.getElementById("rb-char").textContent = "0 / 300";
+        document
+          .querySelectorAll(".rtag.on")
+          .forEach((t) => t.classList.remove("on"));
+      }
+
+      function updateAnnCount() {
+        const len = document.getElementById("rb-ta").value.length;
+        document.getElementById("rb-char").textContent = `${len} / 300`;
+      }
+
+      function toggleRTag(el) {
+        el.classList.toggle("on");
+      }
+
+      function submitAnnounce() {
+        const text = document.getElementById("rb-ta").value.trim();
+        if (!text) {
+          showToast("Add a short announcement before posting");
+          return;
+        }
+
+        const tags = [...document.querySelectorAll(".rtag.on")].map(
+          (t) => t.dataset.tag,
+        );
+        const pills = tags.slice(0, 4);
+        sponsorHomeState.announcements.unshift({
+          id: `ua-${Date.now()}`,
+          avatar: sponsorHomeState.profile.initials || "GF",
+          avatarBg: "var(--blu-l)",
+          avatarColor: "var(--blu-t)",
+          avatarSquare: false,
+          brand: `${sponsorHomeState.profile.displayName || "GreenFresh BD"} — Pre-campaign announcement`,
+          meta: "Your brand · Just now",
+          title: null,
+          text,
+          pills,
+          pillTypes: pills.map(() => "p-cat"),
+          stats: [],
+          ctaType: "none",
+        });
+
+        collapseAnnounce();
+        persistSponsorState();
+        renderFeed(activeFilter);
+        showToast("Announcement posted — visible to creators on SponzoBD");
+      }
+
+      function submitCampaign() {
+        const name = document.getElementById("campaign-name").value.trim();
+        const niche = document.getElementById("campaign-niche").value.trim();
+        const brief = document.getElementById("campaign-brief").value.trim();
+        const location = document
+          .getElementById("campaign-location")
+          .value.trim();
+        const budget = document.getElementById("campaign-budget").value.trim();
+        const deliverables = document
+          .getElementById("campaign-deliverables")
+          .value.trim();
+
+        if (
+          !name ||
+          !niche ||
+          !brief ||
+          !location ||
+          !budget ||
+          !deliverables
+        ) {
+          showToast("Complete the campaign form before publishing");
+          return;
+        }
+
+        const initials =
+          (sponsorHomeState.profile.initials || "GF").trim() || "GF";
+        sponsorHomeState.campaigns.unshift({
+          id: `sc-${Date.now()}`,
+          avatar: initials,
+          avatarBg: "var(--blu-l)",
+          avatarColor: "var(--blu-t)",
+          avatarSquare: true,
+          brand: sponsorHomeState.profile.displayName || "GreenFresh BD",
+          meta: `${niche} · Sponsored campaign · Just now`,
+          title: name,
+          text: `${brief} Deliverables: ${deliverables}`,
+          pills: [niche, location, budget, "Open applications"],
+          pillTypes: ["p-cat", "p-loc", "p-fol", "p-eng"],
+          budget,
+          days: 14,
+          apps: 0,
+          ctaType: "similar",
+        });
+
+        document.getElementById("campaign-modal").classList.remove("on");
+        persistSponsorState();
+        renderFeed(activeFilter);
+        showToast("Campaign created — creators can now apply");
+      }
+
+      function showToast(msg) {
+        const t = document.getElementById("toast");
+        document.getElementById("toast-msg").textContent = msg;
+        t.classList.add("on");
+        setTimeout(() => t.classList.remove("on"), 3000);
+      }
+
+      async function initSponsorHome() {
+        const localState = readLocalSponsorState();
+        sponsorHomeState = normalizeSponsorState(
+          localState || sponsorHomeState,
+        );
+
+        try {
+          const response = await fetch(
+            `/api/sponsor/home/${encodeURIComponent(sponsorPhone)}`,
+          );
+          if (response.ok) {
+            const payload = await response.json();
+            sponsorHomeState = normalizeSponsorState(
+              payload.state || sponsorHomeState,
+            );
+          }
+        } catch (_err) {
+          if (!localState) {
+            writeLocalSponsorState();
+          }
+        }
+
+        updateSponsorSummary();
+        renderFeed("all");
+      }
+
+      initSponsorHome();
+    </script>
+  </body>
+</html>

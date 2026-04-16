@@ -1,0 +1,2276 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SponzoBD — My Applications & Deals</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --red: #e24b4a;
+        --red-l: #fcebeb;
+        --red-m: #f7c1c1;
+        --grn: #1d9e75;
+        --grn-l: #eaf3de;
+        --grn-m: #c0dd97;
+        --grn-d: #085041;
+        --grn-3: #3b6d11;
+        --grn-t: #27500a;
+        --teal-l: #e1f5ee;
+        --teal-m: #9fe1cb;
+        --blu-l: #e6f1fb;
+        --blu-m: #b5d4f4;
+        --blu-t: #0c447c;
+        --blu-3: #185fa5;
+        --amb-l: #faeeda;
+        --amb-m: #fac775;
+        --amb-t: #633806;
+        --amb-d: #854f0b;
+        --pur-l: #eeedfe;
+        --pur-t: #3c3489;
+        --bg: #f4f2ee;
+        --srf: #ffffff;
+        --srf2: #f0eee9;
+        --bdr: rgba(0, 0, 0, 0.08);
+        --bdr-m: rgba(0, 0, 0, 0.14);
+        --bdr-s: rgba(0, 0, 0, 0.22);
+        --tx1: #1a1a1a;
+        --tx2: #555;
+        --tx3: #999;
+        --font: "DM Sans", system-ui, sans-serif;
+        --r1: 7px;
+        --r2: 10px;
+        --r3: 14px;
+      }
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+        font-family: var(--font);
+        font-size: 14px;
+        color: var(--tx1);
+        background: var(--bg);
+      }
+      .app {
+        display: flex;
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+      }
+
+      /* SIDEBAR */
+      .sb {
+        width: 220px;
+        flex-shrink: 0;
+        background: var(--srf);
+        border-right: 1px solid var(--bdr);
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
+      .sb-logo {
+        padding: 15px 16px 12px;
+        border-bottom: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .logo-ic {
+        width: 28px;
+        height: 28px;
+        background: var(--red);
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .sb-user {
+        padding: 11px 16px;
+        border-bottom: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .av {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--teal-m);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--grn-d);
+        flex-shrink: 0;
+      }
+      .u-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .u-sub {
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .u-plan {
+        font-size: 11px;
+        color: var(--grn-d);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-top: 2px;
+      }
+      .pdot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--grn);
+      }
+      .nav {
+        flex: 1;
+        overflow-y: auto;
+        padding: 8px 0;
+      }
+      .nav-sec {
+        padding: 5px 16px 3px;
+        font-size: 10px;
+        color: var(--tx3);
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        font-weight: 600;
+      }
+      .ni {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        font-size: 13px;
+        color: var(--tx2);
+        cursor: pointer;
+        border-left: 2.5px solid transparent;
+        transition: background 0.1s;
+      }
+      .ni:hover {
+        background: var(--srf2);
+      }
+      .ni.on {
+        background: var(--srf2);
+        color: var(--tx1);
+        font-weight: 600;
+        border-left-color: var(--red);
+      }
+      .ni svg {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+        opacity: 0.5;
+      }
+      .ni.on svg {
+        opacity: 1;
+      }
+      .ni-badge {
+        margin-left: auto;
+        background: var(--red);
+        color: #fff;
+        font-size: 10px;
+        padding: 1px 7px;
+        border-radius: 20px;
+        font-weight: 700;
+      }
+      .sb-ps {
+        margin: 0 10px 14px;
+        padding: 10px 12px;
+        background: var(--srf2);
+        border-radius: var(--r2);
+      }
+      .ps-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 4px;
+      }
+      .ps-lbl {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .ps-pct {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--grn);
+      }
+      .ps-track {
+        height: 4px;
+        background: var(--bdr-m);
+        border-radius: 2px;
+      }
+      .ps-fill {
+        height: 4px;
+        background: var(--grn);
+        border-radius: 2px;
+        width: 92%;
+      }
+      .ps-note {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-top: 4px;
+      }
+
+      /* MAIN */
+      .main {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+      }
+      .topbar {
+        height: 52px;
+        background: var(--srf);
+        border-bottom: 1px solid var(--bdr);
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+      }
+      .tb-t {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--tx1);
+        letter-spacing: -0.2px;
+      }
+      .tb-r {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .badge-prem {
+        background: var(--teal-l);
+        color: var(--grn-d);
+        font-size: 11px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-weight: 700;
+      }
+
+      /* PAGE */
+      .content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px 22px;
+      }
+
+      /* TABS */
+      .tabs {
+        display: flex;
+        gap: 0;
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        border-radius: var(--r3);
+        padding: 4px;
+        width: fit-content;
+        margin-bottom: 16px;
+      }
+      .tab {
+        padding: 7px 18px;
+        font-size: 13px;
+        color: var(--tx2);
+        border-radius: var(--r2);
+        cursor: pointer;
+        font-weight: 500;
+        transition: background 0.1s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .tab:hover:not(.on) {
+        background: var(--srf2);
+      }
+      .tab.on {
+        background: var(--red);
+        color: #fff;
+        font-weight: 600;
+      }
+      .tab-count {
+        font-size: 11px;
+        padding: 1px 7px;
+        border-radius: 20px;
+      }
+      .tab.on .tab-count {
+        background: rgba(255, 255, 255, 0.25);
+        color: #fff;
+      }
+      .tab:not(.on) .tab-count {
+        background: var(--srf2);
+        color: var(--tx3);
+      }
+
+      /* FILTER BAR */
+      .filter-strip {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+      }
+      .fchip {
+        padding: 5px 12px;
+        border: 1px solid var(--bdr-m);
+        border-radius: 20px;
+        font-size: 12px;
+        color: var(--tx2);
+        cursor: pointer;
+        background: var(--srf);
+        font-weight: 500;
+      }
+      .fchip:hover {
+        background: var(--srf2);
+      }
+      .fchip.on {
+        background: var(--srf2);
+        border-color: var(--bdr-s);
+        color: var(--tx1);
+        font-weight: 600;
+      }
+      .fcount {
+        font-size: 12px;
+        color: var(--tx3);
+        margin-left: auto;
+      }
+      .fcount span {
+        font-weight: 600;
+        color: var(--tx1);
+      }
+
+      /* PAGE SECTIONS */
+      .section {
+        display: none;
+      }
+      .section.on {
+        display: block;
+      }
+
+      /* COMMON */
+      .panel {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        border-radius: var(--r3);
+        padding: 14px 17px;
+        margin-bottom: 11px;
+      }
+      .ph {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+      .pt {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .pn {
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .divider {
+        height: 1px;
+        background: var(--bdr);
+        margin: 11px 0;
+      }
+      .ins {
+        font-size: 12px;
+        padding: 8px 11px;
+        border-radius: var(--r1);
+        display: flex;
+        align-items: flex-start;
+        gap: 7px;
+        line-height: 1.55;
+        margin-top: 9px;
+      }
+      .ins svg {
+        width: 12px;
+        height: 12px;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .ins-g {
+        background: var(--grn-l);
+        color: var(--grn-t);
+      }
+      .ins-a {
+        background: var(--amb-l);
+        color: var(--amb-t);
+      }
+      .ins-b {
+        background: var(--blu-l);
+        color: var(--blu-t);
+      }
+      .stag {
+        font-size: 11px;
+        padding: 2px 9px;
+        border-radius: 20px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .t-ch {
+        background: var(--grn-l);
+        color: var(--grn-3);
+      }
+      .t-vi {
+        background: var(--amb-l);
+        color: var(--amb-t);
+      }
+      .t-pe {
+        background: var(--srf2);
+        color: var(--tx2);
+      }
+      .t-cl {
+        background: var(--blu-l);
+        color: var(--blu-t);
+      }
+      .t-ac {
+        background: var(--teal-l);
+        color: var(--grn-d);
+      }
+      .t-de {
+        background: var(--red-l);
+        color: #791f1f;
+      }
+      .t-wd {
+        background: var(--srf2);
+        color: var(--tx3);
+      }
+      .vbdg {
+        font-size: 10px;
+        padding: 1px 6px;
+        border-radius: 20px;
+        background: var(--grn-l);
+        color: var(--grn-3);
+        margin-left: 5px;
+        font-weight: 700;
+        vertical-align: middle;
+      }
+      .stars {
+        display: flex;
+        gap: 2px;
+      }
+      .sf {
+        width: 11px;
+        height: 11px;
+        background: #ef9f27;
+        clip-path: polygon(
+          50% 0%,
+          61% 35%,
+          98% 35%,
+          68% 57%,
+          79% 91%,
+          50% 70%,
+          21% 91%,
+          32% 57%,
+          2% 35%,
+          39% 35%
+        );
+      }
+      .se {
+        width: 11px;
+        height: 11px;
+        background: #ddd;
+        clip-path: polygon(
+          50% 0%,
+          61% 35%,
+          98% 35%,
+          68% 57%,
+          79% 91%,
+          50% 70%,
+          21% 91%,
+          32% 57%,
+          2% 35%,
+          39% 35%
+        );
+      }
+
+      /* BUTTONS */
+      .btn-g {
+        padding: 5px 11px;
+        background: var(--grn-l);
+        border: 1px solid var(--grn-m);
+        border-radius: var(--r1);
+        color: var(--grn-t);
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .btn-b {
+        padding: 5px 11px;
+        background: var(--blu-l);
+        border: 1px solid var(--blu-m);
+        border-radius: var(--r1);
+        color: var(--blu-t);
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .btn-ghost {
+        padding: 5px 11px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        background: transparent;
+        color: var(--tx2);
+        font-size: 12px;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .btn-red-s {
+        padding: 5px 11px;
+        border: 1px solid var(--red-m);
+        border-radius: var(--r1);
+        background: var(--red-l);
+        color: #791f1f;
+        font-size: 12px;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+
+      /* APPLICATION CARDS */
+      .app-card {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        border-radius: var(--r3);
+        padding: 13px 16px;
+        margin-bottom: 9px;
+        transition: border-color 0.15s;
+      }
+      .app-card:hover {
+        border-color: var(--bdr-m);
+      }
+      .app-card:last-child {
+        margin-bottom: 0;
+      }
+      .ac-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 10px;
+      }
+      .ac-left {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        flex: 1;
+        min-width: 0;
+      }
+      .ac-logo {
+        width: 34px;
+        height: 34px;
+        border-radius: var(--r2);
+        background: var(--srf2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--tx2);
+        flex-shrink: 0;
+        border: 1px solid var(--bdr);
+      }
+      .ac-brand {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .ac-campaign {
+        font-size: 12px;
+        color: var(--tx2);
+        margin-top: 2px;
+      }
+      .ac-right {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 5px;
+        flex-shrink: 0;
+      }
+      .score-wrap {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .sbg {
+        width: 44px;
+        height: 4px;
+        background: var(--srf2);
+        border-radius: 2px;
+        overflow: hidden;
+      }
+      .sbf {
+        height: 100%;
+        border-radius: 2px;
+      }
+      .fhi {
+        background: var(--grn-3);
+      }
+      .fmd {
+        background: #ef9f27;
+      }
+      .sbn {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .ac-meta {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        padding-top: 10px;
+        border-top: 1px solid var(--bdr);
+      }
+      .ac-m {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .ac-m svg {
+        width: 12px;
+        height: 12px;
+        opacity: 0.45;
+        flex-shrink: 0;
+      }
+      .ac-m.warn {
+        color: var(--amb-d);
+      }
+      .ac-m.ok {
+        color: var(--grn-3);
+      }
+      .ac-actions {
+        margin-left: auto;
+        display: flex;
+        gap: 6px;
+      }
+      .ac-note {
+        font-size: 12px;
+        color: var(--tx2);
+        background: var(--srf2);
+        border-radius: var(--r1);
+        padding: 8px 11px;
+        margin-top: 9px;
+        line-height: 1.55;
+      }
+      .ac-note-lbl {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-bottom: 3px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 600;
+      }
+
+      /* PIPELINE CARDS */
+      .pipe-card {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        border-radius: var(--r3);
+        padding: 14px 16px;
+        margin-bottom: 10px;
+      }
+      .pipe-card:last-child {
+        margin-bottom: 0;
+      }
+      .pc-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 11px;
+      }
+      .pc-logo {
+        width: 36px;
+        height: 36px;
+        border-radius: var(--r2);
+        background: var(--srf2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--tx2);
+        flex-shrink: 0;
+        border: 1px solid var(--bdr);
+      }
+      .pc-brand {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .pc-campaign {
+        font-size: 12px;
+        color: var(--tx2);
+        margin-top: 2px;
+      }
+      .pc-tags {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+        margin-top: 5px;
+      }
+      .pc-tag {
+        font-size: 10px;
+        padding: 2px 8px;
+        border-radius: 20px;
+        background: var(--srf2);
+        color: var(--tx2);
+      }
+      .pc-right {
+        text-align: right;
+        flex-shrink: 0;
+      }
+      .pc-amt {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--grn-3);
+      }
+      .pc-escrow {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-top: 3px;
+      }
+      .stages {
+        display: flex;
+        align-items: flex-start;
+        margin: 12px 0;
+      }
+      .stage {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+      }
+      .stage:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        top: 9px;
+        left: 50%;
+        width: 100%;
+        height: 1.5px;
+        background: var(--bdr-m);
+        z-index: 0;
+      }
+      .stage.done:not(:last-child)::after {
+        background: var(--grn-m);
+      }
+      .sd {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 1.5px solid var(--bdr-m);
+        background: var(--srf);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 1;
+      }
+      .sd.done {
+        background: var(--grn-l);
+        border-color: var(--grn-m);
+      }
+      .sd.now {
+        background: var(--blu-l);
+        border-color: #378add;
+      }
+      .sl {
+        font-size: 9px;
+        color: var(--tx3);
+        margin-top: 3px;
+        text-align: center;
+        line-height: 1.3;
+        max-width: 50px;
+      }
+      .sl.done {
+        color: var(--grn-3);
+      }
+      .sl.now {
+        color: #185fa5;
+        font-weight: 700;
+      }
+      .pc-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 10px;
+        border-top: 1px solid var(--bdr);
+      }
+      .pc-eta {
+        font-size: 11px;
+        color: var(--grn);
+        font-weight: 600;
+      }
+      .pc-eta-r {
+        font-size: 11px;
+        color: var(--red);
+        font-weight: 600;
+      }
+      .deliverables {
+        background: var(--srf2);
+        border-radius: var(--r2);
+        padding: 10px 13px;
+        margin: 10px 0;
+      }
+      .del-lbl {
+        font-size: 10px;
+        color: var(--tx3);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+      .del-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 4px 0;
+        font-size: 12px;
+        border-bottom: 1px solid var(--bdr);
+      }
+      .del-item:last-child {
+        border-bottom: none;
+      }
+      .del-name {
+        color: var(--tx2);
+      }
+
+      /* DEAL RECEIPT */
+      .receipt {
+        background: var(--srf2);
+        border-radius: var(--r2);
+        padding: 11px 13px;
+        margin-top: 10px;
+      }
+      .rec-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px 0;
+        border-bottom: 1px solid var(--bdr);
+        font-size: 12px;
+      }
+      .rec-row:last-child {
+        border-bottom: none;
+      }
+      .rec-l {
+        color: var(--tx2);
+      }
+      .rec-v {
+        font-weight: 700;
+        color: var(--tx1);
+      }
+
+      /* EMPTY STATE */
+      .empty-state {
+        text-align: center;
+        padding: 48px 20px;
+      }
+      .es-ic {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--srf2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 12px;
+      }
+      .es-t {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--tx1);
+        margin-bottom: 6px;
+      }
+      .es-s {
+        font-size: 13px;
+        color: var(--tx2);
+        line-height: 1.55;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- SIDEBAR -->
+      <div class="sb">
+        <div class="sb-logo" style="cursor: pointer" onclick="goTo('homeFeed')">
+          <div class="logo-ic">
+            <svg viewBox="0 0 16 16" fill="none" width="15" height="15">
+              <path
+                d="M3 8a5 5 0 1010 0A5 5 0 003 8z"
+                fill="white"
+                opacity="0.25"
+              />
+              <path
+                d="M8 5v3l2 2"
+                stroke="white"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+          <div>
+            <div
+              style="
+                font-size: 14px;
+                font-weight: 700;
+                color: var(--tx1);
+                letter-spacing: -0.2px;
+              "
+            >
+              SponzoBD
+            </div>
+            <div style="font-size: 10px; color: var(--tx3)">Creator portal</div>
+          </div>
+        </div>
+        <div class="sb-user">
+          <div class="av">LA</div>
+          <div>
+            <div class="u-name">Lamia Akter</div>
+            <div class="u-sub">Health &amp; wellness · 52K</div>
+            <div class="u-plan"><span class="pdot"></span>Premium plan</div>
+          </div>
+        </div>
+        <nav class="nav">
+          <div class="nav-sec">Main</div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'sponsee_home_feed (1).html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <path
+                d="M1.5 6.5L7.5 1.5L13.5 6.5V13H9.5V9.5H5.5V13H1.5V6.5Z"
+              ></path>
+            </svg>
+            Home
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'dashboard_analytics.html'"
+          >
+            <svg viewBox="0 0 15 15" fill="currentColor">
+              <rect x="1" y="1" width="5" height="5" rx="1"></rect>
+              <rect x="9" y="1" width="5" height="5" rx="1"></rect>
+              <rect x="1" y="9" width="5" height="5" rx="1"></rect>
+              <rect x="9" y="9" width="5" height="5" rx="1"></rect>
+            </svg>
+            Dashboard &amp; analytics
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'browse_campaigns.html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <rect x="1.5" y="2.5" width="12" height="10" rx="1.5"></rect>
+              <path d="M5 6h5M5 9h3"></path>
+            </svg>
+            Browse campaigns
+          </div>
+          <div
+            class="ni on"
+            onclick="
+              window.location.href = 'Sponsee_ my_applications_deals.html'
+            "
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <circle cx="7.5" cy="7.5" r="5.5"></circle>
+              <path d="M7.5 4.5v3l2 1.5"></path>
+            </svg>
+            My applications &amp; deals
+          </div>
+          <div class="ni" onclick="window.location.href = 'messages.html'">
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <path d="M2 2h11v8H8l-3 2.5V10H2V2z"></path>
+            </svg>
+            Messages<span class="ni-badge">2</span>
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'ai_pitch_generator.html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <path d="M3 12l2-2 2 1 4-5"></path>
+              <circle
+                cx="11.5"
+                cy="3.5"
+                r="1.8"
+                fill="currentColor"
+                opacity="0.35"
+              ></circle>
+            </svg>
+            AI pitch generator
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'sponsee Profile.html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <circle cx="7.5" cy="5" r="2.5"></circle>
+              <path d="M2 13c0-3 2.5-4.5 5.5-4.5S13 10 13 13"></path>
+            </svg>
+            My profile
+          </div>
+        </nav>
+        <div class="sb-ps">
+          <div class="ps-row">
+            <span class="ps-lbl">Profile strength</span
+            ><span class="ps-pct">92%</span>
+          </div>
+          <div class="ps-track"><div class="ps-fill"></div></div>
+          <div class="ps-note">Add 1 portfolio sample to reach 100%</div>
+        </div>
+      </div>
+
+      <!-- MAIN -->
+      <div class="main">
+        <div class="topbar">
+          <div class="tb-t">My applications &amp; deals</div>
+          <div class="tb-r">
+            <span class="badge-prem">Premium plan</span>
+          </div>
+        </div>
+
+        <div class="content">
+          <!-- TABS -->
+          <div class="tabs">
+            <div class="tab on" id="tab-apps" onclick="switchTab('apps')">
+              My applications <span class="tab-count">11</span>
+            </div>
+            <div class="tab" id="tab-deals" onclick="switchTab('deals')">
+              My deals <span class="tab-count">3</span>
+            </div>
+          </div>
+
+          <!-- ═══ APPLICATIONS SECTION ═══ -->
+          <div class="section on" id="sec-apps">
+            <div class="filter-strip">
+              <span
+                style="font-size: 12px; color: var(--tx3); margin-right: 2px"
+                >Filter by status</span
+              >
+              <div class="fchip on" onclick="filterApps('all', this)">All</div>
+              <div class="fchip" onclick="filterApps('active', this)">
+                Active
+              </div>
+              <div class="fchip" onclick="filterApps('pending', this)">
+                Pending
+              </div>
+              <div class="fchip" onclick="filterApps('closed', this)">
+                Closed / declined
+              </div>
+              <div class="fcount">
+                Showing <span id="app-count">11</span> applications
+              </div>
+            </div>
+
+            <div id="app-list">
+              <!-- 1. GreenFresh - In chat -->
+              <div class="app-card" data-status="active">
+                <div class="ac-top">
+                  <div class="ac-left">
+                    <div
+                      class="ac-logo"
+                      style="background: var(--grn-l); color: var(--grn-3)"
+                    >
+                      GF
+                    </div>
+                    <div>
+                      <div class="ac-brand">GreenFresh BD</div>
+                      <div class="ac-campaign">
+                        National Health Week · Instagram, YouTube · Nationwide ·
+                        ৳20,000–৳40,000
+                      </div>
+                    </div>
+                  </div>
+                  <div class="ac-right">
+                    <span class="stag t-ch">In chat</span>
+                    <div class="score-wrap">
+                      <div class="sbg">
+                        <div class="sbf fhi" style="width: 91%"></div>
+                      </div>
+                      <span class="sbn">91</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="ac-meta">
+                  <div class="ac-m">
+                    <svg
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    >
+                      <rect x="1.5" y="2" width="9" height="8" rx="1" />
+                      <path d="M4 2V1M8 2V1M1.5 5h9" /></svg
+                    >Applied Mar 6
+                  </div>
+                  <div class="ac-m ok">
+                    <svg
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    >
+                      <circle cx="6" cy="6" r="4.5" />
+                      <path d="M6 3.5v2.5l1.5 1" /></svg
+                    >Sponsor replied Mar 6 · same day
+                  </div>
+                  <div class="ac-m">
+                    <svg
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    >
+                      <path d="M2 2h8v5H7L5.5 8.5V7H2V2z" /></svg
+                    >Budget ৳20K–৳40K
+                  </div>
+                  <div class="ac-actions">
+                    <button class="btn-b" onclick="goTo('messages')">
+                      Open chat
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2. NutriLife - Accepted -->
+              <div class="app-card" data-status="active">
+                <div class="ac-top">
+                  <div class="ac-left">
+                    <div
+                      class="ac-logo"
+                      style="background: var(--blu-l); color: var(--blu-t)"
+                    >
+                      NL
+                    </div>
+                    <div>
+                      <div class="ac-brand">NutriLife Bangladesh</div>
+                      <div class="ac-campaign">
+                        Ramadan Wellness Series · Instagram · Dhaka, Chittagong
+                        · ৳15,000–৳25,000
+                      </div>
+                    </div>
+                  </div>
+                  <div class="ac-right">
+                    <span class="stag t-ac">Accepted</span>
+                    <div class="score-wrap">
+                      <div class="sbg">
+                        <div class="sbf fhi" style="width: 84%"></div>
+                      </div>
+                      <span class="sbn">84</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="ac-meta">
+                  <div class="ac-m">
+                    <svg
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    >
+                      <rect x="1.5" y="2" width="9" height="8" rx="1" />
+                      <path d="M4 2V1M8 2V1M1.5 5h9" /></svg
+                    >Applied Mar 9
+                  </div>
+                  <div class="ac-m warn">
+                    <svg
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    >
+                      <circle cx="6" cy="6" r="4.5" />
+                      <path d="M6 3.5v2.5l1.5 1" /></svg
+                    >Awaiting your reply · 1 day
+                  </div>
+                  <div class="ac-m">
+                    <svg
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    >
+                      <path d="M2 2h8v5H7L5.5 8.5V7H2V2z" /></svg
+                    >Budget ৳15K–৳25K
+                  </div>
+                  <div class="ac-actions">
+                    <button class="btn-b" onclick="goTo('messages')">
+                      Reply now
+                    </button>
+                    <button class="btn-g" onclick="goTo('messages')">
+                      Propose terms
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3. Tasty Bites - Pending -->
+              <div class="app-card" data-status="pending">
+                <div class="ac-top">
+                  <div class="ac-left">
+                    <div
+                      class="ac-logo"
+                      style="background: var(--amb-l); color: var(--amb-d)"
+                    >
+                      TB
+                    </div>
+                    <div>
+                      <div class="ac-brand">Tasty Bites BD</div>
+                      <div class="ac-campaign">
+                        Eid Menu Launch · TikTok · Dhaka · ৳12,000–৳22,000
+                      </div>
+                    </div>
+                  </div>
+                  <div class="ac-right">
+                    <span class="stag t-pe">Pending</span>
+                    <div class="score-wrap">
+                      <div class="sbg">
+                        <div class="sbf fhi" style="width: 88%"></div>
+                      </div>
+                      <span class="sbn">88</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="ac-meta">
+                  <div class="ac-m">
+                    <svg
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    >
+                      <rect x="1.5" y="2" width="9" height="8" rx="1" />
+                      <path d="M4 2V1M8 2V1M1.5 5h9" /></svg
+                    >Applied Mar 12
+                  </div>
+                  <div class="ac-m">
+                    <svg
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    >
+                      <circle cx="6" cy="6" r="4.5" />
+                      <path d="M6 3.5v2.5l1.5 1" /></svg
+                    >Waiting for sponsor · 4 days
+                  </div>
+                  <div class="ac-m">
+                    <svg
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    >
+                      <path d="M2 2h8v5H7L5.5 8.5V7H2V2z" /></svg
+                    >Budget ৳12K–৳22K
+                  </div>
+                  <div class="ac-actions">
+                    <button
+                      class="btn-red-s"
+                      onclick="
+                        alert('Withdrawing application from Tasty Bites BD...')
+                      "
+                    >
+                      Withdraw
+                    </button>
+                  </div>
+                </div>
+                <div class="ac-note">
+                  <div class="ac-note-lbl">Your application note</div>
+                  "I create health-focused food content that your Dhaka audience
+                  will connect with. My last food campaign averaged 4.1%
+                  engagement across 52K followers."
+                </div>
+              </div>
+
+              <!-- 4. StyleBox - Viewed -->
+              <div class="app-card" data-status="pending">
+                <div class="ac-top">
+                  <div class="ac-left">
+                    <div
+                      class="ac-logo"
+                      style="background: var(--pur-l); color: var(--pur-t)"
+                    >
+                      SB
+                    </div>
+                    <div>
+                      <div class="ac-brand">StyleBox BD</div>
+                      <div class="ac-campaign">
+                        Summer Collection Drop · TikTok, Instagram · Nationwide
+                        · ৳18,000–৳35,000
+                      </div>
+                    </div>
+                  </div>
+                  <div class="ac-right">
+                    <span class="stag t-vi">Viewed</span>
+                    <div class="score-wrap">
+                      <div class="sbg">
+                        <div class="sbf fmd" style="width: 62%"></div>
+                      </div>
+                      <span class="sbn">62</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="ac-meta">
+                  <div class="ac-m">
+                    <svg
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    >
+                      <rect x="1.5" y="2" width="9" height="8" rx="1" />
+                      <path d="M4 2V1M8 2V1M1.5 5h9" /></svg
+                    >Applied Mar 4
+                  </div>
+                  <div class="ac-m">
+                    <svg
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    >
+                      <circle cx="6" cy="6" r="4.5" />
+                      <path d="M6 3.5v2.5l1.5 1" /></svg
+                    >Sponsor viewed Mar 5 · no reply yet
+                  </div>
+                  <div class="ac-m">
+                    <svg
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    >
+                      <path d="M2 2h8v5H7L5.5 8.5V7H2V2z" /></svg
+                    >Budget ৳18K–৳35K
+                  </div>
+                  <div class="ac-actions">
+                    <button
+                      class="btn-red-s"
+                      onclick="
+                        alert('Withdrawing application from StyleBox BD...')
+                      "
+                    >
+                      Withdraw
+                    </button>
+                  </div>
+                </div>
+                <div class="ins ins-a" style="margin-top: 9px">
+                  <svg viewBox="0 0 14 14" fill="none">
+                    <circle cx="7" cy="7" r="6" fill="#FAC775" />
+                    <path
+                      d="M7 4.5v3M7 9v.5"
+                      stroke="#633806"
+                      stroke-width="1.2"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  Match score of 62 is moderate — fashion is a secondary niche
+                  for you. Platform mismatch (no YouTube) may have reduced
+                  visibility. Still worth waiting a few more days before
+                  withdrawing.
+                </div>
+              </div>
+
+              <!-- 5. OrganicBD - Deal closed -->
+              <div class="app-card" data-status="closed">
+                <div class="ac-top">
+                  <div class="ac-left">
+                    <div
+                      class="ac-logo"
+                      style="background: var(--teal-l); color: var(--grn-d)"
+                    >
+                      OB
+                    </div>
+                    <div>
+                      <div class="ac-brand">OrganicBD</div>
+                      <div class="ac-campaign">
+                        Health Food Launch · Instagram · Nationwide ·
+                        ৳12,000–৳22,000
+                      </div>
+                    </div>
+                  </div>
+                  <div class="ac-right">
+                    <span class="stag t-cl">Deal closed</span>
+                    <div class="score-wrap">
+                      <div class="sbg">
+                        <div class="sbf fhi" style="width: 79%"></div>
+                      </div>
+                      <span class="sbn">79</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="ac-meta">
+                  <div class="ac-m">
+                    <svg
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    >
+                      <rect x="1.5" y="2" width="9" height="8" rx="1" />
+                      <path d="M4 2V1M8 2V1M1.5 5h9" /></svg
+                    >Applied Mar 1
+                  </div>
+                  <div class="ac-m ok">
+                    <svg
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    >
+                      <path d="M2 6l2.5 2.5L10 3" /></svg
+                    >Deal completed · ৳18,000 paid out Mar 8
+                  </div>
+                  <div class="ac-actions">
+                    <button class="btn-ghost" onclick="switchTab('deals')">
+                      View deal
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 6. FitZone - Pending -->
+              <div class="app-card" data-status="pending">
+                <div class="ac-top">
+                  <div class="ac-left">
+                    <div
+                      class="ac-logo"
+                      style="background: var(--grn-l); color: var(--grn-3)"
+                    >
+                      FZ
+                    </div>
+                    <div>
+                      <div class="ac-brand">FitZone BD</div>
+                      <div class="ac-campaign">
+                        Gym Launch Campaign · TikTok, Instagram · Dhaka ·
+                        ৳8,000–৳14,000
+                      </div>
+                    </div>
+                  </div>
+                  <div class="ac-right">
+                    <span class="stag t-pe">Pending</span>
+                    <div class="score-wrap">
+                      <div class="sbg">
+                        <div class="sbf fmd" style="width: 67%"></div>
+                      </div>
+                      <span class="sbn">67</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="ac-meta">
+                  <div class="ac-m">
+                    <svg
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    >
+                      <rect x="1.5" y="2" width="9" height="8" rx="1" />
+                      <path d="M4 2V1M8 2V1M1.5 5h9" /></svg
+                    >Applied Mar 10
+                  </div>
+                  <div class="ac-m">
+                    <svg
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    >
+                      <circle cx="6" cy="6" r="4.5" />
+                      <path d="M6 3.5v2.5l1.5 1" /></svg
+                    >Waiting for sponsor · 6 days
+                  </div>
+                  <div class="ac-m">
+                    <svg
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    >
+                      <path d="M2 2h8v5H7L5.5 8.5V7H2V2z" /></svg
+                    >Budget ৳8K–৳14K
+                  </div>
+                  <div class="ac-actions">
+                    <button
+                      class="btn-red-s"
+                      onclick="
+                        alert('Withdrawing application from FitZone BD...')
+                      "
+                    >
+                      Withdraw
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 7. RoboKart - Declined -->
+              <div class="app-card" data-status="closed">
+                <div class="ac-top">
+                  <div class="ac-left">
+                    <div
+                      class="ac-logo"
+                      style="background: var(--srf2); color: var(--tx2)"
+                    >
+                      RK
+                    </div>
+                    <div>
+                      <div class="ac-brand">RoboKart BD</div>
+                      <div class="ac-campaign">
+                        Smart Gadgets Review · YouTube · Nationwide ·
+                        ৳12,000–৳24,000
+                      </div>
+                    </div>
+                  </div>
+                  <div class="ac-right">
+                    <span class="stag t-de">Declined</span>
+                    <div class="score-wrap">
+                      <div class="sbg">
+                        <div class="sbf fmd" style="width: 44%"></div>
+                      </div>
+                      <span class="sbn">44</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="ac-meta">
+                  <div class="ac-m">
+                    <svg
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    >
+                      <rect x="1.5" y="2" width="9" height="8" rx="1" />
+                      <path d="M4 2V1M8 2V1M1.5 5h9" /></svg
+                    >Applied Feb 28
+                  </div>
+                  <div class="ac-m">
+                    <svg
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    >
+                      <circle cx="6" cy="6" r="4.5" />
+                      <path d="M6 3.5v2.5l1.5 1" /></svg
+                    >Declined Mar 2
+                  </div>
+                </div>
+                <div class="ins ins-a" style="margin-top: 9px">
+                  <svg viewBox="0 0 14 14" fill="none">
+                    <circle cx="7" cy="7" r="6" fill="#FAC775" />
+                    <path
+                      d="M7 4.5v3M7 9v.5"
+                      stroke="#633806"
+                      stroke-width="1.2"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  Match score was 44 — likely declined due to platform mismatch
+                  (campaign required YouTube, not in your active platforms).
+                  Adding YouTube to your profile would improve tech campaign
+                  matches significantly.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ═══ DEALS SECTION ═══ -->
+          <div class="section" id="sec-deals">
+            <div class="filter-strip">
+              <span
+                style="font-size: 12px; color: var(--tx3); margin-right: 2px"
+                >Filter by status</span
+              >
+              <div class="fchip on" onclick="filterDeals('all', this)">All</div>
+              <div class="fchip" onclick="filterDeals('active', this)">
+                Active
+              </div>
+              <div class="fchip" onclick="filterDeals('completed', this)">
+                Completed
+              </div>
+              <div class="fcount">
+                Showing <span id="deal-count">3</span> deals
+              </div>
+            </div>
+
+            <div id="deal-list">
+              <!-- DEAL 1: GreenFresh - Active, content due -->
+              <div class="pipe-card" data-dstatus="active">
+                <div class="pc-top">
+                  <div
+                    style="
+                      display: flex;
+                      align-items: flex-start;
+                      gap: 10px;
+                      flex: 1;
+                      min-width: 0;
+                    "
+                  >
+                    <div
+                      class="pc-logo"
+                      style="background: var(--grn-l); color: var(--grn-3)"
+                    >
+                      GF
+                    </div>
+                    <div>
+                      <div class="pc-brand">
+                        GreenFresh BD
+                        <span
+                          style="
+                            font-size: 10px;
+                            padding: 1px 7px;
+                            border-radius: 20px;
+                            background: var(--grn-l);
+                            color: var(--grn-3);
+                            margin-left: 5px;
+                            font-weight: 700;
+                          "
+                          >Active</span
+                        >
+                      </div>
+                      <div class="pc-campaign">National Health Week</div>
+                      <div class="pc-tags">
+                        <span class="pc-tag">Health &amp; wellness</span
+                        ><span class="pc-tag">Instagram, YouTube</span
+                        ><span class="pc-tag">Nationwide</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pc-right">
+                    <div class="pc-amt">৳35,000</div>
+                    <div class="pc-escrow">Escrow held</div>
+                  </div>
+                </div>
+                <div class="stages">
+                  <div class="stage done">
+                    <div class="sd done">
+                      <svg width="8" height="8" viewBox="0 0 9 9" fill="none">
+                        <path
+                          d="M1.5 4.5l2 2L7.5 2"
+                          stroke="#3B6D11"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <div class="sl done">Applied</div>
+                  </div>
+                  <div class="stage done">
+                    <div class="sd done">
+                      <svg width="8" height="8" viewBox="0 0 9 9" fill="none">
+                        <path
+                          d="M1.5 4.5l2 2L7.5 2"
+                          stroke="#3B6D11"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <div class="sl done">Accepted</div>
+                  </div>
+                  <div class="stage done">
+                    <div class="sd done">
+                      <svg width="8" height="8" viewBox="0 0 9 9" fill="none">
+                        <path
+                          d="M1.5 4.5l2 2L7.5 2"
+                          stroke="#3B6D11"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <div class="sl done">Deal signed</div>
+                  </div>
+                  <div class="stage done">
+                    <div class="sd done">
+                      <svg width="8" height="8" viewBox="0 0 9 9" fill="none">
+                        <path
+                          d="M1.5 4.5l2 2L7.5 2"
+                          stroke="#3B6D11"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <div class="sl done">Payment held</div>
+                  </div>
+                  <div class="stage">
+                    <div class="sd now">
+                      <svg width="7" height="7" viewBox="0 0 7 7">
+                        <circle cx="3.5" cy="3.5" r="2.5" fill="#378ADD" />
+                      </svg>
+                    </div>
+                    <div class="sl now">Work in progress</div>
+                  </div>
+                  <div class="stage">
+                    <div class="sd"></div>
+                    <div class="sl">Work verified</div>
+                  </div>
+                  <div class="stage">
+                    <div class="sd"></div>
+                    <div class="sl">Paid out</div>
+                  </div>
+                </div>
+                <div class="deliverables">
+                  <div class="del-lbl">Deliverables</div>
+                  <div class="del-item">
+                    <span class="del-name">Reel 1 — Health Week awareness</span
+                    ><span
+                      style="
+                        background: var(--amb-l);
+                        color: var(--amb-t);
+                        font-size: 10px;
+                        padding: 1px 8px;
+                        border-radius: 20px;
+                        font-weight: 700;
+                      "
+                      >Pending</span
+                    >
+                  </div>
+                  <div class="del-item">
+                    <span class="del-name">Reel 2 — Product feature</span
+                    ><span
+                      style="
+                        background: var(--amb-l);
+                        color: var(--amb-t);
+                        font-size: 10px;
+                        padding: 1px 8px;
+                        border-radius: 20px;
+                        font-weight: 700;
+                      "
+                      >Pending</span
+                    >
+                  </div>
+                  <div class="del-item">
+                    <span class="del-name">3 × Instagram Stories</span
+                    ><span
+                      style="
+                        background: var(--amb-l);
+                        color: var(--amb-t);
+                        font-size: 10px;
+                        padding: 1px 8px;
+                        border-radius: 20px;
+                        font-weight: 700;
+                      "
+                      >Pending</span
+                    >
+                  </div>
+                </div>
+                <div class="pc-foot">
+                  <div class="pc-eta-r">
+                    Content due March 22 · 4 days remaining
+                  </div>
+                  <div style="display: flex; gap: 7px">
+                    <button class="btn-ghost" onclick="goTo('messages')">
+                      Open chat
+                    </button>
+                    <button class="btn-g" onclick="goTo('dealJourney')">
+                      Submit content
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- DEAL 2: NutriLife - Active, negotiating -->
+              <div class="pipe-card" data-dstatus="active">
+                <div class="pc-top">
+                  <div
+                    style="
+                      display: flex;
+                      align-items: flex-start;
+                      gap: 10px;
+                      flex: 1;
+                      min-width: 0;
+                    "
+                  >
+                    <div
+                      class="pc-logo"
+                      style="background: var(--blu-l); color: var(--blu-t)"
+                    >
+                      NL
+                    </div>
+                    <div>
+                      <div class="pc-brand">
+                        NutriLife Bangladesh
+                        <span
+                          style="
+                            font-size: 10px;
+                            padding: 1px 7px;
+                            border-radius: 20px;
+                            background: var(--amb-l);
+                            color: var(--amb-t);
+                            margin-left: 5px;
+                            font-weight: 700;
+                          "
+                          >Terms pending</span
+                        >
+                      </div>
+                      <div class="pc-campaign">Ramadan Wellness Series</div>
+                      <div class="pc-tags">
+                        <span class="pc-tag">Health &amp; wellness</span
+                        ><span class="pc-tag">Instagram</span
+                        ><span class="pc-tag">Dhaka · Chittagong</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pc-right">
+                    <div
+                      class="pc-amt"
+                      style="
+                        color: var(--tx3);
+                        font-weight: 500;
+                        font-size: 14px;
+                      "
+                    >
+                      TBD
+                    </div>
+                    <div class="pc-escrow">Awaiting agreement</div>
+                  </div>
+                </div>
+                <div class="stages">
+                  <div class="stage done">
+                    <div class="sd done">
+                      <svg width="8" height="8" viewBox="0 0 9 9" fill="none">
+                        <path
+                          d="M1.5 4.5l2 2L7.5 2"
+                          stroke="#3B6D11"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <div class="sl done">Applied</div>
+                  </div>
+                  <div class="stage done">
+                    <div class="sd done">
+                      <svg width="8" height="8" viewBox="0 0 9 9" fill="none">
+                        <path
+                          d="M1.5 4.5l2 2L7.5 2"
+                          stroke="#3B6D11"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <div class="sl done">Accepted</div>
+                  </div>
+                  <div class="stage">
+                    <div class="sd now">
+                      <svg width="7" height="7" viewBox="0 0 7 7">
+                        <circle cx="3.5" cy="3.5" r="2.5" fill="#378ADD" />
+                      </svg>
+                    </div>
+                    <div class="sl now">Deal signing</div>
+                  </div>
+                  <div class="stage">
+                    <div class="sd"></div>
+                    <div class="sl">Payment held</div>
+                  </div>
+                  <div class="stage">
+                    <div class="sd"></div>
+                    <div class="sl">Work in progress</div>
+                  </div>
+                  <div class="stage">
+                    <div class="sd"></div>
+                    <div class="sl">Work verified</div>
+                  </div>
+                  <div class="stage">
+                    <div class="sd"></div>
+                    <div class="sl">Paid out</div>
+                  </div>
+                </div>
+                <div
+                  class="ins ins-a"
+                  style="margin-top: 0; margin-bottom: 10px"
+                >
+                  <svg viewBox="0 0 14 14" fill="none">
+                    <circle cx="7" cy="7" r="6" fill="#FAC775" />
+                    <path
+                      d="M7 4.5v3M7 9v.5"
+                      stroke="#633806"
+                      stroke-width="1.2"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  Sponsor replied — agree terms to proceed to escrow. They
+                  proposed ৳22,000 but your rate for 2 reels is ৳28,000.
+                </div>
+                <div class="pc-foot">
+                  <div class="pc-eta">
+                    Sponsor replied — propose your terms to move forward
+                  </div>
+                  <div style="display: flex; gap: 7px">
+                    <button class="btn-ghost" onclick="goTo('messages')">
+                      Open chat
+                    </button>
+                    <button class="btn-g" onclick="goTo('messages')">
+                      Propose terms
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- DEAL 3: OrganicBD - Completed -->
+              <div class="pipe-card" data-dstatus="completed">
+                <div class="pc-top">
+                  <div
+                    style="
+                      display: flex;
+                      align-items: flex-start;
+                      gap: 10px;
+                      flex: 1;
+                      min-width: 0;
+                    "
+                  >
+                    <div
+                      class="pc-logo"
+                      style="background: var(--teal-l); color: var(--grn-d)"
+                    >
+                      OB
+                    </div>
+                    <div>
+                      <div class="pc-brand">
+                        OrganicBD
+                        <span
+                          style="
+                            font-size: 10px;
+                            padding: 1px 7px;
+                            border-radius: 20px;
+                            background: var(--grn-l);
+                            color: var(--grn-3);
+                            margin-left: 5px;
+                            font-weight: 700;
+                          "
+                          >Completed</span
+                        >
+                      </div>
+                      <div class="pc-campaign">Health Food Launch</div>
+                      <div class="pc-tags">
+                        <span class="pc-tag">Health &amp; food</span
+                        ><span class="pc-tag">Instagram</span
+                        ><span class="pc-tag">Nationwide</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pc-right">
+                    <div class="pc-amt" style="color: var(--grn-3)">
+                      ৳17,370
+                    </div>
+                    <div
+                      class="pc-escrow"
+                      style="color: var(--grn); font-weight: 600"
+                    >
+                      Paid out · Mar 8
+                    </div>
+                  </div>
+                </div>
+                <div class="stages">
+                  <div class="stage done">
+                    <div class="sd done">
+                      <svg width="8" height="8" viewBox="0 0 9 9" fill="none">
+                        <path
+                          d="M1.5 4.5l2 2L7.5 2"
+                          stroke="#3B6D11"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <div class="sl done">Applied</div>
+                  </div>
+                  <div class="stage done">
+                    <div class="sd done">
+                      <svg width="8" height="8" viewBox="0 0 9 9" fill="none">
+                        <path
+                          d="M1.5 4.5l2 2L7.5 2"
+                          stroke="#3B6D11"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <div class="sl done">Accepted</div>
+                  </div>
+                  <div class="stage done">
+                    <div class="sd done">
+                      <svg width="8" height="8" viewBox="0 0 9 9" fill="none">
+                        <path
+                          d="M1.5 4.5l2 2L7.5 2"
+                          stroke="#3B6D11"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <div class="sl done">Deal signed</div>
+                  </div>
+                  <div class="stage done">
+                    <div class="sd done">
+                      <svg width="8" height="8" viewBox="0 0 9 9" fill="none">
+                        <path
+                          d="M1.5 4.5l2 2L7.5 2"
+                          stroke="#3B6D11"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <div class="sl done">Payment held</div>
+                  </div>
+                  <div class="stage done">
+                    <div class="sd done">
+                      <svg width="8" height="8" viewBox="0 0 9 9" fill="none">
+                        <path
+                          d="M1.5 4.5l2 2L7.5 2"
+                          stroke="#3B6D11"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <div class="sl done">Work verified</div>
+                  </div>
+                  <div class="stage done">
+                    <div class="sd done">
+                      <svg width="8" height="8" viewBox="0 0 9 9" fill="none">
+                        <path
+                          d="M1.5 4.5l2 2L7.5 2"
+                          stroke="#3B6D11"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <div class="sl done">Paid out</div>
+                  </div>
+                </div>
+                <div class="receipt">
+                  <div
+                    style="
+                      font-size: 10px;
+                      color: var(--tx3);
+                      text-transform: uppercase;
+                      letter-spacing: 0.05em;
+                      font-weight: 600;
+                      margin-bottom: 7px;
+                    "
+                  >
+                    Deal receipt
+                  </div>
+                  <div class="rec-row">
+                    <span class="rec-l">Agreed amount</span
+                    ><span class="rec-v">৳18,000</span>
+                  </div>
+                  <div class="rec-row">
+                    <span class="rec-l">Platform escrow fee (3.5%)</span
+                    ><span class="rec-v">– ৳630</span>
+                  </div>
+                  <div class="rec-row">
+                    <span class="rec-l">Amount received</span
+                    ><span class="rec-v" style="color: var(--grn-3)"
+                      >৳17,370</span
+                    >
+                  </div>
+                  <div class="rec-row">
+                    <span class="rec-l">Paid out</span
+                    ><span class="rec-v">March 8, 2025</span>
+                  </div>
+                  <div class="rec-row">
+                    <span class="rec-l">Sponsor rating</span>
+                    <div style="display: flex; align-items: center; gap: 6px">
+                      <div class="stars">
+                        <div class="sf"></div>
+                        <div class="sf"></div>
+                        <div class="sf"></div>
+                        <div class="sf"></div>
+                        <div class="sf"></div>
+                      </div>
+                      <span
+                        style="
+                          font-size: 12px;
+                          font-weight: 700;
+                          color: var(--tx1);
+                        "
+                        >5.0</span
+                      >
+                    </div>
+                  </div>
+                  <div class="rec-row" style="align-items: flex-start">
+                    <span class="rec-l">Sponsor comment</span
+                    ><span
+                      class="rec-v"
+                      style="
+                        font-size: 12px;
+                        font-weight: 400;
+                        color: var(--tx2);
+                        text-align: right;
+                        max-width: 60%;
+                      "
+                      >"Exceeded expectations. Best influencer ROI this quarter.
+                      Highly recommended."</span
+                    >
+                  </div>
+                </div>
+                <div class="ins ins-g" style="margin-top: 10px">
+                  <svg viewBox="0 0 14 14" fill="none">
+                    <circle cx="7" cy="7" r="6" fill="#C0DD97" />
+                    <path
+                      d="M4.5 7l2 2 3-3"
+                      stroke="#27500A"
+                      stroke-width="1.2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  This deal added a verified badge and 5-star rating to your
+                  public profile. Every sponsor browsing the creator directory
+                  can see this track record.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const PAGE_ROUTES = {
+        homeFeed: "sponsee_home_feed (1).html",
+        profile: "sponsee Profile.html",
+        dashboardAnalytics: "dashboard_analytics.html",
+        applicationsDeals: "Sponsee_ my_applications_deals.html",
+        messages: "messages.html",
+        aiPitchGenerator: "ai_pitch_generator.html",
+        browseCampaigns: "browse_campaigns.html",
+        dealJourney: "../Log in/deal_journey (1).html",
+      };
+
+      function goTo(routeKey) {
+        const targetPath = PAGE_ROUTES[routeKey];
+        if (!targetPath) {
+          console.warn("Unknown route key:", routeKey);
+          return;
+        }
+        window.location.href = targetPath;
+      }
+
+      function switchTab(tab) {
+        document
+          .getElementById("tab-apps")
+          .classList.toggle("on", tab === "apps");
+        document
+          .getElementById("tab-deals")
+          .classList.toggle("on", tab === "deals");
+        document
+          .getElementById("sec-apps")
+          .classList.toggle("on", tab === "apps");
+        document
+          .getElementById("sec-deals")
+          .classList.toggle("on", tab === "deals");
+      }
+
+      function filterApps(status, el) {
+        document
+          .querySelectorAll("#sec-apps .fchip")
+          .forEach((c) => c.classList.remove("on"));
+        el.classList.add("on");
+        const cards = document.querySelectorAll("#app-list .app-card");
+        let count = 0;
+        cards.forEach((card) => {
+          const s = card.dataset.status;
+          const show =
+            status === "all" ||
+            (status === "active" && s === "active") ||
+            (status === "pending" && s === "pending") ||
+            (status === "closed" && s === "closed");
+          card.style.display = show ? "" : "none";
+          if (show) count++;
+        });
+        document.getElementById("app-count").textContent = count;
+      }
+
+      function filterDeals(status, el) {
+        document
+          .querySelectorAll("#sec-deals .fchip")
+          .forEach((c) => c.classList.remove("on"));
+        el.classList.add("on");
+        const cards = document.querySelectorAll("#deal-list .pipe-card");
+        let count = 0;
+        cards.forEach((card) => {
+          const s = card.dataset.dstatus;
+          const show = status === "all" || s === status;
+          card.style.display = show ? "" : "none";
+          if (show) count++;
+        });
+        document.getElementById("deal-count").textContent = count;
+      }
+    </script>
+    <script src="sponsee_dynamic.js"></script>
+  </body>
+</html>

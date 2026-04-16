@@ -1,0 +1,3774 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SponzoBD — Messages (Creator)</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --red: #e24b4a;
+        --red-l: #fcebeb;
+        --red-m: #f7c1c1;
+        --grn: #1d9e75;
+        --grn-l: #eaf3de;
+        --grn-m: #c0dd97;
+        --grn-d: #085041;
+        --grn-3: #3b6d11;
+        --grn-t: #27500a;
+        --teal-l: #e1f5ee;
+        --teal-m: #9fe1cb;
+        --blu-l: #e6f1fb;
+        --blu-m: #b5d4f4;
+        --blu-t: #0c447c;
+        --amb-l: #faeeda;
+        --amb-m: #fac775;
+        --amb-t: #633806;
+        --amb-d: #854f0b;
+        --pur-l: #eeedfe;
+        --pur-t: #3c3489;
+        --bg: #f4f2ee;
+        --srf: #ffffff;
+        --srf2: #f0eee9;
+        --bdr: rgba(0, 0, 0, 0.08);
+        --bdr-m: rgba(0, 0, 0, 0.14);
+        --tx1: #1a1a1a;
+        --tx2: #555;
+        --tx3: #999;
+        --font: "DM Sans", system-ui, sans-serif;
+        --r1: 7px;
+        --r2: 10px;
+        --r3: 14px;
+      }
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+        font-family: var(--font);
+        font-size: 14px;
+        color: var(--tx1);
+        background: var(--bg);
+      }
+      .app {
+        display: flex;
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+      }
+      .sb {
+        width: 220px;
+        flex-shrink: 0;
+        background: var(--srf);
+        border-right: 1px solid var(--bdr);
+        display: flex;
+        flex-direction: column;
+      }
+      .sb-logo {
+        padding: 15px 16px 12px;
+        border-bottom: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .logo-ic {
+        width: 28px;
+        height: 28px;
+        background: var(--red);
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .sb-user {
+        padding: 11px 16px;
+        border-bottom: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .av-sb {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--teal-m);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--grn-d);
+        flex-shrink: 0;
+      }
+      .u-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .u-sub {
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .u-plan {
+        font-size: 11px;
+        color: var(--grn-d);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-top: 2px;
+      }
+      .pdot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--grn);
+      }
+      .nav {
+        flex: 1;
+        overflow-y: auto;
+        padding: 8px 0;
+      }
+      .nav-sec {
+        padding: 5px 16px 3px;
+        font-size: 10px;
+        color: var(--tx3);
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        font-weight: 600;
+      }
+      .ni {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        font-size: 13px;
+        color: var(--tx2);
+        cursor: pointer;
+        border-left: 2.5px solid transparent;
+      }
+      .ni:hover {
+        background: var(--srf2);
+      }
+      .ni.on {
+        background: var(--srf2);
+        color: var(--tx1);
+        font-weight: 600;
+        border-left-color: var(--red);
+      }
+      .ni svg {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+        opacity: 0.5;
+      }
+      .ni.on svg {
+        opacity: 1;
+      }
+      .ni-badge {
+        margin-left: auto;
+        background: var(--red);
+        color: #fff;
+        font-size: 10px;
+        padding: 1px 7px;
+        border-radius: 20px;
+        font-weight: 700;
+      }
+      .sb-ps {
+        margin: 0 10px 14px;
+        padding: 10px 12px;
+        background: var(--srf2);
+        border-radius: var(--r2);
+      }
+      .ps-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 4px;
+      }
+      .ps-lbl {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .ps-pct {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--grn);
+      }
+      .ps-track {
+        height: 4px;
+        background: var(--bdr-m);
+        border-radius: 2px;
+      }
+      .ps-fill {
+        height: 4px;
+        background: var(--grn);
+        border-radius: 2px;
+        width: 92%;
+      }
+      .ps-note {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-top: 4px;
+      }
+      .main {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+      }
+      .topbar {
+        height: 52px;
+        background: var(--srf);
+        border-bottom: 1px solid var(--bdr);
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+      }
+      .tb-t {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .tb-r {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .badge-prem {
+        background: var(--teal-l);
+        color: var(--grn-d);
+        font-size: 11px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-weight: 700;
+      }
+      .msg-layout {
+        display: flex;
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+      }
+      .conv-col {
+        width: 272px;
+        flex-shrink: 0;
+        border-right: 1px solid var(--bdr);
+        background: var(--srf);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .conv-hd {
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--bdr);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+      }
+      .conv-hd-t {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .unread-badge {
+        background: var(--red);
+        color: #fff;
+        font-size: 11px;
+        padding: 2px 9px;
+        border-radius: 20px;
+        font-weight: 700;
+      }
+      .conv-search {
+        padding: 8px 12px;
+        border-bottom: 1px solid var(--bdr);
+        flex-shrink: 0;
+      }
+      .csi {
+        width: 100%;
+        padding: 7px 11px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r2);
+        background: var(--srf2);
+        color: var(--tx1);
+        font-size: 12px;
+        font-family: var(--font);
+      }
+      .csi:focus {
+        outline: none;
+        border-color: var(--grn);
+      }
+      .conv-list {
+        flex: 1;
+        overflow-y: auto;
+      }
+      .conv-item {
+        padding: 11px 14px;
+        border-bottom: 1px solid var(--bdr);
+        cursor: pointer;
+        display: flex;
+        gap: 9px;
+        border-left: 2.5px solid transparent;
+      }
+      .conv-item:hover {
+        background: var(--srf2);
+      }
+      .conv-item.active {
+        background: var(--srf2);
+        border-left-color: var(--red);
+      }
+      .ci-av {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .av-gf {
+        background: var(--grn-l);
+        color: var(--grn-3);
+      }
+      .av-nl {
+        background: var(--blu-l);
+        color: var(--blu-t);
+      }
+      .av-tb {
+        background: var(--amb-l);
+        color: var(--amb-d);
+      }
+      .av-sb2 {
+        background: var(--pur-l);
+        color: var(--pur-t);
+      }
+      .ci-body {
+        flex: 1;
+        min-width: 0;
+      }
+      .ci-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 1px;
+      }
+      .ci-brand {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .ci-time {
+        font-size: 10px;
+        color: var(--tx3);
+        flex-shrink: 0;
+        margin-left: 5px;
+      }
+      .ci-camp {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-bottom: 3px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .ci-prev {
+        font-size: 12px;
+        color: var(--tx2);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .ci-prev.unread {
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .ci-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 5px;
+      }
+      .stage-pill {
+        font-size: 10px;
+        padding: 2px 7px;
+        border-radius: 20px;
+        font-weight: 600;
+      }
+      .sp-terms {
+        background: var(--blu-l);
+        color: var(--blu-t);
+      }
+      .sp-record {
+        background: var(--pur-l);
+        color: var(--pur-t);
+      }
+      .sp-escrow {
+        background: var(--amb-l);
+        color: var(--amb-t);
+      }
+      .sp-content {
+        background: var(--red-l);
+        color: #791f1f;
+      }
+      .sp-review {
+        background: var(--teal-l);
+        color: var(--grn-d);
+      }
+      .sp-done {
+        background: var(--grn-l);
+        color: var(--grn-3);
+      }
+      .udot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--red);
+        flex-shrink: 0;
+      }
+      .chat-col {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background: var(--bg);
+      }
+      /* context bar */
+      .ctx-bar {
+        background: var(--srf);
+        border-bottom: 1px solid var(--bdr);
+        padding: 10px 17px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        flex-shrink: 0;
+        position: relative;
+      }
+      .ctx-left {
+        flex: 1;
+      }
+      .ctx-brand {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .ctx-camp {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-top: 1px;
+      }
+      .ctx-pipe {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        margin-top: 7px;
+        flex-wrap: wrap;
+      }
+      .dp {
+        font-size: 10px;
+        padding: 2px 8px;
+        border-radius: 20px;
+        background: var(--srf2);
+        color: var(--tx3);
+        font-weight: 500;
+      }
+      .dp.done {
+        background: var(--grn-l);
+        color: var(--grn-3);
+      }
+      .dp.now {
+        background: var(--blu-l);
+        color: var(--blu-t);
+        font-weight: 700;
+      }
+      .dp-arr {
+        font-size: 10px;
+        color: var(--tx3);
+      }
+      .ctx-right {
+        flex-shrink: 0;
+        text-align: right;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 6px;
+      }
+      .ctx-amt {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--grn-3);
+      }
+      .ctx-lbl {
+        font-size: 10px;
+        color: var(--tx3);
+      }
+      /* thread */
+      .thread {
+        flex: 1;
+        padding: 14px 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 11px;
+        overflow-y: auto;
+        min-height: 0;
+      }
+      /* cannot-text notice */
+      .no-text-notice {
+        background: var(--amb-l);
+        border: 1px solid var(--amb-m);
+        border-radius: var(--r2);
+        padding: 9px 14px;
+        font-size: 12px;
+        color: var(--amb-t);
+        text-align: center;
+        max-width: 400px;
+        margin: 0 auto;
+      }
+      /* input area */
+      .input-area {
+        background: var(--srf);
+        border-top: 1px solid var(--bdr);
+        padding: 10px 18px;
+        flex-shrink: 0;
+      }
+      .qa-row {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 8px;
+        flex-wrap: wrap;
+      }
+      .qa {
+        padding: 4px 11px;
+        border: 1px solid var(--bdr-m);
+        border-radius: 20px;
+        font-size: 11px;
+        color: var(--tx2);
+        background: transparent;
+        cursor: pointer;
+        font-family: var(--font);
+        font-weight: 500;
+      }
+      .qa:hover {
+        background: var(--srf2);
+      }
+      .qa-g {
+        border-color: var(--grn-m);
+        color: var(--grn-3);
+        background: var(--grn-l);
+      }
+      .qa-b {
+        border-color: var(--blu-m);
+        color: var(--blu-t);
+        background: var(--blu-l);
+      }
+      .qa-r {
+        border-color: var(--red-m);
+        color: var(--red);
+        background: var(--red-l);
+      }
+      .msg-inp-row {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .msg-inp {
+        flex: 1;
+        padding: 9px 14px;
+        border: 1px solid var(--bdr-m);
+        border-radius: 20px;
+        background: var(--srf);
+        color: var(--tx1);
+        font-size: 13px;
+        font-family: var(--font);
+      }
+      .msg-inp:focus {
+        outline: none;
+        border-color: var(--grn);
+      }
+      .send-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: var(--red);
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+      .send-btn:hover {
+        background: #c73c3b;
+      }
+      /* shared cards & components from shared CSS */
+      .journey-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--srf);
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r3);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        z-index: 50;
+        display: none;
+        overflow: hidden;
+      }
+      .journey-dropdown.on {
+        display: block;
+      }
+      .jd-hd {
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--bdr);
+        background: var(--pur-l);
+      }
+      .jd-hd-t {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--pur-t);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .jd-row {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 7px 14px;
+      }
+      .jd-dot {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        border: 1.5px solid var(--bdr-m);
+        background: var(--srf);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .jd-dot.done {
+        background: var(--grn-l);
+        border-color: var(--grn-m);
+      }
+      .jd-dot.now {
+        background: var(--blu-l);
+        border-color: var(--blu-t);
+      }
+      .jd-info {
+        flex: 1;
+      }
+      .jd-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .jd-label.done {
+        color: var(--grn-3);
+      }
+      .jd-label.now {
+        color: var(--blu-t);
+      }
+      .jd-label.grey {
+        color: var(--tx3);
+      }
+      .jd-who {
+        font-size: 10px;
+        color: var(--tx3);
+      }
+      .jd-time {
+        font-size: 10px;
+        color: var(--tx3);
+        flex-shrink: 0;
+      }
+      .jd-line {
+        width: 1.5px;
+        height: 10px;
+        background: var(--bdr-m);
+        margin-left: 22px;
+      }
+      .jd-line.done {
+        background: var(--grn-m);
+      }
+      .journey-btn {
+        padding: 5px 11px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        background: var(--srf);
+        font-size: 11px;
+        color: var(--tx2);
+        cursor: pointer;
+        font-family: var(--font);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-weight: 600;
+      }
+      .journey-btn:hover {
+        background: var(--srf2);
+      }
+      .journey-btn.on {
+        background: var(--pur-l);
+        border-color: var(--pur-t);
+        color: var(--pur-t);
+      }
+      .terms-card {
+        background: var(--srf);
+        border: 1px solid var(--grn-m);
+        border-radius: var(--r3);
+        padding: 12px 14px;
+        max-width: 70%;
+      }
+      .tc-hd {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--grn-3);
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .tc-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 0;
+        border-bottom: 1px solid var(--bdr);
+        font-size: 12px;
+      }
+      .tc-row:last-of-type {
+        border-bottom: none;
+      }
+      .tc-l {
+        color: var(--tx2);
+      }
+      .tc-v {
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .tc-badge {
+        font-size: 11px;
+        padding: 3px 9px;
+        border-radius: 20px;
+        margin-top: 9px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-weight: 700;
+      }
+      .tc-pend {
+        background: var(--amb-l);
+        color: var(--amb-t);
+      }
+      .tc-acc {
+        background: var(--grn-l);
+        color: var(--grn-3);
+      }
+      .tc-actions {
+        display: flex;
+        gap: 7px;
+        margin-top: 10px;
+        flex-wrap: wrap;
+      }
+      .deal-rec {
+        background: var(--srf);
+        border: 2px solid var(--grn-m);
+        border-radius: var(--r3);
+        padding: 13px 15px;
+        max-width: 76%;
+      }
+      .dr-hd {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--grn-d);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        border-bottom: 1px solid var(--bdr);
+        padding-bottom: 8px;
+      }
+      .dr-sec-t {
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--tx3);
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        margin: 8px 0 5px;
+      }
+      .dr-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 4px 0;
+        border-bottom: 1px solid var(--bdr);
+        font-size: 11px;
+      }
+      .dr-row:last-child {
+        border-bottom: none;
+      }
+      .dr-l {
+        color: var(--tx2);
+      }
+      .dr-v {
+        font-weight: 700;
+        color: var(--tx1);
+      }
+      .dr-v.grn {
+        color: var(--grn-3);
+      }
+      .dr-v.red {
+        color: var(--red);
+      }
+      .dr-sigs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 7px;
+        margin-top: 9px;
+        padding-top: 9px;
+        border-top: 1px solid var(--bdr-m);
+      }
+      .dr-sig {
+        background: var(--srf2);
+        border-radius: var(--r1);
+        padding: 7px 10px;
+      }
+      .dr-sig-name {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--tx1);
+        margin-bottom: 2px;
+      }
+      .dr-sig-meta {
+        font-size: 10px;
+        color: var(--tx3);
+      }
+      .dr-sig-ok {
+        font-size: 10px;
+        color: var(--grn-3);
+        font-weight: 700;
+        margin-top: 2px;
+      }
+      .dr-confirm-actions {
+        display: flex;
+        gap: 7px;
+        margin-top: 10px;
+      }
+      .escrow-card {
+        border-radius: var(--r3);
+        padding: 12px 14px;
+        max-width: 70%;
+      }
+      .esc-sp {
+        background: var(--amb-l);
+        border: 1px solid var(--amb-m);
+      }
+      .esc-cr {
+        background: var(--grn-l);
+        border: 1px solid var(--grn-m);
+      }
+      .esc-hd {
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 7px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .esc-sp .esc-hd {
+        color: var(--amb-t);
+      }
+      .esc-cr .esc-hd {
+        color: var(--grn-3);
+      }
+      .esc-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 4px 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+        font-size: 12px;
+      }
+      .esc-row:last-of-type {
+        border-bottom: none;
+      }
+      .esc-sp .esc-l {
+        color: var(--amb-t);
+      }
+      .esc-sp .esc-v {
+        font-weight: 700;
+        color: var(--amb-d);
+      }
+      .esc-cr .esc-l {
+        color: var(--grn-t);
+      }
+      .esc-cr .esc-v {
+        font-weight: 700;
+        color: var(--grn-d);
+      }
+      .content-card {
+        background: var(--srf);
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r3);
+        overflow: hidden;
+        max-width: 70%;
+      }
+      .cc-thumb {
+        width: 100%;
+        height: 96px;
+        background: linear-gradient(135deg, var(--grn-l), var(--teal-l));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .cc-body {
+        padding: 10px 12px;
+      }
+      .cc-hd {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--tx1);
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .cc-item {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 11px;
+        color: var(--tx2);
+        padding: 3px 0;
+        border-bottom: 1px solid var(--bdr);
+      }
+      .cc-item:last-child {
+        border-bottom: none;
+      }
+      .cc-link {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 12px;
+        color: var(--blu-t);
+        font-weight: 600;
+        padding: 6px 9px;
+        background: var(--blu-l);
+        border-radius: var(--r1);
+        margin: 7px 0;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .cc-link:hover {
+        background: var(--blu-m);
+      }
+      .cc-note {
+        font-size: 11px;
+        color: var(--tx2);
+        background: var(--srf2);
+        border-radius: var(--r1);
+        padding: 6px 9px;
+        margin-bottom: 7px;
+        line-height: 1.55;
+        border-left: 2px solid var(--bdr-m);
+      }
+      .cc-status {
+        font-size: 11px;
+        padding: 3px 9px;
+        border-radius: 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-weight: 700;
+      }
+      .cc-pend {
+        background: var(--amb-l);
+        color: var(--amb-t);
+      }
+      .cc-approved {
+        background: var(--grn-l);
+        color: var(--grn-3);
+      }
+      .cc-actions {
+        display: flex;
+        gap: 7px;
+        margin-top: 8px;
+        flex-wrap: wrap;
+      }
+      .review-card {
+        background: var(--srf);
+        border: 1px solid var(--grn-m);
+        border-radius: var(--r3);
+        padding: 12px 14px;
+        max-width: 70%;
+      }
+      .rv-hd {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--grn-3);
+        margin-bottom: 9px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .rv-stars {
+        display: flex;
+        gap: 4px;
+        margin-bottom: 8px;
+      }
+      .rv-star {
+        width: 26px;
+        height: 26px;
+        cursor: pointer;
+        clip-path: polygon(
+          50% 0%,
+          61% 35%,
+          98% 35%,
+          68% 57%,
+          79% 91%,
+          50% 70%,
+          21% 91%,
+          32% 57%,
+          2% 35%,
+          39% 35%
+        );
+        background: #ddd;
+        transition: background 0.1s;
+      }
+      .rv-star.on {
+        background: #ef9f27;
+      }
+      .rv-ta {
+        padding: 7px 10px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        background: var(--srf);
+        color: var(--tx1);
+        font-size: 12px;
+        font-family: var(--font);
+        width: 100%;
+        resize: none;
+        height: 50px;
+        margin-bottom: 8px;
+      }
+      .rv-ta:focus {
+        outline: none;
+        border-color: var(--grn);
+      }
+      .rv-note {
+        font-size: 11px;
+        color: var(--tx3);
+        margin-bottom: 7px;
+      }
+      .rv-submitted {
+        background: var(--grn-l);
+        border-radius: var(--r2);
+        padding: 9px 12px;
+        font-size: 12px;
+        color: var(--grn-t);
+        line-height: 1.6;
+        border-left: 2px solid var(--grn-m);
+      }
+      .rv-by {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-top: 4px;
+      }
+      .msg-wrap {
+        display: flex;
+        gap: 8px;
+        align-items: flex-end;
+      }
+      .msg-wrap.me {
+        flex-direction: row-reverse;
+      }
+      .m-av {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .bubble {
+        max-width: 65%;
+        padding: 9px 13px;
+        border-radius: 16px;
+        font-size: 13px;
+        line-height: 1.55;
+      }
+      .b-sp {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        color: var(--tx1);
+        border-bottom-left-radius: 4px;
+      }
+      .b-me {
+        background: var(--grn-l);
+        color: var(--grn-d);
+        border-bottom-right-radius: 4px;
+      }
+      .b-sys {
+        background: var(--pur-l);
+        color: var(--pur-t);
+        border-bottom-right-radius: 4px;
+        font-size: 12px;
+      }
+      .msg-t {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-top: 3px;
+      }
+      .msg-t.r {
+        text-align: right;
+      }
+      .seen {
+        font-size: 10px;
+        color: var(--tx3);
+        text-align: right;
+        margin-top: 1px;
+      }
+      .sys-ev {
+        background: var(--srf);
+        border: 1px solid var(--bdr);
+        border-radius: var(--r2);
+        padding: 8px 13px;
+        text-align: center;
+        max-width: 400px;
+        margin: 0 auto;
+      }
+      .se-lbl {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--tx2);
+        margin-bottom: 2px;
+      }
+      .se-det {
+        font-size: 12px;
+        color: var(--tx1);
+      }
+      .se-t {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-top: 2px;
+      }
+      .panel-zone {
+        background: var(--srf);
+        border-top: 1px solid var(--bdr);
+        padding: 13px 18px;
+        flex-shrink: 0;
+        display: none;
+      }
+      .pz-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--tx1);
+        margin-bottom: 11px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .pz-close {
+        font-size: 12px;
+        color: var(--tx3);
+        cursor: pointer;
+        padding: 3px 8px;
+        border-radius: var(--r1);
+        border: 1px solid var(--bdr-m);
+      }
+      .pz-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 9px;
+        margin-bottom: 10px;
+      }
+      .pz-field {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .pz-field.full {
+        grid-column: 1/-1;
+      }
+      .pz-lbl {
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .pz-inp {
+        padding: 7px 10px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        background: var(--srf);
+        color: var(--tx1);
+        font-size: 13px;
+        font-family: var(--font);
+        width: 100%;
+      }
+      .pz-inp:focus {
+        outline: none;
+        border-color: var(--grn);
+      }
+      .pz-ta {
+        padding: 7px 10px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        background: var(--srf);
+        color: var(--tx1);
+        font-size: 13px;
+        font-family: var(--font);
+        width: 100%;
+        resize: none;
+        height: 52px;
+      }
+      .pz-ta:focus {
+        outline: none;
+        border-color: var(--grn);
+      }
+      .pz-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .pz-note {
+        font-size: 11px;
+        color: var(--tx3);
+      }
+      .upload-zone {
+        border: 1.5px dashed var(--bdr-m);
+        border-radius: var(--r2);
+        padding: 14px;
+        text-align: center;
+        cursor: pointer;
+        background: var(--srf2);
+      }
+      .upload-zone:hover,
+      .upload-zone.has {
+        border-color: var(--grn);
+        background: var(--grn-l);
+      }
+      .uz-lbl {
+        font-size: 12px;
+        color: var(--tx3);
+        margin-top: 4px;
+      }
+      .uz-note {
+        font-size: 10px;
+        color: var(--tx3);
+        margin-top: 2px;
+      }
+      .btn-r {
+        padding: 7px 13px;
+        background: var(--red);
+        border: none;
+        border-radius: var(--r1);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .btn-r:hover {
+        background: #c73c3b;
+      }
+      .btn-g {
+        padding: 6px 12px;
+        background: var(--grn-l);
+        border: 1px solid var(--grn-m);
+        border-radius: var(--r1);
+        color: var(--grn-t);
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .btn-ghost {
+        padding: 6px 11px;
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r1);
+        background: transparent;
+        color: var(--tx2);
+        font-size: 12px;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .btn-ghost:hover {
+        background: var(--srf2);
+      }
+      .btn-a {
+        padding: 6px 12px;
+        background: var(--amb-l);
+        border: 1px solid var(--amb-m);
+        border-radius: var(--r1);
+        color: var(--amb-t);
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: var(--font);
+      }
+      .toast {
+        position: fixed;
+        bottom: 22px;
+        right: 22px;
+        background: var(--grn-d);
+        color: #fff;
+        padding: 10px 16px;
+        border-radius: var(--r2);
+        font-size: 13px;
+        font-weight: 600;
+        display: none;
+        z-index: 300;
+        align-items: center;
+        gap: 7px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+      }
+      .toast.on {
+        display: flex;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- SIDEBAR -->
+      <div class="sb">
+        <div class="sb-logo">
+          <div class="logo-ic">
+            <svg viewBox="0 0 16 16" fill="none" width="15" height="15">
+              <path
+                d="M3 8a5 5 0 1010 0A5 5 0 003 8z"
+                fill="white"
+                opacity="0.25"
+              />
+              <path
+                d="M8 5v3l2 2"
+                stroke="white"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+          <div>
+            <div style="font-size: 14px; font-weight: 700; color: var(--tx1)">
+              SponzoBD
+            </div>
+            <div style="font-size: 10px; color: var(--tx3)">Creator portal</div>
+          </div>
+        </div>
+        <div class="sb-user">
+          <div class="av-sb">LA</div>
+          <div>
+            <div class="u-name">Lamia Akter</div>
+            <div class="u-sub">Health & wellness · 52K</div>
+            <div class="u-plan"><span class="pdot"></span>Premium plan</div>
+          </div>
+        </div>
+        <nav class="nav">
+          <div class="nav-sec">Main</div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'sponsee_home_feed (1).html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <path
+                d="M1.5 6.5L7.5 1.5L13.5 6.5V13H9.5V9.5H5.5V13H1.5V6.5Z"
+              ></path>
+            </svg>
+            Home
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'dashboard_analytics.html'"
+          >
+            <svg viewBox="0 0 15 15" fill="currentColor">
+              <rect x="1" y="1" width="5" height="5" rx="1"></rect>
+              <rect x="9" y="1" width="5" height="5" rx="1"></rect>
+              <rect x="1" y="9" width="5" height="5" rx="1"></rect>
+              <rect x="9" y="9" width="5" height="5" rx="1"></rect>
+            </svg>
+            Dashboard &amp; analytics
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'browse_campaigns.html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <rect x="1.5" y="2.5" width="12" height="10" rx="1.5"></rect>
+              <path d="M5 6h5M5 9h3"></path>
+            </svg>
+            Browse campaigns
+          </div>
+          <div
+            class="ni"
+            onclick="
+              window.location.href = 'Sponsee_ my_applications_deals.html'
+            "
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <circle cx="7.5" cy="7.5" r="5.5"></circle>
+              <path d="M7.5 4.5v3l2 1.5"></path>
+            </svg>
+            My applications &amp; deals
+          </div>
+          <div class="ni on" onclick="window.location.href = 'messages.html'">
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <path d="M2 2h11v8H8l-3 2.5V10H2V2z"></path>
+            </svg>
+            Messages<span class="ni-badge">2</span>
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'ai_pitch_generator.html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <path d="M3 12l2-2 2 1 4-5"></path>
+              <circle
+                cx="11.5"
+                cy="3.5"
+                r="1.8"
+                fill="currentColor"
+                opacity="0.35"
+              ></circle>
+            </svg>
+            AI pitch generator
+          </div>
+          <div
+            class="ni"
+            onclick="window.location.href = 'sponsee Profile.html'"
+          >
+            <svg
+              viewBox="0 0 15 15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            >
+              <circle cx="7.5" cy="5" r="2.5"></circle>
+              <path d="M2 13c0-3 2.5-4.5 5.5-4.5S13 10 13 13"></path>
+            </svg>
+            My profile
+          </div>
+        </nav>
+        <div class="sb-ps">
+          <div class="ps-row">
+            <span class="ps-lbl">Profile strength</span
+            ><span class="ps-pct">92%</span>
+          </div>
+          <div class="ps-track"><div class="ps-fill"></div></div>
+          <div class="ps-note">Add 1 portfolio sample to reach 100%</div>
+        </div>
+      </div>
+
+      <!-- MAIN -->
+      <div class="main">
+        <div class="topbar">
+          <div class="tb-t">Messages</div>
+          <div class="tb-r"><span class="badge-prem">Premium plan</span></div>
+        </div>
+        <div class="msg-layout">
+          <!-- CONV LIST -->
+          <div class="conv-col">
+            <div class="conv-hd">
+              <div class="conv-hd-t">Conversations</div>
+              <div class="unread-badge" id="ubadge">3 unread</div>
+            </div>
+            <div class="conv-search">
+              <input
+                class="csi"
+                type="text"
+                placeholder="Search conversations..."
+              />
+            </div>
+            <div class="conv-list">
+              <!-- Chat 1: Terms proposal — creator proposes to sponsor -->
+              <div class="conv-item active" id="ci-gf" onclick="sw('gf', this)">
+                <div class="ci-av av-gf">GF</div>
+                <div class="ci-body">
+                  <div class="ci-top">
+                    <span class="ci-brand">GreenFresh BD</span
+                    ><span class="ci-time">2h ago</span>
+                  </div>
+                  <div class="ci-camp">
+                    National Health Week · Instagram, YouTube
+                  </div>
+                  <div class="ci-prev unread">
+                    We accepted your application! Please send your terms.
+                  </div>
+                  <div class="ci-foot">
+                    <span class="stage-pill sp-terms">Negotiating terms</span>
+                    <div class="udot"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Chat 2: Deal record — both confirm -->
+              <div class="conv-item" id="ci-nl" onclick="sw('nl', this)">
+                <div class="ci-av av-nl">NL</div>
+                <div class="ci-body">
+                  <div class="ci-top">
+                    <span class="ci-brand">NutriLife BD</span
+                    ><span class="ci-time">Mar 16</span>
+                  </div>
+                  <div class="ci-camp">Ramadan Wellness Series · Instagram</div>
+                  <div class="ci-prev unread">
+                    Deal record sent — please confirm to proceed.
+                  </div>
+                  <div class="ci-foot">
+                    <span class="stage-pill sp-record">Deal record</span>
+                    <div class="udot"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Chat 3: Escrow funded — creator sees notification -->
+              <div class="conv-item" id="ci-tb" onclick="sw('tb', this)">
+                <div class="ci-av av-tb">TB</div>
+                <div class="ci-body">
+                  <div class="ci-top">
+                    <span class="ci-brand">Tasty Bites BD</span
+                    ><span class="ci-time">Mar 14</span>
+                  </div>
+                  <div class="ci-camp">Eid Menu Launch · TikTok</div>
+                  <div class="ci-prev unread">
+                    Escrow funded ৳18,000 — you can start work now!
+                  </div>
+                  <div class="ci-foot">
+                    <span class="stage-pill sp-escrow">Escrow funded</span>
+                    <div class="udot"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Chat 4: Content submitted — awaiting approval + review card -->
+              <div class="conv-item" id="ci-sb" onclick="sw('sb', this)">
+                <div class="ci-av av-sb2">SB</div>
+                <div class="ci-body">
+                  <div class="ci-top">
+                    <span class="ci-brand">StyleBox BD</span
+                    ><span class="ci-time">Feb 22</span>
+                  </div>
+                  <div class="ci-camp">Summer Collection Drop · TikTok</div>
+                  <div class="ci-prev">
+                    Content approved · ৳28,000 released. Please rate us!
+                  </div>
+                  <div class="ci-foot">
+                    <span class="stage-pill sp-review">Rate this sponsor</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CHAT AREA -->
+          <div class="chat-col">
+            <!-- ═══ CTX BARS ═══ -->
+            <div class="ctx-bar" id="ctx-gf">
+              <div class="ctx-left">
+                <div class="ctx-brand">GreenFresh BD · Health & food</div>
+                <div class="ctx-camp">
+                  National Health Week Campaign 2025 · Instagram, YouTube ·
+                  Nationwide
+                </div>
+                <div class="ctx-pipe">
+                  <span class="dp done">Applied</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp done">Accepted</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp now">Terms negotiation</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp">Deal record</span
+                  ><span class="dp-arr">›</span> <span class="dp">Escrow</span
+                  ><span class="dp-arr">›</span> <span class="dp">Content</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp">Paid out</span>
+                </div>
+              </div>
+              <div class="ctx-right">
+                <div
+                  class="ctx-amt"
+                  style="font-size: 13px; color: var(--tx3); font-weight: 400"
+                >
+                  Pending
+                </div>
+                <div class="ctx-lbl">Terms not agreed yet</div>
+                <button
+                  class="journey-btn"
+                  id="jbtn-gf"
+                  onclick="toggleJourney('gf')"
+                >
+                  <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+                    <circle
+                      cx="6"
+                      cy="6"
+                      r="5"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    />
+                    <path
+                      d="M6 4v4M6 3v.5"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  Deal journey
+                </button>
+                <div class="journey-dropdown" id="jd-gf">
+                  <div class="jd-hd">
+                    <div class="jd-hd-t">
+                      Deal journey · GreenFresh BD × Lamia Akter
+                    </div>
+                  </div>
+                  <div class="jd-stages">
+                    <div class="jd-row">
+                      <div class="jd-dot done">
+                        <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                          <path
+                            d="M1 4l2 2L7 2"
+                            stroke="#3B6D11"
+                            stroke-width="1.3"
+                            stroke-linecap="round"
+                          />
+                        </svg>
+                      </div>
+                      <div class="jd-info">
+                        <div class="jd-label done">Application submitted</div>
+                        <div class="jd-who">You · Mar 14</div>
+                      </div>
+                      <div class="jd-time">Mar 14</div>
+                    </div>
+                    <div class="jd-line done"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot done">
+                        <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                          <path
+                            d="M1 4l2 2L7 2"
+                            stroke="#3B6D11"
+                            stroke-width="1.3"
+                            stroke-linecap="round"
+                          />
+                        </svg>
+                      </div>
+                      <div class="jd-info">
+                        <div class="jd-label done">
+                          Application accepted by sponsor
+                        </div>
+                        <div class="jd-who">GreenFresh BD · Mar 15</div>
+                      </div>
+                      <div class="jd-time">Mar 15</div>
+                    </div>
+                    <div class="jd-line done"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot now">
+                        <svg width="7" height="7" viewBox="0 0 7 7">
+                          <circle
+                            cx="3.5"
+                            cy="3.5"
+                            r="2.5"
+                            fill="var(--blu-t)"
+                          />
+                        </svg>
+                      </div>
+                      <div class="jd-info">
+                        <div class="jd-label now">
+                          Terms negotiation · in progress
+                        </div>
+                        <div class="jd-who">You propose → sponsor accepts</div>
+                      </div>
+                    </div>
+                    <div class="jd-line"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot"></div>
+                      <div class="jd-info">
+                        <div class="jd-label grey">
+                          Deal record confirmation
+                        </div>
+                        <div class="jd-who">Both parties confirm</div>
+                      </div>
+                    </div>
+                    <div class="jd-line"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot"></div>
+                      <div class="jd-info">
+                        <div class="jd-label grey">
+                          Escrow funded by sponsor
+                        </div>
+                        <div class="jd-who">Sponsor funds · you start work</div>
+                      </div>
+                    </div>
+                    <div class="jd-line"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot"></div>
+                      <div class="jd-info">
+                        <div class="jd-label grey">
+                          Content submitted by you
+                        </div>
+                        <div class="jd-who">You upload · sponsor reviews</div>
+                      </div>
+                    </div>
+                    <div class="jd-line"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot"></div>
+                      <div class="jd-info">
+                        <div class="jd-label grey">Payment released</div>
+                        <div class="jd-who">
+                          Sponsor approves → you get paid
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="ctx-bar" id="ctx-nl" style="display: none">
+              <div class="ctx-left">
+                <div class="ctx-brand">NutriLife Bangladesh</div>
+                <div class="ctx-camp">
+                  Ramadan Wellness Series · Instagram · Dhaka, Chittagong
+                </div>
+                <div class="ctx-pipe">
+                  <span class="dp done">Applied</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp done">Accepted</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp done">Terms agreed</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp now">Deal record</span
+                  ><span class="dp-arr">›</span> <span class="dp">Escrow</span
+                  ><span class="dp-arr">›</span> <span class="dp">Content</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp">Paid out</span>
+                </div>
+              </div>
+              <div class="ctx-right">
+                <div class="ctx-amt">৳22,000</div>
+                <div class="ctx-lbl">Agreed · awaiting deal record</div>
+                <button
+                  class="journey-btn"
+                  id="jbtn-nl"
+                  onclick="toggleJourney('nl')"
+                >
+                  <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+                    <circle
+                      cx="6"
+                      cy="6"
+                      r="5"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    />
+                    <path
+                      d="M6 4v4M6 3v.5"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  Deal journey
+                </button>
+                <div class="journey-dropdown" id="jd-nl">
+                  <div class="jd-hd">
+                    <div class="jd-hd-t">
+                      Deal journey · NutriLife BD × Lamia Akter
+                    </div>
+                  </div>
+                  <div class="jd-stages">
+                    <div class="jd-row">
+                      <div class="jd-dot done">
+                        <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                          <path
+                            d="M1 4l2 2L7 2"
+                            stroke="#3B6D11"
+                            stroke-width="1.3"
+                            stroke-linecap="round"
+                          />
+                        </svg>
+                      </div>
+                      <div class="jd-info">
+                        <div class="jd-label done">
+                          Application submitted & accepted
+                        </div>
+                        <div class="jd-who">Mar 14</div>
+                      </div>
+                    </div>
+                    <div class="jd-line done"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot done">
+                        <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                          <path
+                            d="M1 4l2 2L7 2"
+                            stroke="#3B6D11"
+                            stroke-width="1.3"
+                            stroke-linecap="round"
+                          />
+                        </svg>
+                      </div>
+                      <div class="jd-info">
+                        <div class="jd-label done">Terms agreed · ৳22,000</div>
+                        <div class="jd-who">
+                          Mar 15 · 2 posts + 4 stories · deadline Apr 2
+                        </div>
+                      </div>
+                    </div>
+                    <div class="jd-line done"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot now">
+                        <svg width="7" height="7" viewBox="0 0 7 7">
+                          <circle
+                            cx="3.5"
+                            cy="3.5"
+                            r="2.5"
+                            fill="var(--blu-t)"
+                          />
+                        </svg>
+                      </div>
+                      <div class="jd-info">
+                        <div class="jd-label now">
+                          Deal record · awaiting your confirmation
+                        </div>
+                        <div class="jd-who">
+                          Confirm below to proceed to escrow
+                        </div>
+                      </div>
+                    </div>
+                    <div class="jd-line"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot"></div>
+                      <div class="jd-info">
+                        <div class="jd-label grey">Escrow funded</div>
+                      </div>
+                    </div>
+                    <div class="jd-line"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot"></div>
+                      <div class="jd-info">
+                        <div class="jd-label grey">Content submitted</div>
+                      </div>
+                    </div>
+                    <div class="jd-line"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot"></div>
+                      <div class="jd-info">
+                        <div class="jd-label grey">Payment released</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="ctx-bar" id="ctx-tb" style="display: none">
+              <div class="ctx-left">
+                <div class="ctx-brand">Tasty Bites BD</div>
+                <div class="ctx-camp">Eid Menu Launch · TikTok · Dhaka</div>
+                <div class="ctx-pipe">
+                  <span class="dp done">Applied</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp done">Accepted</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp done">Terms agreed</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp done">Deal record</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp now">Work in progress</span
+                  ><span class="dp-arr">›</span> <span class="dp">Content</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp">Paid out</span>
+                </div>
+              </div>
+              <div class="ctx-right">
+                <div class="ctx-amt">৳18,000</div>
+                <div class="ctx-lbl">In escrow · secured</div>
+                <button
+                  class="journey-btn"
+                  id="jbtn-tb"
+                  onclick="toggleJourney('tb')"
+                >
+                  <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+                    <circle
+                      cx="6"
+                      cy="6"
+                      r="5"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    />
+                    <path
+                      d="M6 4v4M6 3v.5"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  Deal journey
+                </button>
+                <div class="journey-dropdown" id="jd-tb">
+                  <div class="jd-hd">
+                    <div class="jd-hd-t">
+                      Deal journey · Tasty Bites BD × Lamia Akter
+                    </div>
+                  </div>
+                  <div class="jd-stages">
+                    <div class="jd-row">
+                      <div class="jd-dot done">
+                        <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                          <path
+                            d="M1 4l2 2L7 2"
+                            stroke="#3B6D11"
+                            stroke-width="1.3"
+                            stroke-linecap="round"
+                          />
+                        </svg>
+                      </div>
+                      <div class="jd-info">
+                        <div class="jd-label done">Applied & accepted</div>
+                      </div>
+                    </div>
+                    <div class="jd-line done"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot done">
+                        <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                          <path
+                            d="M1 4l2 2L7 2"
+                            stroke="#3B6D11"
+                            stroke-width="1.3"
+                            stroke-linecap="round"
+                          />
+                        </svg>
+                      </div>
+                      <div class="jd-info">
+                        <div class="jd-label done">Terms agreed · ৳18,000</div>
+                      </div>
+                    </div>
+                    <div class="jd-line done"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot done">
+                        <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                          <path
+                            d="M1 4l2 2L7 2"
+                            stroke="#3B6D11"
+                            stroke-width="1.3"
+                            stroke-linecap="round"
+                          />
+                        </svg>
+                      </div>
+                      <div class="jd-info">
+                        <div class="jd-label done">Deal record confirmed</div>
+                      </div>
+                    </div>
+                    <div class="jd-line done"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot done">
+                        <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                          <path
+                            d="M1 4l2 2L7 2"
+                            stroke="#3B6D11"
+                            stroke-width="1.3"
+                            stroke-linecap="round"
+                          />
+                        </svg>
+                      </div>
+                      <div class="jd-info">
+                        <div class="jd-label done">
+                          Escrow funded · ৳18,000 secured
+                        </div>
+                        <div class="jd-who">Mar 14</div>
+                      </div>
+                    </div>
+                    <div class="jd-line done"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot now">
+                        <svg width="7" height="7" viewBox="0 0 7 7">
+                          <circle
+                            cx="3.5"
+                            cy="3.5"
+                            r="2.5"
+                            fill="var(--blu-t)"
+                          />
+                        </svg>
+                      </div>
+                      <div class="jd-info">
+                        <div class="jd-label now">
+                          Work in progress · deadline Mar 28
+                        </div>
+                        <div class="jd-who">Submit content when ready</div>
+                      </div>
+                    </div>
+                    <div class="jd-line"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot"></div>
+                      <div class="jd-info">
+                        <div class="jd-label grey">
+                          Submit content for approval
+                        </div>
+                      </div>
+                    </div>
+                    <div class="jd-line"></div>
+                    <div class="jd-row">
+                      <div class="jd-dot"></div>
+                      <div class="jd-info">
+                        <div class="jd-label grey">Payment released</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="ctx-bar" id="ctx-sb" style="display: none">
+              <div class="ctx-left">
+                <div class="ctx-brand">StyleBox BD</div>
+                <div class="ctx-camp">
+                  Summer Collection Drop · TikTok · Nationwide
+                </div>
+                <div class="ctx-pipe">
+                  <span class="dp done">Applied</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp done">Accepted</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp done">Terms agreed</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp done">Deal record</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp done">Content approved</span
+                  ><span class="dp-arr">›</span>
+                  <span class="dp done">Paid out</span>
+                </div>
+              </div>
+              <div class="ctx-right">
+                <div class="ctx-amt">৳28,000</div>
+                <div class="ctx-lbl">Paid out Feb 22</div>
+                <button
+                  class="journey-btn"
+                  id="jbtn-sb"
+                  onclick="toggleJourney('sb')"
+                >
+                  <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+                    <circle
+                      cx="6"
+                      cy="6"
+                      r="5"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    />
+                    <path
+                      d="M6 4v4M6 3v.5"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  Deal journey
+                </button>
+                <div class="journey-dropdown" id="jd-sb">
+                  <div class="jd-hd">
+                    <div class="jd-hd-t">
+                      Deal journey · StyleBox BD × Lamia Akter · Completed
+                    </div>
+                  </div>
+                  <div class="jd-stages">
+                    <div class="jd-row">
+                      <div class="jd-dot done">
+                        <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                          <path
+                            d="M1 4l2 2L7 2"
+                            stroke="#3B6D11"
+                            stroke-width="1.3"
+                            stroke-linecap="round"
+                          />
+                        </svg>
+                      </div>
+                      <div class="jd-info">
+                        <div class="jd-label done">All stages completed</div>
+                        <div class="jd-who">৳28,000 paid · 5★ from sponsor</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ═══ THREADS ═══ -->
+
+            <!-- THREAD 1: Terms proposal — creator side -->
+            <div class="thread" id="thread-gf">
+              <div class="sys-ev">
+                <div class="se-lbl">Application accepted by GreenFresh BD</div>
+                <div class="se-det">
+                  GreenFresh BD accepted your application on Mar 15 ·
+                  Conversation opened
+                </div>
+                <div class="se-t">Mar 15 · 10:00 AM · Platform</div>
+              </div>
+              <div class="no-text-notice">
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 13 13"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.2"
+                  style="margin-bottom: 3px; opacity: 0.7"
+                >
+                  <circle cx="6.5" cy="6.5" r="5.5" />
+                  <path d="M6.5 4v3.5M6.5 9v.5" />
+                </svg>
+                <strong>Sponsor messaged first.</strong> GreenFresh BD opened
+                this conversation — you can now reply freely.
+              </div>
+              <div class="msg-wrap">
+                <div class="m-av av-gf">GF</div>
+                <div>
+                  <div class="bubble b-sp">
+                    Hi Lamia! We accepted your application for National Health
+                    Week. Budget is ৳35,000 for 2 reels, 3 stories and 1 YouTube
+                    short. Please review the brief and send your terms whenever
+                    ready.
+                  </div>
+                  <div class="msg-t">Mar 15 · 10:05 AM</div>
+                </div>
+              </div>
+              <div class="msg-wrap me">
+                <div class="m-av av-sb">LA</div>
+                <div>
+                  <div class="bubble b-me">
+                    Thank you! I've reviewed the brief — it's a great fit.
+                    Sending my terms proposal now.
+                  </div>
+                  <div class="msg-t r">Mar 15 · 11:30 AM</div>
+                  <div class="seen">Seen</div>
+                </div>
+              </div>
+              <!-- CARD 1: TERMS PROPOSAL (creator sends to sponsor) -->
+              <div class="msg-wrap me">
+                <div class="m-av av-sb">LA</div>
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-end;
+                    gap: 3px;
+                  "
+                >
+                  <div class="terms-card">
+                    <div class="tc-hd">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                        stroke="#3B6D11"
+                        stroke-width="1.3"
+                      >
+                        <rect x="1.5" y="1.5" width="9" height="9" rx="1" />
+                        <path d="M3.5 6h5M3.5 4h5M3.5 8h3" /></svg
+                      >Terms proposed by Lamia Akter
+                    </div>
+                    <div class="tc-row">
+                      <span class="tc-l">Rate</span
+                      ><span class="tc-v">৳35,000</span>
+                    </div>
+                    <div class="tc-row">
+                      <span class="tc-l">Deliverables</span
+                      ><span class="tc-v"
+                        >2 IG reels · 3 stories · 1 YouTube short</span
+                      >
+                    </div>
+                    <div class="tc-row">
+                      <span class="tc-l">Deadline</span
+                      ><span class="tc-v">March 22, 2025</span>
+                    </div>
+                    <div class="tc-row">
+                      <span class="tc-l">Revision rounds</span
+                      ><span class="tc-v"
+                        >1 included · 7-day review window</span
+                      >
+                    </div>
+                    <div class="tc-row">
+                      <span class="tc-l">Usage rights</span
+                      ><span class="tc-v">3 months · Bangladesh only</span>
+                    </div>
+                    <div class="tc-badge tc-pend">
+                      Awaiting sponsor response
+                    </div>
+                  </div>
+                  <div class="msg-t r">Mar 15 · 12:00 PM</div>
+                </div>
+              </div>
+              <div
+                style="
+                  text-align: center;
+                  font-size: 11px;
+                  color: var(--tx3);
+                  padding: 4px 0;
+                "
+              >
+                Waiting for GreenFresh BD to accept or counter-propose...
+              </div>
+            </div>
+
+            <!-- THREAD 2: Deal record — creator confirms -->
+            <div class="thread" id="thread-nl" style="display: none">
+              <div class="sys-ev">
+                <div class="se-lbl">Terms agreed · ৳22,000</div>
+                <div class="se-det">
+                  Both parties accepted terms · Deal record generated by
+                  platform
+                </div>
+                <div class="se-t">Mar 16 · 9:00 AM</div>
+              </div>
+              <div class="msg-wrap">
+                <div class="m-av av-nl">NL</div>
+                <div>
+                  <div class="bubble b-sp">
+                    Great terms Lamia — we accept! A deal record has been
+                    generated by the platform. Please review and confirm so we
+                    can proceed to fund escrow.
+                  </div>
+                  <div class="msg-t">Mar 16 · 9:05 AM</div>
+                </div>
+              </div>
+              <!-- CARD 2: DEAL RECORD (creator sees, must confirm) -->
+              <div class="msg-wrap">
+                <div
+                  class="m-av"
+                  style="background: var(--pur-l); color: var(--pur-t)"
+                >
+                  SB
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 3px">
+                  <div class="deal-rec">
+                    <div class="dr-hd">
+                      <svg
+                        width="13"
+                        height="13"
+                        viewBox="0 0 13 13"
+                        fill="none"
+                      >
+                        <rect
+                          x="1.5"
+                          y="1.5"
+                          width="10"
+                          height="10"
+                          rx="1.5"
+                          fill="#C0DD97"
+                        />
+                        <path
+                          d="M3.5 6.5h6M3.5 4.5h6M3.5 8.5h4"
+                          stroke="#27500A"
+                          stroke-width="1.2"
+                          stroke-linecap="round"
+                        /></svg
+                      >Deal Record · SponzoBD Platform · Auto-generated
+                    </div>
+                    <div class="dr-sec-t">Parties</div>
+                    <div class="dr-row">
+                      <span class="dr-l">Sponsor</span
+                      ><span class="dr-v">NutriLife Bangladesh · Dhaka</span>
+                    </div>
+                    <div class="dr-row">
+                      <span class="dr-l">Creator</span
+                      ><span class="dr-v">Lamia Akter · @lamia.wellness</span>
+                    </div>
+                    <div class="dr-row">
+                      <span class="dr-l">Campaign</span
+                      ><span class="dr-v">Ramadan Wellness Series</span>
+                    </div>
+                    <div class="dr-sec-t">Agreed terms</div>
+                    <div class="dr-row">
+                      <span class="dr-l">Rate</span
+                      ><span class="dr-v grn">৳22,000</span>
+                    </div>
+                    <div class="dr-row">
+                      <span class="dr-l">Deliverables</span
+                      ><span class="dr-v">2 Instagram posts · 4 stories</span>
+                    </div>
+                    <div class="dr-row">
+                      <span class="dr-l">Deadline</span
+                      ><span class="dr-v">April 2, 2025</span>
+                    </div>
+                    <div class="dr-row">
+                      <span class="dr-l">Revision rounds</span
+                      ><span class="dr-v">1 · 7-day review window</span>
+                    </div>
+                    <div class="dr-row">
+                      <span class="dr-l">Usage rights</span
+                      ><span class="dr-v">3 months · Bangladesh</span>
+                    </div>
+                    <div class="dr-sec-t">Escrow & conditions</div>
+                    <div class="dr-row">
+                      <span class="dr-l">Escrow amount</span
+                      ><span class="dr-v">৳22,000 (funded by sponsor)</span>
+                    </div>
+                    <div class="dr-row">
+                      <span class="dr-l">Auto-release</span
+                      ><span class="dr-v"
+                        >April 9, 2025 if sponsor does not respond</span
+                      >
+                    </div>
+                    <div class="dr-row">
+                      <span class="dr-l">If you miss deadline</span
+                      ><span class="dr-v red"
+                        >Sponsor may cancel · escrow refunded</span
+                      >
+                    </div>
+                    <div class="dr-row">
+                      <span class="dr-l">Platform fee</span
+                      ><span class="dr-v">3.5% at payment release</span>
+                    </div>
+                    <div class="dr-sigs">
+                      <div class="dr-sig">
+                        <div class="dr-sig-name">NutriLife Bangladesh</div>
+                        <div class="dr-sig-meta">
+                          Confirmed Mar 16 · 9:03 AM
+                        </div>
+                        <div class="dr-sig-ok">✓ IP logged · confirmed</div>
+                      </div>
+                      <div class="dr-sig">
+                        <div class="dr-sig-name">Lamia Akter</div>
+                        <div class="dr-sig-meta">
+                          Awaiting your confirmation
+                        </div>
+                        <div class="dr-sig-ok" style="color: var(--amb-t)">
+                          ⏳ Action required
+                        </div>
+                      </div>
+                    </div>
+                    <div class="dr-confirm-actions">
+                      <button class="btn-g" onclick="confirmDealRecord()">
+                        ✓ I confirm and agree to these terms
+                      </button>
+                    </div>
+                  </div>
+                  <div class="msg-t">Mar 16 · 9:03 AM · Platform</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- THREAD 3: Escrow funded — creator view -->
+            <div class="thread" id="thread-tb" style="display: none">
+              <div class="msg-wrap">
+                <div class="m-av av-tb">TB</div>
+                <div>
+                  <div class="bubble b-sp">
+                    Lamia! We've just funded escrow — ৳18,000 is secured. You
+                    can now start working on the Eid content. Looking forward to
+                    seeing what you create!
+                  </div>
+                  <div class="msg-t">Mar 14 · 8:30 AM</div>
+                </div>
+              </div>
+              <!-- CARD 3: ESCROW (creator view — green confirmation) -->
+              <div class="msg-wrap">
+                <div
+                  class="m-av"
+                  style="background: var(--pur-l); color: var(--pur-t)"
+                >
+                  SB
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 3px">
+                  <div class="escrow-card esc-cr">
+                    <div class="esc-hd">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                        stroke="var(--grn-3)"
+                        stroke-width="1.3"
+                      >
+                        <rect x="2" y="5" width="8" height="5.5" rx="1" />
+                        <path d="M4 5V3.5a2 2 0 114 0V5" /></svg
+                      >Escrow secured · you can start work
+                    </div>
+                    <div class="esc-row">
+                      <span class="esc-l">Amount held for you</span
+                      ><span class="esc-v">৳18,000</span>
+                    </div>
+                    <div class="esc-row">
+                      <span class="esc-l">Funded by</span
+                      ><span class="esc-v">Tasty Bites BD</span>
+                    </div>
+                    <div class="esc-row">
+                      <span class="esc-l">Held by</span
+                      ><span class="esc-v">SponzoBD platform escrow</span>
+                    </div>
+                    <div class="esc-row">
+                      <span class="esc-l">Released when</span
+                      ><span class="esc-v"
+                        >Tasty Bites approves your content</span
+                      >
+                    </div>
+                    <div class="esc-row">
+                      <span class="esc-l">Auto-release date</span
+                      ><span class="esc-v"
+                        >April 4, 2025 if no sponsor action</span
+                      >
+                    </div>
+                    <div class="esc-row">
+                      <span class="esc-l">Your deadline</span
+                      ><span class="esc-v">March 28, 2025 · 14 days</span>
+                    </div>
+                  </div>
+                  <div class="msg-t">Mar 14 · 8:30 AM · Platform</div>
+                </div>
+              </div>
+              <div class="msg-wrap me">
+                <div class="m-av av-sb">LA</div>
+                <div>
+                  <div class="bubble b-me">
+                    Escrow confirmed — starting work today! I'll share a content
+                    outline before filming.
+                  </div>
+                  <div class="msg-t r">Mar 14 · 10:00 AM</div>
+                  <div class="seen">Seen</div>
+                </div>
+              </div>
+              <div class="sys-ev">
+                <div class="se-lbl">Content submission due March 28</div>
+                <div class="se-det">
+                  Submit using the "Submit content" button · platform will
+                  notify you 3 days before deadline
+                </div>
+                <div class="se-t">Mar 14 · Platform reminder</div>
+              </div>
+            </div>
+
+            <!-- THREAD 4: Content submitted + review card (creator sees approved + rate sponsor) -->
+            <div class="thread" id="thread-sb" style="display: none">
+              <div class="sys-ev">
+                <div class="se-lbl">Content submitted</div>
+                <div class="se-det">
+                  You submitted all 4 deliverables · StyleBox BD is reviewing
+                </div>
+                <div class="se-t">Feb 20 · 3:00 PM</div>
+              </div>
+              <!-- CARD 4: CONTENT SUBMISSION (what creator sees after submitting) -->
+              <div class="msg-wrap me">
+                <div class="m-av av-sb">LA</div>
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-end;
+                    gap: 3px;
+                  "
+                >
+                  <div class="content-card">
+                    <div class="cc-thumb">
+                      <svg
+                        width="26"
+                        height="26"
+                        viewBox="0 0 26 26"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.2"
+                        opacity=".35"
+                      >
+                        <rect x="2" y="2" width="22" height="22" rx="2" />
+                        <circle cx="8" cy="8" r="3" />
+                        <path d="M2 18l7-7 4 4 4-6 7 9" /></svg
+                      ><span style="font-size: 10px; color: var(--tx3)"
+                        >Content thumbnail</span
+                      >
+                    </div>
+                    <div class="cc-body">
+                      <div class="cc-hd">
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 12 12"
+                          fill="none"
+                          stroke="#3B6D11"
+                          stroke-width="1.3"
+                        >
+                          <rect x="1.5" y="1.5" width="9" height="9" rx="1" />
+                          <path d="M3.5 4h5M3.5 6.5h5M3.5 9h3" /></svg
+                        >Content submitted · 4 of 4 deliverables
+                      </div>
+                      <div class="cc-item">
+                        <svg viewBox="0 0 11 11" fill="none" width="11">
+                          <circle cx="5.5" cy="5.5" r="4.5" fill="#C0DD97" />
+                          <path
+                            d="M3 5.5l2 2L8.5 3"
+                            stroke="#27500A"
+                            stroke-width="1.3"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          /></svg
+                        >TikTok reel · 42 sec
+                      </div>
+                      <div class="cc-item">
+                        <svg viewBox="0 0 11 11" fill="none" width="11">
+                          <circle cx="5.5" cy="5.5" r="4.5" fill="#C0DD97" />
+                          <path
+                            d="M3 5.5l2 2L8.5 3"
+                            stroke="#27500A"
+                            stroke-width="1.3"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          /></svg
+                        >TikTok story 1
+                      </div>
+                      <div class="cc-item">
+                        <svg viewBox="0 0 11 11" fill="none" width="11">
+                          <circle cx="5.5" cy="5.5" r="4.5" fill="#C0DD97" />
+                          <path
+                            d="M3 5.5l2 2L8.5 3"
+                            stroke="#27500A"
+                            stroke-width="1.3"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          /></svg
+                        >TikTok story 2
+                      </div>
+                      <div class="cc-item">
+                        <svg viewBox="0 0 11 11" fill="none" width="11">
+                          <circle cx="5.5" cy="5.5" r="4.5" fill="#C0DD97" />
+                          <path
+                            d="M3 5.5l2 2L8.5 3"
+                            stroke="#27500A"
+                            stroke-width="1.3"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          /></svg
+                        >Instagram story
+                      </div>
+                      <a class="cc-link" href="#" onclick="return false;"
+                        ><svg
+                          width="11"
+                          height="11"
+                          viewBox="0 0 12 12"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.2"
+                        >
+                          <path d="M5 2H2v8h8V7M7 2h3v3M5 7l5-5" /></svg
+                        >View content files · Google Drive</a
+                      >
+                      <div class="cc-note">
+                        Summer vibe TikTok reel featuring the collection
+                        naturally in a styling session. Stories show
+                        behind-the-scenes. All brand tags included as briefed.
+                      </div>
+                      <span class="cc-status cc-approved"
+                        ><svg
+                          width="10"
+                          height="10"
+                          viewBox="0 0 10 10"
+                          fill="none"
+                        >
+                          <path
+                            d="M2 5l2 2L8 3"
+                            stroke="#3B6D11"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                          /></svg
+                        >Approved by StyleBox BD · Feb 22</span
+                      >
+                    </div>
+                  </div>
+                  <div class="msg-t r">Feb 20 · 3:05 PM</div>
+                </div>
+              </div>
+              <div class="sys-ev">
+                <div class="se-lbl">Content approved · payment released</div>
+                <div class="se-det">
+                  StyleBox BD approved all deliverables · ৳28,000 released to
+                  your account
+                </div>
+                <div class="se-t">Feb 22 · 2:00 PM</div>
+              </div>
+              <div class="msg-wrap">
+                <div class="m-av av-sb2">SB</div>
+                <div>
+                  <div class="bubble b-sp">
+                    Lamia, the reel is performing brilliantly! 22% traffic spike
+                    this week. We've released your payment. Would love to
+                    collaborate again!
+                  </div>
+                  <div class="msg-t">Feb 22 · 2:05 PM</div>
+                </div>
+              </div>
+              <div class="msg-wrap me">
+                <div class="m-av av-sb">LA</div>
+                <div>
+                  <div class="bubble b-me">
+                    So glad it worked well! Thank you for the smooth
+                    collaboration. Please leave a review on my profile when you
+                    get a chance — it helps a lot!
+                  </div>
+                  <div class="msg-t r">Feb 22 · 3:00 PM</div>
+                  <div class="seen">Seen</div>
+                </div>
+              </div>
+              <!-- CARD 5: REVIEW CARD (creator rates sponsor) -->
+              <div class="msg-wrap">
+                <div
+                  class="m-av"
+                  style="background: var(--pur-l); color: var(--pur-t)"
+                >
+                  SB
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 3px">
+                  <div class="review-card" id="review-card-cr">
+                    <div class="rv-hd">
+                      <svg
+                        width="13"
+                        height="13"
+                        viewBox="0 0 13 13"
+                        fill="none"
+                      >
+                        <path
+                          d="M6.5 1.5L8 5H12L9 7.5L10 11L6.5 8.5L3 11L4 7.5L1 5H5Z"
+                          fill="#EF9F27"
+                          opacity=".6"
+                        /></svg
+                      >Rate this sponsor · StyleBox BD
+                    </div>
+                    <div class="rv-note">
+                      How was your experience working with StyleBox BD? Your
+                      rating appears on their public profile.
+                    </div>
+                    <div class="rv-stars" id="cr-stars">
+                      <div
+                        class="rv-star"
+                        onclick="setRating(1)"
+                        title="1 star"
+                      ></div>
+                      <div
+                        class="rv-star"
+                        onclick="setRating(2)"
+                        title="2 stars"
+                      ></div>
+                      <div
+                        class="rv-star"
+                        onclick="setRating(3)"
+                        title="3 stars"
+                      ></div>
+                      <div
+                        class="rv-star"
+                        onclick="setRating(4)"
+                        title="4 stars"
+                      ></div>
+                      <div
+                        class="rv-star"
+                        onclick="setRating(5)"
+                        title="5 stars"
+                      ></div>
+                    </div>
+                    <textarea
+                      class="rv-ta"
+                      id="rv-text"
+                      placeholder="Optional: share a note about the collaboration — brief clarity, payment speed, communication... (visible on their profile)"
+                    ></textarea>
+                    <button class="btn-g" onclick="submitRating()">
+                      Submit rating
+                    </button>
+                  </div>
+                  <div class="msg-t">Feb 22 · Platform</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- PANEL ZONE (terms form) -->
+            <div class="panel-zone" id="terms-panel">
+              <div class="pz-title">
+                Propose terms
+                <button class="pz-close" onclick="hidePanel('terms-panel')">
+                  Close
+                </button>
+              </div>
+              <div class="pz-grid">
+                <div class="pz-field">
+                  <div class="pz-lbl">Your rate (৳)</div>
+                  <input
+                    class="pz-inp"
+                    id="tp-rate"
+                    type="number"
+                    placeholder="e.g. 35000"
+                  />
+                </div>
+                <div class="pz-field">
+                  <div class="pz-lbl">Deliverables</div>
+                  <input
+                    class="pz-inp"
+                    id="tp-del"
+                    placeholder="e.g. 2 reels · 3 stories"
+                  />
+                </div>
+                <div class="pz-field">
+                  <div class="pz-lbl">Deadline</div>
+                  <input
+                    class="pz-inp"
+                    id="tp-date"
+                    placeholder="e.g. March 22, 2025"
+                  />
+                </div>
+                <div class="pz-field">
+                  <div class="pz-lbl">Revision rounds</div>
+                  <input
+                    class="pz-inp"
+                    id="tp-rev"
+                    placeholder="e.g. 1 included"
+                  />
+                </div>
+                <div class="pz-field">
+                  <div class="pz-lbl">Usage rights</div>
+                  <input
+                    class="pz-inp"
+                    id="tp-rights"
+                    placeholder="e.g. 3 months · Bangladesh"
+                  />
+                </div>
+                <div class="pz-field">
+                  <div class="pz-lbl">Notes (optional)</div>
+                  <textarea
+                    class="pz-ta"
+                    id="tp-notes"
+                    placeholder="Any extra conditions..."
+                  ></textarea>
+                </div>
+              </div>
+              <div class="pz-foot">
+                <div class="pz-note">
+                  Sponsor will see this as a formal terms card and can accept or
+                  counter-propose.
+                </div>
+                <button class="btn-r" onclick="sendTerms()">
+                  Send terms proposal
+                </button>
+              </div>
+            </div>
+
+            <!-- PANEL ZONE (content submit) -->
+            <div class="panel-zone" id="submit-panel">
+              <div class="pz-title">
+                Submit content for review
+                <button class="pz-close" onclick="hidePanel('submit-panel')">
+                  Close
+                </button>
+              </div>
+              <div class="pz-grid">
+                <div class="pz-field">
+                  <div class="pz-lbl">
+                    Thumbnail
+                    <span style="color: var(--grn-3); font-size: 10px"
+                      >(JPEG/PNG)</span
+                    >
+                  </div>
+                  <div
+                    class="upload-zone"
+                    id="uz"
+                    onclick="document.getElementById('uf').click()"
+                  >
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                      opacity=".4"
+                    >
+                      <rect x="2" y="2" width="16" height="16" rx="2" />
+                      <circle cx="7" cy="7" r="2" />
+                      <path d="M2 14l5-5 3 3 3-4 5 6" />
+                    </svg>
+                    <div class="uz-lbl">Click to upload</div>
+                    <div class="uz-note">Cover frame of your content</div>
+                    <img
+                      id="up"
+                      style="
+                        width: 100%;
+                        height: 70px;
+                        object-fit: cover;
+                        border-radius: 5px;
+                        margin-top: 5px;
+                        display: none;
+                      "
+                      src=""
+                      alt=""
+                    />
+                  </div>
+                  <input
+                    type="file"
+                    id="uf"
+                    accept="image/*"
+                    style="display: none"
+                    onchange="handleUpl(this)"
+                  />
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px">
+                  <div class="pz-field">
+                    <div class="pz-lbl">Content link (Drive/Dropbox)</div>
+                    <input
+                      class="pz-inp"
+                      id="sc-link"
+                      type="url"
+                      placeholder="https://drive.google.com/..."
+                    />
+                  </div>
+                  <div class="pz-field">
+                    <div class="pz-lbl">Files submitted</div>
+                    <input
+                      class="pz-inp"
+                      id="sc-count"
+                      placeholder="e.g. 2 reels · 3 stories"
+                    />
+                  </div>
+                </div>
+                <div class="pz-field full">
+                  <div class="pz-lbl">Delivery note (optional)</div>
+                  <textarea
+                    class="pz-ta"
+                    id="sc-note"
+                    placeholder="Tell the sponsor what to look for..."
+                  ></textarea>
+                </div>
+              </div>
+              <div class="pz-foot">
+                <div class="pz-note">
+                  Escrow releases only after sponsor approves.
+                </div>
+                <button class="btn-r" onclick="submitContent()">
+                  Submit for review
+                </button>
+              </div>
+            </div>
+
+            <!-- INPUT AREA -->
+            <div class="input-area">
+              <div class="qa-row" id="qa-row"></div>
+              <div class="msg-inp-row">
+                <input
+                  class="msg-inp"
+                  id="msg-inp"
+                  type="text"
+                  placeholder="Type a message..."
+                  onkeydown="if (event.key === 'Enter') sendMsg();"
+                />
+                <button class="send-btn" onclick="sendMsg()">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path d="M1.5 7l11-5.5-5.5 11L6 8 1.5 7z" fill="white" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="toast" id="tst">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+        <path
+          d="M2 7l3 3 7-7"
+          stroke="white"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        /></svg
+      ><span id="tm"></span>
+    </div>
+    <script>
+      let active = "gf";
+      let rating = 0;
+      const CONVS = ["gf", "nl", "tb", "sb"];
+
+      const MESSAGE_STATE_KEY = "sponzobd.messages.state";
+      const MESSAGE_BLUEPRINTS = {
+        gf: {
+          brand: "GreenFresh BD",
+          category: "Health & food",
+          campaign: "National Health Week Campaign 2025",
+          platforms: "Instagram, YouTube",
+          location: "Nationwide",
+          time: "2h ago",
+          preview: "We accepted your application! Please send your terms.",
+          stageLabel: "Negotiating terms",
+          stageClass: "sp-terms",
+          ctxAmt: "Pending",
+          ctxLbl: "Terms not agreed yet",
+          unread: true,
+          qa: [
+            { type: "terms", label: "Propose terms", cls: "qa-g" },
+            {
+              type: "message",
+              label: "Request extension",
+              value: "Request extension sent",
+            },
+          ],
+        },
+        nl: {
+          brand: "NutriLife BD",
+          category: "Health & wellness",
+          campaign: "Ramadan Wellness Series",
+          platforms: "Instagram",
+          location: "Dhaka, Chittagong",
+          time: "Mar 16",
+          preview: "Deal record sent — please confirm to proceed.",
+          stageLabel: "Deal record",
+          stageClass: "sp-record",
+          ctxAmt: "৳22,000",
+          ctxLbl: "Agreed · awaiting deal record",
+          unread: true,
+          qa: [
+            {
+              type: "message",
+              label: "Waiting for deal record",
+              value: "Awaiting deal confirmation...",
+            },
+          ],
+        },
+        tb: {
+          brand: "Tasty Bites BD",
+          category: "Food & beverage",
+          campaign: "Eid Menu Launch",
+          platforms: "TikTok",
+          location: "Dhaka",
+          time: "Mar 14",
+          preview: "Escrow funded ৳18,000 — you can start work now!",
+          stageLabel: "Escrow funded",
+          stageClass: "sp-escrow",
+          ctxAmt: "৳18,000",
+          ctxLbl: "In escrow · secured",
+          unread: true,
+          qa: [
+            { type: "submit", label: "Submit content", cls: "qa-g" },
+            {
+              type: "message",
+              label: "Request extension",
+              value: "Extension request sent",
+            },
+          ],
+        },
+        sb: {
+          brand: "StyleBox BD",
+          category: "Fashion & beauty",
+          campaign: "Summer Collection Drop",
+          platforms: "TikTok",
+          location: "Nationwide",
+          time: "Feb 22",
+          preview: "Content approved · ৳28,000 released. Please rate us!",
+          stageLabel: "Rate this sponsor",
+          stageClass: "sp-review",
+          ctxAmt: "৳28,000",
+          ctxLbl: "Paid out Feb 22",
+          unread: false,
+          qa: [
+            {
+              type: "status",
+              label: "Deal completed · rate this sponsor above",
+              cls: "",
+            },
+          ],
+        },
+      };
+
+      function loadMessageState() {
+        try {
+          const parsed = JSON.parse(
+            localStorage.getItem(MESSAGE_STATE_KEY) || "{}",
+          );
+          return parsed && typeof parsed === "object" ? parsed : {};
+        } catch (_err) {
+          return {};
+        }
+      }
+
+      function saveMessageState() {
+        try {
+          localStorage.setItem(MESSAGE_STATE_KEY, JSON.stringify(messageState));
+        } catch (_err) {
+          // Ignore storage failures.
+        }
+      }
+
+      let messageState = loadMessageState();
+      let profileSnapshot = null;
+      let currentCampaignPhone = "demo-user";
+      let activeSearchTerm = "";
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function getConversationState(id) {
+        if (!messageState[id]) {
+          const blueprint = MESSAGE_BLUEPRINTS[id];
+          messageState[id] = {
+            unread: blueprint?.unread ?? false,
+            stageLabel: blueprint?.stageLabel || "",
+            stageClass: blueprint?.stageClass || "",
+            preview: blueprint?.preview || "",
+            time: blueprint?.time || "",
+            ctxAmt: blueprint?.ctxAmt || "",
+            ctxLbl: blueprint?.ctxLbl || "",
+            titleSuffix: blueprint?.category || "",
+            messages: [],
+          };
+        }
+        return messageState[id];
+      }
+
+      function getCurrentDisplayProfile() {
+        const user = profileSnapshot?.user || {};
+        return {
+          name: user.displayName || "Lamia Akter",
+          followers: user.followers || "52K",
+          subtitle: `${user.category || "Creator"} · ${user.followers || "52K"}`,
+          platform: user.platform || "Instagram",
+          instagramHandle:
+            user.platformPresence?.instagram?.handle || "@lamia.wellness",
+          tikTokHandle:
+            user.platformPresence?.tiktok?.handle || "@lamia_health",
+          instagramFollowers:
+            user.platformPresence?.instagram?.followers || "38,200",
+          tikTokFollowers: user.platformPresence?.tiktok?.followers || "14,200",
+          instagramEngagement:
+            user.platformPresence?.instagram?.engagement || "5.2%",
+          tikTokEngagement: user.platformPresence?.tiktok?.engagement || "3.8%",
+          rating: Number(profileSnapshot?.stats?.rating || 4.8).toFixed(1),
+          dealsDone: profileSnapshot?.stats?.dealsDone || 7,
+        };
+      }
+
+      function renderConversationList() {
+        const list = document.querySelector(".conv-list");
+        if (!list) return;
+        const items = Object.entries(MESSAGE_BLUEPRINTS)
+          .map(([id, blueprint]) => {
+            const state = getConversationState(id);
+            const searchText = [
+              blueprint.brand,
+              blueprint.campaign,
+              blueprint.preview,
+              blueprint.category,
+            ]
+              .join(" ")
+              .toLowerCase();
+            if (activeSearchTerm && !searchText.includes(activeSearchTerm)) {
+              return "";
+            }
+            const unread = state.unread ?? blueprint.unread;
+            const activeClass = id === active ? " active" : "";
+            const previewClass = unread ? " unread" : "";
+            return `
+              <div class="conv-item${activeClass}" id="ci-${id}" onclick="sw('${id}', this)">
+                <div class="ci-av av-${id}">${id.toUpperCase()}</div>
+                <div class="ci-body">
+                  <div class="ci-top">
+                    <span class="ci-brand">${escapeHtml(blueprint.brand)}</span>
+                    <span class="ci-time">${escapeHtml(state.time || blueprint.time)}</span>
+                  </div>
+                  <div class="ci-camp">${escapeHtml(blueprint.campaign)} · ${escapeHtml(blueprint.platforms)}</div>
+                  <div class="ci-prev${previewClass}">${escapeHtml(state.preview || blueprint.preview)}</div>
+                  <div class="ci-foot">
+                    <span class="stage-pill ${blueprint.stageClass}">${escapeHtml(state.stageLabel || blueprint.stageLabel)}</span>
+                    ${unread ? '<div class="udot"></div>' : ""}
+                  </div>
+                </div>
+              </div>`;
+          })
+          .join("");
+
+        list.innerHTML =
+          items ||
+          `<div class="no-text-notice">No conversations match your search.</div>`;
+
+        const unreadCount = Object.values(MESSAGE_BLUEPRINTS).reduce(
+          (sum, blueprint, index) => {
+            const id = Object.keys(MESSAGE_BLUEPRINTS)[index];
+            const state = getConversationState(id);
+            const isUnread = state.unread ?? blueprint.unread ?? false;
+            return sum + (isUnread ? 1 : 0);
+          },
+          0,
+        );
+        const badge = document.getElementById("ubadge");
+        if (badge) {
+          badge.textContent =
+            unreadCount > 0 ? `${unreadCount} unread` : "All read";
+          badge.style.background =
+            unreadCount > 0 ? "var(--red)" : "var(--grn)";
+        }
+      }
+
+      function renderContextBar(id) {
+        const blueprint = MESSAGE_BLUEPRINTS[id];
+        const state = getConversationState(id);
+        if (!blueprint) return;
+
+        const ctx = document.getElementById(`ctx-${id}`);
+        if (!ctx) return;
+
+        const profile = getCurrentDisplayProfile();
+        const title = `${blueprint.brand} · ${blueprint.category}`;
+        const amount = state.ctxAmt || blueprint.ctxAmt;
+        const label = state.ctxLbl || blueprint.ctxLbl;
+        const selectedCampaign = blueprint.campaign;
+
+        const pipeMarkup =
+          {
+            gf: [
+              "Applied",
+              "Accepted",
+              "Terms negotiation",
+              "Deal record",
+              "Escrow",
+              "Content",
+              "Paid out",
+            ],
+            nl: [
+              "Applied",
+              "Accepted",
+              "Terms agreed",
+              "Deal record",
+              "Escrow",
+              "Content",
+              "Paid out",
+            ],
+            tb: [
+              "Applied",
+              "Accepted",
+              "Terms agreed",
+              "Deal record",
+              "Work in progress",
+              "Content",
+              "Paid out",
+            ],
+            sb: [
+              "Applied",
+              "Accepted",
+              "Terms agreed",
+              "Deal record",
+              "Content approved",
+              "Paid out",
+            ],
+          }[id] || [];
+
+        const stageMarkup = pipeMarkup
+          .map((stage, index) => {
+            const isDone =
+              index < 2 || (id === "tb" && index < 4) || id === "sb";
+            const isNow =
+              (id === "gf" && index === 2) ||
+              (id === "nl" && index === 3) ||
+              (id === "tb" && index === 4);
+            const cls = isNow ? "dp now" : isDone ? "dp done" : "dp";
+            const arr =
+              index < pipeMarkup.length - 1
+                ? '<span class="dp-arr">›</span>'
+                : "";
+            return `<span class="${cls}">${escapeHtml(stage)}</span>${arr}`;
+          })
+          .join("");
+
+        ctx.innerHTML = `
+          <div class="ctx-left">
+            <div class="ctx-brand">${escapeHtml(title)}</div>
+            <div class="ctx-camp">${escapeHtml(selectedCampaign)} · ${escapeHtml(blueprint.platforms)} · ${escapeHtml(blueprint.location)}</div>
+            <div class="ctx-pipe">${stageMarkup}</div>
+          </div>
+          <div class="ctx-right">
+            <div class="ctx-amt">${escapeHtml(amount)}</div>
+            <div class="ctx-lbl">${escapeHtml(label)}</div>
+            <button class="journey-btn" id="jbtn-${id}" onclick="toggleJourney('${id}')">
+              <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+                <circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2" />
+                <path d="M6 4v4M6 3v.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+              </svg>
+              Deal journey
+            </button>
+            <div class="journey-dropdown" id="jd-${id}">
+              <div class="jd-hd"><div class="jd-hd-t">Deal journey · ${escapeHtml(blueprint.brand)} × ${escapeHtml(profile.name)}</div></div>
+              <div class="jd-stages" id="jd-stages-${id}"></div>
+            </div>
+          </div>`;
+
+        const stagesEl = document.getElementById(`jd-stages-${id}`);
+        if (stagesEl) {
+          stagesEl.innerHTML = renderJourneyStages(id, profile);
+        }
+      }
+
+      function renderJourneyStages(id, profile) {
+        const item =
+          {
+            gf: [
+              ["Application submitted", "You · Mar 14", "Mar 14", true, true],
+              [
+                "Application accepted by sponsor",
+                "GreenFresh BD · Mar 15",
+                "Mar 15",
+                true,
+                true,
+              ],
+              [
+                "Terms negotiation · in progress",
+                "You propose → sponsor accepts",
+                "",
+                true,
+                false,
+              ],
+              [
+                "Deal record confirmation",
+                "Both parties confirm",
+                "",
+                false,
+                false,
+              ],
+              [
+                "Escrow funded by sponsor",
+                "Sponsor funds · you start work",
+                "",
+                false,
+                false,
+              ],
+              [
+                "Content submitted by you",
+                "You upload · sponsor reviews",
+                "",
+                false,
+                false,
+              ],
+              [
+                "Payment released",
+                "Sponsor approves → you get paid",
+                "",
+                false,
+                false,
+              ],
+            ],
+            nl: [
+              ["Application submitted & accepted", "Mar 14", "", true, true],
+              [
+                "Terms agreed · ৳22,000",
+                "Mar 15 · 2 posts + 4 stories · deadline Apr 2",
+                "",
+                true,
+                true,
+              ],
+              [
+                "Deal record · awaiting your confirmation",
+                "Confirm below to proceed to escrow",
+                "",
+                true,
+                false,
+              ],
+              ["Escrow funded", "", "", false, false],
+              ["Content submitted", "", "", false, false],
+              ["Payment released", "", "", false, false],
+            ],
+            tb: [
+              ["Applied & accepted", "", "", true, true],
+              ["Terms agreed · ৳18,000", "", "", true, true],
+              ["Deal record confirmed", "", "", true, true],
+              ["Escrow funded · ৳18,000 secured", "Mar 14", "", true, true],
+              [
+                "Work in progress · deadline Mar 28",
+                "Submit content when ready",
+                "",
+                true,
+                false,
+              ],
+              ["Submit content for approval", "", "", false, false],
+              ["Payment released", "", "", false, false],
+            ],
+            sb: [
+              [
+                "All stages completed",
+                "৳28,000 paid · 5★ from sponsor",
+                "",
+                true,
+                true,
+              ],
+            ],
+          }[id] || [];
+
+        return item
+          .map(([label, who, time, done, isNow], index) => {
+            const dotClass = isNow
+              ? "jd-dot now"
+              : done
+                ? "jd-dot done"
+                : "jd-dot";
+            const labelClass = isNow
+              ? "jd-label now"
+              : done
+                ? "jd-label done"
+                : "jd-label grey";
+            const lineClass = done ? "jd-line done" : "jd-line";
+            const timeHtml = time
+              ? `<div class="jd-time">${escapeHtml(time)}</div>`
+              : "";
+            return `
+              <div class="jd-row">
+                <div class="${dotClass}">${done ? '<svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1 4l2 2L7 2" stroke="#3B6D11" stroke-width="1.3" stroke-linecap="round"/></svg>' : isNow ? '<svg width="7" height="7" viewBox="0 0 7 7"><circle cx="3.5" cy="3.5" r="2.5" fill="var(--blu-t)" /></svg>' : ""}</div>
+                <div class="jd-info">
+                  <div class="${labelClass}">${escapeHtml(label)}</div>
+                  <div class="jd-who">${escapeHtml(who)}</div>
+                </div>
+                ${timeHtml}
+              </div>
+              ${index < item.length - 1 ? `<div class="${lineClass}"></div>` : ""}`;
+          })
+          .join("");
+      }
+
+      function updateThreadDefaults() {
+        const profile = getCurrentDisplayProfile();
+        const profileNameNodes = [
+          document.querySelector(".terms-card .tc-hd"),
+          document.querySelector(".dr-sig:last-child .dr-sig-name"),
+        ];
+        void profileNameNodes;
+        const creatorNode = document.querySelector(".dr-row .dr-v");
+        void creatorNode;
+      }
+
+      function renderAllConversationChrome() {
+        renderConversationList();
+        CONVS.forEach((id) => renderContextBar(id));
+        syncVisibleConversation(active);
+      }
+
+      function syncVisibleConversation(id) {
+        CONVS.forEach((c) => {
+          const ctx = document.getElementById(`ctx-${c}`);
+          const thread = document.getElementById(`thread-${c}`);
+          if (ctx) ctx.style.display = c === id ? "flex" : "none";
+          if (thread) {
+            thread.style.display = c === id ? "flex" : "none";
+            thread.style.flexDirection = "column";
+          }
+        });
+      }
+
+      function markRead(id) {
+        const state = getConversationState(id);
+        state.unread = false;
+        saveMessageState();
+        renderConversationList();
+      }
+
+      function appendThreadMessage(id, html) {
+        const thread = document.getElementById(`thread-${id}`);
+        if (!thread) return;
+        thread.insertAdjacentHTML("beforeend", html);
+        thread.scrollTop = thread.scrollHeight;
+      }
+
+      function upsertPreview(id, preview, stageLabel) {
+        const state = getConversationState(id);
+        state.preview = preview;
+        if (stageLabel) state.stageLabel = stageLabel;
+        saveMessageState();
+        renderConversationList();
+      }
+
+      function applySnapshotToBlueprints(snapshot) {
+        const campaigns = Array.isArray(snapshot?.campaigns)
+          ? snapshot.campaigns
+          : [];
+        const profile = snapshot?.user || {};
+        const makePlatformText = (items) =>
+          Array.isArray(items) ? items.join(", ") : String(items || "");
+
+        const rows = ["gf", "nl", "tb"];
+        rows.forEach((id, index) => {
+          const campaign = campaigns[index];
+          if (!campaign) return;
+          MESSAGE_BLUEPRINTS[id] = {
+            ...MESSAGE_BLUEPRINTS[id],
+            brand: campaign.brand || MESSAGE_BLUEPRINTS[id].brand,
+            campaign: campaign.title || MESSAGE_BLUEPRINTS[id].campaign,
+            platforms: makePlatformText(
+              campaign.channels || MESSAGE_BLUEPRINTS[id].platforms,
+            ),
+            location: campaign.location || MESSAGE_BLUEPRINTS[id].location,
+            preview:
+              id === "gf"
+                ? `We accepted your application! Please send your terms for ${campaign.title || MESSAGE_BLUEPRINTS[id].campaign}.`
+                : id === "nl"
+                  ? `Deal record sent for ${campaign.title || MESSAGE_BLUEPRINTS[id].campaign} — please confirm to proceed.`
+                  : `Escrow funded for ${campaign.title || MESSAGE_BLUEPRINTS[id].campaign} — you can start work now!`,
+            time:
+              campaign.status === "active"
+                ? "Now"
+                : MESSAGE_BLUEPRINTS[id].time,
+          };
+        });
+
+        if (profile.displayName) {
+          MESSAGE_BLUEPRINTS.gf.ctxLbl = `Terms not agreed yet · ${profile.displayName}`;
+          MESSAGE_BLUEPRINTS.nl.ctxLbl = `Agreed · awaiting deal record · ${profile.displayName}`;
+          MESSAGE_BLUEPRINTS.tb.ctxLbl = `In escrow · secured · ${profile.displayName}`;
+        }
+
+        renderAllConversationChrome();
+      }
+
+      function sw(id, el) {
+        active = id;
+        renderConversationList();
+        syncVisibleConversation(id);
+        const t = document.getElementById("thread-" + id);
+        setTimeout(() => (t.scrollTop = t.scrollHeight), 50);
+        const state = getConversationState(id);
+        state.unread = false;
+        saveMessageState();
+        renderConversationList();
+        ["terms-panel", "submit-panel"].forEach((p) => {
+          const el2 = document.getElementById(p);
+          if (el2) el2.style.display = "none";
+        });
+        updateQA(id);
+        // close all journey dropdowns
+        CONVS.forEach((c) => {
+          const d = document.getElementById("jd-" + c);
+          if (d) d.classList.remove("on");
+          const b = document.getElementById("jbtn-" + c);
+          if (b) b.classList.remove("on");
+        });
+      }
+
+      function updateBadge() {
+        renderConversationList();
+      }
+
+      function updateQA(id) {
+        const row = document.getElementById("qa-row");
+        const blueprint = MESSAGE_BLUEPRINTS[id];
+        if (!row || !blueprint) return;
+        row.innerHTML = blueprint.qa
+          .map((button) => {
+            if (button.type === "terms") {
+              return `<button class="qa ${button.cls || ""}" onclick="showPanel('terms-panel')">${escapeHtml(button.label)}</button>`;
+            }
+            if (button.type === "submit") {
+              return `<button class="qa ${button.cls || ""}" onclick="showPanel('submit-panel')">${escapeHtml(button.label)}</button>`;
+            }
+            if (button.type === "message") {
+              return `<button class="qa" onclick="T(${JSON.stringify(button.value)})">${escapeHtml(button.label)}</button>`;
+            }
+            return `<span style="font-size:12px;color:var(--tx3);padding:4px 0;">${escapeHtml(button.label)}</span>`;
+          })
+          .join("");
+      }
+
+      function toggleJourney(id) {
+        CONVS.forEach((c) => {
+          if (c !== id) {
+            const d = document.getElementById("jd-" + c);
+            if (d) d.classList.remove("on");
+            const b = document.getElementById("jbtn-" + c);
+            if (b) b.classList.remove("on");
+          }
+        });
+        const d = document.getElementById("jd-" + id);
+        const b = document.getElementById("jbtn-" + id);
+        if (d) {
+          d.classList.toggle("on");
+          b.classList.toggle("on");
+        }
+      }
+
+      function showPanel(id) {
+        ["terms-panel", "submit-panel"].forEach((p) => {
+          const el = document.getElementById(p);
+          if (el) el.style.display = p === id ? "block" : "none";
+        });
+      }
+      function hidePanel(id) {
+        document.getElementById(id).style.display = "none";
+      }
+
+      function confirmDealRecord() {
+        const state = getConversationState("nl");
+        const btn = document.querySelector(".dr-confirm-actions");
+        if (btn) {
+          btn.innerHTML =
+            '<span style="font-size:12px;color:var(--grn-3);font-weight:700;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L10 3" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round"/></svg>You confirmed — awaiting escrow from sponsor</span>';
+        }
+        const sigMine = document.querySelector(
+          ".dr-sig:last-child .dr-sig-meta",
+        );
+        if (sigMine) sigMine.textContent = "Confirmed by you · Just now";
+        const sigOk = document.querySelector(".dr-sig:last-child .dr-sig-ok");
+        if (sigOk) {
+          sigOk.textContent = "✓ IP logged · confirmed";
+          sigOk.style.color = "var(--grn-3)";
+        }
+        state.preview = "Deal record confirmed — awaiting escrow funding.";
+        state.stageLabel = "Deal record confirmed";
+        state.unread = false;
+        state.ctxLbl = "Agreed · awaiting escrow";
+        saveMessageState();
+        renderConversationList();
+        T("Deal record confirmed — NutriLife BD will now fund escrow");
+      }
+
+      function sendTerms() {
+        const state = getConversationState(active);
+        const rate = document.getElementById("tp-rate").value;
+        const del = document.getElementById("tp-del").value;
+        if (!rate && !del) {
+          T("Fill in at least rate and deliverables");
+          return;
+        }
+        const thread = document.getElementById("thread-" + active);
+        const w = document.createElement("div");
+        w.className = "msg-wrap me";
+        const profile = getCurrentDisplayProfile();
+        w.innerHTML =
+          '<div class="m-av av-sb">LA</div>' +
+          '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;">' +
+          '<div class="terms-card"><div class="tc-hd"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#3B6D11" stroke-width="1.3"><rect x="1.5" y="1.5" width="9" height="9" rx="1"/><path d="M3.5 6h5M3.5 4h5M3.5 8h3"/></svg>Terms proposed by ' +
+          escapeHtml(profile.name) +
+          "</div>" +
+          (rate
+            ? '<div class="tc-row"><span class="tc-l">Rate</span><span class="tc-v">৳' +
+              parseInt(rate).toLocaleString() +
+              "</span></div>"
+            : "") +
+          (del
+            ? '<div class="tc-row"><span class="tc-l">Deliverables</span><span class="tc-v">' +
+              del +
+              "</span></div>"
+            : "") +
+          '<div class="tc-badge tc-pend">Awaiting sponsor response</div></div>' +
+          '<div class="msg-t r">Just now</div></div>';
+        thread.appendChild(w);
+        thread.scrollTop = thread.scrollHeight;
+        hidePanel("terms-panel");
+        state.preview = `Terms sent · ৳${parseInt(rate || "0").toLocaleString()}`;
+        state.stageLabel = "Awaiting sponsor response";
+        state.unread = false;
+        state.ctxLbl = "Terms sent · waiting sponsor reply";
+        saveMessageState();
+        renderConversationList();
+        T("Terms proposal sent to sponsor");
+      }
+
+      function handleUpl(input) {
+        const file = input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const p = document.getElementById("up");
+          p.src = e.target.result;
+          p.style.display = "block";
+          const z = document.getElementById("uz");
+          z.classList.add("has");
+          z.querySelector(".uz-lbl").textContent = "✓ " + file.name;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      function submitContent() {
+        const state = getConversationState(active);
+        const link = document.getElementById("sc-link").value.trim();
+        if (!link) {
+          T("Please paste your content link");
+          return;
+        }
+        const count = document.getElementById("sc-count").value.trim();
+        const note = document.getElementById("sc-note").value.trim();
+        const p = document.getElementById("up");
+        const thumbSrc = p.style.display !== "none" ? p.src : null;
+        const items = count
+          ? count
+              .split(/[·,]/)
+              .map((s) => s.trim())
+              .filter(Boolean)
+          : ["Content files"];
+        const thread = document.getElementById("thread-" + active);
+        const w = document.createElement("div");
+        w.className = "msg-wrap me";
+        const thumbHTML = thumbSrc
+          ? '<img style="width:100%;height:96px;object-fit:cover;" src="' +
+            thumbSrc +
+            '" alt="">'
+          : '<div class="cc-thumb"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".3"><rect x="2" y="2" width="20" height="20" rx="2"/><circle cx="7" cy="7" r="2.5"/><path d="M2 17l6-6 4 4 4-5 6 8"/></svg></div>';
+        w.innerHTML =
+          '<div class="m-av av-sb">LA</div>' +
+          '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;">' +
+          '<div class="content-card">' +
+          thumbHTML +
+          '<div class="cc-body">' +
+          '<div class="cc-hd"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#3B6D11" stroke-width="1.3"><rect x="1.5" y="1.5" width="9" height="9" rx="1"/><path d="M3.5 4h5M3.5 6.5h5M3.5 9h3"/></svg>Content submitted · ' +
+          items.length +
+          " deliverables</div>" +
+          items
+            .map(
+              (i) =>
+                '<div class="cc-item"><svg viewBox="0 0 11 11" fill="none" width="11"><circle cx="5.5" cy="5.5" r="4.5" fill="#C0DD97"/><path d="M3 5.5l2 2L8.5 3" stroke="#27500A" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+                i +
+                "</div>",
+            )
+            .join("") +
+          (note ? '<div class="cc-note">' + note + "</div>" : "") +
+          '<a class="cc-link" href="' +
+          link +
+          '" target="_blank" rel="noopener"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 2H2v8h8V7M7 2h3v3M5 7l5-5"/></svg>View content files</a>' +
+          '<span class="cc-status cc-pend">Awaiting sponsor approval</span></div></div>' +
+          '<div class="msg-t r">Just now</div></div>';
+        thread.appendChild(w);
+        thread.scrollTop = thread.scrollHeight;
+        ["sc-link", "sc-count", "sc-note"].forEach((id) => {
+          const el = document.getElementById(id);
+          if (el) el.value = "";
+        });
+        document.getElementById("up").style.display = "none";
+        document.getElementById("uz").classList.remove("has");
+        document.getElementById("uz").querySelector(".uz-lbl").textContent =
+          "Click to upload";
+        document.getElementById("uf").value = "";
+        hidePanel("submit-panel");
+        state.preview = `Content submitted · ${items.length} files`;
+        state.stageLabel = "Content submitted";
+        state.unread = false;
+        state.ctxLbl = "Submitted · waiting review";
+        saveMessageState();
+        renderConversationList();
+        T("Content submitted — awaiting sponsor review");
+      }
+
+      function setRating(n) {
+        rating = n;
+        document
+          .querySelectorAll(".rv-star")
+          .forEach((s, i) => s.classList.toggle("on", i < n));
+      }
+
+      function submitRating() {
+        if (!rating) {
+          T("Please select a star rating");
+          return;
+        }
+        const state = getConversationState("sb");
+        const note = document.getElementById("rv-text").value.trim();
+        const stars = "⭐".repeat(rating);
+        const card = document.getElementById("review-card-cr");
+        card.innerHTML =
+          '<div class="rv-hd"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1.5L8 5H12L9 7.5L10 11L6.5 8.5L3 11L4 7.5L1 5H5Z" fill="#EF9F27"/></svg>Your rating submitted</div>' +
+          '<div class="rv-submitted">' +
+          stars +
+          " — " +
+          rating +
+          "/5 · StyleBox BD" +
+          (note ? '<br><br>"' + note + '"' : "") +
+          '<div class="rv-by">— Submitted just now · visible on their sponsor profile</div></div>';
+        state.preview = `You rated StyleBox BD ${rating}/5`;
+        state.stageLabel = "Rating submitted";
+        state.unread = false;
+        saveMessageState();
+        renderConversationList();
+        T("Rating submitted — visible on StyleBox BD's profile");
+      }
+
+      function sendMsg() {
+        const inp = document.getElementById("msg-inp");
+        const text = inp.value.trim();
+        if (!text) return;
+        const state = getConversationState(active);
+        const thread = document.getElementById("thread-" + active);
+        const w = document.createElement("div");
+        w.className = "msg-wrap me";
+        w.innerHTML =
+          '<div class="m-av av-sb">LA</div><div><div class="bubble b-me">' +
+          text +
+          '</div><div class="msg-t r">Just now</div></div>';
+        thread.appendChild(w);
+        thread.scrollTop = thread.scrollHeight;
+        inp.value = "";
+        state.preview = text;
+        state.unread = false;
+        saveMessageState();
+        renderConversationList();
+      }
+
+      function T(m) {
+        const t = document.getElementById("tst");
+        document.getElementById("tm").textContent = m;
+        t.classList.add("on");
+        setTimeout(() => t.classList.remove("on"), 2700);
+      }
+
+      // init
+      (function () {
+        renderAllConversationChrome();
+        updateQA("gf");
+        const search = document.querySelector(".conv-search .csi");
+        if (search) {
+          search.addEventListener("input", (event) => {
+            activeSearchTerm = String(event.target.value || "")
+              .trim()
+              .toLowerCase();
+            renderConversationList();
+            syncVisibleConversation(active);
+          });
+        }
+        setTimeout(() => {
+          const t = document.getElementById("thread-gf");
+          t.scrollTop = t.scrollHeight;
+        }, 100);
+      })();
+
+      document.addEventListener("sponsee:snapshot", (event) => {
+        profileSnapshot = event?.detail?.snapshot || profileSnapshot;
+        currentCampaignPhone =
+          event?.detail?.currentPhone || currentCampaignPhone;
+        applySnapshotToBlueprints(profileSnapshot);
+        renderAllConversationChrome();
+      });
+
+      if (window.SponseeDynamic?.getCurrentPhone) {
+        currentCampaignPhone = window.SponseeDynamic.getCurrentPhone();
+      }
+    </script>
+    <script src="sponsee_dynamic.js"></script>
+  </body>
+</html>
