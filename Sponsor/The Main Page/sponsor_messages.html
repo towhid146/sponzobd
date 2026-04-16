@@ -2652,6 +2652,175 @@
       let active = "la";
       let ratingCr = 0;
       const CONVS = ["la", "ni", "rk", "fa"];
+      const SHARED_DEAL_KEY = "sponzobd.shared.deals.v1";
+      const DEAL_ID_BY_CONV = {
+        la: "dealA",
+        ni: "dealB",
+        rk: "dealC",
+        fa: "dealD",
+      };
+
+      function loadSharedDeals() {
+        try {
+          const parsed = JSON.parse(
+            localStorage.getItem(SHARED_DEAL_KEY) || "{}",
+          );
+          return parsed && typeof parsed === "object" ? parsed : {};
+        } catch (_err) {
+          return {};
+        }
+      }
+
+      function saveSharedDeals(shared) {
+        try {
+          localStorage.setItem(SHARED_DEAL_KEY, JSON.stringify(shared));
+        } catch (_err) {
+          // Ignore storage errors to keep UI usable.
+        }
+      }
+
+      function updateSharedDeal(dealId, patch) {
+        const shared = loadSharedDeals();
+        const prev =
+          shared[dealId] && typeof shared[dealId] === "object"
+            ? shared[dealId]
+            : {};
+        shared[dealId] = {
+          ...prev,
+          ...patch,
+          lastUpdatedAt: Date.now(),
+        };
+        saveSharedDeals(shared);
+      }
+
+      function getSharedDeal(convId) {
+        const dealId = DEAL_ID_BY_CONV[convId];
+        if (!dealId) return {};
+        const shared = loadSharedDeals();
+        return shared[dealId] && typeof shared[dealId] === "object"
+          ? shared[dealId]
+          : {};
+      }
+
+      function setConvSummary(convId, preview, stageLabel) {
+        const item = document.getElementById("ci-" + convId);
+        if (!item) return;
+        const prev = item.querySelector(".ci-prev");
+        if (prev && preview) prev.textContent = preview;
+        const pill = item.querySelector(".stage-pill");
+        if (pill && stageLabel) pill.textContent = stageLabel;
+      }
+
+      function markTermsAcceptedUI() {
+        const card = document.querySelector("#thread-la .tc-badge");
+        if (card) {
+          card.className = "tc-badge tc-acc";
+          card.innerHTML =
+            '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2L8 3" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round"/></svg>Accepted by GreenFresh BD · Just now';
+        }
+        const actions = document.querySelector("#thread-la .tc-actions");
+        if (actions) actions.remove();
+        const thread = document.getElementById("thread-la");
+        if (
+          thread &&
+          !thread.querySelector(".se-lbl[data-state='terms-accepted']")
+        ) {
+          const sys = document.createElement("div");
+          sys.className = "sys-ev";
+          sys.innerHTML =
+            '<div class="se-lbl" data-state="terms-accepted">Terms accepted · deal record being generated</div><div class="se-det">GreenFresh BD accepted Lamia\'s terms · Platform generating deal record for both parties to confirm</div><div class="se-t">Just now · Platform</div>';
+          thread.appendChild(sys);
+          thread.scrollTop = thread.scrollHeight;
+        }
+        setConvSummary(
+          "la",
+          "Terms accepted — deal record pending",
+          "Deal record",
+        );
+      }
+
+      function markDealRecordConfirmedUI() {
+        const sigMine = document.querySelector(
+          "#thread-ni .dr-sig:first-child .dr-sig-meta",
+        );
+        if (sigMine) sigMine.textContent = "Confirmed by you · Just now";
+        const sigOk = document.querySelector(
+          "#thread-ni .dr-sig:first-child .dr-sig-ok",
+        );
+        if (sigOk) {
+          sigOk.textContent = "✓ IP logged · confirmed";
+          sigOk.style.color = "var(--grn-3)";
+        }
+        const cfBtns = document.querySelector("#thread-ni .dr-confirm-actions");
+        if (cfBtns)
+          cfBtns.innerHTML =
+            '<span style="font-size:12px;color:var(--grn-3);font-weight:700;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L10 3" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round"/></svg>You confirmed · now fund escrow to proceed</span>';
+        setConvSummary(
+          "ni",
+          "Deal record confirmed — fund escrow",
+          "Fund escrow",
+        );
+      }
+
+      function syncSponsorFromShared() {
+        const dealA = getSharedDeal("la");
+        if (dealA.termsAccepted) {
+          markTermsAcceptedUI();
+        } else if (dealA.sponsorPreview) {
+          setConvSummary(
+            "la",
+            dealA.sponsorPreview,
+            dealA.termsStatus === "countered"
+              ? "Counter sent"
+              : "Terms proposed",
+          );
+        }
+
+        const dealB = getSharedDeal("ni");
+        if (dealB.dealRecordSponsorConfirmed) {
+          markDealRecordConfirmedUI();
+        } else if (dealB.sponsorPreview) {
+          setConvSummary("ni", dealB.sponsorPreview, "Deal record");
+        }
+
+        const dealC = getSharedDeal("rk");
+        if (dealC.escrowFunded) {
+          setConvSummary(
+            "rk",
+            "Escrow funded — creator can start work",
+            "In progress",
+          );
+        }
+        if (dealC.contentSubmitted) {
+          setConvSummary(
+            "rk",
+            "Creator submitted content — review required",
+            "Review content",
+          );
+        } else if (dealC.revisionRequested) {
+          setConvSummary(
+            "rk",
+            "Revision requested from creator",
+            "Revision requested",
+          );
+        }
+
+        const dealD = getSharedDeal("fa");
+        if (dealD.sponsorRated && dealD.sponsorRating) {
+          setConvSummary(
+            "fa",
+            "You rated creator " + dealD.sponsorRating + "/5",
+            "Rating submitted",
+          );
+        }
+        if (dealD.sponseeRated && dealD.sponseeRating) {
+          setConvSummary(
+            "fa",
+            "Creator rated the collaboration " + dealD.sponseeRating + "/5",
+            "Rated by creator",
+          );
+        }
+      }
 
       function sw(id, el) {
         document
@@ -2737,21 +2906,13 @@
       }
 
       function acceptTerms() {
-        const card = document.querySelector("#thread-la .tc-badge");
-        if (card) {
-          card.className = "tc-badge tc-acc";
-          card.innerHTML =
-            '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2L8 3" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round"/></svg>Accepted by GreenFresh BD · Just now';
-        }
-        const actions = document.querySelector("#thread-la .tc-actions");
-        if (actions) actions.remove();
-        const thread = document.getElementById("thread-la");
-        const sys = document.createElement("div");
-        sys.className = "sys-ev";
-        sys.innerHTML =
-          '<div class="se-lbl">Terms accepted · deal record being generated</div><div class="se-det">GreenFresh BD accepted Lamia\'s terms · Platform generating deal record for both parties to confirm</div><div class="se-t">Just now · Platform</div>';
-        thread.appendChild(sys);
-        thread.scrollTop = thread.scrollHeight;
+        markTermsAcceptedUI();
+        updateSharedDeal("dealA", {
+          termsStatus: "accepted",
+          termsAccepted: true,
+          sponsorPreview: "Terms accepted — deal record pending",
+          sponseePreview: "Sponsor accepted your terms — deal record pending",
+        });
         T(
           "Terms accepted — deal record will appear for both parties to confirm",
         );
@@ -2761,21 +2922,12 @@
       }
 
       function confirmRecord() {
-        const sigMine = document.querySelector(
-          "#thread-ni .dr-sig:first-child .dr-sig-meta",
-        );
-        if (sigMine) sigMine.textContent = "Confirmed by you · Just now";
-        const sigOk = document.querySelector(
-          "#thread-ni .dr-sig:first-child .dr-sig-ok",
-        );
-        if (sigOk) {
-          sigOk.textContent = "✓ IP logged · confirmed";
-          sigOk.style.color = "var(--grn-3)";
-        }
-        const cfBtns = document.querySelector("#thread-ni .dr-confirm-actions");
-        if (cfBtns)
-          cfBtns.innerHTML =
-            '<span style="font-size:12px;color:var(--grn-3);font-weight:700;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L10 3" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round"/></svg>You confirmed · now fund escrow to proceed</span>';
+        markDealRecordConfirmedUI();
+        updateSharedDeal("dealB", {
+          dealRecordSponsorConfirmed: true,
+          sponsorPreview: "Deal record confirmed — fund escrow",
+          sponseePreview: "Sponsor confirmed the deal record",
+        });
         T(
           "Deal record confirmed — please fund escrow for ৳22,000 to allow creator to start",
         );
@@ -2784,6 +2936,11 @@
       }
 
       function fundEscrow() {
+        const shared = getSharedDeal("rk");
+        if (shared.escrowFunded) {
+          T("Escrow already funded for this deal");
+          return;
+        }
         const thread = document.getElementById("thread-rk");
         const w = document.createElement("div");
         w.className = "msg-wrap me";
@@ -2799,6 +2956,11 @@
           '<div class="msg-t r">Just now</div></div>';
         thread.appendChild(w);
         thread.scrollTop = thread.scrollHeight;
+        updateSharedDeal("dealC", {
+          escrowFunded: true,
+          sponsorPreview: "Escrow funded — creator can start work",
+          sponseePreview: "Escrow funded — you can start work now",
+        });
         T("Escrow funded — Rafi Khan can now start work");
         document.getElementById("qa-row").innerHTML =
           '<button class="qa" onclick="T(\'Opening chat...\')">Open chat</button><button class="qa" onclick="showPanel(\'revision-panel\')">Request revision</button>';
@@ -2835,6 +2997,11 @@
         thread.appendChild(w);
         thread.scrollTop = thread.scrollHeight;
         hidePanel("counter-panel");
+        updateSharedDeal("dealA", {
+          termsStatus: "countered",
+          sponsorPreview: "Counter proposal sent",
+          sponseePreview: "Sponsor sent a counter proposal",
+        });
         T("Counter-proposal sent to creator");
       }
 
@@ -2860,6 +3027,11 @@
         thread.appendChild(w);
         thread.scrollTop = thread.scrollHeight;
         hidePanel("revision-panel");
+        updateSharedDeal("dealC", {
+          revisionRequested: true,
+          sponsorPreview: "Revision requested from creator",
+          sponseePreview: "Sponsor requested revisions",
+        });
         T("Revision request sent to creator");
       }
 
@@ -2887,6 +3059,12 @@
           "/5 · Faria Ahmed" +
           (note ? '<br><br>"' + note + '"' : "") +
           '<div class="rv-by">— Visible on Faria\'s creator profile · submitted just now</div></div>';
+        updateSharedDeal("dealD", {
+          sponsorRated: true,
+          sponsorRating: ratingCr,
+          sponsorPreview: "You rated creator " + ratingCr + "/5",
+          sponseePreview: "Sponsor rated this collaboration " + ratingCr + "/5",
+        });
         T("Rating submitted — visible on Faria Ahmed's public profile");
       }
 
@@ -2904,6 +3082,14 @@
         thread.appendChild(w);
         thread.scrollTop = thread.scrollHeight;
         inp.value = "";
+        const dealId = DEAL_ID_BY_CONV[active];
+        if (dealId) {
+          updateSharedDeal(dealId, {
+            sponsorPreview: text,
+            sponseePreview: text,
+            lastSponsorMessage: text,
+          });
+        }
       }
 
       function T(m) {
@@ -2917,12 +3103,20 @@
         document.getElementById("thread-la").style.display = "flex";
         document.getElementById("thread-la").style.flexDirection = "column";
         document.getElementById("ctx-la").style.display = "flex";
+        syncSponsorFromShared();
         updateQA("la");
         setTimeout(() => {
           const t = document.getElementById("thread-la");
           t.scrollTop = t.scrollHeight;
         }, 100);
       })();
+
+      window.addEventListener("storage", (event) => {
+        if (event.key === SHARED_DEAL_KEY) {
+          syncSponsorFromShared();
+          updateBadge();
+        }
+      });
     </script>
   </body>
 </html>

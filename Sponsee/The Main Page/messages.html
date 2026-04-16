@@ -3024,6 +3024,55 @@
       let profileSnapshot = null;
       let currentCampaignPhone = "demo-user";
       let activeSearchTerm = "";
+      const SHARED_DEAL_KEY = "sponzobd.shared.deals.v1";
+      const DEAL_ID_BY_CONV = {
+        gf: "dealA",
+        nl: "dealB",
+        tb: "dealC",
+        sb: "dealD",
+      };
+
+      function loadSharedDeals() {
+        try {
+          const parsed = JSON.parse(
+            localStorage.getItem(SHARED_DEAL_KEY) || "{}",
+          );
+          return parsed && typeof parsed === "object" ? parsed : {};
+        } catch (_err) {
+          return {};
+        }
+      }
+
+      function saveSharedDeals(shared) {
+        try {
+          localStorage.setItem(SHARED_DEAL_KEY, JSON.stringify(shared));
+        } catch (_err) {
+          // Ignore storage failures.
+        }
+      }
+
+      function updateSharedDeal(dealId, patch) {
+        const shared = loadSharedDeals();
+        const prev =
+          shared[dealId] && typeof shared[dealId] === "object"
+            ? shared[dealId]
+            : {};
+        shared[dealId] = {
+          ...prev,
+          ...patch,
+          lastUpdatedAt: Date.now(),
+        };
+        saveSharedDeals(shared);
+      }
+
+      function getSharedDeal(convId) {
+        const dealId = DEAL_ID_BY_CONV[convId];
+        if (!dealId) return {};
+        const shared = loadSharedDeals();
+        return shared[dealId] && typeof shared[dealId] === "object"
+          ? shared[dealId]
+          : {};
+      }
 
       function escapeHtml(value) {
         return String(value ?? "")
@@ -3369,9 +3418,86 @@
       }
 
       function renderAllConversationChrome() {
+        syncSponseeFromShared();
         renderConversationList();
         CONVS.forEach((id) => renderContextBar(id));
         syncVisibleConversation(active);
+      }
+
+      function syncSponseeFromShared() {
+        const dealA = getSharedDeal("gf");
+        const stateA = getConversationState("gf");
+        if (dealA.termsAccepted) {
+          stateA.preview =
+            dealA.sponseePreview ||
+            "Sponsor accepted your terms — deal record pending";
+          stateA.stageLabel = "Deal record pending";
+          stateA.ctxLbl = "Terms accepted · waiting deal record";
+          const badge = document.querySelector("#thread-gf .tc-badge");
+          if (badge) {
+            badge.className = "tc-badge tc-acc";
+            badge.textContent = "Accepted by sponsor";
+          }
+        } else if (dealA.termsStatus === "countered") {
+          stateA.preview =
+            dealA.sponseePreview || "Sponsor sent a counter proposal";
+          stateA.stageLabel = "Counter received";
+          stateA.unread = true;
+        }
+
+        const dealB = getSharedDeal("nl");
+        const stateB = getConversationState("nl");
+        if (
+          dealB.dealRecordSponsorConfirmed &&
+          !dealB.dealRecordSponseeConfirmed
+        ) {
+          stateB.preview =
+            dealB.sponseePreview || "Sponsor confirmed the deal record";
+          stateB.stageLabel = "Confirm deal record";
+          stateB.unread = true;
+        }
+        if (
+          dealB.dealRecordSponsorConfirmed &&
+          dealB.dealRecordSponseeConfirmed
+        ) {
+          stateB.preview = "Both confirmed — waiting escrow funding";
+          stateB.stageLabel = "Escrow pending";
+          stateB.ctxLbl = "Confirmed · waiting escrow";
+        }
+
+        const dealC = getSharedDeal("tb");
+        const stateC = getConversationState("tb");
+        if (dealC.escrowFunded) {
+          stateC.preview =
+            dealC.sponseePreview || "Escrow funded — you can start work now";
+          stateC.stageLabel = "Escrow funded";
+          stateC.ctxLbl = "In escrow · secured";
+        }
+        if (dealC.revisionRequested) {
+          stateC.preview =
+            dealC.sponseePreview || "Sponsor requested revisions";
+          stateC.stageLabel = "Revision requested";
+          stateC.unread = true;
+        }
+        if (dealC.contentSubmitted) {
+          stateC.preview = "Content submitted — sponsor reviewing";
+          stateC.stageLabel = "Content submitted";
+          stateC.ctxLbl = "Submitted · waiting review";
+        }
+
+        const dealD = getSharedDeal("sb");
+        const stateD = getConversationState("sb");
+        if (dealD.sponsorRated && dealD.sponsorRating) {
+          stateD.preview =
+            dealD.sponseePreview ||
+            `Sponsor rated this collaboration ${dealD.sponsorRating}/5`;
+          stateD.stageLabel = "Rated by sponsor";
+          stateD.unread = true;
+        }
+        if (dealD.sponseeRated) {
+          stateD.preview = `You rated sponsor ${dealD.sponseeRating || rating}/5`;
+          stateD.stageLabel = "Rating submitted";
+        }
       }
 
       function syncVisibleConversation(id) {
@@ -3545,6 +3671,11 @@
         state.stageLabel = "Deal record confirmed";
         state.unread = false;
         state.ctxLbl = "Agreed · awaiting escrow";
+        updateSharedDeal("dealB", {
+          dealRecordSponseeConfirmed: true,
+          sponseePreview: "You confirmed the deal record — waiting escrow",
+          sponsorPreview: "Creator confirmed the deal record",
+        });
         saveMessageState();
         renderConversationList();
         T("Deal record confirmed — NutriLife BD will now fund escrow");
@@ -3587,6 +3718,12 @@
         state.stageLabel = "Awaiting sponsor response";
         state.unread = false;
         state.ctxLbl = "Terms sent · waiting sponsor reply";
+        updateSharedDeal("dealA", {
+          creatorSentTerms: true,
+          termsStatus: "proposed",
+          sponseePreview: state.preview,
+          sponsorPreview: "Creator proposed terms",
+        });
         saveMessageState();
         renderConversationList();
         T("Terms proposal sent to sponsor");
@@ -3671,6 +3808,11 @@
         state.stageLabel = "Content submitted";
         state.unread = false;
         state.ctxLbl = "Submitted · waiting review";
+        updateSharedDeal("dealC", {
+          contentSubmitted: true,
+          sponseePreview: state.preview,
+          sponsorPreview: "Creator submitted content — review required",
+        });
         saveMessageState();
         renderConversationList();
         T("Content submitted — awaiting sponsor review");
@@ -3704,6 +3846,12 @@
         state.preview = `You rated StyleBox BD ${rating}/5`;
         state.stageLabel = "Rating submitted";
         state.unread = false;
+        updateSharedDeal("dealD", {
+          sponseeRated: true,
+          sponseeRating: rating,
+          sponseePreview: state.preview,
+          sponsorPreview: `Creator rated this collaboration ${rating}/5`,
+        });
         saveMessageState();
         renderConversationList();
         T("Rating submitted — visible on StyleBox BD's profile");
@@ -3726,6 +3874,14 @@
         inp.value = "";
         state.preview = text;
         state.unread = false;
+        const dealId = DEAL_ID_BY_CONV[active];
+        if (dealId) {
+          updateSharedDeal(dealId, {
+            sponseePreview: text,
+            sponsorPreview: text,
+            lastSponseeMessage: text,
+          });
+        }
         saveMessageState();
         renderConversationList();
       }
@@ -3756,6 +3912,13 @@
           t.scrollTop = t.scrollHeight;
         }, 100);
       })();
+
+      window.addEventListener("storage", (event) => {
+        if (event.key === SHARED_DEAL_KEY) {
+          renderAllConversationChrome();
+          updateQA(active);
+        }
+      });
 
       document.addEventListener("sponsee:snapshot", (event) => {
         profileSnapshot = event?.detail?.snapshot || profileSnapshot;
