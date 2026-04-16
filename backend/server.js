@@ -375,6 +375,39 @@ const defaultSponsorHomeState = {
     initials: "GF",
     subtitle: "Health & food · Dhaka",
   },
+  brandProfile: {
+    brandName: "GreenFresh BD",
+    industry: "Health & food",
+    location: "Dhaka",
+    country: "Bangladesh",
+    tagline:
+      "Organic health food products for health-conscious Bangladeshi consumers",
+    about:
+      "GreenFresh BD produces organic and natural health food products for health-conscious Bangladeshi consumers. Our range includes superfoods, health snacks, and nutrition supplements formulated for South Asian dietary needs.\n\nWe partner with health and wellness creators who believe in authentic nutrition content - not scripted ads. Every campaign we run is designed to feel like a genuine recommendation, not a commercial.",
+    website: "https://greenfreshbd.com",
+    typicalBudget: "৳20,000 - ৳40,000",
+    preferredPlatforms: "Instagram & YouTube",
+    preferredCreatorTags: [
+      "Health & wellness",
+      "Nutrition",
+      "Fitness lifestyle",
+      "Female audience 18-34",
+      "Dhaka-based reach",
+      "Authentic storytelling",
+    ],
+    logoUrl: "",
+    coverUrl: "",
+    memberSince: "Jan 2024",
+    sinceYear: 2024,
+    dealsCompleted: 7,
+    avgRating: 4.7,
+    ratingCount: 7,
+    campaignsPosted: 12,
+    totalPaidEscrow: "৳4.2L",
+    escrowDeals: 7,
+    profileStrength: 75,
+    updatedAt: "",
+  },
   metrics: {
     liveCampaigns: 2,
     applicants: 47,
@@ -405,6 +438,30 @@ function mergeSponsorHomeState(existing = {}, update = {}) {
 
   const safeArray = (value, fallback = []) =>
     Array.isArray(value) ? value.slice(0, 50) : cloneValue(fallback);
+
+  const safeUrl = (value) => {
+    const url = safeText(value, 250000);
+    if (!url) return "";
+    return /^https?:\/\//i.test(url) || /^data:image\//i.test(url) ? url : "";
+  };
+
+  const safeInt = (value, fallback = 0, min = 0, max = 999999) => {
+    const num = Number(value);
+    if (!Number.isFinite(num)) return fallback;
+    return Math.max(min, Math.min(max, Math.round(num)));
+  };
+
+  const safeFloat = (value, fallback = 0, min = 0, max = 5) => {
+    const num = Number(value);
+    if (!Number.isFinite(num)) return fallback;
+    return Math.max(min, Math.min(max, Number(num.toFixed(1))));
+  };
+
+  const mergedBrandProfile = {
+    ...defaultSponsorHomeState.brandProfile,
+    ...(existing.brandProfile || {}),
+    ...(update.brandProfile || {}),
+  };
 
   return {
     profile: {
@@ -439,6 +496,36 @@ function mergeSponsorHomeState(existing = {}, update = {}) {
       ...(existing.metrics || {}),
       ...(update.metrics || {}),
     },
+    brandProfile: {
+      ...mergedBrandProfile,
+      brandName: safeText(mergedBrandProfile.brandName, 80),
+      industry: safeText(mergedBrandProfile.industry, 80),
+      location: safeText(mergedBrandProfile.location, 80),
+      country: safeText(mergedBrandProfile.country, 80),
+      tagline: safeText(mergedBrandProfile.tagline, 180),
+      about: safeText(mergedBrandProfile.about, 3000),
+      website: safeUrl(mergedBrandProfile.website),
+      typicalBudget: safeText(mergedBrandProfile.typicalBudget, 80),
+      preferredPlatforms: safeText(mergedBrandProfile.preferredPlatforms, 80),
+      preferredCreatorTags: safeArray(
+        (mergedBrandProfile.preferredCreatorTags || []).map((tag) =>
+          safeText(tag, 40),
+        ),
+        defaultSponsorHomeState.brandProfile.preferredCreatorTags,
+      ).filter(Boolean),
+      logoUrl: safeUrl(mergedBrandProfile.logoUrl),
+      coverUrl: safeUrl(mergedBrandProfile.coverUrl),
+      memberSince: safeText(mergedBrandProfile.memberSince, 30),
+      sinceYear: safeInt(mergedBrandProfile.sinceYear, 2024, 2000, 2100),
+      dealsCompleted: safeInt(mergedBrandProfile.dealsCompleted, 0, 0, 9999),
+      avgRating: safeFloat(mergedBrandProfile.avgRating, 0, 0, 5),
+      ratingCount: safeInt(mergedBrandProfile.ratingCount, 0, 0, 9999),
+      campaignsPosted: safeInt(mergedBrandProfile.campaignsPosted, 0, 0, 9999),
+      totalPaidEscrow: safeText(mergedBrandProfile.totalPaidEscrow, 40),
+      escrowDeals: safeInt(mergedBrandProfile.escrowDeals, 0, 0, 9999),
+      profileStrength: safeInt(mergedBrandProfile.profileStrength, 0, 0, 100),
+      updatedAt: safeText(mergedBrandProfile.updatedAt, 40),
+    },
     savedCreators: safeArray(
       update.savedCreators || existing.savedCreators,
       defaultSponsorHomeState.savedCreators,
@@ -460,6 +547,74 @@ async function loadSponsorHomeState(phone) {
   const merged = mergeSponsorHomeState(defaultSponsorHomeState, record || {});
   merged.profile.phone = phone;
   return merged;
+}
+
+function sanitizeSponsorProfileUpdate(payload = {}) {
+  const cleanText = (value, max = 300) =>
+    String(value || "")
+      .trim()
+      .slice(0, max);
+
+  const safeUrl = (value) => {
+    const url = cleanText(value, 250000);
+    if (!url) return "";
+    return /^https?:\/\//i.test(url) || /^data:image\//i.test(url) ? url : "";
+  };
+
+  const toInt = (value, fallback = 0, min = 0, max = 999999) => {
+    const num = Number(value);
+    if (!Number.isFinite(num)) return fallback;
+    return Math.max(min, Math.min(max, Math.round(num)));
+  };
+
+  const toFloat = (value, fallback = 0, min = 0, max = 5) => {
+    const num = Number(value);
+    if (!Number.isFinite(num)) return fallback;
+    return Math.max(min, Math.min(max, Number(num.toFixed(1))));
+  };
+
+  return {
+    brandName: cleanText(payload.brandName, 80),
+    industry: cleanText(payload.industry, 80),
+    location: cleanText(payload.location, 80),
+    country: cleanText(payload.country, 80),
+    tagline: cleanText(payload.tagline, 180),
+    about: cleanText(payload.about, 3000),
+    website: safeUrl(payload.website),
+    typicalBudget: cleanText(payload.typicalBudget, 80),
+    preferredPlatforms: cleanText(payload.preferredPlatforms, 80),
+    preferredCreatorTags: Array.isArray(payload.preferredCreatorTags)
+      ? payload.preferredCreatorTags
+          .map((item) => cleanText(item, 40))
+          .filter(Boolean)
+          .slice(0, 12)
+      : cleanText(payload.preferredCreatorTags, 500)
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean)
+          .slice(0, 12),
+    logoUrl: safeUrl(payload.logoUrl),
+    coverUrl: safeUrl(payload.coverUrl),
+    memberSince: cleanText(payload.memberSince, 30),
+    sinceYear: toInt(payload.sinceYear, 2024, 2000, 2100),
+    dealsCompleted: toInt(payload.dealsCompleted, 0, 0, 9999),
+    avgRating: toFloat(payload.avgRating, 0, 0, 5),
+    ratingCount: toInt(payload.ratingCount, 0, 0, 9999),
+    campaignsPosted: toInt(payload.campaignsPosted, 0, 0, 9999),
+    totalPaidEscrow: cleanText(payload.totalPaidEscrow, 40),
+    escrowDeals: toInt(payload.escrowDeals, 0, 0, 9999),
+    profileStrength: toInt(payload.profileStrength, 0, 0, 100),
+  };
+}
+
+function brandInitials(name) {
+  const source = String(name || "").trim();
+  if (!source) return "SP";
+  const words = source.split(/\s+/).filter(Boolean);
+  if (words.length === 1) {
+    return words[0].slice(0, 2).toUpperCase();
+  }
+  return (words[0][0] + words[1][0]).toUpperCase();
 }
 
 app.get("/api/sponsor/home/:phone", async (req, res) => {
@@ -484,7 +639,8 @@ app.put("/api/sponsor/home/:phone", async (req, res) => {
     }
 
     const update = req.body || {};
-    const merged = mergeSponsorHomeState({}, update);
+    const existing = await loadSponsorHomeState(phone);
+    const merged = mergeSponsorHomeState(existing, update);
 
     await sponsorHomeStatesCollection.updateOne(
       { phone },
@@ -497,6 +653,71 @@ app.put("/api/sponsor/home/:phone", async (req, res) => {
   } catch (err) {
     console.error("Sponsor home PUT error:", err.message);
     return res.status(500).json({ error: "Failed to save sponsor state" });
+  }
+});
+
+app.get("/api/sponsor/profile/:phone", async (req, res) => {
+  try {
+    const phone = String(req.params.phone || "").trim();
+    if (!phone) {
+      return res.status(400).json({ error: "Phone is required" });
+    }
+
+    const state = await loadSponsorHomeState(phone);
+    return res.json({ profile: state.brandProfile || {} });
+  } catch (err) {
+    return res.status(500).json({ error: "Failed to load sponsor profile" });
+  }
+});
+
+app.put("/api/sponsor/profile/:phone", async (req, res) => {
+  try {
+    const ownerPhone = String(req.headers["x-user-phone"] || "").trim();
+    const profilePhone = String(req.params.phone || "").trim();
+    if (!profilePhone) {
+      return res.status(400).json({ error: "Phone is required" });
+    }
+    if (ownerPhone && ownerPhone !== profilePhone) {
+      return res.status(403).json({ error: "Only profile owner can edit" });
+    }
+
+    const existing = await loadSponsorHomeState(profilePhone);
+    const cleaned = sanitizeSponsorProfileUpdate(req.body || {});
+    const nextBrandProfile = {
+      ...(existing.brandProfile || {}),
+      ...cleaned,
+      updatedAt: new Date().toISOString(),
+    };
+
+    const locationText = [nextBrandProfile.location, nextBrandProfile.country]
+      .filter(Boolean)
+      .join(", ");
+    const homeProfilePatch = {
+      phone: profilePhone,
+      displayName: nextBrandProfile.brandName || existing.profile?.displayName,
+      industry: nextBrandProfile.industry || existing.profile?.industry,
+      location: nextBrandProfile.location || existing.profile?.location,
+      initials: brandInitials(nextBrandProfile.brandName),
+      subtitle: [nextBrandProfile.industry, nextBrandProfile.location]
+        .filter(Boolean)
+        .join(" · "),
+      locationText,
+    };
+
+    const merged = mergeSponsorHomeState(existing, {
+      profile: homeProfilePatch,
+      brandProfile: nextBrandProfile,
+    });
+
+    await sponsorHomeStatesCollection.updateOne(
+      { phone: profilePhone },
+      { $set: merged },
+      { upsert: true },
+    );
+
+    return res.json({ ok: true, profile: merged.brandProfile });
+  } catch (err) {
+    return res.status(500).json({ error: "Failed to update sponsor profile" });
   }
 });
 

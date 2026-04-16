@@ -866,8 +866,6 @@
         border-radius: var(--r2);
         margin-bottom: 6px;
       }
-      .ver-left {
-      }
       .ver-title {
         font-size: 13px;
         font-weight: 600;
@@ -1127,11 +1125,13 @@
           </div>
         </div>
         <div class="sb-user">
-          <div class="av-s">GF</div>
+          <div class="av-s" id="sb-avatar">GF</div>
           <div>
-            <div class="u-name">GreenFresh BD</div>
-            <div class="u-sub">Health &amp; food · Dhaka</div>
-            <div class="u-plan"><span class="pdot"></span>Pro plan</div>
+            <div class="u-name" id="sb-name">GreenFresh BD</div>
+            <div class="u-sub" id="sb-sub">Health &amp; food · Dhaka</div>
+            <div class="u-plan" id="sb-plan">
+              <span class="pdot"></span>Pro plan
+            </div>
           </div>
         </div>
         <nav class="nav">
@@ -1241,7 +1241,7 @@
             <button class="btn-save-top" onclick="saveSettings()">
               Save changes
             </button>
-            <span class="badge-pro">Pro plan</span>
+            <span class="badge-pro" id="top-plan-badge">Pro plan</span>
           </div>
         </div>
 
@@ -1297,16 +1297,17 @@
           </div>
           <div class="identity-wrap">
             <div class="id-row">
-              <div class="brand-av missing-logo">GF</div>
+              <div class="brand-av missing-logo" id="brand-avatar">GF</div>
               <div class="id-main">
-                <div class="id-name">GreenFresh BD</div>
-                <div class="id-tagline">
+                <div class="id-name" id="brand-name-view">GreenFresh BD</div>
+                <div class="id-tagline" id="brand-tagline-view">
                   Organic health food products for health-conscious Bangladeshi
                   consumers
                 </div>
               </div>
               <div class="id-right">
                 <div
+                  id="industry-location-pill"
                   style="
                     font-size: 11px;
                     padding: 3px 10px;
@@ -1318,7 +1319,10 @@
                 >
                   Health &amp; food · Dhaka
                 </div>
-                <div style="font-size: 11px; color: var(--tx3)">
+                <div
+                  style="font-size: 11px; color: var(--tx3)"
+                  id="brand-member-since"
+                >
                   On SponzoBD since Jan 2024
                 </div>
                 <button
@@ -1342,7 +1346,7 @@
                     d="M6 1C4.3 1 3 2.3 3 4c0 2.5 3 7 3 7s3-4.5 3-7c0-1.7-1.3-3-3-3z"
                   />
                   <circle cx="6" cy="4" r="1.2" /></svg
-                >Dhaka, Bangladesh
+                ><span id="meta-location">Dhaka, Bangladesh</span>
               </div>
               <div class="id-m">
                 <svg
@@ -1353,7 +1357,7 @@
                 >
                   <rect x="1.5" y="2" width="9" height="8" rx="1" />
                   <path d="M4 2V1M8 2V1M1.5 5h9" /></svg
-                >Member since Jan 2024
+                ><span id="meta-member-since">Member since Jan 2024</span>
               </div>
               <div class="id-m">
                 <svg
@@ -1365,6 +1369,7 @@
                   <path d="M2 10V4l4-3 4 3v6" />
                   <path d="M4.5 10V7h3v3" /></svg
                 ><a
+                  id="meta-website"
                   href="#"
                   style="color: var(--blu-t); text-decoration: none"
                   onclick="return false;"
@@ -1449,27 +1454,27 @@
           </div>
           <div class="stats-bar">
             <div class="sb-item">
-              <div class="sb-val">7</div>
+              <div class="sb-val" id="stats-deals">7</div>
               <div class="sb-lbl">Deals completed</div>
-              <div class="sb-note">All via escrow</div>
+              <div class="sb-note" id="stats-escrow-note">All via escrow</div>
             </div>
             <div class="sb-item">
-              <div class="sb-val">
+              <div class="sb-val" id="stats-rating-wrap">
                 4.7<span
                   style="font-size: 12px; color: var(--tx3); font-weight: 400"
                   >/5</span
                 >
               </div>
               <div class="sb-lbl">Avg creator rating given</div>
-              <div class="sb-note">From 7 creators</div>
+              <div class="sb-note" id="stats-rating-count">From 7 creators</div>
             </div>
             <div class="sb-item">
-              <div class="sb-val">12</div>
+              <div class="sb-val" id="stats-campaigns">12</div>
               <div class="sb-lbl">Campaigns posted</div>
-              <div class="sb-note">Since Jan 2024</div>
+              <div class="sb-note" id="stats-since">Since Jan 2024</div>
             </div>
             <div class="sb-item">
-              <div class="sb-val">৳4.2L</div>
+              <div class="sb-val" id="stats-total-paid">৳4.2L</div>
               <div class="sb-lbl">Total paid via escrow</div>
               <div class="sb-note">Platform verified</div>
             </div>
@@ -1482,6 +1487,7 @@
                   <div class="pe" onclick="switchTab('edit')">Edit</div>
                 </div>
                 <p
+                  id="about-primary"
                   style="
                     font-size: 13px;
                     color: var(--tx2);
@@ -1495,6 +1501,7 @@
                   formulated for South Asian dietary needs.
                 </p>
                 <p
+                  id="about-secondary"
                   style="font-size: 13px; color: var(--tx2); line-height: 1.75"
                 >
                   We partner with health and wellness creators who believe in
@@ -1508,7 +1515,10 @@
                 >
                   What we look for in creators
                 </div>
-                <div style="display: flex; flex-wrap: wrap; gap: 5px">
+                <div
+                  style="display: flex; flex-wrap: wrap; gap: 5px"
+                  id="creator-tags-wrap"
+                >
                   <span
                     style="
                       font-size: 11px;
@@ -1580,25 +1590,36 @@
                 </div>
                 <div class="info-row">
                   <span class="ir-l">Industry</span
-                  ><span class="ir-v">Health &amp; food</span>
+                  ><span class="ir-v" id="detail-industry"
+                    >Health &amp; food</span
+                  >
                 </div>
                 <div class="info-row">
                   <span class="ir-l">Location</span
-                  ><span class="ir-v">Dhaka, Bangladesh</span>
+                  ><span class="ir-v" id="detail-location"
+                    >Dhaka, Bangladesh</span
+                  >
                 </div>
                 <div class="info-row">
                   <span class="ir-l">Website</span
-                  ><span class="ir-v" style="color: var(--blu-t)"
+                  ><span
+                    class="ir-v"
+                    style="color: var(--blu-t)"
+                    id="detail-website"
                     >greenfreshbd.com</span
                   >
                 </div>
                 <div class="info-row">
                   <span class="ir-l">Typical budget</span
-                  ><span class="ir-v">৳20,000 – ৳40,000</span>
+                  ><span class="ir-v" id="detail-budget"
+                    >৳20,000 – ৳40,000</span
+                  >
                 </div>
                 <div class="info-row" style="border: none">
                   <span class="ir-l">Preferred platforms</span
-                  ><span class="ir-v">Instagram · YouTube</span>
+                  ><span class="ir-v" id="detail-platforms"
+                    >Instagram · YouTube</span
+                  >
                 </div>
               </div>
               <div class="panel" style="margin-bottom: 0">
@@ -1606,12 +1627,16 @@
                 <div class="strength-wrap">
                   <div class="str-row">
                     <span class="str-lbl">Profile strength</span
-                    ><span class="str-pct">75%</span>
+                    ><span class="str-pct" id="profile-strength-pct">75%</span>
                   </div>
                   <div class="str-track">
-                    <div class="str-fill" style="width: 75%"></div>
+                    <div
+                      class="str-fill"
+                      id="profile-strength-fill"
+                      style="width: 75%"
+                    ></div>
                   </div>
-                  <div class="str-note">
+                  <div class="str-note" id="profile-strength-note">
                     Add a logo to reach 90% · logos increase application rates
                   </div>
                 </div>
@@ -1818,7 +1843,12 @@
                   <div class="ef-lbl">
                     Brand name <span class="ef-req">*</span>
                   </div>
-                  <input class="ef-inp" type="text" value="GreenFresh BD" />
+                  <input
+                    class="ef-inp"
+                    id="brand-name-inp"
+                    type="text"
+                    value="GreenFresh BD"
+                  />
                   <div class="ef-hint">
                     This appears on every campaign card you post
                   </div>
@@ -1827,7 +1857,7 @@
                   <div class="ef-lbl">
                     Industry category <span class="ef-req">*</span>
                   </div>
-                  <select class="ef-sel">
+                  <select class="ef-sel" id="industry-sel">
                     <option selected>Health &amp; food</option>
                     <option>Fashion &amp; beauty</option>
                     <option>Technology</option>
@@ -1897,7 +1927,7 @@ We partner with health and wellness creators who believe in authentic nutrition 
                   <div class="ef-lbl">
                     Location <span class="ef-req">*</span>
                   </div>
-                  <select class="ef-sel">
+                  <select class="ef-sel" id="location-sel">
                     <option selected>Dhaka</option>
                     <option>Chittagong</option>
                     <option>Sylhet</option>
@@ -1912,6 +1942,7 @@ We partner with health and wellness creators who believe in authentic nutrition 
                     <span class="ef-opt">(optional)</span>
                   </div>
                   <input
+                    id="website-inp"
                     class="ef-inp"
                     type="url"
                     value="https://greenfreshbd.com"
@@ -1942,7 +1973,7 @@ We partner with health and wellness creators who believe in authentic nutrition 
               <div class="ef-grid">
                 <div class="ef-field">
                   <div class="ef-lbl">Typical budget range</div>
-                  <select class="ef-sel">
+                  <select class="ef-sel" id="budget-sel">
                     <option>Under ৳10,000</option>
                     <option>৳10,000 – ৳20,000</option>
                     <option selected>৳20,000 – ৳40,000</option>
@@ -1952,7 +1983,7 @@ We partner with health and wellness creators who believe in authentic nutrition 
                 </div>
                 <div class="ef-field">
                   <div class="ef-lbl">Preferred platforms</div>
-                  <select class="ef-sel">
+                  <select class="ef-sel" id="platforms-sel">
                     <option selected>Instagram &amp; YouTube</option>
                     <option>Instagram only</option>
                     <option>TikTok only</option>
@@ -2688,6 +2719,123 @@ We partner with health and wellness creators who believe in authentic nutrition 
     <script>
       const pages = ["profile", "edit", "billing", "subscription"];
       const tabs = ["profile", "edit", "billing", "subscription"];
+      const sponsorPhoneStorageKey = "sponzobd.sponsor.phone";
+      const sponsorProfileStoragePrefix = "sponzobd.sponsor.profile";
+
+      const defaultBrandProfile = {
+        brandName: "GreenFresh BD",
+        industry: "Health & food",
+        location: "Dhaka",
+        country: "Bangladesh",
+        tagline:
+          "Organic health food products for health-conscious Bangladeshi consumers",
+        about:
+          "GreenFresh BD produces organic and natural health food products for health-conscious Bangladeshi consumers. Our range includes superfoods, health snacks, and nutrition supplements formulated for South Asian dietary needs.\n\nWe partner with health and wellness creators who believe in authentic nutrition content - not scripted ads. Every campaign we run is designed to feel like a genuine recommendation, not a commercial.",
+        website: "https://greenfreshbd.com",
+        typicalBudget: "৳20,000 - ৳40,000",
+        preferredPlatforms: "Instagram & YouTube",
+        preferredCreatorTags: [
+          "Health & wellness",
+          "Nutrition",
+          "Fitness lifestyle",
+          "Female audience 18-34",
+          "Dhaka-based reach",
+          "Authentic storytelling",
+        ],
+        logoUrl: "",
+        coverUrl: "",
+        memberSince: "Jan 2024",
+        sinceYear: 2024,
+        dealsCompleted: 7,
+        avgRating: 4.7,
+        ratingCount: 7,
+        campaignsPosted: 12,
+        totalPaidEscrow: "৳4.2L",
+        escrowDeals: 7,
+        profileStrength: 75,
+      };
+
+      let sponsorPhone = "";
+      let sponsorProfileState = { ...defaultBrandProfile };
+
+      function resolveSponsorPhone() {
+        const qp = new URLSearchParams(window.location.search);
+        const fromQuery = String(qp.get("phone") || "").trim();
+        if (fromQuery) {
+          localStorage.setItem(sponsorPhoneStorageKey, fromQuery);
+          return fromQuery;
+        }
+
+        const fromStorage = String(
+          localStorage.getItem(sponsorPhoneStorageKey) ||
+            localStorage.getItem("sponsorPhone") ||
+            "",
+        ).trim();
+        if (fromStorage) return fromStorage;
+
+        const fallback = "01700000000";
+        localStorage.setItem(sponsorPhoneStorageKey, fallback);
+        return fallback;
+      }
+
+      function profileStorageKey(phone) {
+        return `${sponsorProfileStoragePrefix}.${phone}`;
+      }
+
+      function initialsFromName(name) {
+        const text = String(name || "").trim();
+        if (!text) return "SP";
+        const words = text.split(/\s+/).filter(Boolean);
+        if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
+        return (words[0][0] + words[1][0]).toUpperCase();
+      }
+
+      function normalizeProfile(raw = {}) {
+        const profile = { ...defaultBrandProfile, ...(raw || {}) };
+        profile.preferredCreatorTags = Array.isArray(
+          profile.preferredCreatorTags,
+        )
+          ? profile.preferredCreatorTags
+              .map((item) => String(item || "").trim())
+              .filter(Boolean)
+              .slice(0, 12)
+          : [...defaultBrandProfile.preferredCreatorTags];
+        profile.profileStrength = Number.isFinite(
+          Number(profile.profileStrength),
+        )
+          ? Math.max(
+              0,
+              Math.min(100, Math.round(Number(profile.profileStrength))),
+            )
+          : defaultBrandProfile.profileStrength;
+        profile.avgRating = Number.isFinite(Number(profile.avgRating))
+          ? Number(Number(profile.avgRating).toFixed(1))
+          : defaultBrandProfile.avgRating;
+        profile.dealsCompleted = Number.isFinite(Number(profile.dealsCompleted))
+          ? Math.max(0, Math.round(Number(profile.dealsCompleted)))
+          : defaultBrandProfile.dealsCompleted;
+        profile.ratingCount = Number.isFinite(Number(profile.ratingCount))
+          ? Math.max(0, Math.round(Number(profile.ratingCount)))
+          : defaultBrandProfile.ratingCount;
+        profile.campaignsPosted = Number.isFinite(
+          Number(profile.campaignsPosted),
+        )
+          ? Math.max(0, Math.round(Number(profile.campaignsPosted)))
+          : defaultBrandProfile.campaignsPosted;
+        return profile;
+      }
+
+      function calculateProfileStrength(profile) {
+        let score = 35;
+        if (profile.brandName) score += 15;
+        if (profile.tagline) score += 10;
+        if ((profile.about || "").trim().length >= 120) score += 15;
+        if (profile.industry) score += 7;
+        if (profile.location) score += 7;
+        if (profile.website) score += 6;
+        if (profile.typicalBudget) score += 5;
+        return Math.max(0, Math.min(100, score));
+      }
 
       function switchTab(id) {
         pages.forEach((p) => {
@@ -2704,9 +2852,280 @@ We partner with health and wellness creators who believe in authentic nutrition 
         if (target) target.scrollTop = 0;
       }
 
-      function saveSettings() {
-        showToast("Profile saved successfully");
-        switchTab("profile");
+      function setNodeText(id, value) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.textContent = value;
+      }
+
+      function splitAboutParagraphs(about) {
+        const parts = String(about || "")
+          .split(/\n+/)
+          .map((part) => part.trim())
+          .filter(Boolean);
+        return [parts[0] || "", parts[1] || ""];
+      }
+
+      function websiteLabel(url) {
+        const value = String(url || "").trim();
+        if (!value) return "Not provided";
+        return value.replace(/^https?:\/\//i, "").replace(/\/$/, "");
+      }
+
+      function renderCreatorTags(tags) {
+        const wrap = document.getElementById("creator-tags-wrap");
+        if (!wrap) return;
+        const list = Array.isArray(tags) ? tags.filter(Boolean) : [];
+        if (!list.length) {
+          wrap.innerHTML =
+            '<span style="font-size: 11px; color: var(--tx3)">No creator preference tags yet</span>';
+          return;
+        }
+
+        wrap.innerHTML = list
+          .map((tag, idx) => {
+            const style =
+              idx === 0
+                ? "font-size: 11px; padding: 3px 9px; border-radius: 20px; background: var(--grn-l); color: var(--grn-3);"
+                : "font-size: 11px; padding: 3px 9px; border-radius: 20px; background: var(--srf2); color: var(--tx2);";
+            return `<span style="${style}">${tag}</span>`;
+          })
+          .join("");
+      }
+
+      function renderProfile(profile) {
+        sponsorProfileState = normalizeProfile(profile);
+        const p = sponsorProfileState;
+        p.profileStrength = calculateProfileStrength(p);
+
+        const initials = initialsFromName(p.brandName);
+        const shortWebsite = websiteLabel(p.website);
+        const locationText = [p.location, p.country].filter(Boolean).join(", ");
+        const memberText = `Member since ${p.memberSince || "Not set"}`;
+        const [aboutPrimary, aboutSecondary] = splitAboutParagraphs(p.about);
+
+        setNodeText("sb-avatar", initials);
+        setNodeText("sb-name", p.brandName || "Brand name");
+        setNodeText(
+          "sb-sub",
+          [p.industry, p.location].filter(Boolean).join(" · ") || "No subtitle",
+        );
+        setNodeText("sb-plan", "Pro plan");
+        setNodeText("top-plan-badge", "Pro plan");
+
+        setNodeText("brand-avatar", initials);
+        setNodeText("brand-name-view", p.brandName || "Brand name");
+        setNodeText("brand-tagline-view", p.tagline || "Add a tagline");
+        setNodeText(
+          "industry-location-pill",
+          [p.industry, p.location].filter(Boolean).join(" · ") || "Not set",
+        );
+        setNodeText(
+          "brand-member-since",
+          `On SponzoBD since ${p.memberSince || "Not set"}`,
+        );
+        setNodeText("meta-location", locationText || "Location not set");
+        setNodeText("meta-member-since", memberText);
+
+        const metaWebsite = document.getElementById("meta-website");
+        if (metaWebsite) {
+          metaWebsite.textContent = shortWebsite;
+          metaWebsite.href = p.website || "#";
+        }
+
+        setNodeText("stats-deals", String(p.dealsCompleted || 0));
+        const ratingWrap = document.getElementById("stats-rating-wrap");
+        if (ratingWrap) {
+          ratingWrap.innerHTML = `${p.avgRating}<span style="font-size: 12px; color: var(--tx3); font-weight: 400">/5</span>`;
+        }
+        setNodeText(
+          "stats-rating-count",
+          `From ${p.ratingCount || 0} creators`,
+        );
+        setNodeText("stats-campaigns", String(p.campaignsPosted || 0));
+        setNodeText("stats-since", `Since ${p.memberSince || "Not set"}`);
+        setNodeText("stats-total-paid", p.totalPaidEscrow || "৳0");
+        setNodeText(
+          "stats-escrow-note",
+          `All via escrow (${p.escrowDeals || 0} deals)`,
+        );
+
+        setNodeText(
+          "about-primary",
+          aboutPrimary || "No about description yet.",
+        );
+        setNodeText("about-secondary", aboutSecondary || "");
+        renderCreatorTags(p.preferredCreatorTags);
+
+        setNodeText("detail-industry", p.industry || "Not set");
+        setNodeText("detail-location", locationText || "Not set");
+        setNodeText("detail-website", shortWebsite);
+        setNodeText("detail-budget", p.typicalBudget || "Not set");
+        setNodeText("detail-platforms", p.preferredPlatforms || "Not set");
+
+        setNodeText("profile-strength-pct", `${p.profileStrength}%`);
+        const strengthFill = document.getElementById("profile-strength-fill");
+        if (strengthFill) strengthFill.style.width = `${p.profileStrength}%`;
+        setNodeText(
+          "profile-strength-note",
+          p.logoUrl
+            ? "Great profile quality. Keep campaign details specific for better creator fit."
+            : "Add a logo to boost trust and increase campaign application rates.",
+        );
+
+        const brandNameInput = document.getElementById("brand-name-inp");
+        if (brandNameInput) brandNameInput.value = p.brandName || "";
+
+        const industrySel = document.getElementById("industry-sel");
+        if (industrySel)
+          industrySel.value = p.industry || defaultBrandProfile.industry;
+
+        const taglineInput = document.getElementById("tagline-inp");
+        if (taglineInput) taglineInput.value = p.tagline || "";
+
+        const aboutArea = document.getElementById("about-ta");
+        if (aboutArea) aboutArea.value = p.about || "";
+
+        const locationSel = document.getElementById("location-sel");
+        if (locationSel)
+          locationSel.value = p.location || defaultBrandProfile.location;
+
+        const websiteInput = document.getElementById("website-inp");
+        if (websiteInput) websiteInput.value = p.website || "";
+
+        const budgetSel = document.getElementById("budget-sel");
+        if (budgetSel)
+          budgetSel.value =
+            p.typicalBudget || defaultBrandProfile.typicalBudget;
+
+        const platformsSel = document.getElementById("platforms-sel");
+        if (platformsSel) {
+          platformsSel.value =
+            p.preferredPlatforms || defaultBrandProfile.preferredPlatforms;
+        }
+
+        updateTaglineCount();
+        updateAboutCount();
+      }
+
+      function collectProfileFromForm() {
+        const brandName =
+          document.getElementById("brand-name-inp")?.value?.trim() || "";
+        const industry =
+          document.getElementById("industry-sel")?.value?.trim() || "";
+        const tagline =
+          document.getElementById("tagline-inp")?.value?.trim() || "";
+        const about = document.getElementById("about-ta")?.value?.trim() || "";
+        const location =
+          document.getElementById("location-sel")?.value?.trim() || "";
+        const website =
+          document.getElementById("website-inp")?.value?.trim() || "";
+        const typicalBudget =
+          document.getElementById("budget-sel")?.value?.trim() || "";
+        const preferredPlatforms =
+          document.getElementById("platforms-sel")?.value?.trim() || "";
+
+        const next = {
+          ...sponsorProfileState,
+          brandName,
+          industry,
+          tagline,
+          about,
+          location,
+          website,
+          typicalBudget,
+          preferredPlatforms,
+        };
+        next.profileStrength = calculateProfileStrength(next);
+        return normalizeProfile(next);
+      }
+
+      function readLocalProfile(phone) {
+        try {
+          const raw = localStorage.getItem(profileStorageKey(phone));
+          if (!raw) return null;
+          return normalizeProfile(JSON.parse(raw));
+        } catch (err) {
+          return null;
+        }
+      }
+
+      function writeLocalProfile(phone, profile) {
+        try {
+          localStorage.setItem(
+            profileStorageKey(phone),
+            JSON.stringify(profile),
+          );
+        } catch (err) {
+          // ignore localStorage quota errors
+        }
+      }
+
+      async function loadProfileFromApi(phone) {
+        const res = await fetch(
+          `${window.location.origin}/api/sponsor/profile/${encodeURIComponent(phone)}`,
+        );
+        if (!res.ok) {
+          throw new Error(`Profile API failed (${res.status})`);
+        }
+        const data = await res.json();
+        return normalizeProfile(data?.profile || {});
+      }
+
+      async function saveSettings() {
+        const nextProfile = collectProfileFromForm();
+        renderProfile(nextProfile);
+        writeLocalProfile(sponsorPhone, nextProfile);
+
+        try {
+          const res = await fetch(
+            `${window.location.origin}/api/sponsor/profile/${encodeURIComponent(sponsorPhone)}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                "x-user-phone": sponsorPhone,
+              },
+              body: JSON.stringify(nextProfile),
+            },
+          );
+
+          if (!res.ok) {
+            throw new Error(`Save failed (${res.status})`);
+          }
+
+          const payload = await res.json();
+          const serverProfile = normalizeProfile(
+            payload?.profile || nextProfile,
+          );
+          renderProfile(serverProfile);
+          writeLocalProfile(sponsorPhone, serverProfile);
+          showToast("Profile saved successfully");
+          switchTab("profile");
+        } catch (err) {
+          showToast("Saved locally. Server sync failed.");
+        }
+      }
+
+      async function initializeSponsorProfile() {
+        sponsorPhone = resolveSponsorPhone();
+
+        const localProfile = readLocalProfile(sponsorPhone);
+        if (localProfile) {
+          renderProfile(localProfile);
+        } else {
+          renderProfile(defaultBrandProfile);
+        }
+
+        try {
+          const remoteProfile = await loadProfileFromApi(sponsorPhone);
+          renderProfile(remoteProfile);
+          writeLocalProfile(sponsorPhone, remoteProfile);
+        } catch (err) {
+          if (!localProfile) {
+            showToast("Using local profile defaults");
+          }
+        }
       }
 
       function showToast(msg) {
@@ -2733,6 +3152,7 @@ We partner with health and wellness creators who believe in authentic nutrition 
       // init char counts
       updateTaglineCount();
       updateAboutCount();
+      initializeSponsorProfile();
     </script>
   </body>
 </html>
