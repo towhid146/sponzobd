@@ -3031,6 +3031,8 @@
         tb: "dealC",
         sb: "dealD",
       };
+      const CHAT_API_BASE = "/api/chat/deals";
+      const LAST_MESSAGE_AT = {};
 
       function loadSharedDeals() {
         try {
@@ -3072,6 +3074,142 @@
         return shared[dealId] && typeof shared[dealId] === "object"
           ? shared[dealId]
           : {};
+      }
+
+      async function fetchDealsFromServer() {
+        const ids = Object.values(DEAL_ID_BY_CONV).join(",");
+        try {
+          const res = await fetch(
+            `${CHAT_API_BASE}?ids=${encodeURIComponent(ids)}`,
+          );
+          if (!res.ok) return;
+          const data = await res.json();
+          const deals = data?.deals || {};
+          const shared = loadSharedDeals();
+          Object.entries(deals).forEach(([dealId, state]) => {
+            const prev =
+              shared[dealId] && typeof shared[dealId] === "object"
+                ? shared[dealId]
+                : {};
+            shared[dealId] = {
+              ...prev,
+              ...(state || {}),
+              lastUpdatedAt: Date.now(),
+            };
+          });
+          saveSharedDeals(shared);
+          renderAllConversationChrome();
+          updateQA(active);
+        } catch (_err) {
+          // Keep local fallback if API is unavailable.
+        }
+      }
+
+      async function patchDealState(convId, patch) {
+        const dealId = DEAL_ID_BY_CONV[convId];
+        if (!dealId) return;
+        updateSharedDeal(dealId, patch);
+        try {
+          await fetch(`${CHAT_API_BASE}/${encodeURIComponent(dealId)}/state`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(patch),
+          });
+        } catch (_err) {
+          // Local state already updated.
+        }
+      }
+
+      function formatMsgTime(value) {
+        const d = new Date(value || Date.now());
+        const hh = d.getHours();
+        const mm = String(d.getMinutes()).padStart(2, "0");
+        const ap = hh >= 12 ? "PM" : "AM";
+        const hr = hh % 12 || 12;
+        return `${hr}:${mm} ${ap}`;
+      }
+
+      function appendIncomingMessage(convId, message) {
+        const thread = document.getElementById("thread-" + convId);
+        if (!thread || !message?._id) return;
+        const existing = thread.querySelector(
+          `[data-server-msg-id="${message._id}"]`,
+        );
+        if (existing) return;
+
+        const fromSponsee = message.senderRole === "sponsee";
+        const wrap = document.createElement("div");
+        wrap.className = "msg-wrap" + (fromSponsee ? " me" : "");
+        wrap.setAttribute("data-server-msg-id", String(message._id));
+
+        const avatar = fromSponsee
+          ? '<div class="m-av av-sb">LA</div>'
+          : `<div class="m-av av-${convId}">${convId.toUpperCase()}</div>`;
+        const bubbleClass = fromSponsee ? "b-me" : "b-sp";
+        const timeAlign = fromSponsee ? " r" : "";
+
+        wrap.innerHTML =
+          avatar +
+          '<div><div class="bubble ' +
+          bubbleClass +
+          '">' +
+          escapeHtml(message.text || "") +
+          '</div><div class="msg-t' +
+          timeAlign +
+          '">' +
+          formatMsgTime(message.createdAt) +
+          "</div></div>";
+
+        thread.appendChild(wrap);
+        if (convId === active) {
+          thread.scrollTop = thread.scrollHeight;
+        }
+      }
+
+      async function fetchMessagesForConv(convId) {
+        const dealId = DEAL_ID_BY_CONV[convId];
+        if (!dealId) return;
+        const after = LAST_MESSAGE_AT[dealId];
+        const params = new URLSearchParams();
+        params.set("limit", "80");
+        if (after) params.set("after", after);
+        try {
+          const res = await fetch(
+            `${CHAT_API_BASE}/${encodeURIComponent(dealId)}/messages?${params.toString()}`,
+          );
+          if (!res.ok) return;
+          const data = await res.json();
+          const messages = Array.isArray(data?.messages) ? data.messages : [];
+          messages.forEach((msg) => appendIncomingMessage(convId, msg));
+          if (messages.length) {
+            LAST_MESSAGE_AT[dealId] = messages[messages.length - 1].createdAt;
+          }
+        } catch (_err) {
+          // Ignore transient polling/network errors.
+        }
+      }
+
+      async function sendServerMessage(convId, text) {
+        const dealId = DEAL_ID_BY_CONV[convId];
+        if (!dealId) return;
+        try {
+          const res = await fetch(
+            `${CHAT_API_BASE}/${encodeURIComponent(dealId)}/messages`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ senderRole: "sponsee", text }),
+            },
+          );
+          if (!res.ok) return;
+          const data = await res.json();
+          if (data?.message) {
+            appendIncomingMessage(convId, data.message);
+            LAST_MESSAGE_AT[dealId] = data.message.createdAt;
+          }
+        } catch (_err) {
+          // UI still works with local fallback state.
+        }
       }
 
       function escapeHtml(value) {
@@ -3598,6 +3736,7 @@
           const b = document.getElementById("jbtn-" + c);
           if (b) b.classList.remove("on");
         });
+        fetchMessagesForConv(id);
       }
 
       function updateBadge() {
@@ -3671,7 +3810,7 @@
         state.stageLabel = "Deal record confirmed";
         state.unread = false;
         state.ctxLbl = "Agreed · awaiting escrow";
-        updateSharedDeal("dealB", {
+        patchDealState("nl", {
           dealRecordSponseeConfirmed: true,
           sponseePreview: "You confirmed the deal record — waiting escrow",
           sponsorPreview: "Creator confirmed the deal record",
@@ -3718,7 +3857,7 @@
         state.stageLabel = "Awaiting sponsor response";
         state.unread = false;
         state.ctxLbl = "Terms sent · waiting sponsor reply";
-        updateSharedDeal("dealA", {
+        patchDealState("gf", {
           creatorSentTerms: true,
           termsStatus: "proposed",
           sponseePreview: state.preview,
@@ -3808,7 +3947,7 @@
         state.stageLabel = "Content submitted";
         state.unread = false;
         state.ctxLbl = "Submitted · waiting review";
-        updateSharedDeal("dealC", {
+        patchDealState("tb", {
           contentSubmitted: true,
           sponseePreview: state.preview,
           sponsorPreview: "Creator submitted content — review required",
@@ -3846,7 +3985,7 @@
         state.preview = `You rated StyleBox BD ${rating}/5`;
         state.stageLabel = "Rating submitted";
         state.unread = false;
-        updateSharedDeal("dealD", {
+        patchDealState("sb", {
           sponseeRated: true,
           sponseeRating: rating,
           sponseePreview: state.preview,
@@ -3857,31 +3996,20 @@
         T("Rating submitted — visible on StyleBox BD's profile");
       }
 
-      function sendMsg() {
+      async function sendMsg() {
         const inp = document.getElementById("msg-inp");
         const text = inp.value.trim();
         if (!text) return;
         const state = getConversationState(active);
-        const thread = document.getElementById("thread-" + active);
-        const w = document.createElement("div");
-        w.className = "msg-wrap me";
-        w.innerHTML =
-          '<div class="m-av av-sb">LA</div><div><div class="bubble b-me">' +
-          text +
-          '</div><div class="msg-t r">Just now</div></div>';
-        thread.appendChild(w);
-        thread.scrollTop = thread.scrollHeight;
+        await sendServerMessage(active, text);
         inp.value = "";
         state.preview = text;
         state.unread = false;
-        const dealId = DEAL_ID_BY_CONV[active];
-        if (dealId) {
-          updateSharedDeal(dealId, {
-            sponseePreview: text,
-            sponsorPreview: text,
-            lastSponseeMessage: text,
-          });
-        }
+        patchDealState(active, {
+          sponseePreview: text,
+          sponsorPreview: text,
+          lastSponseeMessage: text,
+        });
         saveMessageState();
         renderConversationList();
       }
@@ -3896,6 +4024,8 @@
       // init
       (function () {
         renderAllConversationChrome();
+        fetchDealsFromServer();
+        fetchMessagesForConv("gf");
         updateQA("gf");
         const search = document.querySelector(".conv-search .csi");
         if (search) {
@@ -3911,6 +4041,11 @@
           const t = document.getElementById("thread-gf");
           t.scrollTop = t.scrollHeight;
         }, 100);
+
+        setInterval(() => {
+          fetchDealsFromServer();
+          fetchMessagesForConv(active);
+        }, 4000);
       })();
 
       window.addEventListener("storage", (event) => {

@@ -2659,6 +2659,14 @@
         rk: "dealC",
         fa: "dealD",
       };
+      const CONV_BY_DEAL_ID = {
+        dealA: "la",
+        dealB: "ni",
+        dealC: "rk",
+        dealD: "fa",
+      };
+      const CHAT_API_BASE = "/api/chat/deals";
+      const LAST_MESSAGE_AT = {};
 
       function loadSharedDeals() {
         try {
@@ -2700,6 +2708,144 @@
         return shared[dealId] && typeof shared[dealId] === "object"
           ? shared[dealId]
           : {};
+      }
+
+      async function fetchDealsFromServer() {
+        const ids = Object.values(DEAL_ID_BY_CONV).join(",");
+        try {
+          const res = await fetch(
+            `${CHAT_API_BASE}?ids=${encodeURIComponent(ids)}`,
+          );
+          if (!res.ok) return;
+          const data = await res.json();
+          const deals = data?.deals || {};
+          const shared = loadSharedDeals();
+          Object.entries(deals).forEach(([dealId, state]) => {
+            const prev =
+              shared[dealId] && typeof shared[dealId] === "object"
+                ? shared[dealId]
+                : {};
+            shared[dealId] = {
+              ...prev,
+              ...(state || {}),
+              lastUpdatedAt: Date.now(),
+            };
+          });
+          saveSharedDeals(shared);
+          syncSponsorFromShared();
+        } catch (_err) {
+          // Keep local fallback if API is temporarily unavailable.
+        }
+      }
+
+      async function patchDealState(convId, patch) {
+        const dealId = DEAL_ID_BY_CONV[convId];
+        if (!dealId) return;
+        updateSharedDeal(dealId, patch);
+        try {
+          await fetch(`${CHAT_API_BASE}/${encodeURIComponent(dealId)}/state`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(patch),
+          });
+        } catch (_err) {
+          // Local state is already updated.
+        }
+      }
+
+      function formatMsgTime(value) {
+        const d = new Date(value || Date.now());
+        const hh = d.getHours();
+        const mm = String(d.getMinutes()).padStart(2, "0");
+        const ap = hh >= 12 ? "PM" : "AM";
+        const hr = hh % 12 || 12;
+        return `${hr}:${mm} ${ap}`;
+      }
+
+      function appendIncomingMessage(convId, message) {
+        const thread = document.getElementById("thread-" + convId);
+        if (!thread || !message?._id) return;
+        const existing = thread.querySelector(
+          `[data-server-msg-id="${message._id}"]`,
+        );
+        if (existing) return;
+
+        const fromSponsor = message.senderRole === "sponsor";
+        const wrap = document.createElement("div");
+        wrap.className = "msg-wrap" + (fromSponsor ? " me" : "");
+        wrap.setAttribute("data-server-msg-id", String(message._id));
+
+        const avatar = fromSponsor
+          ? '<div class="m-av av-s">GF</div>'
+          : `<div class="m-av av-${convId}">${convId.toUpperCase()}</div>`;
+        const bubbleClass = fromSponsor ? "b-me" : "b-cr";
+        const timeAlign = fromSponsor ? " r" : "";
+
+        wrap.innerHTML =
+          avatar +
+          '<div><div class="bubble ' +
+          bubbleClass +
+          '">' +
+          String(message.text || "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;") +
+          '</div><div class="msg-t' +
+          timeAlign +
+          '">' +
+          formatMsgTime(message.createdAt) +
+          "</div></div>";
+
+        thread.appendChild(wrap);
+        if (convId === active) {
+          thread.scrollTop = thread.scrollHeight;
+        }
+      }
+
+      async function fetchMessagesForConv(convId) {
+        const dealId = DEAL_ID_BY_CONV[convId];
+        if (!dealId) return;
+        const after = LAST_MESSAGE_AT[dealId];
+        const params = new URLSearchParams();
+        params.set("limit", "80");
+        if (after) params.set("after", after);
+        try {
+          const res = await fetch(
+            `${CHAT_API_BASE}/${encodeURIComponent(dealId)}/messages?${params.toString()}`,
+          );
+          if (!res.ok) return;
+          const data = await res.json();
+          const messages = Array.isArray(data?.messages) ? data.messages : [];
+          messages.forEach((msg) => appendIncomingMessage(convId, msg));
+          if (messages.length) {
+            LAST_MESSAGE_AT[dealId] = messages[messages.length - 1].createdAt;
+          }
+        } catch (_err) {
+          // Ignore transient polling/network errors.
+        }
+      }
+
+      async function sendServerMessage(convId, text) {
+        const dealId = DEAL_ID_BY_CONV[convId];
+        if (!dealId) return;
+        try {
+          const res = await fetch(
+            `${CHAT_API_BASE}/${encodeURIComponent(dealId)}/messages`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ senderRole: "sponsor", text }),
+            },
+          );
+          if (!res.ok) return;
+          const data = await res.json();
+          if (data?.message) {
+            appendIncomingMessage(convId, data.message);
+            LAST_MESSAGE_AT[dealId] = data.message.createdAt;
+          }
+        } catch (_err) {
+          // UI will still show local fallback in sendMsg.
+        }
       }
 
       function setConvSummary(convId, preview, stageLabel) {
@@ -2823,6 +2969,7 @@
       }
 
       function sw(id, el) {
+        active = id;
         document
           .querySelectorAll(".conv-item")
           .forEach((c) => c.classList.remove("active"));
@@ -2846,13 +2993,13 @@
           if (e2) e2.style.display = "none";
         });
         updateQA(id);
-        active = id;
         CONVS.forEach((c) => {
           const d = document.getElementById("jd-" + c);
           if (d) d.classList.remove("on");
           const b = document.getElementById("jbtn-" + c);
           if (b) b.classList.remove("on");
         });
+        fetchMessagesForConv(id);
       }
 
       function updateBadge() {
@@ -2907,7 +3054,7 @@
 
       function acceptTerms() {
         markTermsAcceptedUI();
-        updateSharedDeal("dealA", {
+        patchDealState("la", {
           termsStatus: "accepted",
           termsAccepted: true,
           sponsorPreview: "Terms accepted — deal record pending",
@@ -2923,7 +3070,7 @@
 
       function confirmRecord() {
         markDealRecordConfirmedUI();
-        updateSharedDeal("dealB", {
+        patchDealState("ni", {
           dealRecordSponsorConfirmed: true,
           sponsorPreview: "Deal record confirmed — fund escrow",
           sponseePreview: "Sponsor confirmed the deal record",
@@ -2956,7 +3103,7 @@
           '<div class="msg-t r">Just now</div></div>';
         thread.appendChild(w);
         thread.scrollTop = thread.scrollHeight;
-        updateSharedDeal("dealC", {
+        patchDealState("rk", {
           escrowFunded: true,
           sponsorPreview: "Escrow funded — creator can start work",
           sponseePreview: "Escrow funded — you can start work now",
@@ -2997,7 +3144,7 @@
         thread.appendChild(w);
         thread.scrollTop = thread.scrollHeight;
         hidePanel("counter-panel");
-        updateSharedDeal("dealA", {
+        patchDealState("la", {
           termsStatus: "countered",
           sponsorPreview: "Counter proposal sent",
           sponseePreview: "Sponsor sent a counter proposal",
@@ -3027,7 +3174,7 @@
         thread.appendChild(w);
         thread.scrollTop = thread.scrollHeight;
         hidePanel("revision-panel");
-        updateSharedDeal("dealC", {
+        patchDealState("rk", {
           revisionRequested: true,
           sponsorPreview: "Revision requested from creator",
           sponseePreview: "Sponsor requested revisions",
@@ -3059,7 +3206,7 @@
           "/5 · Faria Ahmed" +
           (note ? '<br><br>"' + note + '"' : "") +
           '<div class="rv-by">— Visible on Faria\'s creator profile · submitted just now</div></div>';
-        updateSharedDeal("dealD", {
+        patchDealState("fa", {
           sponsorRated: true,
           sponsorRating: ratingCr,
           sponsorPreview: "You rated creator " + ratingCr + "/5",
@@ -3068,28 +3215,17 @@
         T("Rating submitted — visible on Faria Ahmed's public profile");
       }
 
-      function sendMsg() {
+      async function sendMsg() {
         const inp = document.getElementById("msg-inp");
         const text = inp.value.trim();
         if (!text) return;
-        const thread = document.getElementById("thread-" + active);
-        const w = document.createElement("div");
-        w.className = "msg-wrap me";
-        w.innerHTML =
-          '<div class="m-av av-s">GF</div><div><div class="bubble b-me">' +
-          text +
-          '</div><div class="msg-t r">Just now</div></div>';
-        thread.appendChild(w);
-        thread.scrollTop = thread.scrollHeight;
+        await sendServerMessage(active, text);
         inp.value = "";
-        const dealId = DEAL_ID_BY_CONV[active];
-        if (dealId) {
-          updateSharedDeal(dealId, {
-            sponsorPreview: text,
-            sponseePreview: text,
-            lastSponsorMessage: text,
-          });
-        }
+        patchDealState(active, {
+          sponsorPreview: text,
+          sponseePreview: text,
+          lastSponsorMessage: text,
+        });
       }
 
       function T(m) {
@@ -3104,11 +3240,18 @@
         document.getElementById("thread-la").style.flexDirection = "column";
         document.getElementById("ctx-la").style.display = "flex";
         syncSponsorFromShared();
+        fetchDealsFromServer();
+        fetchMessagesForConv("la");
         updateQA("la");
         setTimeout(() => {
           const t = document.getElementById("thread-la");
           t.scrollTop = t.scrollHeight;
         }, 100);
+
+        setInterval(() => {
+          fetchDealsFromServer();
+          fetchMessagesForConv(active);
+        }, 4000);
       })();
 
       window.addEventListener("storage", (event) => {

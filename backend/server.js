@@ -16,6 +16,8 @@ app.use(express.static(path.resolve(__dirname, "..")));
 let paymentCollection;
 let sponseeUsersCollection;
 let sponsorHomeStatesCollection;
+let chatDealsCollection;
+let chatMessagesCollection;
 
 class InMemoryCollection {
   constructor(keyField) {
@@ -62,6 +64,38 @@ class InMemoryCollection {
 
   async createIndex() {
     return `${this.keyField}_idx`;
+  }
+}
+
+class InMemoryMessageCollection {
+  constructor() {
+    this.rows = [];
+    this.seq = 1;
+  }
+
+  async insertOne(doc) {
+    const now = new Date();
+    const row = {
+      ...doc,
+      _id: String(this.seq++),
+      createdAt: doc.createdAt || now.toISOString(),
+    };
+    this.rows.push(row);
+    return { acknowledged: true, insertedId: row._id };
+  }
+
+  async findByDeal(dealId, options = {}) {
+    const limit = Math.max(1, Math.min(Number(options.limit || 50), 200));
+    const after = options.after ? String(options.after) : "";
+    const filtered = this.rows
+      .filter((row) => row.dealId === dealId)
+      .filter((row) => (!after ? true : String(row.createdAt) > after))
+      .sort((a, b) => String(a.createdAt).localeCompare(String(b.createdAt)));
+    return filtered.slice(-limit);
+  }
+
+  async createIndex() {
+    return "memory_messages_idx";
   }
 }
 
@@ -617,6 +651,299 @@ function brandInitials(name) {
   return (words[0][0] + words[1][0]).toUpperCase();
 }
 
+const defaultDealStates = {
+  dealA: {
+    termsStatus: "proposed",
+    termsAccepted: false,
+    creatorSentTerms: true,
+    sponsorPreview:
+      "Terms proposed — ৳35,000 for 2 reels, 3 stories, YouTube short.",
+    sponseePreview: "We accepted your application! Please send your terms.",
+  },
+  dealB: {
+    dealRecordSponsorConfirmed: false,
+    dealRecordSponseeConfirmed: false,
+    sponsorPreview: "Deal record ready — your confirmation needed.",
+    sponseePreview: "Deal record sent — please confirm to proceed.",
+  },
+  dealC: {
+    escrowFunded: true,
+    contentSubmitted: false,
+    revisionRequested: false,
+    sponsorPreview: "Terms accepted — please fund escrow to start.",
+    sponseePreview: "Escrow funded ৳18,000 — you can start work now!",
+  },
+  dealD: {
+    sponsorRated: false,
+    sponseeRated: false,
+    sponsorPreview: "Payment released. Rate creator to complete the deal.",
+    sponseePreview: "Content approved · payment released. Please rate sponsor.",
+  },
+};
+
+function cleanDealId(value) {
+  const id = String(value || "")
+    .trim()
+    .slice(0, 64);
+  return /^[a-zA-Z0-9_-]+$/.test(id) ? id : "";
+}
+
+function sanitizeDealPatch(payload = {}) {
+  const toBool = (value) => value === true;
+  const toText = (value, max = 260) =>
+    String(value || "")
+      .trim()
+      .slice(0, max);
+  const toRating = (value) => {
+    const num = Number(value);
+    if (!Number.isFinite(num)) return null;
+    return Math.max(1, Math.min(5, Math.round(num)));
+  };
+
+  const patch = {};
+  if (payload.termsStatus !== undefined) {
+    patch.termsStatus = toText(payload.termsStatus, 40);
+  }
+  [
+    "termsAccepted",
+    "creatorSentTerms",
+    "dealRecordSponsorConfirmed",
+    "dealRecordSponseeConfirmed",
+    "escrowFunded",
+    "contentSubmitted",
+    "revisionRequested",
+    "sponsorRated",
+    "sponseeRated",
+  ].forEach((key) => {
+    if (payload[key] !== undefined) {
+      patch[key] = toBool(payload[key]);
+    }
+  });
+
+  [
+    "sponsorPreview",
+    "sponseePreview",
+    "lastSponsorMessage",
+    "lastSponseeMessage",
+  ].forEach((key) => {
+    if (payload[key] !== undefined) {
+      patch[key] = toText(payload[key], 400);
+    }
+  });
+
+  if (payload.sponsorRating !== undefined) {
+    const rating = toRating(payload.sponsorRating);
+    if (rating !== null) patch.sponsorRating = rating;
+  }
+  if (payload.sponseeRating !== undefined) {
+    const rating = toRating(payload.sponseeRating);
+    if (rating !== null) patch.sponseeRating = rating;
+  }
+
+  return patch;
+}
+
+function sanitizeMessagePayload(payload = {}) {
+  const senderRole = String(payload.senderRole || "")
+    .trim()
+    .toLowerCase();
+  const text = String(payload.text || "")
+    .trim()
+    .slice(0, 2000);
+  if (!text) return null;
+  if (!["sponsor", "sponsee", "system"].includes(senderRole)) return null;
+  return { senderRole, text };
+}
+
+async function ensureDealDoc(dealId) {
+  const existing = await chatDealsCollection.findOne({ dealId });
+  if (existing) return existing;
+
+  const nowIso = new Date().toISOString();
+  const seed = {
+    dealId,
+    state: {
+      ...(defaultDealStates[dealId] || {}),
+      lastUpdatedAt: Date.now(),
+    },
+    createdAt: nowIso,
+  };
+
+  await chatDealsCollection.updateOne(
+    { dealId },
+    { $setOnInsert: seed, $set: { updatedAt: nowIso } },
+    { upsert: true },
+  );
+
+  return (await chatDealsCollection.findOne({ dealId })) || seed;
+}
+
+async function getMessagesByDeal(dealId, after, limit) {
+  if (chatMessagesCollection instanceof InMemoryMessageCollection) {
+    return chatMessagesCollection.findByDeal(dealId, { after, limit });
+  }
+
+  const query = { dealId };
+  if (after) {
+    query.createdAt = { $gt: String(after) };
+  }
+
+  const rows = await chatMessagesCollection
+    .find(query)
+    .sort({ createdAt: 1 })
+    .limit(Math.max(1, Math.min(Number(limit || 50), 200)))
+    .toArray();
+
+  return rows;
+}
+
+app.get("/api/chat/deals", async (req, res) => {
+  try {
+    const ids = String(req.query.ids || "")
+      .split(",")
+      .map((id) => cleanDealId(id))
+      .filter(Boolean)
+      .slice(0, 20);
+
+    if (!ids.length) {
+      return res
+        .status(400)
+        .json({ error: "At least one deal id is required" });
+    }
+
+    const result = {};
+    for (const dealId of ids) {
+      const doc = await ensureDealDoc(dealId);
+      result[dealId] = doc.state || {};
+    }
+
+    return res.json({ deals: result });
+  } catch (err) {
+    console.error("Chat deals GET error:", err.message);
+    return res.status(500).json({ error: "Failed to load chat deals" });
+  }
+});
+
+app.patch("/api/chat/deals/:dealId/state", async (req, res) => {
+  try {
+    const dealId = cleanDealId(req.params.dealId);
+    if (!dealId) {
+      return res.status(400).json({ error: "Valid deal id is required" });
+    }
+
+    const patch = sanitizeDealPatch(req.body || {});
+    if (!Object.keys(patch).length) {
+      return res.status(400).json({ error: "No valid state fields supplied" });
+    }
+
+    const doc = await ensureDealDoc(dealId);
+    const nextState = {
+      ...(doc.state || {}),
+      ...patch,
+      lastUpdatedAt: Date.now(),
+    };
+
+    await chatDealsCollection.updateOne(
+      { dealId },
+      {
+        $set: {
+          state: nextState,
+          updatedAt: new Date().toISOString(),
+        },
+      },
+      { upsert: true },
+    );
+
+    return res.json({ ok: true, state: nextState });
+  } catch (err) {
+    console.error("Chat deal PATCH error:", err.message);
+    return res.status(500).json({ error: "Failed to update deal state" });
+  }
+});
+
+app.get("/api/chat/deals/:dealId/messages", async (req, res) => {
+  try {
+    const dealId = cleanDealId(req.params.dealId);
+    if (!dealId) {
+      return res.status(400).json({ error: "Valid deal id is required" });
+    }
+
+    const after = req.query.after ? String(req.query.after) : "";
+    const limit = Number(req.query.limit || 50);
+    const messages = await getMessagesByDeal(dealId, after, limit);
+
+    return res.json({ messages });
+  } catch (err) {
+    console.error("Chat messages GET error:", err.message);
+    return res.status(500).json({ error: "Failed to load messages" });
+  }
+});
+
+app.post("/api/chat/deals/:dealId/messages", async (req, res) => {
+  try {
+    const dealId = cleanDealId(req.params.dealId);
+    if (!dealId) {
+      return res.status(400).json({ error: "Valid deal id is required" });
+    }
+
+    const clean = sanitizeMessagePayload(req.body || {});
+    if (!clean) {
+      return res
+        .status(400)
+        .json({ error: "Valid senderRole and text are required" });
+    }
+
+    await ensureDealDoc(dealId);
+
+    const now = new Date().toISOString();
+    const message = {
+      dealId,
+      senderRole: clean.senderRole,
+      text: clean.text,
+      createdAt: now,
+    };
+
+    const insert = await chatMessagesCollection.insertOne(message);
+    const messageId = insert.insertedId ? String(insert.insertedId) : now;
+
+    const doc = await ensureDealDoc(dealId);
+    const nextState = {
+      ...(doc.state || {}),
+      lastUpdatedAt: Date.now(),
+      lastMessageAt: now,
+      ...(clean.senderRole === "sponsor"
+        ? {
+            sponsorPreview: clean.text,
+            sponseePreview: clean.text,
+            lastSponsorMessage: clean.text,
+          }
+        : clean.senderRole === "sponsee"
+          ? {
+              sponsorPreview: clean.text,
+              sponseePreview: clean.text,
+              lastSponseeMessage: clean.text,
+            }
+          : {}),
+    };
+
+    await chatDealsCollection.updateOne(
+      { dealId },
+      {
+        $set: {
+          state: nextState,
+          updatedAt: now,
+        },
+      },
+      { upsert: true },
+    );
+
+    return res.json({ ok: true, message: { ...message, _id: messageId } });
+  } catch (err) {
+    console.error("Chat message POST error:", err.message);
+    return res.status(500).json({ error: "Failed to send message" });
+  }
+});
+
 app.get("/api/sponsor/home/:phone", async (req, res) => {
   try {
     const phone = String(req.params.phone || "").trim();
@@ -946,8 +1273,14 @@ app.put("/api/sponsee/profile/:phone", async (req, res) => {
 
 async function start() {
   try {
+    // Long-running API server: keep a moderate warm pool and fail fast on topology issues.
     const client = new MongoClient(MONGODB_URI, {
-      serverSelectionTimeoutMS: 3000,
+      maxPoolSize: 50,
+      minPoolSize: 10,
+      maxIdleTimeMS: 5 * 60 * 1000,
+      connectTimeoutMS: 10 * 1000,
+      socketTimeoutMS: 30 * 1000,
+      serverSelectionTimeoutMS: 5 * 1000,
     });
     await client.connect();
     console.log(`Connected to MongoDB at ${MONGODB_URI}`);
@@ -956,6 +1289,8 @@ async function start() {
     paymentCollection = db.collection("payment_verifications");
     sponseeUsersCollection = db.collection("sponsee_users");
     sponsorHomeStatesCollection = db.collection("sponsor_home_states");
+    chatDealsCollection = db.collection("chat_deals");
+    chatMessagesCollection = db.collection("chat_messages");
 
     await paymentCollection.createIndex({ id: 1 }, { unique: true });
     await sponseeUsersCollection.createIndex({ phone: 1 }, { unique: true });
@@ -963,6 +1298,8 @@ async function start() {
       { phone: 1 },
       { unique: true },
     );
+    await chatDealsCollection.createIndex({ dealId: 1 }, { unique: true });
+    await chatMessagesCollection.createIndex({ dealId: 1, createdAt: 1 });
   } catch (err) {
     console.warn(
       "MongoDB unavailable. Starting with in-memory storage fallback.",
@@ -971,6 +1308,8 @@ async function start() {
     paymentCollection = new InMemoryCollection("id");
     sponseeUsersCollection = new InMemoryCollection("phone");
     sponsorHomeStatesCollection = new InMemoryCollection("phone");
+    chatDealsCollection = new InMemoryCollection("dealId");
+    chatMessagesCollection = new InMemoryMessageCollection();
   }
 
   app.listen(PORT, () => {
