@@ -2952,6 +2952,31 @@
         );
       }
 
+      function renderSponsorRatingSubmitted(ratingValue, ratingNote) {
+        const card = document.getElementById("review-card-sp");
+        if (!card) return;
+        const rating = Number(ratingValue);
+        if (!Number.isFinite(rating) || rating <= 0) return;
+        const stars = "⭐".repeat(Math.max(1, Math.min(5, Math.round(rating))));
+        card.innerHTML =
+          '<div class="rv-hd"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1.5L8 5H12L9 7.5L10 11L6.5 8.5L3 11L4 7.5L1 5H5Z" fill="#EF9F27"/></svg>Your rating submitted</div>' +
+          '<div class="rv-submitted">' +
+          stars +
+          " — " +
+          rating +
+          "/5 · Faria Ahmed" +
+          (ratingNote ? '<br><br>"' + ratingNote + '"' : "") +
+          '<div class="rv-by">— Synced from deal state</div></div>';
+      }
+
+      function markTermsPendingUI() {
+        const card = document.querySelector("#thread-la .tc-badge");
+        if (card) {
+          card.className = "tc-badge tc-pend";
+          card.textContent = "Awaiting your response";
+        }
+      }
+
       function syncSponsorFromShared() {
         const dealA = getSharedDeal("la");
         if (dealA.sponseeName) {
@@ -2960,6 +2985,7 @@
         if (dealA.termsAccepted) {
           markTermsAcceptedUI();
         } else if (dealA.sponsorPreview) {
+          markTermsPendingUI();
           setConvSummary(
             "la",
             dealA.sponsorPreview,
@@ -3000,6 +3026,10 @@
 
         const dealD = getSharedDeal("fa");
         if (dealD.sponsorRated && dealD.sponsorRating) {
+          renderSponsorRatingSubmitted(
+            dealD.sponsorRating,
+            dealD.sponsorReviewNote || "",
+          );
           setConvSummary(
             "fa",
             "You rated creator " + dealD.sponsorRating + "/5",
@@ -3256,6 +3286,7 @@
         patchDealState("fa", {
           sponsorRated: true,
           sponsorRating: ratingCr,
+          sponsorReviewNote: note,
           sponsorPreview: "You rated creator " + ratingCr + "/5",
           sponseePreview: "Sponsor rated this collaboration " + ratingCr + "/5",
         });

@@ -2232,6 +2232,7 @@
                 </div>
               </div>
               <div
+                id="terms-status-note-gf"
                 style="
                   text-align: center;
                   font-size: 11px;
@@ -3577,6 +3578,7 @@
       function syncSponseeFromShared() {
         const dealA = getSharedDeal("gf");
         const stateA = getConversationState("gf");
+        const termsNote = document.getElementById("terms-status-note-gf");
         if (dealA.termsAccepted) {
           stateA.preview =
             dealA.sponseePreview ||
@@ -3588,11 +3590,29 @@
             badge.className = "tc-badge tc-acc";
             badge.textContent = "Accepted by sponsor";
           }
+          if (termsNote) {
+            termsNote.textContent =
+              "Sponsor accepted your terms. Deal record will be generated next.";
+          }
         } else if (dealA.termsStatus === "countered") {
           stateA.preview =
             dealA.sponseePreview || "Sponsor sent a counter proposal";
           stateA.stageLabel = "Counter received";
           stateA.unread = true;
+          const badge = document.querySelector("#thread-gf .tc-badge");
+          if (badge) {
+            badge.className = "tc-badge";
+            badge.style.background = "var(--blu-l)";
+            badge.style.color = "var(--blu-t)";
+            badge.textContent = "Sponsor sent counter terms";
+          }
+          if (termsNote) {
+            termsNote.textContent =
+              "Sponsor countered your terms. Review messages and respond.";
+          }
+        } else if (termsNote) {
+          termsNote.textContent =
+            "Waiting for GreenFresh BD to accept or counter-propose...";
         }
 
         const dealB = getSharedDeal("nl");
@@ -3644,8 +3664,22 @@
           stateD.stageLabel = "Rated by sponsor";
           stateD.unread = true;
         }
-        if (dealD.sponseeRated) {
-          stateD.preview = `You rated sponsor ${dealD.sponseeRating || rating}/5`;
+        if (dealD.sponseeRated && dealD.sponseeRating) {
+          const submittedRating = Number(dealD.sponseeRating);
+          const card = document.getElementById("review-card-cr");
+          if (card && Number.isFinite(submittedRating)) {
+            const stars = "⭐".repeat(
+              Math.max(1, Math.min(5, Math.round(submittedRating))),
+            );
+            card.innerHTML =
+              '<div class="rv-hd"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1.5L8 5H12L9 7.5L10 11L6.5 8.5L3 11L4 7.5L1 5H5Z" fill="#EF9F27"/></svg>Your rating submitted</div>' +
+              '<div class="rv-submitted">' +
+              stars +
+              " — " +
+              submittedRating +
+              '/5 · StyleBox BD<div class="rv-by">— Synced from deal state</div></div>';
+          }
+          stateD.preview = `You rated sponsor ${submittedRating}/5`;
           stateD.stageLabel = "Rating submitted";
         }
       }
@@ -4000,6 +4034,7 @@
         patchDealState("sb", {
           sponseeRated: true,
           sponseeRating: rating,
+          sponseeReviewNote: note,
           sponseePreview: state.preview,
           sponsorPreview: `Creator rated this collaboration ${rating}/5`,
         });
