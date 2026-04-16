@@ -725,6 +725,7 @@ function sanitizeDealPatch(payload = {}) {
     "sponseePreview",
     "lastSponsorMessage",
     "lastSponseeMessage",
+    "sponseeName",
   ].forEach((key) => {
     if (payload[key] !== undefined) {
       patch[key] = toText(payload[key], 400);

@@ -2655,15 +2655,6 @@
       const SHARED_DEAL_KEY = "sponzobd.shared.deals.v1";
       const DEAL_ID_BY_CONV = {
         la: "dealA",
-        ni: "dealB",
-        rk: "dealC",
-        fa: "dealD",
-      };
-      const CONV_BY_DEAL_ID = {
-        dealA: "la",
-        dealB: "ni",
-        dealC: "rk",
-        dealD: "fa",
       };
       const CHAT_API_BASE = "/api/chat/deals";
       const LAST_MESSAGE_AT = {};
@@ -2712,6 +2703,7 @@
 
       async function fetchDealsFromServer() {
         const ids = Object.values(DEAL_ID_BY_CONV).join(",");
+        if (!ids) return;
         try {
           const res = await fetch(
             `${CHAT_API_BASE}?ids=${encodeURIComponent(ids)}`,
@@ -2733,8 +2725,57 @@
           });
           saveSharedDeals(shared);
           syncSponsorFromShared();
+          updateBadge();
         } catch (_err) {
           // Keep local fallback if API is temporarily unavailable.
+        }
+      }
+
+      function applySponseeIdentity(name) {
+        const cleanName = String(name || "").trim();
+        if (!cleanName) return;
+
+        const convName = document.querySelector("#ci-la .ci-name");
+        if (convName) convName.textContent = cleanName;
+
+        const ctxCreator = document.querySelector("#ctx-la .ctx-creator");
+        if (ctxCreator) {
+          const parts = ctxCreator.textContent
+            .split("·")
+            .map((part) => part.trim());
+          const tail = parts.slice(1).join(" · ");
+          ctxCreator.textContent = tail ? `${cleanName} · ${tail}` : cleanName;
+        }
+
+        const journeyTitle = document.querySelector("#jd-la .jd-hd-t");
+        if (journeyTitle) {
+          journeyTitle.textContent = `Deal journey · GreenFresh BD × ${cleanName}`;
+        }
+
+        const termsHeader = document.querySelector(
+          "#thread-la .terms-card .tc-hd",
+        );
+        if (
+          termsHeader &&
+          termsHeader.textContent.includes("Terms proposed by")
+        ) {
+          termsHeader.innerHTML = termsHeader.innerHTML.replace(
+            /Terms proposed by[^<]*/,
+            `Terms proposed by ${cleanName}`,
+          );
+        }
+
+        const initials = cleanName
+          .split(/\s+/)
+          .filter(Boolean)
+          .slice(0, 2)
+          .map((w) => w[0])
+          .join("")
+          .toUpperCase();
+        if (initials) {
+          document.querySelectorAll(".av-la").forEach((node) => {
+            node.textContent = initials;
+          });
         }
       }
 
@@ -2910,6 +2951,9 @@
 
       function syncSponsorFromShared() {
         const dealA = getSharedDeal("la");
+        if (dealA.sponseeName) {
+          applySponseeIdentity(dealA.sponseeName);
+        }
         if (dealA.termsAccepted) {
           markTermsAcceptedUI();
         } else if (dealA.sponsorPreview) {
@@ -2919,51 +2963,6 @@
             dealA.termsStatus === "countered"
               ? "Counter sent"
               : "Terms proposed",
-          );
-        }
-
-        const dealB = getSharedDeal("ni");
-        if (dealB.dealRecordSponsorConfirmed) {
-          markDealRecordConfirmedUI();
-        } else if (dealB.sponsorPreview) {
-          setConvSummary("ni", dealB.sponsorPreview, "Deal record");
-        }
-
-        const dealC = getSharedDeal("rk");
-        if (dealC.escrowFunded) {
-          setConvSummary(
-            "rk",
-            "Escrow funded — creator can start work",
-            "In progress",
-          );
-        }
-        if (dealC.contentSubmitted) {
-          setConvSummary(
-            "rk",
-            "Creator submitted content — review required",
-            "Review content",
-          );
-        } else if (dealC.revisionRequested) {
-          setConvSummary(
-            "rk",
-            "Revision requested from creator",
-            "Revision requested",
-          );
-        }
-
-        const dealD = getSharedDeal("fa");
-        if (dealD.sponsorRated && dealD.sponsorRating) {
-          setConvSummary(
-            "fa",
-            "You rated creator " + dealD.sponsorRating + "/5",
-            "Rating submitted",
-          );
-        }
-        if (dealD.sponseeRated && dealD.sponseeRating) {
-          setConvSummary(
-            "fa",
-            "Creator rated the collaboration " + dealD.sponseeRating + "/5",
-            "Rated by creator",
           );
         }
       }
