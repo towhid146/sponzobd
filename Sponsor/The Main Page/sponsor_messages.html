@@ -2655,6 +2655,9 @@
       const SHARED_DEAL_KEY = "sponzobd.shared.deals.v1";
       const DEAL_ID_BY_CONV = {
         la: "dealA",
+        ni: "dealB",
+        rk: "dealC",
+        fa: "dealD",
       };
       const CHAT_API_BASE = "/api/chat/deals";
       const LAST_MESSAGE_AT = {};
@@ -2963,6 +2966,51 @@
             dealA.termsStatus === "countered"
               ? "Counter sent"
               : "Terms proposed",
+          );
+        }
+
+        const dealB = getSharedDeal("ni");
+        if (dealB.dealRecordSponsorConfirmed) {
+          markDealRecordConfirmedUI();
+        } else if (dealB.sponsorPreview) {
+          setConvSummary("ni", dealB.sponsorPreview, "Deal record");
+        }
+
+        const dealC = getSharedDeal("rk");
+        if (dealC.escrowFunded) {
+          setConvSummary(
+            "rk",
+            "Escrow funded — creator can start work",
+            "In progress",
+          );
+        }
+        if (dealC.contentSubmitted) {
+          setConvSummary(
+            "rk",
+            "Creator submitted content — review required",
+            "Review content",
+          );
+        } else if (dealC.revisionRequested) {
+          setConvSummary(
+            "rk",
+            "Revision requested from creator",
+            "Revision requested",
+          );
+        }
+
+        const dealD = getSharedDeal("fa");
+        if (dealD.sponsorRated && dealD.sponsorRating) {
+          setConvSummary(
+            "fa",
+            "You rated creator " + dealD.sponsorRating + "/5",
+            "Rating submitted",
+          );
+        }
+        if (dealD.sponseeRated && dealD.sponseeRating) {
+          setConvSummary(
+            "fa",
+            "Creator rated the collaboration " + dealD.sponseeRating + "/5",
+            "Rated by creator",
           );
         }
       }
