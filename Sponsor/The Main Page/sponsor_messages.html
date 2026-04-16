@@ -3088,18 +3088,34 @@
 
       function updateQA(id) {
         const row = document.getElementById("qa-row");
-        if (id === "la")
-          row.innerHTML =
-            '<button class="qa qa-g" onclick="acceptTerms()">✓ Accept terms</button><button class="qa qa-a" onclick="showPanel(\'counter-panel\')">Counter-propose</button><button class="qa" onclick="T(\'Decline sent\')">Decline</button>';
-        else if (id === "ni")
+        const dealA = getSharedDeal("la");
+        const dealD = getSharedDeal("fa");
+        if (id === "la") {
+          if (dealA.termsAccepted) {
+            row.innerHTML =
+              '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Terms accepted · waiting for deal record</span>';
+          } else if (dealA.termsStatus === "countered") {
+            row.innerHTML =
+              '<button class="qa qa-g" onclick="acceptTerms()">✓ Accept countered terms</button><button class="qa qa-a" onclick="showPanel(\'counter-panel\')">Send another counter</button><button class="qa" onclick="T(\'Decline sent\')">Decline</button>';
+          } else {
+            row.innerHTML =
+              '<button class="qa qa-g" onclick="acceptTerms()">✓ Accept terms</button><button class="qa qa-a" onclick="showPanel(\'counter-panel\')">Counter-propose</button><button class="qa" onclick="T(\'Decline sent\')">Decline</button>';
+          }
+        } else if (id === "ni") {
           row.innerHTML =
             '<button class="qa qa-g" onclick="confirmRecord()">✓ Confirm deal record</button>';
-        else if (id === "rk")
+        } else if (id === "rk") {
           row.innerHTML =
             '<button class="qa qa-g" onclick="fundEscrow()">Fund escrow ৳18,000</button><button class="qa" onclick="T(\'Opening chat...\')">Open chat</button>';
-        else if (id === "fa")
-          row.innerHTML =
-            '<span style="font-size:12px;color:var(--tx3);padding:4px 0;">Deal completed · rate Faria above to finish</span>';
+        } else if (id === "fa") {
+          if (dealD.sponsorRated && dealD.sponsorRating) {
+            row.innerHTML =
+              '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Rating submitted · visible on creator profile</span>';
+          } else {
+            row.innerHTML =
+              '<span style="font-size:12px;color:var(--tx3);padding:4px 0;">Deal completed · rate Faria above to finish</span>';
+          }
+        }
       }
 
       function toggleJourney(id) {

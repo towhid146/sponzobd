@@ -3793,6 +3793,23 @@
         const row = document.getElementById("qa-row");
         const blueprint = MESSAGE_BLUEPRINTS[id];
         if (!row || !blueprint) return;
+        const dealA = getSharedDeal("gf");
+        const dealD = getSharedDeal("sb");
+        if (id === "gf" && dealA.termsAccepted) {
+          row.innerHTML =
+            '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Sponsor accepted your terms · waiting for deal record</span>';
+          return;
+        }
+        if (id === "gf" && dealA.termsStatus === "countered") {
+          row.innerHTML =
+            '<button class="qa qa-g" onclick="showPanel(\'terms-panel\')">Send revised terms</button><span style="font-size:12px;color:var(--tx3);padding:4px 0;">Counter received from sponsor</span>';
+          return;
+        }
+        if (id === "sb" && dealD.sponseeRated && dealD.sponseeRating) {
+          row.innerHTML =
+            '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Rating submitted · visible on sponsor profile</span>';
+          return;
+        }
         row.innerHTML = blueprint.qa
           .map((button) => {
             if (button.type === "terms") {
