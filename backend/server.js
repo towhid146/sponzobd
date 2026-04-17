@@ -85,6 +85,17 @@ class InMemoryMessageCollection {
     return this.rows.filter((row) => row.dealId === cleanDealId).length;
   }
 
+  async deleteMany(filter = {}) {
+    const dealId = String(filter.dealId || "").trim();
+    if (!dealId) return { acknowledged: true, deletedCount: 0 };
+    const before = this.rows.length;
+    this.rows = this.rows.filter((row) => row.dealId !== dealId);
+    return {
+      acknowledged: true,
+      deletedCount: Math.max(0, before - this.rows.length),
+    };
+  }
+
   async insertOne(doc) {
     const now = new Date();
     const row = {
@@ -873,6 +884,67 @@ async function ensureSeedMessagesForDeal(dealId) {
   }
 }
 
+function getDefaultDealStateForSeed(dealId) {
+  return {
+    ...(defaultDealStates[dealId] || {}),
+    lastUpdatedAt: Date.now(),
+    lastMessageAt: null,
+    lastSponsorMessage: "",
+    lastSponseeMessage: "",
+  };
+}
+
+async function resetAndSeedDeal(dealId) {
+  const nowIso = new Date().toISOString();
+  const baseState = getDefaultDealStateForSeed(dealId);
+  let lastSeedText = "";
+
+  await chatMessagesCollection.deleteMany({ dealId });
+
+  const seedMessages = defaultSeedMessagesByDeal[dealId] || [];
+  const baseTime = Date.now() - seedMessages.length * 60 * 1000;
+  for (let i = 0; i < seedMessages.length; i += 1) {
+    const message = seedMessages[i];
+    const createdAt = new Date(baseTime + i * 60 * 1000).toISOString();
+    lastSeedText = message.text;
+    await chatMessagesCollection.insertOne({
+      dealId,
+      senderRole: message.senderRole,
+      text: message.text,
+      createdAt,
+    });
+    baseState.lastMessageAt = createdAt;
+    if (message.senderRole === "sponsor") {
+      baseState.lastSponsorMessage = message.text;
+    } else if (message.senderRole === "sponsee") {
+      baseState.lastSponseeMessage = message.text;
+    }
+  }
+
+  if (lastSeedText) {
+    baseState.sponsorPreview = lastSeedText;
+    baseState.sponseePreview = lastSeedText;
+  }
+
+  const normalized = normalizeDealState(baseState);
+  await chatDealsCollection.updateOne(
+    { dealId },
+    {
+      $set: {
+        dealId,
+        state: normalized,
+        updatedAt: nowIso,
+      },
+      $setOnInsert: {
+        createdAt: nowIso,
+      },
+    },
+    { upsert: true },
+  );
+
+  return normalized;
+}
+
 async function ensureDealDoc(dealId) {
   const existing = await chatDealsCollection.findOne({ dealId });
   if (existing) {
@@ -1066,6 +1138,24 @@ app.post("/api/chat/deals/:dealId/messages", async (req, res) => {
   } catch (err) {
     console.error("Chat message POST error:", err.message);
     return res.status(500).json({ error: "Failed to send message" });
+  }
+});
+
+app.post("/api/chat/test/reset-seed/:dealId", async (req, res) => {
+  try {
+    const dealId = cleanDealId(req.params.dealId);
+    if (!dealId) {
+      return res.status(400).json({ error: "Valid deal id is required" });
+    }
+
+    const nextState = await resetAndSeedDeal(dealId);
+    const messages = await getMessagesByDeal(dealId, "", 50);
+    return res.json({ ok: true, dealId, state: nextState, messages });
+  } catch (err) {
+    console.error("Chat test reset-seed error:", err.message);
+    return res
+      .status(500)
+      .json({ error: "Failed to reset and seed chat data" });
   }
 });
 

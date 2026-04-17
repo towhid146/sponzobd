@@ -2626,6 +2626,11 @@
             <!-- INPUT AREA -->
             <div class="input-area">
               <div class="qa-row" id="qa-row"></div>
+              <div class="qa-row" id="test-tools-row">
+                <button class="qa" onclick="resetAndSeedDealATestData()">
+                  Reset demo data (GreenFresh BD x Towhidul Islam)
+                </button>
+              </div>
               <div class="msg-inp-row">
                 <input
                   class="msg-inp"
@@ -3672,6 +3677,36 @@
           sponseePreview: text,
           lastSponsorMessage: text,
         });
+      }
+
+      async function resetAndSeedDealATestData() {
+        const dealId = DEAL_ID_BY_CONV.la;
+        if (!dealId) {
+          T("Deal mapping missing for test seed");
+          return;
+        }
+
+        try {
+          const res = await fetch(
+            `/api/chat/test/reset-seed/${encodeURIComponent(dealId)}`,
+            {
+              method: "POST",
+            },
+          );
+          if (!res.ok) {
+            throw new Error("Reset API failed");
+          }
+
+          LAST_MESSAGE_AT[dealId] = "";
+          await fetchDealsFromServer();
+          await fetchMessagesForConv("la");
+          if (active === "la") {
+            setActive("la");
+          }
+          T("Demo chat reset: GreenFresh BD and Towhidul Islam");
+        } catch (_err) {
+          T("Could not reset demo chat data right now");
+        }
       }
 
       function T(m) {
