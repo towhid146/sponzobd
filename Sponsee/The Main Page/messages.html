@@ -3274,6 +3274,129 @@
         };
       }
 
+      function inferDealStage(deal = {}) {
+        if (!deal.termsAccepted) return "terms";
+        if (
+          !deal.dealCriteriaSubmitted ||
+          !deal.dealCriteriaApproved ||
+          !deal.dealRecordSponsorConfirmed ||
+          !deal.dealRecordSponseeConfirmed
+        ) {
+          return "record";
+        }
+        if (!deal.escrowFunded) return "escrow";
+        if (!deal.contentSubmitted) return "content";
+        if (!(deal.sponsorRated && deal.sponseeRated)) return "review";
+        return "complete";
+      }
+
+      const DEAL_PIPE_CONFIG = {
+        gf: {
+          labels: [
+            "Applied",
+            "Accepted",
+            "Terms negotiation",
+            "Deal record",
+            "Escrow",
+            "Content",
+            "Paid out",
+          ],
+          indexByStage: {
+            terms: 2,
+            record: 3,
+            escrow: 4,
+            content: 5,
+            review: 5,
+            complete: 6,
+          },
+        },
+        nl: {
+          labels: [
+            "Applied",
+            "Accepted",
+            "Terms agreed",
+            "Deal record",
+            "Escrow",
+            "Content",
+            "Paid out",
+          ],
+          indexByStage: {
+            terms: 2,
+            record: 3,
+            escrow: 4,
+            content: 5,
+            review: 5,
+            complete: 6,
+          },
+        },
+        tb: {
+          labels: [
+            "Applied",
+            "Accepted",
+            "Terms agreed",
+            "Deal record",
+            "Work in progress",
+            "Content",
+            "Paid out",
+          ],
+          indexByStage: {
+            terms: 2,
+            record: 3,
+            escrow: 4,
+            content: 5,
+            review: 5,
+            complete: 6,
+          },
+        },
+        sb: {
+          labels: [
+            "Applied",
+            "Accepted",
+            "Terms agreed",
+            "Deal record",
+            "Content approved",
+            "Paid out",
+          ],
+          indexByStage: {
+            terms: 2,
+            record: 3,
+            escrow: 3,
+            content: 4,
+            review: 4,
+            complete: 5,
+          },
+        },
+      };
+
+      function getDealProgressModel(id) {
+        const deal = getSharedDeal(id);
+        const config = DEAL_PIPE_CONFIG[id] || { labels: [], indexByStage: {} };
+        const stage = deal.dealStage || inferDealStage(deal);
+        const currentIndex = config.indexByStage[stage] ?? 0;
+        return {
+          deal,
+          stage,
+          labels: config.labels,
+          currentIndex,
+        };
+      }
+
+      function renderPipeMarkup(labels, currentIndex) {
+        return labels
+          .map((label, index) => {
+            const cls =
+              index < currentIndex
+                ? "dp done"
+                : index === currentIndex
+                  ? "dp now"
+                  : "dp";
+            const arrow =
+              index < labels.length - 1 ? '<span class="dp-arr">›</span>' : "";
+            return `<span class="${cls}">${escapeHtml(label)}</span>${arrow}`;
+          })
+          .join("");
+      }
+
       function renderConversationList() {
         const list = document.querySelector(".conv-list");
         if (!list) return;
@@ -3348,62 +3471,11 @@
         const amount = state.ctxAmt || blueprint.ctxAmt;
         const label = state.ctxLbl || blueprint.ctxLbl;
         const selectedCampaign = blueprint.campaign;
-
-        const pipeMarkup =
-          {
-            gf: [
-              "Applied",
-              "Accepted",
-              "Terms negotiation",
-              "Deal record",
-              "Escrow",
-              "Content",
-              "Paid out",
-            ],
-            nl: [
-              "Applied",
-              "Accepted",
-              "Terms agreed",
-              "Deal record",
-              "Escrow",
-              "Content",
-              "Paid out",
-            ],
-            tb: [
-              "Applied",
-              "Accepted",
-              "Terms agreed",
-              "Deal record",
-              "Work in progress",
-              "Content",
-              "Paid out",
-            ],
-            sb: [
-              "Applied",
-              "Accepted",
-              "Terms agreed",
-              "Deal record",
-              "Content approved",
-              "Paid out",
-            ],
-          }[id] || [];
-
-        const stageMarkup = pipeMarkup
-          .map((stage, index) => {
-            const isDone =
-              index < 2 || (id === "tb" && index < 4) || id === "sb";
-            const isNow =
-              (id === "gf" && index === 2) ||
-              (id === "nl" && index === 3) ||
-              (id === "tb" && index === 4);
-            const cls = isNow ? "dp now" : isDone ? "dp done" : "dp";
-            const arr =
-              index < pipeMarkup.length - 1
-                ? '<span class="dp-arr">›</span>'
-                : "";
-            return `<span class="${cls}">${escapeHtml(stage)}</span>${arr}`;
-          })
-          .join("");
+        const progress = getDealProgressModel(id);
+        const stageMarkup = renderPipeMarkup(
+          progress.labels,
+          progress.currentIndex,
+        );
 
         ctx.innerHTML = `
           <div class="ctx-left">
@@ -3434,6 +3506,7 @@
       }
 
       function renderJourneyStages(id, profile) {
+        const progress = getDealProgressModel(id);
         const item =
           {
             gf: [
@@ -3527,25 +3600,29 @@
             ],
           }[id] || [];
 
+        const currentIndex = progress.currentIndex;
+
         return item
           .map(([label, who, time, done, isNow], index) => {
-            const dotClass = isNow
+            const isDone = index < currentIndex;
+            const now = index === currentIndex;
+            const dotClass = now
               ? "jd-dot now"
-              : done
+              : isDone
                 ? "jd-dot done"
                 : "jd-dot";
-            const labelClass = isNow
+            const labelClass = now
               ? "jd-label now"
-              : done
+              : isDone
                 ? "jd-label done"
                 : "jd-label grey";
-            const lineClass = done ? "jd-line done" : "jd-line";
+            const lineClass = isDone ? "jd-line done" : "jd-line";
             const timeHtml = time
               ? `<div class="jd-time">${escapeHtml(time)}</div>`
               : "";
             return `
               <div class="jd-row">
-                <div class="${dotClass}">${done ? '<svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1 4l2 2L7 2" stroke="#3B6D11" stroke-width="1.3" stroke-linecap="round"/></svg>' : isNow ? '<svg width="7" height="7" viewBox="0 0 7 7"><circle cx="3.5" cy="3.5" r="2.5" fill="var(--blu-t)" /></svg>' : ""}</div>
+                <div class="${dotClass}">${isDone ? '<svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1 4l2 2L7 2" stroke="#3B6D11" stroke-width="1.3" stroke-linecap="round"/></svg>' : now ? '<svg width="7" height="7" viewBox="0 0 7 7"><circle cx="3.5" cy="3.5" r="2.5" fill="var(--blu-t)" /></svg>' : ""}</div>
                 <div class="jd-info">
                   <div class="${labelClass}">${escapeHtml(label)}</div>
                   <div class="jd-who">${escapeHtml(who)}</div>
@@ -3617,23 +3694,30 @@
 
         const dealB = getSharedDeal("nl");
         const stateB = getConversationState("nl");
-        if (
+        if (dealB.dealCriteriaApproved) {
+          stateB.preview =
+            dealB.sponseePreview ||
+            "Sponsor approved criteria — escrow released";
+          stateB.stageLabel = "Escrow released";
+          stateB.ctxLbl = "Criteria approved · escrow released";
+        } else if (dealB.dealCriteriaSubmitted) {
+          stateB.preview =
+            dealB.sponseePreview ||
+            "Criteria submitted — waiting sponsor confirmation";
+          stateB.stageLabel = "Awaiting sponsor confirmation";
+          stateB.ctxLbl = "Criteria submitted · waiting sponsor";
+          stateB.unread = true;
+        } else if (
           dealB.dealRecordSponsorConfirmed &&
           !dealB.dealRecordSponseeConfirmed
         ) {
           stateB.preview =
             dealB.sponseePreview || "Sponsor confirmed the deal record";
-          stateB.stageLabel = "Confirm deal record";
+          stateB.stageLabel = "Submit criteria checklist";
           stateB.unread = true;
         }
-        if (
-          dealB.dealRecordSponsorConfirmed &&
-          dealB.dealRecordSponseeConfirmed
-        ) {
-          stateB.preview = "Both confirmed — waiting escrow funding";
-          stateB.stageLabel = "Escrow pending";
-          stateB.ctxLbl = "Confirmed · waiting escrow";
-        }
+
+        renderSponseeDealRecordActions();
 
         const dealC = getSharedDeal("tb");
         const stateC = getConversationState("tb");
@@ -3794,15 +3878,32 @@
         const blueprint = MESSAGE_BLUEPRINTS[id];
         if (!row || !blueprint) return;
         const dealA = getSharedDeal("gf");
+        const dealB = getSharedDeal("nl");
+        const dealC = getSharedDeal("tb");
         const dealD = getSharedDeal("sb");
         if (id === "gf" && dealA.termsAccepted) {
           row.innerHTML =
-            '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Sponsor accepted your terms · waiting for deal record</span>';
+            '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Sponsor accepted your terms · next: deal record</span><button class="qa qa-g" onclick="sw(\'nl\', document.getElementById(\'ci-nl\'))">Go to deal record</button>';
           return;
         }
         if (id === "gf" && dealA.termsStatus === "countered") {
           row.innerHTML =
             '<button class="qa qa-g" onclick="showPanel(\'terms-panel\')">Send revised terms</button><span style="font-size:12px;color:var(--tx3);padding:4px 0;">Counter received from sponsor</span>';
+          return;
+        }
+        if (id === "nl" && dealB.dealCriteriaApproved) {
+          row.innerHTML =
+            '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Deal record confirmed · next: escrow</span><button class="qa qa-g" onclick="sw(\'tb\', document.getElementById(\'ci-tb\'))">Go to escrow</button>';
+          return;
+        }
+        if (id === "nl" && dealB.dealCriteriaSubmitted) {
+          row.innerHTML =
+            '<span style="font-size:12px;color:var(--tx3);padding:4px 0;">Criteria submitted · waiting sponsor confirmation</span>';
+          return;
+        }
+        if (id === "tb" && dealC.contentSubmitted) {
+          row.innerHTML =
+            '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Content submitted · waiting sponsor review</span><button class="qa qa-g" onclick="sw(\'sb\', document.getElementById(\'ci-sb\'))">Go to rating</button>';
           return;
         }
         if (id === "sb" && dealD.sponseeRated && dealD.sponseeRating) {
@@ -3853,13 +3954,47 @@
         document.getElementById(id).style.display = "none";
       }
 
+      function renderSponseeDealRecordActions() {
+        const actions = document.querySelector(
+          "#thread-nl .dr-confirm-actions",
+        );
+        if (!actions) return;
+
+        const dealB = getSharedDeal("nl");
+        if (dealB.dealCriteriaApproved) {
+          actions.innerHTML =
+            '<span style="font-size:12px;color:var(--grn-3);font-weight:700;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L10 3" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round"/></svg>Sponsor confirmed criteria · escrow released</span>';
+          return;
+        }
+
+        if (dealB.dealCriteriaSubmitted) {
+          actions.innerHTML =
+            '<span style="font-size:12px;color:var(--tx3);display:flex;align-items:center;gap:5px;">⏳ Criteria submitted · waiting sponsor confirmation</span>';
+          return;
+        }
+
+        actions.innerHTML =
+          '<div style="display:flex;flex-direction:column;gap:7px;width:100%;">' +
+          '<div style="font-size:11px;color:var(--tx2);font-weight:600;">Submit criteria checklist before sponsor confirmation:</div>' +
+          '<label style="font-size:11px;color:var(--tx2);display:flex;align-items:center;gap:6px;"><input type="checkbox" id="nl-crit-brief" /> Brief scope is confirmed</label>' +
+          '<label style="font-size:11px;color:var(--tx2);display:flex;align-items:center;gap:6px;"><input type="checkbox" id="nl-crit-deliverables" /> Deliverables are finalized</label>' +
+          '<label style="font-size:11px;color:var(--tx2);display:flex;align-items:center;gap:6px;"><input type="checkbox" id="nl-crit-deadline" /> Deadline and review window accepted</label>' +
+          '<button class="btn-g" onclick="confirmDealRecord()">Submit criteria checklist</button>' +
+          "</div>";
+      }
+
       function confirmDealRecord() {
         const state = getConversationState("nl");
-        const btn = document.querySelector(".dr-confirm-actions");
-        if (btn) {
-          btn.innerHTML =
-            '<span style="font-size:12px;color:var(--grn-3);font-weight:700;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L10 3" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round"/></svg>You confirmed — awaiting escrow from sponsor</span>';
+        const briefOk = document.getElementById("nl-crit-brief")?.checked;
+        const deliverablesOk = document.getElementById(
+          "nl-crit-deliverables",
+        )?.checked;
+        const deadlineOk = document.getElementById("nl-crit-deadline")?.checked;
+        if (!(briefOk && deliverablesOk && deadlineOk)) {
+          T("Please complete all criteria checkboxes before submitting");
+          return;
         }
+
         const sigMine = document.querySelector(
           ".dr-sig:last-child .dr-sig-meta",
         );
@@ -3869,18 +4004,26 @@
           sigOk.textContent = "✓ IP logged · confirmed";
           sigOk.style.color = "var(--grn-3)";
         }
-        state.preview = "Deal record confirmed — awaiting escrow funding.";
-        state.stageLabel = "Deal record confirmed";
+
+        state.preview = "Criteria submitted — awaiting sponsor confirmation";
+        state.stageLabel = "Awaiting sponsor confirmation";
         state.unread = false;
-        state.ctxLbl = "Agreed · awaiting escrow";
+        state.ctxLbl = "Criteria submitted · waiting sponsor";
         patchDealState("nl", {
+          dealCriteriaSubmitted: true,
+          dealCriteriaSummary:
+            "Brief scope confirmed · Deliverables finalized · Deadline accepted",
           dealRecordSponseeConfirmed: true,
-          sponseePreview: "You confirmed the deal record — waiting escrow",
-          sponsorPreview: "Creator confirmed the deal record",
+          sponseePreview: "Criteria submitted — waiting sponsor confirmation",
+          sponsorPreview:
+            "Creator submitted criteria checklist for confirmation",
         });
+
+        renderSponseeDealRecordActions();
         saveMessageState();
         renderConversationList();
-        T("Deal record confirmed — NutriLife BD will now fund escrow");
+        updateQA("nl");
+        T("Criteria checklist submitted — waiting sponsor confirmation");
       }
 
       function sendTerms() {

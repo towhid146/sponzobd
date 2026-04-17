@@ -2901,6 +2901,15 @@
         if (pill && stageLabel) pill.textContent = stageLabel;
       }
 
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/\"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
       function markTermsAcceptedUI() {
         const card = document.querySelector("#thread-la .tc-badge");
         if (card) {
@@ -2944,12 +2953,8 @@
         const cfBtns = document.querySelector("#thread-ni .dr-confirm-actions");
         if (cfBtns)
           cfBtns.innerHTML =
-            '<span style="font-size:12px;color:var(--grn-3);font-weight:700;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L10 3" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round"/></svg>You confirmed · now fund escrow to proceed</span>';
-        setConvSummary(
-          "ni",
-          "Deal record confirmed — fund escrow",
-          "Fund escrow",
-        );
+            '<span style="font-size:12px;color:var(--grn-3);font-weight:700;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L10 3" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round"/></svg>Confirmation saved</span>';
+        setConvSummary("ni", "Deal record step confirmed", "Deal record");
       }
 
       function renderSponsorRatingSubmitted(ratingValue, ratingNote) {
@@ -2977,6 +2982,181 @@
         }
       }
 
+      function jumpToSponsorStep(convId) {
+        const target = document.getElementById("ci-" + convId);
+        if (target) {
+          sw(convId, target);
+        }
+      }
+
+      function inferDealStage(deal = {}) {
+        if (!deal.termsAccepted) return "terms";
+        if (
+          !deal.dealCriteriaSubmitted ||
+          !deal.dealCriteriaApproved ||
+          !deal.dealRecordSponsorConfirmed ||
+          !deal.dealRecordSponseeConfirmed
+        ) {
+          return "record";
+        }
+        if (!deal.escrowFunded) return "escrow";
+        if (!deal.contentSubmitted) return "content";
+        if (!(deal.sponsorRated && deal.sponseeRated)) return "review";
+        return "complete";
+      }
+
+      const SPONSOR_PIPE_CONFIG = {
+        la: {
+          labels: [
+            "Accepted",
+            "Terms negotiation",
+            "Deal record",
+            "Escrow",
+            "Content",
+            "Paid out",
+          ],
+          indexByStage: {
+            terms: 1,
+            record: 2,
+            escrow: 3,
+            content: 4,
+            review: 4,
+            complete: 5,
+          },
+        },
+        ni: {
+          labels: [
+            "Accepted",
+            "Terms agreed",
+            "Deal record",
+            "Escrow",
+            "Content",
+            "Paid out",
+          ],
+          indexByStage: {
+            terms: 1,
+            record: 2,
+            escrow: 3,
+            content: 4,
+            review: 4,
+            complete: 5,
+          },
+        },
+        rk: {
+          labels: [
+            "Accepted",
+            "Terms agreed",
+            "Deal record",
+            "Fund escrow",
+            "Content",
+            "Paid out",
+          ],
+          indexByStage: {
+            terms: 1,
+            record: 2,
+            escrow: 3,
+            content: 4,
+            review: 4,
+            complete: 5,
+          },
+        },
+        fa: {
+          labels: [
+            "Accepted",
+            "Terms agreed",
+            "Deal record",
+            "Content approved",
+            "Paid out",
+          ],
+          indexByStage: {
+            terms: 1,
+            record: 2,
+            escrow: 2,
+            content: 3,
+            review: 3,
+            complete: 4,
+          },
+        },
+      };
+
+      function getSponsorProgressModel(id) {
+        const deal = getSharedDeal(id);
+        const config = SPONSOR_PIPE_CONFIG[id] || {
+          labels: [],
+          indexByStage: {},
+        };
+        const stage = deal.dealStage || inferDealStage(deal);
+        const currentIndex = config.indexByStage[stage] ?? 0;
+        return {
+          deal,
+          stage,
+          labels: config.labels,
+          currentIndex,
+        };
+      }
+
+      function renderSponsorPipeMarkup(labels, currentIndex) {
+        return labels
+          .map((label, index) => {
+            const cls =
+              index < currentIndex
+                ? "dp done"
+                : index === currentIndex
+                  ? "dp now"
+                  : "dp";
+            const arrow =
+              index < labels.length - 1 ? '<span class="dp-arr">›</span>' : "";
+            return `<span class="${cls}">${escapeHtml(label)}</span>${arrow}`;
+          })
+          .join("");
+      }
+
+      function refreshSponsorContextChrome() {
+        ["la", "ni", "rk", "fa"].forEach((id) => {
+          const ctx = document.getElementById(`ctx-${id}`);
+          if (!ctx) return;
+          const progress = getSponsorProgressModel(id);
+          const pipe = ctx.querySelector(".ctx-pipe");
+          if (pipe) {
+            pipe.innerHTML = renderSponsorPipeMarkup(
+              progress.labels,
+              progress.currentIndex,
+            );
+          }
+        });
+      }
+
+      function renderSponsorDealRecordActions() {
+        const actions = document.querySelector(
+          "#thread-ni .dr-confirm-actions",
+        );
+        if (!actions) return;
+
+        const dealB = getSharedDeal("ni");
+        if (dealB.dealCriteriaApproved) {
+          actions.innerHTML =
+            '<span style="font-size:12px;color:var(--grn-3);font-weight:700;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L10 3" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round"/></svg>Criteria confirmed · escrow released to active deal flow</span>';
+          return;
+        }
+
+        if (dealB.dealCriteriaSubmitted) {
+          const summary =
+            dealB.dealCriteriaSummary || "Creator submitted all deal criteria";
+          actions.innerHTML =
+            '<div style="display:flex;flex-direction:column;gap:7px;">' +
+            '<div style="font-size:11px;color:var(--tx2);background:var(--srf2);border-radius:7px;padding:7px 9px;">' +
+            "Submitted criteria: " +
+            escapeHtml(summary) +
+            "</div>" +
+            '<button class="btn-g" onclick="confirmRecord()">Confirm submitted criteria</button>' +
+            "</div>";
+          return;
+        }
+
+        actions.innerHTML =
+          '<span style="font-size:12px;color:var(--tx3);">Waiting for creator criteria submission</span>';
+      }
+
       function syncSponsorFromShared() {
         const dealA = getSharedDeal("la");
         if (dealA.sponseeName) {
@@ -2996,11 +3176,19 @@
         }
 
         const dealB = getSharedDeal("ni");
-        if (dealB.dealRecordSponsorConfirmed) {
+        if (dealB.dealCriteriaApproved) {
+          markDealRecordConfirmedUI();
+          setConvSummary(
+            "ni",
+            "Criteria approved — escrow released",
+            "Escrow released",
+          );
+        } else if (dealB.dealRecordSponsorConfirmed) {
           markDealRecordConfirmedUI();
         } else if (dealB.sponsorPreview) {
           setConvSummary("ni", dealB.sponsorPreview, "Deal record");
         }
+        renderSponsorDealRecordActions();
 
         const dealC = getSharedDeal("rk");
         if (dealC.escrowFunded) {
@@ -3043,6 +3231,8 @@
             "Rated by creator",
           );
         }
+
+        refreshSponsorContextChrome();
       }
 
       function sw(id, el) {
@@ -3089,11 +3279,13 @@
       function updateQA(id) {
         const row = document.getElementById("qa-row");
         const dealA = getSharedDeal("la");
+        const dealB = getSharedDeal("ni");
+        const dealC = getSharedDeal("rk");
         const dealD = getSharedDeal("fa");
         if (id === "la") {
           if (dealA.termsAccepted) {
             row.innerHTML =
-              '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Terms accepted · waiting for deal record</span>';
+              '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Terms accepted · move to deal record</span><button class="qa qa-g" onclick="jumpToSponsorStep(\'ni\')">Next: Deal record</button>';
           } else if (dealA.termsStatus === "countered") {
             row.innerHTML =
               '<button class="qa qa-g" onclick="acceptTerms()">✓ Accept countered terms</button><button class="qa qa-a" onclick="showPanel(\'counter-panel\')">Send another counter</button><button class="qa" onclick="T(\'Decline sent\')">Decline</button>';
@@ -3102,11 +3294,27 @@
               '<button class="qa qa-g" onclick="acceptTerms()">✓ Accept terms</button><button class="qa qa-a" onclick="showPanel(\'counter-panel\')">Counter-propose</button><button class="qa" onclick="T(\'Decline sent\')">Decline</button>';
           }
         } else if (id === "ni") {
-          row.innerHTML =
-            '<button class="qa qa-g" onclick="confirmRecord()">✓ Confirm deal record</button>';
+          if (dealB.dealCriteriaApproved) {
+            row.innerHTML =
+              '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Deal record confirmed · move to escrow</span><button class="qa qa-g" onclick="jumpToSponsorStep(\'rk\')">Next: Escrow</button>';
+          } else if (dealB.dealCriteriaSubmitted) {
+            row.innerHTML =
+              '<button class="qa qa-g" onclick="confirmRecord()">Confirm submitted criteria</button><span style="font-size:12px;color:var(--tx3);padding:4px 0;">Creator submitted criteria checklist</span>';
+          } else if (dealB.dealRecordSponsorConfirmed) {
+            row.innerHTML =
+              '<span style="font-size:12px;color:var(--tx3);padding:4px 0;">You confirmed the deal record · waiting creator</span>';
+          } else {
+            row.innerHTML =
+              '<span style="font-size:12px;color:var(--tx3);padding:4px 0;">Waiting for creator criteria submission</span>';
+          }
         } else if (id === "rk") {
-          row.innerHTML =
-            '<button class="qa qa-g" onclick="fundEscrow()">Fund escrow ৳18,000</button><button class="qa" onclick="T(\'Opening chat...\')">Open chat</button>';
+          if (dealC.escrowFunded) {
+            row.innerHTML =
+              '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Escrow funded · move to content review</span><button class="qa qa-g" onclick="jumpToSponsorStep(\'fa\')">Next: Review & rating</button>';
+          } else {
+            row.innerHTML =
+              '<button class="qa qa-g" onclick="fundEscrow()">Fund escrow ৳18,000</button><button class="qa" onclick="T(\'Opening chat...\')">Open chat</button>';
+          }
         } else if (id === "fa") {
           if (dealD.sponsorRated && dealD.sponsorRating) {
             row.innerHTML =
@@ -3162,17 +3370,24 @@
       }
 
       function confirmRecord() {
+        const shared = getSharedDeal("ni");
+        if (!shared.dealCriteriaSubmitted) {
+          T("Creator has not submitted the criteria checklist yet");
+          return;
+        }
+
         markDealRecordConfirmedUI();
         patchDealState("ni", {
+          dealCriteriaApproved: true,
           dealRecordSponsorConfirmed: true,
-          sponsorPreview: "Deal record confirmed — fund escrow",
-          sponseePreview: "Sponsor confirmed the deal record",
+          dealRecordSponseeConfirmed: true,
+          escrowFunded: true,
+          sponsorPreview: "Criteria approved — escrow released",
+          sponseePreview: "Sponsor approved criteria — escrow released",
         });
-        T(
-          "Deal record confirmed — please fund escrow for ৳22,000 to allow creator to start",
-        );
-        document.getElementById("qa-row").innerHTML =
-          '<button class="qa qa-g" onclick="T(\'Opening escrow payment...\')">Fund escrow ৳22,000</button>';
+        T("Criteria confirmed — escrow released and both cards updated");
+        renderSponsorDealRecordActions();
+        updateQA("ni");
       }
 
       function fundEscrow() {
@@ -3334,6 +3549,7 @@
         document.getElementById("thread-la").style.flexDirection = "column";
         document.getElementById("ctx-la").style.display = "flex";
         syncSponsorFromShared();
+        refreshSponsorContextChrome();
         fetchDealsFromServer();
         fetchMessagesForConv("la");
         updateQA("la");
@@ -3351,6 +3567,7 @@
       window.addEventListener("storage", (event) => {
         if (event.key === SHARED_DEAL_KEY) {
           syncSponsorFromShared();
+          refreshSponsorContextChrome();
           updateBadge();
         }
       });

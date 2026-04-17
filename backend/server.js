@@ -661,12 +661,21 @@ const defaultDealStates = {
     sponseePreview: "We accepted your application! Please send your terms.",
   },
   dealB: {
+    termsAccepted: true,
+    dealCriteriaSubmitted: false,
+    dealCriteriaApproved: false,
+    dealCriteriaSummary: "",
     dealRecordSponsorConfirmed: false,
     dealRecordSponseeConfirmed: false,
     sponsorPreview: "Deal record ready — your confirmation needed.",
     sponseePreview: "Deal record sent — please confirm to proceed.",
   },
   dealC: {
+    termsAccepted: true,
+    dealCriteriaSubmitted: true,
+    dealCriteriaApproved: true,
+    dealRecordSponsorConfirmed: true,
+    dealRecordSponseeConfirmed: true,
     escrowFunded: true,
     contentSubmitted: false,
     revisionRequested: false,
@@ -674,6 +683,13 @@ const defaultDealStates = {
     sponseePreview: "Escrow funded ৳18,000 — you can start work now!",
   },
   dealD: {
+    termsAccepted: true,
+    dealCriteriaSubmitted: true,
+    dealCriteriaApproved: true,
+    dealRecordSponsorConfirmed: true,
+    dealRecordSponseeConfirmed: true,
+    escrowFunded: true,
+    contentSubmitted: true,
     sponsorRated: false,
     sponseeRated: false,
     sponsorPreview: "Payment released. Rate creator to complete the deal.",
@@ -707,6 +723,8 @@ function sanitizeDealPatch(payload = {}) {
   [
     "termsAccepted",
     "creatorSentTerms",
+    "dealCriteriaSubmitted",
+    "dealCriteriaApproved",
     "dealRecordSponsorConfirmed",
     "dealRecordSponseeConfirmed",
     "escrowFunded",
@@ -723,6 +741,7 @@ function sanitizeDealPatch(payload = {}) {
   [
     "sponsorPreview",
     "sponseePreview",
+    "dealCriteriaSummary",
     "lastSponsorMessage",
     "lastSponseeMessage",
     "sponseeName",
@@ -756,6 +775,43 @@ function sanitizeMessagePayload(payload = {}) {
   return { senderRole, text };
 }
 
+function deriveDealStage(state = {}) {
+  if (!state.termsAccepted) return "terms";
+  if (
+    !state.dealCriteriaSubmitted ||
+    !state.dealCriteriaApproved ||
+    !state.dealRecordSponsorConfirmed ||
+    !state.dealRecordSponseeConfirmed
+  ) {
+    return "record";
+  }
+  if (!state.escrowFunded) return "escrow";
+  if (!state.contentSubmitted) return "content";
+  if (!(state.sponsorRated && state.sponseeRated)) return "review";
+  return "complete";
+}
+
+function getNextDealStep(stage) {
+  const nextByStage = {
+    terms: "record",
+    record: "escrow",
+    escrow: "content",
+    content: "review",
+    review: "complete",
+    complete: "complete",
+  };
+  return nextByStage[stage] || "terms";
+}
+
+function normalizeDealState(state = {}) {
+  const dealStage = deriveDealStage(state);
+  return {
+    ...state,
+    dealStage,
+    nextDealStep: getNextDealStep(dealStage),
+  };
+}
+
 async function ensureDealDoc(dealId) {
   const existing = await chatDealsCollection.findOne({ dealId });
   if (existing) return existing;
@@ -769,6 +825,8 @@ async function ensureDealDoc(dealId) {
     },
     createdAt: nowIso,
   };
+
+  seed.state = normalizeDealState(seed.state);
 
   await chatDealsCollection.updateOne(
     { dealId },
@@ -815,7 +873,7 @@ app.get("/api/chat/deals", async (req, res) => {
     const result = {};
     for (const dealId of ids) {
       const doc = await ensureDealDoc(dealId);
-      result[dealId] = doc.state || {};
+      result[dealId] = normalizeDealState(doc.state || {});
     }
 
     return res.json({ deals: result });
@@ -838,11 +896,11 @@ app.patch("/api/chat/deals/:dealId/state", async (req, res) => {
     }
 
     const doc = await ensureDealDoc(dealId);
-    const nextState = {
+    const nextState = normalizeDealState({
       ...(doc.state || {}),
       ...patch,
       lastUpdatedAt: Date.now(),
-    };
+    });
 
     await chatDealsCollection.updateOne(
       { dealId },
@@ -908,7 +966,7 @@ app.post("/api/chat/deals/:dealId/messages", async (req, res) => {
     const messageId = insert.insertedId ? String(insert.insertedId) : now;
 
     const doc = await ensureDealDoc(dealId);
-    const nextState = {
+    const nextState = normalizeDealState({
       ...(doc.state || {}),
       lastUpdatedAt: Date.now(),
       lastMessageAt: now,
@@ -925,7 +983,7 @@ app.post("/api/chat/deals/:dealId/messages", async (req, res) => {
               lastSponseeMessage: clean.text,
             }
           : {}),
-    };
+    });
 
     await chatDealsCollection.updateOne(
       { dealId },
