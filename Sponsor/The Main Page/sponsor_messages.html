@@ -2999,6 +2999,7 @@
         ) {
           return "record";
         }
+        if (!deal.escrowPassedByAuthority) return "escrow";
         if (!deal.escrowFunded) return "escrow";
         if (!deal.contentSubmitted) return "content";
         if (!(deal.sponsorRated && deal.sponseeRated)) return "review";
@@ -3025,21 +3026,14 @@
           },
         },
         ni: {
-          labels: [
-            "Accepted",
-            "Terms agreed",
-            "Deal record",
-            "Escrow",
-            "Content",
-            "Paid out",
-          ],
+          labels: ["Accepted", "Terms agreed", "Criteria", "Escrow", "Review"],
           indexByStage: {
             terms: 1,
             record: 2,
             escrow: 3,
             content: 4,
             review: 4,
-            complete: 5,
+            complete: 4,
           },
         },
         rk: {
@@ -3134,8 +3128,19 @@
 
         const dealB = getSharedDeal("ni");
         if (dealB.dealCriteriaApproved) {
-          actions.innerHTML =
-            '<span style="font-size:12px;color:var(--grn-3);font-weight:700;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L10 3" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round"/></svg>Criteria confirmed · escrow released to active deal flow</span>';
+          if (dealB.escrowPassedByAuthority) {
+            actions.innerHTML =
+              '<div style="display:flex;flex-direction:column;gap:7px;">' +
+              '<span style="font-size:12px;color:var(--grn-3);font-weight:700;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L10 3" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round"/></svg>Authority marked escrow passed</span>' +
+              '<button class="btn-g" onclick="jumpToSponsorStep(\'fa\')">Open review card</button>' +
+              "</div>";
+          } else {
+            actions.innerHTML =
+              '<div style="display:flex;flex-direction:column;gap:7px;">' +
+              '<span style="font-size:12px;color:var(--tx2);">Criteria fulfilled by sponsor. Awaiting authority escrow action.</span>' +
+              '<button class="btn-g" onclick="passEscrowByAuthority()">Authority: Escrow passed</button>' +
+              "</div>";
+          }
           return;
         }
 
@@ -3148,7 +3153,7 @@
             "Submitted criteria: " +
             escapeHtml(summary) +
             "</div>" +
-            '<button class="btn-g" onclick="confirmRecord()">Confirm submitted criteria</button>' +
+            '<button class="btn-g" onclick="confirmRecord()">Criteria fulfilled</button>' +
             "</div>";
           return;
         }
@@ -3177,12 +3182,20 @@
 
         const dealB = getSharedDeal("ni");
         if (dealB.dealCriteriaApproved) {
-          markDealRecordConfirmedUI();
-          setConvSummary(
-            "ni",
-            "Criteria approved — escrow released",
-            "Escrow released",
-          );
+          if (dealB.escrowPassedByAuthority) {
+            markDealRecordConfirmedUI();
+            setConvSummary(
+              "ni",
+              "Escrow passed by authority — review card unlocked",
+              "Escrow passed",
+            );
+          } else {
+            setConvSummary(
+              "ni",
+              "Criteria fulfilled — waiting authority escrow pass",
+              "Waiting authority",
+            );
+          }
         } else if (dealB.dealRecordSponsorConfirmed) {
           markDealRecordConfirmedUI();
         } else if (dealB.sponsorPreview) {
@@ -3295,11 +3308,16 @@
           }
         } else if (id === "ni") {
           if (dealB.dealCriteriaApproved) {
-            row.innerHTML =
-              '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Deal record confirmed · move to escrow</span><button class="qa qa-g" onclick="jumpToSponsorStep(\'rk\')">Next: Escrow</button>';
+            if (dealB.escrowPassedByAuthority) {
+              row.innerHTML =
+                '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Escrow passed by authority · next: review</span><button class="qa qa-g" onclick="jumpToSponsorStep(\'fa\')">Go to review card</button>';
+            } else {
+              row.innerHTML =
+                '<button class="qa qa-g" onclick="passEscrowByAuthority()">Authority: Escrow passed</button><span style="font-size:12px;color:var(--tx3);padding:4px 0;">Criteria fulfilled by sponsor</span>';
+            }
           } else if (dealB.dealCriteriaSubmitted) {
             row.innerHTML =
-              '<button class="qa qa-g" onclick="confirmRecord()">Confirm submitted criteria</button><span style="font-size:12px;color:var(--tx3);padding:4px 0;">Creator submitted criteria checklist</span>';
+              '<button class="qa qa-g" onclick="confirmRecord()">Criteria fulfilled</button><span style="font-size:12px;color:var(--tx3);padding:4px 0;">Creator submitted criteria checklist</span>';
           } else if (dealB.dealRecordSponsorConfirmed) {
             row.innerHTML =
               '<span style="font-size:12px;color:var(--tx3);padding:4px 0;">You confirmed the deal record · waiting creator</span>';
@@ -3381,11 +3399,29 @@
           dealCriteriaApproved: true,
           dealRecordSponsorConfirmed: true,
           dealRecordSponseeConfirmed: true,
-          escrowFunded: true,
-          sponsorPreview: "Criteria approved — escrow released",
-          sponseePreview: "Sponsor approved criteria — escrow released",
+          sponsorPreview: "Criteria fulfilled — waiting authority escrow pass",
+          sponseePreview: "Sponsor fulfilled criteria — waiting authority",
         });
-        T("Criteria confirmed — escrow released and both cards updated");
+        T("Criteria fulfilled — waiting authority escrow pass");
+        renderSponsorDealRecordActions();
+        updateQA("ni");
+      }
+
+      function passEscrowByAuthority() {
+        const shared = getSharedDeal("ni");
+        if (!shared.dealCriteriaApproved) {
+          T("Criteria must be fulfilled before escrow can be passed");
+          return;
+        }
+
+        patchDealState("ni", {
+          escrowPassedByAuthority: true,
+          escrowFunded: true,
+          contentSubmitted: true,
+          sponsorPreview: "Authority passed escrow — move to review",
+          sponseePreview: "Authority passed escrow — move to review card",
+        });
+        T("Authority marked escrow passed — review card unlocked");
         renderSponsorDealRecordActions();
         updateQA("ni");
       }

@@ -3284,6 +3284,7 @@
         ) {
           return "record";
         }
+        if (!deal.escrowPassedByAuthority) return "escrow";
         if (!deal.escrowFunded) return "escrow";
         if (!deal.contentSubmitted) return "content";
         if (!(deal.sponsorRated && deal.sponseeRated)) return "review";
@@ -3311,22 +3312,14 @@
           },
         },
         nl: {
-          labels: [
-            "Applied",
-            "Accepted",
-            "Terms agreed",
-            "Deal record",
-            "Escrow",
-            "Content",
-            "Paid out",
-          ],
+          labels: ["Applied", "Accepted", "Criteria", "Escrow", "Review"],
           indexByStage: {
             terms: 2,
-            record: 3,
-            escrow: 4,
-            content: 5,
-            review: 5,
-            complete: 6,
+            record: 2,
+            escrow: 3,
+            content: 4,
+            review: 4,
+            complete: 4,
           },
         },
         tb: {
@@ -3695,11 +3688,19 @@
         const dealB = getSharedDeal("nl");
         const stateB = getConversationState("nl");
         if (dealB.dealCriteriaApproved) {
-          stateB.preview =
-            dealB.sponseePreview ||
-            "Sponsor approved criteria — escrow released";
-          stateB.stageLabel = "Escrow released";
-          stateB.ctxLbl = "Criteria approved · escrow released";
+          if (dealB.escrowPassedByAuthority) {
+            stateB.preview =
+              dealB.sponseePreview ||
+              "Authority passed escrow — review card is now active";
+            stateB.stageLabel = "Escrow passed";
+            stateB.ctxLbl = "Escrow passed by authority · move to review";
+          } else {
+            stateB.preview =
+              dealB.sponseePreview ||
+              "Sponsor fulfilled criteria — waiting authority escrow pass";
+            stateB.stageLabel = "Waiting authority";
+            stateB.ctxLbl = "Criteria approved · waiting authority";
+          }
         } else if (dealB.dealCriteriaSubmitted) {
           stateB.preview =
             dealB.sponseePreview ||
@@ -3892,8 +3893,13 @@
           return;
         }
         if (id === "nl" && dealB.dealCriteriaApproved) {
-          row.innerHTML =
-            '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Deal record confirmed · next: escrow</span><button class="qa qa-g" onclick="sw(\'tb\', document.getElementById(\'ci-tb\'))">Go to escrow</button>';
+          if (dealB.escrowPassedByAuthority) {
+            row.innerHTML =
+              '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Escrow passed by authority · next: review</span><button class="qa qa-g" onclick="sw(\'sb\', document.getElementById(\'ci-sb\'))">Go to review card</button>';
+          } else {
+            row.innerHTML =
+              '<span style="font-size:12px;color:var(--tx3);padding:4px 0;">Criteria approved by sponsor · waiting authority escrow pass</span>';
+          }
           return;
         }
         if (id === "nl" && dealB.dealCriteriaSubmitted) {
@@ -3962,8 +3968,16 @@
 
         const dealB = getSharedDeal("nl");
         if (dealB.dealCriteriaApproved) {
-          actions.innerHTML =
-            '<span style="font-size:12px;color:var(--grn-3);font-weight:700;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L10 3" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round"/></svg>Sponsor confirmed criteria · escrow released</span>';
+          if (dealB.escrowPassedByAuthority) {
+            actions.innerHTML =
+              '<div style="display:flex;flex-direction:column;gap:7px;">' +
+              '<span style="font-size:12px;color:var(--grn-3);font-weight:700;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L10 3" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round"/></svg>Authority marked escrow passed</span>' +
+              "<button class=\"btn-g\" onclick=\"sw('sb', document.getElementById('ci-sb'))\">Open review card</button>" +
+              "</div>";
+          } else {
+            actions.innerHTML =
+              '<span style="font-size:12px;color:var(--tx3);display:flex;align-items:center;gap:5px;">Sponsor fulfilled criteria · waiting authority escrow pass</span>';
+          }
           return;
         }
 

@@ -664,6 +664,7 @@ const defaultDealStates = {
     termsAccepted: true,
     dealCriteriaSubmitted: false,
     dealCriteriaApproved: false,
+    escrowPassedByAuthority: false,
     dealCriteriaSummary: "",
     dealRecordSponsorConfirmed: false,
     dealRecordSponseeConfirmed: false,
@@ -676,6 +677,7 @@ const defaultDealStates = {
     dealCriteriaApproved: true,
     dealRecordSponsorConfirmed: true,
     dealRecordSponseeConfirmed: true,
+    escrowPassedByAuthority: true,
     escrowFunded: true,
     contentSubmitted: false,
     revisionRequested: false,
@@ -688,6 +690,7 @@ const defaultDealStates = {
     dealCriteriaApproved: true,
     dealRecordSponsorConfirmed: true,
     dealRecordSponseeConfirmed: true,
+    escrowPassedByAuthority: true,
     escrowFunded: true,
     contentSubmitted: true,
     sponsorRated: false,
@@ -725,6 +728,7 @@ function sanitizeDealPatch(payload = {}) {
     "creatorSentTerms",
     "dealCriteriaSubmitted",
     "dealCriteriaApproved",
+    "escrowPassedByAuthority",
     "dealRecordSponsorConfirmed",
     "dealRecordSponseeConfirmed",
     "escrowFunded",
@@ -785,6 +789,7 @@ function deriveDealStage(state = {}) {
   ) {
     return "record";
   }
+  if (!state.escrowPassedByAuthority) return "escrow";
   if (!state.escrowFunded) return "escrow";
   if (!state.contentSubmitted) return "content";
   if (!(state.sponsorRated && state.sponseeRated)) return "review";
