@@ -1497,7 +1497,9 @@
                     Criteria verification ready — your confirmation needed.
                   </div>
                   <div class="ci-foot">
-                    <span class="stage-pill sp-record">Criteria verification</span>
+                    <span class="stage-pill sp-record"
+                      >Criteria verification</span
+                    >
                     <div class="udot"></div>
                   </div>
                 </div>
@@ -1711,7 +1713,9 @@
               </div>
               <div class="ctx-right">
                 <div class="ctx-amt">৳22,000</div>
-                <div class="ctx-lbl">Agreed · confirm criteria verification</div>
+                <div class="ctx-lbl">
+                  Agreed · confirm criteria verification
+                </div>
                 <button
                   class="journey-btn"
                   id="jbtn-ni"
@@ -1871,7 +1875,8 @@
                       </div>
                       <div class="jd-info">
                         <div class="jd-label done">
-                          Accepted, terms agreed, criteria verification confirmed
+                          Accepted, terms agreed, criteria verification
+                          confirmed
                         </div>
                       </div>
                     </div>
@@ -2130,7 +2135,8 @@
                           stroke-width="1.2"
                           stroke-linecap="round"
                         /></svg
-                      >Criteria Verification · SponzoBD Platform · Auto-generated
+                      >Criteria Verification · SponzoBD Platform ·
+                      Auto-generated
                     </div>
                     <div class="dr-sec-t">Parties</div>
                     <div class="dr-row">
@@ -2221,7 +2227,9 @@
             <!-- THREAD 3: Sponsor funds escrow -->
             <div class="thread" id="thread-rk" style="display: none">
               <div class="sys-ev">
-                <div class="se-lbl">Criteria verification confirmed by both parties</div>
+                <div class="se-lbl">
+                  Criteria verification confirmed by both parties
+                </div>
                 <div class="se-det">
                   Please fund escrow to allow Rafi Khan to begin work
                 </div>
@@ -2231,9 +2239,9 @@
                 <div class="m-av av-rk">RK</div>
                 <div>
                   <div class="bubble b-cr">
-                    Hi! Both parties confirmed the criteria verification. I'm ready to
-                    start as soon as escrow is funded. Looking forward to
-                    creating great content for the Superfoods launch!
+                    Hi! Both parties confirmed the criteria verification. I'm
+                    ready to start as soon as escrow is funded. Looking forward
+                    to creating great content for the Superfoods launch!
                   </div>
                   <div class="msg-t">Mar 13 · 10:05 AM</div>
                 </div>
@@ -2954,7 +2962,11 @@
         if (cfBtns)
           cfBtns.innerHTML =
             '<span style="font-size:12px;color:var(--grn-3);font-weight:700;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L10 3" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round"/></svg>Confirmation saved</span>';
-        setConvSummary("ni", "Criteria verification step confirmed", "Criteria verification");
+        setConvSummary(
+          "ni",
+          "Criteria verification step confirmed",
+          "Criteria verification",
+        );
       }
 
       function renderSponsorRatingSubmitted(ratingValue, ratingNote) {
@@ -3289,6 +3301,39 @@
         b.style.background = r > 0 ? "var(--red)" : "var(--grn)";
       }
 
+      function appendInlineSystemEvent(threadId, label, detail) {
+        const thread = document.getElementById(`thread-${threadId}`);
+        if (!thread) return;
+        const key = `${threadId}-${label}`
+          .toLowerCase()
+          .replace(/[^a-z0-9-]/g, "-");
+        if (thread.querySelector(`[data-inline-event='${key}']`)) return;
+        const wrap = document.createElement("div");
+        wrap.className = "sys-ev";
+        wrap.setAttribute("data-inline-event", key);
+        wrap.innerHTML = `<div class="se-lbl">${escapeHtml(label)}</div><div class="se-det">${escapeHtml(detail)}</div><div class="se-t">Just now · Platform</div>`;
+        thread.appendChild(wrap);
+        thread.scrollTop = thread.scrollHeight;
+      }
+
+      function generateCriteriaCardSponsor() {
+        appendInlineSystemEvent(
+          active,
+          "Criteria verification card generated",
+          "Continue this chat to verify criteria. No chat switch required.",
+        );
+        T("Criteria verification card generated in this chat");
+      }
+
+      function generateReviewCardSponsor() {
+        appendInlineSystemEvent(
+          active,
+          "Review card generated",
+          "Escrow passed. Submit your rating below in this same chat.",
+        );
+        T("Review card generated in this chat");
+      }
+
       function updateQA(id) {
         const row = document.getElementById("qa-row");
         const dealA = getSharedDeal("la");
@@ -3298,7 +3343,7 @@
         if (id === "la") {
           if (dealA.termsAccepted) {
             row.innerHTML =
-              '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Terms accepted · move to criteria verification</span><button class="qa qa-g" onclick="jumpToSponsorStep(\'ni\')">Next: Criteria verification</button>';
+              '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Terms accepted · generate criteria verification card here</span><button class="qa qa-g" onclick="generateCriteriaCardSponsor()">Next: Criteria verification</button>';
           } else if (dealA.termsStatus === "countered") {
             row.innerHTML =
               '<button class="qa qa-g" onclick="acceptTerms()">✓ Accept countered terms</button><button class="qa qa-a" onclick="showPanel(\'counter-panel\')">Send another counter</button><button class="qa" onclick="T(\'Decline sent\')">Decline</button>';
@@ -3310,7 +3355,7 @@
           if (dealB.dealCriteriaApproved) {
             if (dealB.escrowPassedByAuthority) {
               row.innerHTML =
-                '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Escrow passed by authority · next: review</span><button class="qa qa-g" onclick="jumpToSponsorStep(\'fa\')">Go to review card</button>';
+                '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Escrow passed by authority · generate review card here</span><button class="qa qa-g" onclick="generateReviewCardSponsor()">Go to review card</button>';
             } else {
               row.innerHTML =
                 '<button class="qa qa-g" onclick="passEscrowByAuthority()">Authority: Escrow passed</button><span style="font-size:12px;color:var(--tx3);padding:4px 0;">Criteria fulfilled by sponsor</span>';
@@ -3328,7 +3373,7 @@
         } else if (id === "rk") {
           if (dealC.escrowFunded) {
             row.innerHTML =
-              '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Escrow funded · move to content review</span><button class="qa qa-g" onclick="jumpToSponsorStep(\'fa\')">Next: Review & rating</button>';
+              '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Escrow funded · generate review card in this chat</span><button class="qa qa-g" onclick="generateReviewCardSponsor()">Next: Review & rating</button>';
           } else {
             row.innerHTML =
               '<button class="qa qa-g" onclick="fundEscrow()">Fund escrow ৳18,000</button><button class="qa" onclick="T(\'Opening chat...\')">Open chat</button>';
@@ -3377,7 +3422,8 @@
           termsStatus: "accepted",
           termsAccepted: true,
           sponsorPreview: "Terms accepted — criteria verification pending",
-          sponseePreview: "Sponsor accepted your terms — criteria verification pending",
+          sponseePreview:
+            "Sponsor accepted your terms — criteria verification pending",
         });
         T(
           "Terms accepted — criteria verification will appear for both parties to confirm",

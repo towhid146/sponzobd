@@ -3874,6 +3874,38 @@
         renderConversationList();
       }
 
+      function appendInlineSystemEventSponsee(threadId, label, detail) {
+        const thread = document.getElementById(`thread-${threadId}`);
+        if (!thread) return;
+        const key = `${threadId}-${label}`.toLowerCase().replace(/[^a-z0-9-]/g, "-");
+        if (thread.querySelector(`[data-inline-event='${key}']`)) return;
+        const wrap = document.createElement("div");
+        wrap.className = "sys-ev";
+        wrap.setAttribute("data-inline-event", key);
+        wrap.innerHTML =
+          `<div class="se-lbl">${escapeHtml(label)}</div><div class="se-det">${escapeHtml(detail)}</div><div class="se-t">Just now · Platform</div>`;
+        thread.appendChild(wrap);
+        thread.scrollTop = thread.scrollHeight;
+      }
+
+      function generateCriteriaCardSponsee() {
+        appendInlineSystemEventSponsee(
+          active,
+          "Criteria verification card generated",
+          "Continue here and submit criteria checklist in this same chat.",
+        );
+        T("Criteria verification card generated in this chat");
+      }
+
+      function generateReviewCardSponsee() {
+        appendInlineSystemEventSponsee(
+          active,
+          "Review card generated",
+          "Escrow passed. Complete your rating in this same chat.",
+        );
+        T("Review card generated in this chat");
+      }
+
       function updateQA(id) {
         const row = document.getElementById("qa-row");
         const blueprint = MESSAGE_BLUEPRINTS[id];
@@ -3884,7 +3916,7 @@
         const dealD = getSharedDeal("sb");
         if (id === "gf" && dealA.termsAccepted) {
           row.innerHTML =
-            '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Sponsor accepted your terms · next: criteria verification</span><button class="qa qa-g" onclick="sw(\'nl\', document.getElementById(\'ci-nl\'))">Go to criteria verification</button>';
+            '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Sponsor accepted your terms · generate criteria verification card here</span><button class="qa qa-g" onclick="generateCriteriaCardSponsee()">Go to criteria verification</button>';
           return;
         }
         if (id === "gf" && dealA.termsStatus === "countered") {
@@ -3895,7 +3927,7 @@
         if (id === "nl" && dealB.dealCriteriaApproved) {
           if (dealB.escrowPassedByAuthority) {
             row.innerHTML =
-              '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Escrow passed by authority · next: review</span><button class="qa qa-g" onclick="sw(\'sb\', document.getElementById(\'ci-sb\'))">Go to review card</button>';
+              '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Escrow passed by authority · generate review card here</span><button class="qa qa-g" onclick="generateReviewCardSponsee()">Go to review card</button>';
           } else {
             row.innerHTML =
               '<span style="font-size:12px;color:var(--tx3);padding:4px 0;">Criteria approved by sponsor · waiting authority escrow pass</span>';
@@ -3909,7 +3941,7 @@
         }
         if (id === "tb" && dealC.contentSubmitted) {
           row.innerHTML =
-            '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Content submitted · waiting sponsor review</span><button class="qa qa-g" onclick="sw(\'sb\', document.getElementById(\'ci-sb\'))">Go to rating</button>';
+            '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Content submitted · generate rating card here</span><button class="qa qa-g" onclick="generateReviewCardSponsee()">Go to rating</button>';
           return;
         }
         if (id === "sb" && dealD.sponseeRated && dealD.sponseeRating) {
@@ -3972,7 +4004,7 @@
             actions.innerHTML =
               '<div style="display:flex;flex-direction:column;gap:7px;">' +
               '<span style="font-size:12px;color:var(--grn-3);font-weight:700;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L10 3" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round"/></svg>Authority marked escrow passed</span>' +
-              "<button class=\"btn-g\" onclick=\"sw('sb', document.getElementById('ci-sb'))\">Open review card</button>" +
+              '<button class="btn-g" onclick="generateReviewCardSponsee()">Open review card</button>' +
               "</div>";
           } else {
             actions.innerHTML =
