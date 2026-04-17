@@ -73,6 +73,18 @@ class InMemoryMessageCollection {
     this.seq = 1;
   }
 
+  async findOne(filter = {}) {
+    const dealId = String(filter.dealId || "").trim();
+    if (!dealId) return null;
+    return this.rows.find((row) => row.dealId === dealId) || null;
+  }
+
+  async countByDeal(dealId) {
+    const cleanDealId = String(dealId || "").trim();
+    if (!cleanDealId) return 0;
+    return this.rows.filter((row) => row.dealId === cleanDealId).length;
+  }
+
   async insertOne(doc) {
     const now = new Date();
     const row = {
@@ -656,6 +668,7 @@ const defaultDealStates = {
     termsStatus: "proposed",
     termsAccepted: false,
     creatorSentTerms: true,
+    sponseeName: "Towhidul Islam",
     sponsorPreview:
       "Terms proposed — ৳35,000 for 2 reels, 3 stories, YouTube short.",
     sponseePreview: "We accepted your application! Please send your terms.",
@@ -817,9 +830,55 @@ function normalizeDealState(state = {}) {
   };
 }
 
+const defaultSeedMessagesByDeal = {
+  dealA: [
+    {
+      senderRole: "sponsor",
+      text: "Hello Towhidul Islam, this is GreenFresh BD. We reviewed your profile and want to start with terms for our National Health Week campaign.",
+    },
+    {
+      senderRole: "sponsee",
+      text: "Hi GreenFresh BD, Towhidul Islam here. Thanks for reaching out. I can deliver 2 reels and 3 stories with a clear health-focused content plan.",
+    },
+    {
+      senderRole: "sponsor",
+      text: "Great. Please share your final terms and deadline preferences so we can move to criteria verification.",
+    },
+  ],
+};
+
+async function ensureSeedMessagesForDeal(dealId) {
+  const seedMessages = defaultSeedMessagesByDeal[dealId];
+  if (!Array.isArray(seedMessages) || !seedMessages.length) return;
+
+  let hasExistingMessages = false;
+  if (chatMessagesCollection instanceof InMemoryMessageCollection) {
+    const count = await chatMessagesCollection.countByDeal(dealId);
+    hasExistingMessages = count > 0;
+  } else {
+    const existing = await chatMessagesCollection.findOne({ dealId });
+    hasExistingMessages = Boolean(existing);
+  }
+  if (hasExistingMessages) return;
+
+  const baseTime = Date.now() - seedMessages.length * 60 * 1000;
+  for (let i = 0; i < seedMessages.length; i += 1) {
+    const message = seedMessages[i];
+    await chatMessagesCollection.insertOne({
+      dealId,
+      senderRole: message.senderRole,
+      text: message.text,
+      createdAt: new Date(baseTime + i * 60 * 1000).toISOString(),
+    });
+  }
+}
+
 async function ensureDealDoc(dealId) {
   const existing = await chatDealsCollection.findOne({ dealId });
-  if (existing) return existing;
+  if (existing) {
+    await ensureSeedMessagesForDeal(dealId);
+    return existing;
+  }
 
   const nowIso = new Date().toISOString();
   const seed = {
@@ -838,6 +897,8 @@ async function ensureDealDoc(dealId) {
     { $setOnInsert: seed, $set: { updatedAt: nowIso } },
     { upsert: true },
   );
+
+  await ensureSeedMessagesForDeal(dealId);
 
   return (await chatDealsCollection.findOne({ dealId })) || seed;
 }
