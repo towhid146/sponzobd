@@ -1007,6 +1007,113 @@
         margin-top: 8px;
         flex-wrap: wrap;
       }
+      .criteria-card {
+        background: var(--srf);
+        border: 1px solid var(--bdr-m);
+        border-radius: var(--r3);
+        overflow: hidden;
+        max-width: 70%;
+      }
+      .crit-thumb {
+        width: 100%;
+        height: 96px;
+        background: linear-gradient(135deg, var(--pur-l), var(--blu-l));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .crit-body {
+        padding: 10px 12px;
+      }
+      .crit-hd {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--tx1);
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .crit-section {
+        margin-bottom: 8px;
+      }
+      .crit-sec-title {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--tx2);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 5px;
+        padding-bottom: 4px;
+        border-bottom: 1px solid var(--bdr);
+      }
+      .crit-item {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 11px;
+        color: var(--tx2);
+        padding: 3px 0;
+        border-bottom: 1px solid var(--bdr);
+      }
+      .crit-item:last-child {
+        border-bottom: none;
+      }
+      .crit-link {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 12px;
+        color: var(--blu-t);
+        font-weight: 600;
+        padding: 6px 9px;
+        background: var(--blu-l);
+        border-radius: var(--r1);
+        margin: 7px 0;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .crit-link:hover {
+        background: var(--blu-m);
+      }
+      .crit-note {
+        font-size: 11px;
+        color: var(--tx2);
+        background: var(--srf2);
+        border-radius: var(--r1);
+        padding: 6px 9px;
+        margin-bottom: 7px;
+        line-height: 1.55;
+        border-left: 2px solid var(--bdr-m);
+      }
+      .crit-sig {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 8px;
+        padding: 7px 0;
+      }
+      .crit-sig-item {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        font-size: 11px;
+        flex: 1;
+      }
+      .crit-sig-name {
+        font-weight: 600;
+        color: var(--tx1);
+      }
+      .crit-sig-status {
+        font-size: 10px;
+        color: var(--tx3);
+      }
+      .crit-actions {
+        display: flex;
+        gap: 7px;
+        margin-top: 8px;
+      }
       .review-card {
         background: var(--srf);
         border: 1px solid var(--grn-m);
@@ -2113,110 +2220,135 @@
                   SB
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 3px">
-                  <div class="deal-rec">
-                    <div class="dr-hd">
+                  <div class="criteria-card">
+                    <div class="crit-thumb">
                       <svg
-                        width="13"
-                        height="13"
-                        viewBox="0 0 13 13"
+                        width="26"
+                        height="26"
+                        viewBox="0 0 26 26"
                         fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.2"
+                        opacity=".35"
                       >
-                        <rect
-                          x="1.5"
-                          y="1.5"
-                          width="10"
-                          height="10"
-                          rx="1.5"
-                          fill="#C0DD97"
-                        />
-                        <path
-                          d="M3.5 6.5h6M3.5 4.5h6M3.5 8.5h4"
-                          stroke="#27500A"
+                        <rect x="2" y="2" width="22" height="22" rx="2" />
+                        <path d="M3.5 7h19M3.5 12h19M3.5 17h13" /></svg
+                      ><span style="font-size: 10px; color: var(--tx3)"
+                        >Criteria verification · Auto-generated</span
+                      >
+                    </div>
+                    <div class="crit-body">
+                      <div class="crit-hd">
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 12 12"
+                          fill="none"
+                          stroke="#3B6D11"
+                          stroke-width="1.3"
+                        >
+                          <rect x="1.5" y="1.5" width="9" height="9" rx="1" />
+                          <path d="M3.5 6h5M3.5 3.5h5M3.5 8.5h3" /></svg
+                        >Criteria verification · SponzoBD Platform
+                      </div>
+                      <div class="crit-section">
+                        <div class="crit-sec-title">Terms AGREED</div>
+                        <div class="crit-item">
+                          <svg viewBox="0 0 11 11" fill="none" width="11">
+                            <circle cx="5.5" cy="5.5" r="4.5" fill="#C0DD97" />
+                            <path
+                              d="M3 5.5l2 2L8.5 3"
+                              stroke="#27500A"
+                              stroke-width="1.3"
+                              stroke-linecap="round"
+                            /></svg
+                          >Rate: ৳22,000
+                        </div>
+                        <div class="crit-item">
+                          <svg viewBox="0 0 11 11" fill="none" width="11">
+                            <circle cx="5.5" cy="5.5" r="4.5" fill="#C0DD97" />
+                            <path
+                              d="M3 5.5l2 2L8.5 3"
+                              stroke="#27500A"
+                              stroke-width="1.3"
+                              stroke-linecap="round"
+                            /></svg
+                          >Deliverables: 2 posts · 4 stories
+                        </div>
+                        <div class="crit-item">
+                          <svg viewBox="0 0 11 11" fill="none" width="11">
+                            <circle cx="5.5" cy="5.5" r="4.5" fill="#C0DD97" />
+                            <path
+                              d="M3 5.5l2 2L8.5 3"
+                              stroke="#27500A"
+                              stroke-width="1.3"
+                              stroke-linecap="round"
+                            /></svg
+                          >Deadline: April 2, 2025
+                        </div>
+                        <div class="crit-item">
+                          <svg viewBox="0 0 11 11" fill="none" width="11">
+                            <circle cx="5.5" cy="5.5" r="4.5" fill="#C0DD97" />
+                            <path
+                              d="M3 5.5l2 2L8.5 3"
+                              stroke="#27500A"
+                              stroke-width="1.3"
+                              stroke-linecap="round"
+                            /></svg
+                          >Revisions: 1 · 7-day window
+                        </div>
+                        <div class="crit-item">
+                          <svg viewBox="0 0 11 11" fill="none" width="11">
+                            <circle cx="5.5" cy="5.5" r="4.5" fill="#C0DD97" />
+                            <path
+                              d="M3 5.5l2 2L8.5 3"
+                              stroke="#27500A"
+                              stroke-width="1.3"
+                              stroke-linecap="round"
+                            /></svg
+                          >Usage: 3 months · Bangladesh
+                        </div>
+                      </div>
+                      <a class="crit-link" href="#" onclick="return false;"
+                        ><svg
+                          width="11"
+                          height="11"
+                          viewBox="0 0 12 12"
+                          fill="none"
+                          stroke="currentColor"
                           stroke-width="1.2"
-                          stroke-linecap="round"
-                        /></svg
-                      >Criteria Verification · SponzoBD Platform ·
-                      Auto-generated
-                    </div>
-                    <div class="dr-sec-t">Parties</div>
-                    <div class="dr-row">
-                      <span class="dr-l">Sponsor</span
-                      ><span class="dr-v">GreenFresh BD · Dhaka</span>
-                    </div>
-                    <div class="dr-row">
-                      <span class="dr-l">Creator</span
-                      ><span class="dr-v">Nadia Islam · @nadia.style</span>
-                    </div>
-                    <div class="dr-row">
-                      <span class="dr-l">Campaign</span
-                      ><span class="dr-v">Ramadan Wellness Series</span>
-                    </div>
-                    <div class="dr-sec-t">Agreed terms</div>
-                    <div class="dr-row">
-                      <span class="dr-l">Rate</span
-                      ><span class="dr-v grn">৳22,000</span>
-                    </div>
-                    <div class="dr-row">
-                      <span class="dr-l">Deliverables</span
-                      ><span class="dr-v">2 Instagram posts · 4 stories</span>
-                    </div>
-                    <div class="dr-row">
-                      <span class="dr-l">Deadline</span
-                      ><span class="dr-v">April 2, 2025</span>
-                    </div>
-                    <div class="dr-row">
-                      <span class="dr-l">Revision rounds</span
-                      ><span class="dr-v">1 · 7-day review window</span>
-                    </div>
-                    <div class="dr-row">
-                      <span class="dr-l">Usage rights</span
-                      ><span class="dr-v">3 months · Bangladesh</span>
-                    </div>
-                    <div class="dr-sec-t">Escrow & default conditions</div>
-                    <div class="dr-row">
-                      <span class="dr-l">You must fund</span
-                      ><span class="dr-v">৳22,000 after confirmation</span>
-                    </div>
-                    <div class="dr-row">
-                      <span class="dr-l">Auto-release</span
-                      ><span class="dr-v"
-                        >April 9, 2025 if you don't respond</span
+                        >
+                          <path d="M5 2H2v8h8V7M7 2h3v3M5 7l5-5" /></svg
+                        >View full criteria · details document</a
                       >
-                    </div>
-                    <div class="dr-row">
-                      <span class="dr-l">If creator misses deadline</span
-                      ><span class="dr-v red"
-                        >You may cancel · escrow refunded</span
-                      >
-                    </div>
-                    <div class="dr-row">
-                      <span class="dr-l">Platform fee</span
-                      ><span class="dr-v"
-                        >3.5% deducted at payment release</span
-                      >
-                    </div>
-                    <div class="dr-sigs">
-                      <div class="dr-sig">
-                        <div class="dr-sig-name">GreenFresh BD</div>
-                        <div class="dr-sig-meta">
-                          Awaiting your confirmation
+                      <div class="crit-note">
+                        Creator Nadia Islam agreed to these terms on Mar 16.
+                        Platform generated verification card. Escrow funding
+                        required after your confirmation.
+                      </div>
+                      <div class="crit-sig">
+                        <div class="crit-sig-item">
+                          <span class="crit-sig-name">GreenFresh BD</span>
+                          <span
+                            class="crit-sig-status"
+                            style="color: var(--amb-t)"
+                            >⏳ Awaiting your confirmation</span
+                          >
                         </div>
-                        <div class="dr-sig-ok" style="color: var(--amb-t)">
-                          ⏳ Action required
+                        <div class="crit-sig-item">
+                          <span class="crit-sig-name">Nadia Islam</span>
+                          <span
+                            class="crit-sig-status"
+                            style="color: var(--grn-3)"
+                            >✓ Confirmed Mar 16</span
+                          >
                         </div>
                       </div>
-                      <div class="dr-sig">
-                        <div class="dr-sig-name">Nadia Islam</div>
-                        <div class="dr-sig-meta">
-                          Confirmed Mar 16 · 9:02 AM
-                        </div>
-                        <div class="dr-sig-ok">✓ IP logged · confirmed</div>
+                      <div class="crit-actions">
+                        <button class="btn-g" onclick="confirmRecord()">
+                          ✓ Confirm & agree
+                        </button>
                       </div>
-                    </div>
-                    <div class="dr-confirm-actions">
-                      <button class="btn-g" onclick="confirmRecord()">
-                        ✓ I confirm and agree to these terms
-                      </button>
                     </div>
                   </div>
                   <div class="msg-t">Mar 16 · 9:03 AM · Platform</div>
@@ -2717,6 +2849,19 @@
           : {};
       }
 
+      function clearLocalDemoDealState(dealId) {
+        try {
+          const shared = loadSharedDeals();
+          if (shared && typeof shared === "object") {
+            delete shared[dealId];
+            saveSharedDeals(shared);
+          }
+        } catch (_err) {
+          // Ignore storage failures and fall back to a reload.
+        }
+        LAST_MESSAGE_AT[dealId] = "";
+      }
+
       async function fetchDealsFromServer() {
         const ids = Object.values(DEAL_ID_BY_CONV).join(",");
         if (!ids) return;
@@ -2933,21 +3078,42 @@
         const actions = document.querySelector("#thread-la .tc-actions");
         if (actions) actions.remove();
         const thread = document.getElementById("thread-la");
-        if (
-          thread &&
-          !thread.querySelector(".se-lbl[data-state='terms-accepted']")
-        ) {
-          const sys = document.createElement("div");
-          sys.className = "sys-ev";
-          sys.innerHTML =
-            '<div class="se-lbl" data-state="terms-accepted">Terms accepted · criteria verification being generated</div><div class="se-det">GreenFresh BD accepted Lamia\'s terms · Platform generating criteria verification for both parties to confirm</div><div class="se-t">Just now · Platform</div>';
-          thread.appendChild(sys);
+        if (!thread) return;
+
+        // Phase 2: append locked Agreement Confirmation card
+        if (!thread.querySelector("[data-phase='2-confirmed']")) {
+          const conf = document.createElement("div");
+          conf.className = "msg-wrap";
+          conf.setAttribute("data-phase", "2-confirmed");
+          conf.innerHTML =
+            '<div class="m-av" style="background:var(--pur-l);color:var(--pur-t)">SB</div>' +
+            '<div style="display:flex;flex-direction:column;gap:3px;">' +
+            '<div class="terms-card" style="border-color:var(--grn);background:var(--teal-l);max-width:80%;">' +
+            '<div class="tc-hd" style="color:var(--grn-d);border-bottom:1px solid var(--grn-m);padding-bottom:8px;margin-bottom:8px;">' +
+            '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L10 3" stroke="#085041" stroke-width="1.5" stroke-linecap="round"/></svg>' +
+            'Agreement confirmed · both parties agreed</div>' +
+            '<div class="tc-row"><span class="tc-l">Rate</span><span class="tc-v">৳35,000</span></div>' +
+            '<div class="tc-row"><span class="tc-l">Deliverables</span><span class="tc-v">2 IG reels · 3 stories · 1 YouTube short</span></div>' +
+            '<div class="tc-row"><span class="tc-l">Deadline</span><span class="tc-v">March 22, 2025</span></div>' +
+            '<div class="tc-row"><span class="tc-l">Revision rounds</span><span class="tc-v">1 included · 7-day review window</span></div>' +
+            '<div class="tc-row" style="border:none;"><span class="tc-l">Usage rights</span><span class="tc-v">3 months · Bangladesh only</span></div>' +
+            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--grn-m);">' +
+            '<div style="font-size:10px;background:var(--srf);border-radius:var(--r1);padding:6px 8px;">' +
+            '<div style="font-weight:700;color:var(--grn-3);">✓ GreenFresh BD</div><div style="color:var(--tx3);">Accepted · Just now</div></div>' +
+            '<div style="font-size:10px;background:var(--srf);border-radius:var(--r1);padding:6px 8px;">' +
+            '<div style="font-weight:700;color:var(--grn-3);">✓ Lamia Akter</div><div style="color:var(--tx3);">Terms proposed · Mar 15</div></div>' +
+            '</div>' +
+            '<div class="tc-badge tc-acc" style="margin-top:9px;">🔒 Terms locked · cannot be modified</div>' +
+            '</div>' +
+            '<div class="msg-t">Just now · Platform</div></div>';
+          thread.appendChild(conf);
           thread.scrollTop = thread.scrollHeight;
         }
+
         setConvSummary(
           "la",
-          "Terms accepted — criteria verification pending",
-          "Criteria verification",
+          "Terms accepted — deliverables to-do list ready",
+          "Deliverables to-do",
         );
       }
 
@@ -3243,6 +3409,7 @@
         }
 
         const dealD = getSharedDeal("fa");
+        const bothRated = Boolean(dealD.sponsorRated && dealD.sponseeRated);
         if (dealD.sponsorRated && dealD.sponsorRating) {
           renderSponsorRatingSubmitted(
             dealD.sponsorRating,
@@ -3260,6 +3427,11 @@
             "Creator rated the collaboration " + dealD.sponseeRating + "/5",
             "Rated by creator",
           );
+        }
+
+        if (bothRated) {
+          setConvSummary("fa", "Deal done · ratings exchanged", "Deal done");
+          showDealDoneMessageSponsor();
         }
 
         refreshSponsorContextChrome();
@@ -3321,11 +3493,11 @@
         thread.scrollTop = thread.scrollHeight;
       }
 
-      function appendInlineGeneratedCardSponsor(threadId, cardType) {
+      function appendInlineGeneratedCardSponsor(threadId = active) {
         const thread = document.getElementById(`thread-${threadId}`);
         if (!thread) return false;
 
-        const key = `${threadId}-${cardType}`;
+        const key = `${threadId}-todo`;
         if (thread.querySelector(`[data-inline-card='${key}']`)) {
           thread.scrollTop = thread.scrollHeight;
           return false;
@@ -3335,122 +3507,130 @@
         wrap.className = "msg-wrap";
         wrap.setAttribute("data-inline-card", key);
 
-        if (cardType === "criteria") {
-          wrap.innerHTML =
-            '<div class="m-av" style="background: var(--pur-l); color: var(--pur-t)">SB</div>' +
-            '<div style="display:flex;flex-direction:column;gap:3px;">' +
-            '<div class="deal-rec" style="border-style:dashed;">' +
-            '<div class="dr-hd"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1.5" y="1.5" width="10" height="10" rx="1.5" fill="#C0DD97"/><path d="M3.5 6.5h6M3.5 4.5h6M3.5 8.5h4" stroke="#27500A" stroke-width="1.2" stroke-linecap="round"/></svg>Criteria Verification Card</div>' +
-            '<div class="dr-row"><span class="dr-l">Flow</span><span class="dr-v">Sponsor fulfills criteria after creator checklist submission</span></div>' +
-            '<div class="dr-row"><span class="dr-l">Current step</span><span class="dr-v">Use this chat thread only</span></div>' +
-            '<div class="dr-row"><span class="dr-l">After approval</span><span class="dr-v">Authority marks escrow passed</span></div>' +
-            '<div class="tc-badge tc-pend" style="margin-top:8px;">Generated in current chat</div>' +
-            "</div>" +
-            '<div class="msg-t">Just now · Platform</div>' +
-            "</div>";
-        } else if (cardType === 'review') {
-          wrap.innerHTML =
-            
-'<div class="m-av" style="background: var(--pur-l); color: var(--pur-t)">SB</div>' +
-'<div style="display:flex;flex-direction:column;gap:3px;">' +
-  '<div class="content-card" style="max-width:85%; background: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid var(--bdr);">' +
-    // SECTION 1: TERMS COMPARISON
-    '<div style="padding:12px;border-bottom:1px solid var(--bdr);">' +
-      '<div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:12px;">' +
-        '<div style="flex:1;padding:10px;background:var(--srf2);border-radius:var(--r2);border-left:3px solid var(--grn-m);">' +
-          '<div style="font-size:11px;font-weight:600;color:var(--tx1);margin-bottom:8px;display:flex;align-items:center;gap:4px;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3" opacity=".6"><rect x="2" y="2" width="8" height="8" rx="1"></rect><path d="M3.5 6h5M3.5 4h5M3.5 8h3"></path></svg>Terms proposed by Towhidul Islam</div>' +
-          '<div style="font-size:10px;color:var(--tx2);line-height:1.5;">' +
-            '<div style="margin-bottom:4px;"><strong>Rate</strong> ৳35,000</div>' +
-            '<div style="margin-bottom:4px;"><strong>Deliverables</strong> 2 IG reels · 3 stories · 1 YouTube short</div>' +
-            '<div style="margin-bottom:4px;"><strong>Deadline</strong> March 22, 2025</div>' +
-            '<div style="margin-bottom:4px;"><strong>Revision rounds</strong> 1 included · 7-day review</div>' +
-            '<div><strong>Usage rights</strong> 3 months · Bangladesh</div>' +
-          '</div>' +
-          '<div style="font-size:10px;color:var(--amb-t);margin-top:8px;font-weight:600;">Awaiting your response</div>' +
-        '</div>' +
-        '<div style="flex:0 0 24px;display:flex;align-items:center;justify-content:center;margin-top:16px;"><svg width="20" height="3" viewBox="0 0 20 3" fill="none" stroke="var(--tx3)" stroke-width="1.5"><line x1="0" y1="1.5" x2="20" y2="1.5"></line><polygon points="20,1.5 16,0 16,3" fill="var(--tx3)"></polygon></svg></div>' +
-        '<div style="flex:1;padding:10px;background:var(--srf2);border-radius:var(--r2);border-left:3px solid var(--grn);">' +
-          '<div style="font-size:11px;font-weight:600;color:var(--tx1);margin-bottom:8px;display:flex;align-items:center;gap:4px;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3" opacity=".6"><rect x="2" y="2" width="8" height="8" rx="1"></rect><path d="M3.5 6h5M3.5 4h5M3.5 8h3"></path></svg>Terms proposed by Lamia Akter</div>' +
-          '<div style="font-size:10px;color:var(--tx2);line-height:1.5;">' +
-            '<div style="margin-bottom:4px;"><strong>Rate</strong> ৳35,000</div>' +
-            '<div style="margin-bottom:4px;"><strong>Deliverables</strong> 2 IG reels · 3 stories · 1 YouTube short</div>' +
-            '<div style="margin-bottom:4px;"><strong>Deadline</strong> March 22, 2025</div>' +
-            '<div style="margin-bottom:4px;"><strong>Revision rounds</strong> 1 included · 7-day review window</div>' +
-            '<div><strong>Usage rights</strong> 3 months · Bangladesh only</div>' +
-          '</div>' +
-          '<div style="font-size:10px;color:var(--grn-3);margin-top:8px;font-weight:600;">✓ Accepted by sponsor</div>' +
-        '</div>' +
-      '</div>' +
-    '</div>' +
-    // SECTION 2: CONTENT SUBMITTED
-    '<div style="padding:12px;border-bottom:1px solid var(--bdr);">' +
-      '<div class="cc-hd" style="font-weight:600;font-size:11px;margin-bottom:8px;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#3B6D11" stroke-width="1.3"><rect x="1.5" y="1.5" width="9" height="9" rx="1"></rect><path d="M3.5 4h5M3.5 6.5h5M3.5 9h3"></path></svg> Content submitted · 3 of 3 deliverables</div>' +
-      '<div class="cc-item" style="font-size:10px;margin-bottom:4px;color:var(--tx2);"><svg viewBox="0 0 11 11" fill="none" width="11"><circle cx="5.5" cy="5.5" r="4.5" fill="#C0DD97"></circle><path d="M3 5.5l2 2L8.5 3" stroke="#27500A" stroke-width="1.3" stroke-linecap="round"></path></svg> Instagram reel · 48 sec</div>' +
-      '<div class="cc-item" style="font-size:10px;margin-bottom:4px;color:var(--tx2);"><svg viewBox="0 0 11 11" fill="none" width="11"><circle cx="5.5" cy="5.5" r="4.5" fill="#C0DD97"></circle><path d="M3 5.5l2 2L8.5 3" stroke="#27500A" stroke-width="1.3" stroke-linecap="round"></path></svg> Instagram story 1</div>' +
-      '<div class="cc-item" style="font-size:10px;margin-bottom:4px;color:var(--tx2);"><svg viewBox="0 0 11 11" fill="none" width="11"><circle cx="5.5" cy="5.5" r="4.5" fill="#C0DD97"></circle><path d="M3 5.5l2 2L8.5 3" stroke="#27500A" stroke-width="1.3" stroke-linecap="round"></path></svg> Instagram story 2</div>' +
-      '<a style="font-size:10px;color:var(--blu);text-decoration:none;display:inline-block;margin-top:4px;" href="#" onclick="return false;"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 2H2v8h8V7M7 2h3v3M5 7l5-5"></path></svg> View content files · Google Drive</a>' +
-      '<div style="font-size:10px;color:var(--tx2);background:var(--srf2);padding:6px;border-radius:4px;margin-top:8px;">Reel features the supplement naturally in the morning routine. Both stories are lifestyle clips. Brand tag @greenfreshbd and hashtags included.</div>' +
-    '</div>' +
-    // SECTION 3: REVIEW & RATING
-    '<div style="padding:12px;">' +
-      '<div style="font-size:11px;font-weight:600;color:var(--tx1);margin-bottom:8px;">Final approval & review</div>' +
-      '<div style="display:flex;gap:8px;margin-bottom:12px;">' +
-        '<div style="flex:1;font-size:10px;padding:8px;background:var(--grn-l);border-radius:var(--r1);border-left:2px solid var(--grn);">' +
-          '<div style="font-weight:600;color:var(--grn-3);margin-bottom:2px;">✓ Authority ESCROW passed</div>' +
-          '<div style="color:var(--tx2);">Content meets all criteria and deliverables</div>' +
-        '</div>' +
-      '</div>' +
-      '<div style="background:var(--srf2); border-radius: 6px; padding: 10px; border: 1px solid var(--bdr);">' +
-        '<div style="font-size:11px; font-weight:600; margin-bottom:5px;">Rate your experience</div>' +
-        '<div style="display:flex; gap:4px; margin-bottom:8px; font-size:20px; cursor:pointer;" data-val="0" class="star-rating-stars">' +
-          '<span onclick="this.parentElement.setAttribute(\'data-val\', 1); Array.from(this.parentElement.children).forEach((s,i) => s.innerHTML = i < 1 ? \'★\' : \'☆\')">☆</span>' +
-          '<span onclick="this.parentElement.setAttribute(\'data-val\', 2); Array.from(this.parentElement.children).forEach((s,i) => s.innerHTML = i < 2 ? \'★\' : \'☆\')">☆</span>' +
-          '<span onclick="this.parentElement.setAttribute(\'data-val\', 3); Array.from(this.parentElement.children).forEach((s,i) => s.innerHTML = i < 3 ? \'★\' : \'☆\')">☆</span>' +
-          '<span onclick="this.parentElement.setAttribute(\'data-val\', 4); Array.from(this.parentElement.children).forEach((s,i) => s.innerHTML = i < 4 ? \'★\' : \'☆\')">☆</span>' +
-          '<span onclick="this.parentElement.setAttribute(\'data-val\', 5); Array.from(this.parentElement.children).forEach((s,i) => s.innerHTML = i < 5 ? \'★\' : \'☆\')">☆</span>' +
-        '</div>' +
-        '<textarea id="review-text-' + threadId + '" style="width:100%; border:1px solid var(--bdr); border-radius:4px; padding:6px; font-size:10px; margin-bottom:8px; height:40px; resize:none; font-family:inherit; box-sizing:border-box;" placeholder="Write an optional review..."></textarea>' +
-        '<button class="btn-g" style="width:100%;" onclick="submitInCardRating('' + threadId + '', 'sponsee', this)">Rate & complete deal</button>' +
-      '</div>' +
-    '</div>' +
-  '</div>' +
-  '<div class="msg-t">Just now · Platform</div>' +
-'</div>'
-;
-        }
-        }
+        const deliverables = [
+          "Instagram reel · 48 sec",
+          "Instagram story 1",
+          "Instagram story 2",
+        ];
+
+        const itemsHtml = deliverables
+          .map(
+            (d, i) =>
+              `<div class="cc-item" id="todo-item-${threadId}-${i}" style="display:flex;align-items:center;justify-content:space-between;">` +
+              `<span style="display:flex;align-items:center;gap:6px;">` +
+              `<svg id="todo-icon-${threadId}-${i}" viewBox="0 0 11 11" fill="none" width="11"><circle cx="5.5" cy="5.5" r="4.5" fill="#ddd"/></svg>` +
+              `<span id="todo-label-${threadId}-${i}" style="color:var(--tx2);">${d}</span></span>` +
+              `<label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:11px;color:var(--tx3);">` +
+              `<input type="checkbox" id="todo-cb-${threadId}-${i}" onchange="toggleDeliverable('${threadId}',${i})" style="accent-color:var(--grn);cursor:pointer;"> Done</label>` +
+              `</div>`,
+          )
+          .join("");
+
+        wrap.innerHTML =
+          '<div class="m-av" style="background:var(--pur-l);color:var(--pur-t)">SB</div>' +
+          '<div style="display:flex;flex-direction:column;gap:3px;">' +
+          '<div class="content-card" style="max-width:80%;">' +
+          '<div class="cc-thumb"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".3"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 12h10M7 8h10M7 16h6"/></svg>' +
+          '<span style="font-size:10px;color:var(--tx3);">Content deliverables to-do · Auto-generated</span></div>' +
+          '<div class="cc-body">' +
+          '<div class="cc-hd"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#3B6D11" stroke-width="1.3"><rect x="1.5" y="1.5" width="9" height="9" rx="1"/><path d="M3.5 4h5M3.5 6.5h5M3.5 9h3"/></svg>' +
+          `Deliverables to-do · 0 of ${deliverables.length} checked</div>` +
+          `<div id="todo-progress-${threadId}" style="height:4px;background:var(--bdr-m);border-radius:2px;margin-bottom:8px;"><div id="todo-bar-${threadId}" style="height:4px;background:var(--grn);border-radius:2px;width:0%;transition:width 0.3s;"></div></div>` +
+          itemsHtml +
+          '<a class="cc-link" href="#" onclick="return false;" style="margin-top:9px;"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 2H2v8h8V7M7 2h3v3M5 7l5-5"/></svg>View content files · Google Drive</a>' +
+          '<div class="cc-note" style="margin-top:6px;">Check each item after reviewing the creator\'s file. All items must be checked before payment is released.</div>' +
+          '</div></div>' +
+          '<div class="msg-t">Just now · Platform</div></div>';
 
         thread.appendChild(wrap);
         thread.scrollTop = thread.scrollHeight;
         return true;
       }
 
-      function generateCriteriaCardSponsor() {
-        const created = appendInlineGeneratedCardSponsor(active, "criteria");
-        appendInlineSystemEvent(
-          active,
-          "Criteria verification card generated",
-          "Continue this chat to verify criteria. No chat switch required.",
-        );
+      function toggleDeliverable(threadId, index) {
+        const cb = document.getElementById(`todo-cb-${threadId}-${index}`);
+        const icon = document.getElementById(`todo-icon-${threadId}-${index}`);
+        const label = document.getElementById(`todo-label-${threadId}-${index}`);
+        if (!cb || !icon) return;
+
+        if (cb.checked) {
+          icon.innerHTML = '<circle cx="5.5" cy="5.5" r="4.5" fill="#C0DD97"/><path d="M3 5.5l2 2L8.5 3" stroke="#27500A" stroke-width="1.3" stroke-linecap="round"/>';
+          if (label) label.style.color = "var(--grn-3)";
+        } else {
+          icon.innerHTML = '<circle cx="5.5" cy="5.5" r="4.5" fill="#ddd"/>';
+          if (label) label.style.color = "var(--tx2)";
+        }
+
+        // Persist checked set to shared state so sponsee's read-only view syncs
+        const thread = document.getElementById(`thread-${threadId}`);
+        if (thread) {
+          const allCbs = thread.querySelectorAll(`[id^="todo-cb-${threadId}-"]`);
+          const checkedIdxs = Array.from(allCbs)
+            .map((c, i) => (c.checked ? i : null))
+            .filter((v) => v !== null);
+          const convId = threadId === "la" ? "la" : threadId;
+          patchDealState(convId, { checkedDeliverables: checkedIdxs });
+        }
+
+        updateToDoProgress(threadId);
+      }
+
+      function updateToDoProgress(threadId) {
+        const thread = document.getElementById(`thread-${threadId}`);
+        if (!thread) return;
+        const checkboxes = thread.querySelectorAll(`[id^="todo-cb-${threadId}-"]`);
+        const total = checkboxes.length;
+        const done = Array.from(checkboxes).filter((cb) => cb.checked).length;
+        const bar = document.getElementById(`todo-bar-${threadId}`);
+        if (bar) bar.style.width = (done / total * 100) + "%";
+        const hd = thread.querySelector(".cc-hd");
+        if (hd) hd.innerHTML =
+          '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#3B6D11" stroke-width="1.3"><rect x="1.5" y="1.5" width="9" height="9" rx="1"/><path d="M3.5 4h5M3.5 6.5h5M3.5 9h3"/></svg>' +
+          `Deliverables to-do · ${done} of ${total} checked`;
+
+        if (done === total) {
+          patchDealState(threadId === "la" ? "la" : threadId, { allTasksComplete: true,
+            sponsorPreview: "All deliverables verified — tasks complete",
+            sponseePreview: "All tasks approved by sponsor" });
+          onAllTasksDone(threadId);
+        }
+      }
+
+      function onAllTasksDone(threadId) {
+        const thread = document.getElementById(`thread-${threadId}`);
+        if (!thread) return;
+        if (thread.querySelector("[data-phase='4-complete']")) return;
+
+        // Phase 4 — Task Complete card
+        const card = document.createElement("div");
+        card.className = "sys-ev";
+        card.setAttribute("data-phase", "4-complete");
+        card.style.cssText = "background:var(--grn-l);border-color:var(--grn-m);max-width:420px;margin:0 auto;";
+        card.innerHTML =
+          '<div class="se-lbl" style="color:var(--grn-3);">✓ All tasks complete · content approved</div>' +
+          '<div class="se-det" style="color:var(--grn-t);">All deliverables verified. A review card has been sent to the creator. Payment will be released after rating.</div>' +
+          '<div class="se-t">Just now · Platform</div>';
+        thread.appendChild(card);
+        thread.scrollTop = thread.scrollHeight;
+        T("All tasks done — review card sent to creator");
+        updateQA(threadId === "la" ? "la" : threadId);
+      }
+
+      function generateTodoCardSponsor(threadId = active) {
+        const created = appendInlineGeneratedCardSponsor(threadId);
         T(
           created
-            ? "Criteria verification card generated in this chat"
-            : "Criteria verification card is already present in this chat",
+            ? "Deliverables to-do list generated in this chat"
+            : "To-do list is already present in this chat",
         );
       }
 
-      function generateReviewCardSponsor() {
-        const created = appendInlineGeneratedCardSponsor(active, "review");
-        appendInlineSystemEvent(
-          active,
-          "Review card generated",
-          "Escrow passed. Submit your rating below in this same chat.",
-        );
-        T(
-          created
-            ? "Review card generated in this chat"
-            : "Review card is already present in this chat",
-        );
+      function generateCriteriaCardSponsor(threadId = active) {
+        generateTodoCardSponsor(threadId);
+      }
+
+      function generateReviewCardSponsor(threadId = active) {
+        generateTodoCardSponsor(threadId);
       }
 
       function updateQA(id) {
@@ -3460,9 +3640,14 @@
         const dealC = getSharedDeal("rk");
         const dealD = getSharedDeal("fa");
         if (id === "la") {
-          if (dealA.termsAccepted) {
+          if (dealA.allTasksComplete) {
             row.innerHTML =
-              '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Terms accepted · generate criteria verification card here</span><button class="qa qa-g" onclick="generateCriteriaCardSponsor()">Next: Criteria verification</button>';
+              '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">✓ All deliverables verified · review card sent to creator</span>';
+          } else if (dealA.termsAccepted) {
+            // auto-inject the to-do card immediately
+            appendInlineGeneratedCardSponsor("la");
+            row.innerHTML =
+              '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Terms agreed · check each deliverable above as you review the Drive files</span>';
           } else if (dealA.termsStatus === "countered") {
             row.innerHTML =
               '<button class="qa qa-g" onclick="acceptTerms()">✓ Accept countered terms</button><button class="qa qa-a" onclick="showPanel(\'counter-panel\')">Send another counter</button><button class="qa" onclick="T(\'Decline sent\')">Decline</button>';
@@ -3471,10 +3656,13 @@
               '<button class="qa qa-g" onclick="acceptTerms()">✓ Accept terms</button><button class="qa qa-a" onclick="showPanel(\'counter-panel\')">Counter-propose</button><button class="qa" onclick="T(\'Decline sent\')">Decline</button>';
           }
         } else if (id === "ni") {
-          if (dealB.dealCriteriaApproved) {
+          if (dealB.termsAccepted) {
+            row.innerHTML =
+              '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Terms accepted · generate criteria verification card here</span><button class="qa qa-g" onclick="generateCriteriaCardSponsor(\'ni\')">Next: Criteria verification</button>';
+          } else if (dealB.dealCriteriaApproved) {
             if (dealB.escrowPassedByAuthority) {
               row.innerHTML =
-                '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Escrow passed by authority · generate review card here</span><button class="qa qa-g" onclick="generateReviewCardSponsor()">Go to review card</button>';
+                '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Escrow passed by authority · generate review card here</span><button class="qa qa-g" onclick="generateReviewCardSponsor(\'ni\')">Go to review card</button>';
             } else {
               row.innerHTML =
                 '<button class="qa qa-g" onclick="passEscrowByAuthority()">Authority: Escrow passed</button><span style="font-size:12px;color:var(--tx3);padding:4px 0;">Criteria fulfilled by sponsor</span>';
@@ -3492,7 +3680,7 @@
         } else if (id === "rk") {
           if (dealC.escrowFunded) {
             row.innerHTML =
-              '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Escrow funded · generate review card in this chat</span><button class="qa qa-g" onclick="generateReviewCardSponsor()">Next: Review & rating</button>';
+              '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Escrow funded · generate review card in this chat</span><button class="qa qa-g" onclick="generateReviewCardSponsor(\'rk\')">Next: Review & rating</button>';
           } else {
             row.innerHTML =
               '<button class="qa qa-g" onclick="fundEscrow()">Fund escrow ৳18,000</button><button class="qa" onclick="T(\'Opening chat...\')">Open chat</button>';
@@ -3690,6 +3878,41 @@
         });
         T("Revision request sent to creator");
       }
+      function saveProfileRating(profileKey, payload) {
+        try {
+          const current = JSON.parse(localStorage.getItem(profileKey) || "[]");
+          const list = Array.isArray(current) ? current : [];
+          list.push({
+            ...payload,
+            createdAt: new Date().toISOString(),
+          });
+          localStorage.setItem(profileKey, JSON.stringify(list));
+        } catch (_err) {
+          // Ignore storage failures to keep chat flow usable.
+        }
+      }
+      function showDealDoneMessageSponsor() {
+        const thread = document.getElementById("thread-fa");
+        if (!thread) return;
+
+        const reviewCard = document.getElementById("review-card-sp");
+        const reviewWrap = reviewCard ? reviewCard.closest(".msg-wrap") : null;
+        if (reviewWrap) reviewWrap.style.display = "none";
+
+        if (!thread.querySelector("[data-deal-done='fa']")) {
+          const done = document.createElement("div");
+          done.className = "sys-ev";
+          done.setAttribute("data-deal-done", "fa");
+          done.style.cssText =
+            "background:var(--grn-l);border-color:var(--grn-m);max-width:420px;margin:0 auto;";
+          done.innerHTML =
+            '<div class="se-lbl" style="color:var(--grn-3);">Deal done</div>' +
+            '<div class="se-det" style="color:var(--grn-t);">Both sides submitted rating and optional review. Added to profiles.</div>' +
+            '<div class="se-t">Just now · Platform</div>';
+          thread.appendChild(done);
+        }
+        thread.scrollTop = thread.scrollHeight;
+      }
 
       function setRatingSp(n) {
         ratingCr = n;
@@ -3705,6 +3928,8 @@
         }
         const note = document.getElementById("rv-sp-text").value.trim();
         const stars = "⭐".repeat(ratingCr);
+        const before = getSharedDeal("fa");
+        const bothAfterSubmit = Boolean(before?.sponseeRated);
         const card = document.getElementById("review-card-sp");
         card.innerHTML =
           '<div class="rv-hd"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1.5L8 5H12L9 7.5L10 11L6.5 8.5L3 11L4 7.5L1 5H5Z" fill="#EF9F27"/></svg>Your rating submitted</div>' +
@@ -3722,7 +3947,22 @@
           sponsorPreview: "You rated creator " + ratingCr + "/5",
           sponseePreview: "Sponsor rated this collaboration " + ratingCr + "/5",
         });
-        T("Rating submitted — visible on Faria Ahmed's public profile");
+
+        saveProfileRating("sponsee_profile_ratings", {
+          source: "sponsor",
+          dealId: DEAL_ID_BY_CONV.fa,
+          rating: ratingCr,
+          review: note,
+        });
+
+        if (bothAfterSubmit) {
+          setConvSummary("fa", "Deal done · ratings exchanged", "Deal done");
+          showDealDoneMessageSponsor();
+          T("Deal done — ratings added to both profiles");
+        } else {
+          setConvSummary("fa", "You rated creator " + ratingCr + "/5", "Rating submitted");
+          T("Rating submitted — visible on Faria Ahmed's public profile");
+        }
       }
 
       async function sendMsg() {
@@ -3755,17 +3995,13 @@
           if (!res.ok) {
             throw new Error("Reset API failed");
           }
-
-          LAST_MESSAGE_AT[dealId] = "";
-          await fetchDealsFromServer();
-          await fetchMessagesForConv("la");
-          if (active === "la") {
-            setActive("la");
-          }
-          T("Demo chat reset: GreenFresh BD and Towhidul Islam");
         } catch (_err) {
-          T("Could not reset demo chat data right now");
+          // Fall through to the local reset path below.
         }
+
+        clearLocalDemoDealState(dealId);
+        T("Demo chat reset: GreenFresh BD and Towhidul Islam");
+        setTimeout(() => window.location.reload(), 250);
       }
 
       function T(m) {
@@ -3802,39 +4038,6 @@
           updateBadge();
         }
       });
-    
-      function submitFinalRating() {
-         const rating = window.currentRating || 5; 
-         const reviewText = document.getElementById('optional-review') ? document.getElementById('optional-review').value : "";
-         
-         // 1. Show Deal Done Message inline
-         const thread = document.querySelector('.msg-thread.active');
-         if(thread) {
-            const card = document.createElement("div");
-            card.className = "sys-ev";
-            card.style.cssText = "background:var(--grn-l);border-color:var(--grn-m);max-width:420px;margin:0 auto;";
-            card.innerHTML = '<div class="se-lbl" style="color:var(--grn-3);">🎉 Deal Done!</div>' +
-                             '<div class="se-det" style="color:var(--grn-t);">Rating (' + rating + ' ★) ' + (reviewText ? 'and review ' : '') + 'were added successfully to the profile. Payment released.</div>' +
-                             '<div class="se-t">Just now · Platform</div>';
-            thread.appendChild(card);
-            thread.scrollTop = thread.scrollHeight;
-         }
-
-         // 2. Hide or disable the rating block so it can't be clicked again
-         const btn = document.querySelector('.cc-actions button');
-         if(btn) btn.disabled = true;
-
-         // 3. Save to localStorage profiles (Mock Backend)
-         try {
-            const tgtProfile = 'sponsee_profile_ratings';
-            let currentRatings = JSON.parse(localStorage.getItem(tgtProfile) || "[]");
-            currentRatings.push({ rating: rating, review: reviewText, date: new Date().toISOString() });
-            localStorage.setItem(tgtProfile, JSON.stringify(currentRatings));
-         } catch(e) {}
-         
-         if(window.T) window.T("Deal completed. Added to profile!");
-      }
     </script>
-    
   </body>
 </html>

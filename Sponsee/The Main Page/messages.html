@@ -3089,6 +3089,34 @@
           : {};
       }
 
+      function clearLocalDemoDealState(convId) {
+        const dealId = DEAL_ID_BY_CONV[convId];
+        if (!dealId) return;
+
+        try {
+          const nextMessageState = loadMessageState();
+          if (nextMessageState && typeof nextMessageState === "object") {
+            delete nextMessageState[convId];
+            messageState = nextMessageState;
+            saveMessageState();
+          }
+        } catch (_err) {
+          // Ignore storage failures and fall back to a reload.
+        }
+
+        try {
+          const shared = loadSharedDeals();
+          if (shared && typeof shared === "object") {
+            delete shared[dealId];
+            saveSharedDeals(shared);
+          }
+        } catch (_err) {
+          // Ignore storage failures and fall back to a reload.
+        }
+
+        LAST_MESSAGE_AT[dealId] = "";
+      }
+
       async function fetchDealsFromServer() {
         const ids = Object.values(DEAL_ID_BY_CONV).join(",");
         if (!ids) return;
@@ -3114,6 +3142,13 @@
           saveSharedDeals(shared);
           renderAllConversationChrome();
           updateQA(active);
+          // Refresh sponsee to-do card live as sponsor checks items
+          const dealA = getSharedDeal("gf");
+          if (dealA.termsAccepted) {
+            appendInlineGeneratedCardSponsee("gf");
+            refreshSponseeTodoCard("gf");
+            if (dealA.allTasksComplete) appendPhase4SponseeCard("gf");
+          }
         } catch (_err) {
           // Keep local fallback if API is unavailable.
         }
@@ -3491,7 +3526,7 @@
           <div class="ctx-right">
             <div class="ctx-amt">${escapeHtml(amount)}</div>
             <div class="ctx-lbl">${escapeHtml(label)}</div>
-            <button class="journey-btn" id="jbtn-${id}" onclick="toggleJourney('${id}')">
+            <button class="journey-btn" id="jbtn-${id}" onclick="toggleJourney(\'${id}\')">
               <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
                 <circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2" />
                 <path d="M6 4v4M6 3v.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
@@ -3664,9 +3699,9 @@
         if (dealA.termsAccepted) {
           stateA.preview =
             dealA.sponseePreview ||
-            "Sponsor accepted your terms — criteria verification pending";
-          stateA.stageLabel = "Criteria verification pending";
-          stateA.ctxLbl = "Terms accepted · waiting criteria verification";
+            "Sponsor accepted your terms — deliverables to-do list ready";
+          stateA.stageLabel = "Deliverables to-do";
+          stateA.ctxLbl = "Terms accepted · sponsor reviewing deliverables";
           const badge = document.querySelector("#thread-gf .tc-badge");
           if (badge) {
             badge.className = "tc-badge tc-acc";
@@ -3674,7 +3709,14 @@
           }
           if (termsNote) {
             termsNote.textContent =
-              "Sponsor accepted your terms. Criteria verification will be generated next.";
+              "Sponsor accepted your terms. Deliverables to-do list has been generated.";
+          }
+          // Phase 2 — append locked agreement card (idempotent)
+          appendPhase2ConfirmedCard("gf");
+          // Phase 4 — if all tasks done, show completion + review card
+          if (dealA.allTasksComplete) {
+            refreshSponseeTodoCard("gf");
+            appendPhase4SponseeCard("gf");
           }
         } else if (dealA.termsStatus === "countered") {
           stateA.preview =
@@ -3755,6 +3797,7 @@
 
         const dealD = getSharedDeal("sb");
         const stateD = getConversationState("sb");
+        const bothRated = Boolean(dealD.sponsorRated && dealD.sponseeRated);
         if (dealD.sponsorRated && dealD.sponsorRating) {
           stateD.preview =
             dealD.sponseePreview ||
@@ -3775,13 +3818,26 @@
               stars +
               " — " +
               submittedRating +
-              '/5 · StyleBox BD<div class="rv-by">— Synced from deal state</div></div>';
+              "/5 · StyleBox BD" +
+              (dealD.sponseeReviewNote
+                ? '<br><br>"' + escapeHtml(dealD.sponseeReviewNote) + '"'
+                : "") +
+              '<div class="rv-by">— Synced from deal state</div></div>';
           }
           stateD.preview = `You rated sponsor ${submittedRating}/5`;
           stateD.stageLabel = "Rating submitted";
         }
-      }
 
+        if (bothRated) {
+          stateD.preview = "Deal done · ratings exchanged";
+          stateD.stageLabel = "Deal done";
+          stateD.unread = false;
+          showDealDoneMessageSponsee();
+        }
+
+
+
+      }
       function syncVisibleConversation(id) {
         CONVS.forEach((c) => {
           const ctx = document.getElementById(`ctx-${c}`);
@@ -3902,11 +3958,43 @@
         thread.scrollTop = thread.scrollHeight;
       }
 
-      function appendInlineGeneratedCardSponsee(threadId, cardType) {
+      function appendPhase2ConfirmedCard(threadId) {
+        const thread = document.getElementById(`thread-${threadId}`);
+        if (!thread) return;
+        if (thread.querySelector("[data-phase='2-confirmed']")) return;
+        const conf = document.createElement("div");
+        conf.className = "msg-wrap";
+        conf.setAttribute("data-phase", "2-confirmed");
+        conf.innerHTML =
+          '<div class="m-av" style="background:var(--pur-l);color:var(--pur-t)">SB</div>' +
+          '<div style="display:flex;flex-direction:column;gap:3px;">' +
+          '<div class="terms-card" style="border-color:var(--grn);background:var(--teal-l);max-width:80%;">' +
+          '<div class="tc-hd" style="color:var(--grn-d);border-bottom:1px solid var(--grn-m);padding-bottom:8px;margin-bottom:8px;">' +
+          '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L10 3" stroke="#085041" stroke-width="1.5" stroke-linecap="round"/></svg>' +
+          "Agreement confirmed · both parties agreed</div>" +
+          '<div class="tc-row"><span class="tc-l">Rate</span><span class="tc-v">৳35,000</span></div>' +
+          '<div class="tc-row"><span class="tc-l">Deliverables</span><span class="tc-v">2 IG reels · 3 stories · 1 YouTube short</span></div>' +
+          '<div class="tc-row"><span class="tc-l">Deadline</span><span class="tc-v">March 22, 2025</span></div>' +
+          '<div class="tc-row"><span class="tc-l">Revision rounds</span><span class="tc-v">1 included · 7-day review window</span></div>' +
+          '<div class="tc-row" style="border:none;"><span class="tc-l">Usage rights</span><span class="tc-v">3 months · Bangladesh only</span></div>' +
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--grn-m);">' +
+          '<div style="font-size:10px;background:var(--srf);border-radius:var(--r1);padding:6px 8px;">' +
+          '<div style="font-weight:700;color:var(--grn-3);">✓ GreenFresh BD</div><div style="color:var(--tx3);">Accepted</div></div>' +
+          '<div style="font-size:10px;background:var(--srf);border-radius:var(--r1);padding:6px 8px;">' +
+          '<div style="font-weight:700;color:var(--grn-3);">✓ You</div><div style="color:var(--tx3);">Proposed · agreed</div></div>' +
+          '</div>' +
+          '<div class="tc-badge tc-acc" style="margin-top:9px;">🔒 Terms locked · cannot be modified</div>' +
+          '</div>' +
+          '<div class="msg-t">Just now · Platform</div></div>';
+        thread.appendChild(conf);
+        thread.scrollTop = thread.scrollHeight;
+      }
+
+      function appendInlineGeneratedCardSponsee(threadId) {
         const thread = document.getElementById(`thread-${threadId}`);
         if (!thread) return false;
 
-        const key = `${threadId}-${cardType}`;
+        const key = `${threadId}-todo`;
         if (thread.querySelector(`[data-inline-card='${key}']`)) {
           thread.scrollTop = thread.scrollHeight;
           return false;
@@ -3916,122 +4004,133 @@
         wrap.className = "msg-wrap";
         wrap.setAttribute("data-inline-card", key);
 
-        if (cardType === "criteria") {
-          wrap.innerHTML =
-            '<div class="m-av" style="background: var(--pur-l); color: var(--pur-t)">SB</div>' +
-            '<div style="display:flex;flex-direction:column;gap:3px;">' +
-            '<div class="deal-rec" style="border-style:dashed;">' +
-            '<div class="dr-hd"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1.5" y="1.5" width="10" height="10" rx="1.5" fill="#C0DD97"/><path d="M3.5 6.5h6M3.5 4.5h6M3.5 8.5h4" stroke="#27500A" stroke-width="1.2" stroke-linecap="round"/></svg>Criteria Verification Card</div>' +
-            '<div class="dr-row"><span class="dr-l">Flow</span><span class="dr-v">Submit checklist first, then sponsor confirms</span></div>' +
-            '<div class="dr-row"><span class="dr-l">Current step</span><span class="dr-v">Continue in this chat thread</span></div>' +
-            '<div class="dr-row"><span class="dr-l">After approval</span><span class="dr-v">Authority marks escrow passed</span></div>' +
-            '<div class="tc-badge tc-pend" style="margin-top:8px;">Generated in current chat</div>' +
-            "</div>" +
-            '<div class="msg-t">Just now · Platform</div>' +
-            "</div>";
-        } else if (cardType === 'review') {
-          wrap.innerHTML =
-            
-'<div class="m-av" style="background: var(--pur-l); color: var(--pur-t)">SB</div>' +
-'<div style="display:flex;flex-direction:column;gap:3px;">' +
-  '<div class="content-card" style="max-width:85%; background: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid var(--bdr);">' +
-    // SECTION 1: TERMS COMPARISON
-    '<div style="padding:12px;border-bottom:1px solid var(--bdr);">' +
-      '<div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:12px;">' +
-        '<div style="flex:1;padding:10px;background:var(--srf2);border-radius:var(--r2);border-left:3px solid var(--grn-m);">' +
-          '<div style="font-size:11px;font-weight:600;color:var(--tx1);margin-bottom:8px;display:flex;align-items:center;gap:4px;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3" opacity=".6"><rect x="2" y="2" width="8" height="8" rx="1"></rect><path d="M3.5 6h5M3.5 4h5M3.5 8h3"></path></svg>Terms proposed by Towhidul Islam</div>' +
-          '<div style="font-size:10px;color:var(--tx2);line-height:1.5;">' +
-            '<div style="margin-bottom:4px;"><strong>Rate</strong> ৳35,000</div>' +
-            '<div style="margin-bottom:4px;"><strong>Deliverables</strong> 2 IG reels · 3 stories · 1 YouTube short</div>' +
-            '<div style="margin-bottom:4px;"><strong>Deadline</strong> March 22, 2025</div>' +
-            '<div style="margin-bottom:4px;"><strong>Revision rounds</strong> 1 included · 7-day review</div>' +
-            '<div><strong>Usage rights</strong> 3 months · Bangladesh</div>' +
-          '</div>' +
-          '<div style="font-size:10px;color:var(--amb-t);margin-top:8px;font-weight:600;">Awaiting your response</div>' +
-        '</div>' +
-        '<div style="flex:0 0 24px;display:flex;align-items:center;justify-content:center;margin-top:16px;"><svg width="20" height="3" viewBox="0 0 20 3" fill="none" stroke="var(--tx3)" stroke-width="1.5"><line x1="0" y1="1.5" x2="20" y2="1.5"></line><polygon points="20,1.5 16,0 16,3" fill="var(--tx3)"></polygon></svg></div>' +
-        '<div style="flex:1;padding:10px;background:var(--srf2);border-radius:var(--r2);border-left:3px solid var(--grn);">' +
-          '<div style="font-size:11px;font-weight:600;color:var(--tx1);margin-bottom:8px;display:flex;align-items:center;gap:4px;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3" opacity=".6"><rect x="2" y="2" width="8" height="8" rx="1"></rect><path d="M3.5 6h5M3.5 4h5M3.5 8h3"></path></svg>Terms proposed by Lamia Akter</div>' +
-          '<div style="font-size:10px;color:var(--tx2);line-height:1.5;">' +
-            '<div style="margin-bottom:4px;"><strong>Rate</strong> ৳35,000</div>' +
-            '<div style="margin-bottom:4px;"><strong>Deliverables</strong> 2 IG reels · 3 stories · 1 YouTube short</div>' +
-            '<div style="margin-bottom:4px;"><strong>Deadline</strong> March 22, 2025</div>' +
-            '<div style="margin-bottom:4px;"><strong>Revision rounds</strong> 1 included · 7-day review window</div>' +
-            '<div><strong>Usage rights</strong> 3 months · Bangladesh only</div>' +
-          '</div>' +
-          '<div style="font-size:10px;color:var(--grn-3);margin-top:8px;font-weight:600;">✓ Accepted by sponsor</div>' +
-        '</div>' +
-      '</div>' +
-    '</div>' +
-    // SECTION 2: CONTENT SUBMITTED
-    '<div style="padding:12px;border-bottom:1px solid var(--bdr);">' +
-      '<div class="cc-hd" style="font-weight:600;font-size:11px;margin-bottom:8px;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#3B6D11" stroke-width="1.3"><rect x="1.5" y="1.5" width="9" height="9" rx="1"></rect><path d="M3.5 4h5M3.5 6.5h5M3.5 9h3"></path></svg> Content submitted · 3 of 3 deliverables</div>' +
-      '<div class="cc-item" style="font-size:10px;margin-bottom:4px;color:var(--tx2);"><svg viewBox="0 0 11 11" fill="none" width="11"><circle cx="5.5" cy="5.5" r="4.5" fill="#C0DD97"></circle><path d="M3 5.5l2 2L8.5 3" stroke="#27500A" stroke-width="1.3" stroke-linecap="round"></path></svg> Instagram reel · 48 sec</div>' +
-      '<div class="cc-item" style="font-size:10px;margin-bottom:4px;color:var(--tx2);"><svg viewBox="0 0 11 11" fill="none" width="11"><circle cx="5.5" cy="5.5" r="4.5" fill="#C0DD97"></circle><path d="M3 5.5l2 2L8.5 3" stroke="#27500A" stroke-width="1.3" stroke-linecap="round"></path></svg> Instagram story 1</div>' +
-      '<div class="cc-item" style="font-size:10px;margin-bottom:4px;color:var(--tx2);"><svg viewBox="0 0 11 11" fill="none" width="11"><circle cx="5.5" cy="5.5" r="4.5" fill="#C0DD97"></circle><path d="M3 5.5l2 2L8.5 3" stroke="#27500A" stroke-width="1.3" stroke-linecap="round"></path></svg> Instagram story 2</div>' +
-      '<a style="font-size:10px;color:var(--blu);text-decoration:none;display:inline-block;margin-top:4px;" href="#" onclick="return false;"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 2H2v8h8V7M7 2h3v3M5 7l5-5"></path></svg> View content files · Google Drive</a>' +
-      '<div style="font-size:10px;color:var(--tx2);background:var(--srf2);padding:6px;border-radius:4px;margin-top:8px;">Reel features the supplement naturally in the morning routine. Both stories are lifestyle clips. Brand tag @greenfreshbd and hashtags included.</div>' +
-    '</div>' +
-    // SECTION 3: REVIEW & RATING
-    '<div style="padding:12px;">' +
-      '<div style="font-size:11px;font-weight:600;color:var(--tx1);margin-bottom:8px;">Final approval & review</div>' +
-      '<div style="display:flex;gap:8px;margin-bottom:12px;">' +
-        '<div style="flex:1;font-size:10px;padding:8px;background:var(--grn-l);border-radius:var(--r1);border-left:2px solid var(--grn);">' +
-          '<div style="font-weight:600;color:var(--grn-3);margin-bottom:2px;">✓ Authority ESCROW passed</div>' +
-          '<div style="color:var(--tx2);">Content meets all criteria and deliverables</div>' +
-        '</div>' +
-      '</div>' +
-      '<div style="background:var(--srf2); border-radius: 6px; padding: 10px; border: 1px solid var(--bdr);">' +
-        '<div style="font-size:11px; font-weight:600; margin-bottom:5px;">Rate your experience</div>' +
-        '<div style="display:flex; gap:4px; margin-bottom:8px; font-size:20px; cursor:pointer;" data-val="0" class="star-rating-stars">' +
-          '<span onclick="this.parentElement.setAttribute(\'data-val\', 1); Array.from(this.parentElement.children).forEach((s,i) => s.innerHTML = i < 1 ? \'★\' : \'☆\')">☆</span>' +
-          '<span onclick="this.parentElement.setAttribute(\'data-val\', 2); Array.from(this.parentElement.children).forEach((s,i) => s.innerHTML = i < 2 ? \'★\' : \'☆\')">☆</span>' +
-          '<span onclick="this.parentElement.setAttribute(\'data-val\', 3); Array.from(this.parentElement.children).forEach((s,i) => s.innerHTML = i < 3 ? \'★\' : \'☆\')">☆</span>' +
-          '<span onclick="this.parentElement.setAttribute(\'data-val\', 4); Array.from(this.parentElement.children).forEach((s,i) => s.innerHTML = i < 4 ? \'★\' : \'☆\')">☆</span>' +
-          '<span onclick="this.parentElement.setAttribute(\'data-val\', 5); Array.from(this.parentElement.children).forEach((s,i) => s.innerHTML = i < 5 ? \'★\' : \'☆\')">☆</span>' +
-        '</div>' +
-        '<textarea id="review-text-' + threadId + '" style="width:100%; border:1px solid var(--bdr); border-radius:4px; padding:6px; font-size:10px; margin-bottom:8px; height:40px; resize:none; font-family:inherit; box-sizing:border-box;" placeholder="Write an optional review..."></textarea>' +
-        '<button class="btn-g" style="width:100%;" onclick="submitInCardRating('' + threadId + '', 'sponsee', this)">Rate & complete deal</button>' +
-      '</div>' +
-    '</div>' +
-  '</div>' +
-  '<div class="msg-t">Just now · Platform</div>' +
-'</div>'
-;
-        }
-        }
+        const deliverables = [
+          "Instagram reel · 48 sec",
+          "Instagram story 1",
+          "Instagram story 2",
+        ];
+
+        const deal = getSharedDeal(threadId);
+        const checkedItems = Array.isArray(deal.checkedDeliverables) ? deal.checkedDeliverables : [];
+
+        const itemsHtml = deliverables.map((d, i) => {
+          const done = checkedItems.includes(i);
+          const iconHtml = done
+            ? '<svg viewBox="0 0 11 11" fill="none" width="11"><circle cx="5.5" cy="5.5" r="4.5" fill="#C0DD97"/><path d="M3 5.5l2 2L8.5 3" stroke="#27500A" stroke-width="1.3" stroke-linecap="round"/></svg>'
+            : '<svg viewBox="0 0 11 11" fill="none" width="11"><circle cx="5.5" cy="5.5" r="4.5" fill="none" stroke="#bbb" stroke-width="1.2"/></svg>';
+          const statusPill = done
+            ? '<span style="font-size:10px;background:var(--grn-l);color:var(--grn-3);padding:1px 7px;border-radius:20px;font-weight:600;">Done</span>'
+            : '<span style="font-size:10px;background:var(--srf2);color:var(--tx3);padding:1px 7px;border-radius:20px;">Pending</span>';
+          return (
+            `<div class="cc-item" id="sponsee-todo-${threadId}-${i}" style="display:flex;align-items:center;justify-content:space-between;">` +
+            `<span style="display:flex;align-items:center;gap:6px;">${iconHtml}<span style="color:${done ? "var(--grn-3)" : "var(--tx2)"};">${d}</span></span>` +
+            statusPill + "</div>"
+          );
+        }).join("");
+
+        const doneCnt = checkedItems.length;
+        const total = deliverables.length;
+
+        wrap.innerHTML =
+          '<div class="m-av" style="background:var(--pur-l);color:var(--pur-t)">SB</div>' +
+          '<div style="display:flex;flex-direction:column;gap:3px;">' +
+          '<div class="content-card" style="max-width:80%;">' +
+          '<div class="cc-thumb"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".3"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 12h10M7 8h10M7 16h6"/></svg>' +
+          '<span style="font-size:10px;color:var(--tx3);">Deliverables to-do · Sponsor reviewing</span></div>' +
+          '<div class="cc-body">' +
+          `<div class="cc-hd" id="sponsee-todo-hd-${threadId}"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#3B6D11" stroke-width="1.3"><rect x="1.5" y="1.5" width="9" height="9" rx="1"/><path d="M3.5 4h5M3.5 6.5h5M3.5 9h3"/></svg>` +
+          `Deliverables · ${doneCnt} of ${total} approved</div>` +
+          `<div style="height:4px;background:var(--bdr-m);border-radius:2px;margin-bottom:8px;"><div id="sponsee-bar-${threadId}" style="height:4px;background:var(--grn);border-radius:2px;width:${(doneCnt/total*100).toFixed(0)}%;transition:width 0.4s;"></div></div>` +
+          itemsHtml +
+          '<div class="cc-note" style="margin-top:8px;">The sponsor is reviewing your files. Each item will be marked <strong>Done</strong> once approved. These update automatically — you cannot check them.</div>' +
+          '</div></div>' +
+          '<div class="msg-t">Just now · Platform</div></div>';
 
         thread.appendChild(wrap);
         thread.scrollTop = thread.scrollHeight;
         return true;
       }
 
-      function generateCriteriaCardSponsee() {
-        const created = appendInlineGeneratedCardSponsee(active, "criteria");
-        appendInlineSystemEventSponsee(
-          active,
-          "Criteria verification card generated",
-          "Continue here and submit criteria checklist in this same chat.",
-        );
-        T(
-          created
-            ? "Criteria verification card generated in this chat"
-            : "Criteria verification card is already present in this chat",
-        );
+      function refreshSponseeTodoCard(threadId) {
+        const thread = document.getElementById(`thread-${threadId}`);
+        if (!thread) return;
+        const deal = getSharedDeal(threadId);
+        const checkedItems = Array.isArray(deal.checkedDeliverables) ? deal.checkedDeliverables : [];
+        const deliverables = ["Instagram reel · 48 sec", "Instagram story 1", "Instagram story 2"];
+        const total = deliverables.length;
+        const doneCnt = checkedItems.length;
+
+        deliverables.forEach((d, i) => {
+          const row = document.getElementById(`sponsee-todo-${threadId}-${i}`);
+          if (!row) return;
+          const done = checkedItems.includes(i);
+          row.innerHTML =
+            `<span style="display:flex;align-items:center;gap:6px;">` +
+            (done
+              ? '<svg viewBox="0 0 11 11" fill="none" width="11"><circle cx="5.5" cy="5.5" r="4.5" fill="#C0DD97"/><path d="M3 5.5l2 2L8.5 3" stroke="#27500A" stroke-width="1.3" stroke-linecap="round"/></svg>'
+              : '<svg viewBox="0 0 11 11" fill="none" width="11"><circle cx="5.5" cy="5.5" r="4.5" fill="none" stroke="#bbb" stroke-width="1.2"/></svg>') +
+            `<span style="color:${done ? "var(--grn-3)" : "var(--tx2)"};">${d}</span></span>` +
+            (done
+              ? '<span style="font-size:10px;background:var(--grn-l);color:var(--grn-3);padding:1px 7px;border-radius:20px;font-weight:600;">Done</span>'
+              : '<span style="font-size:10px;background:var(--srf2);color:var(--tx3);padding:1px 7px;border-radius:20px;">Pending</span>');
+        });
+
+        const bar = document.getElementById(`sponsee-bar-${threadId}`);
+        if (bar) bar.style.width = (doneCnt / total * 100).toFixed(0) + "%";
+        const hd = document.getElementById(`sponsee-todo-hd-${threadId}`);
+        if (hd) hd.innerHTML =
+          '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#3B6D11" stroke-width="1.3"><rect x="1.5" y="1.5" width="9" height="9" rx="1"/><path d="M3.5 4h5M3.5 6.5h5M3.5 9h3"/></svg>' +
+          `Deliverables · ${doneCnt} of ${total} approved`;
       }
 
-      function generateReviewCardSponsee() {
-        const created = appendInlineGeneratedCardSponsee(active, "review");
-        appendInlineSystemEventSponsee(
-          active,
-          "Review card generated",
-          "Escrow passed. Complete your rating in this same chat.",
-        );
-        T(
-          created
-            ? "Review card generated in this chat"
-            : "Review card is already present in this chat",
-        );
+      function appendPhase4SponseeCard(threadId) {
+        const thread = document.getElementById(`thread-${threadId}`);
+        if (!thread) return;
+        if (thread.querySelector("[data-phase='4-complete-sponsee']")) return;
+
+        const banner = document.createElement("div");
+        banner.className = "sys-ev";
+        banner.setAttribute("data-phase", "4-complete-sponsee");
+        banner.style.cssText = "background:var(--grn-l);border-color:var(--grn-m);max-width:420px;margin:0 auto;";
+        banner.innerHTML =
+          '<div class="se-lbl" style="color:var(--grn-3);">🎉 All deliverables approved · task complete!</div>' +
+          '<div class="se-det" style="color:var(--grn-t);">Sponsor verified all your deliverables. Rate this collaboration to release your payment.</div>' +
+          '<div class="se-t">Just now · Platform</div>';
+        thread.appendChild(banner);
+
+        if (!thread.querySelector("[data-phase='4-review-sponsee']")) {
+          const revWrap = document.createElement("div");
+          revWrap.className = "msg-wrap";
+          revWrap.setAttribute("data-phase", "4-review-sponsee");
+          revWrap.innerHTML =
+            '<div class="m-av" style="background:var(--pur-l);color:var(--pur-t)">SB</div>' +
+            '<div style="display:flex;flex-direction:column;gap:3px;">' +
+            '<div class="review-card" id="review-card-cr">' +
+            '<div class="rv-hd"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1.5L8 5H12L9 7.5L10 11L6.5 8.5L3 11L4 7.5L1 5H5Z" fill="#EF9F27" opacity=".6"/></svg>Rate this collaboration</div>' +
+            '<div class="rv-note">How was your experience with this sponsor? Visible on their public profile.</div>' +
+            '<div class="rv-stars">' +
+            '<div class="rv-star" onclick="setRating(1)"></div>' +
+            '<div class="rv-star" onclick="setRating(2)"></div>' +
+            '<div class="rv-star" onclick="setRating(3)"></div>' +
+            '<div class="rv-star" onclick="setRating(4)"></div>' +
+            '<div class="rv-star" onclick="setRating(5)"></div>' +
+            '</div>' +
+            '<textarea class="rv-ta" id="rv-text" placeholder="Optional: share a note about the collaboration..."></textarea>' +
+            '<button class="btn-g" onclick="submitRating()">Submit rating</button>' +
+            '</div>' +
+            '<div class="msg-t">Just now · Platform</div></div>';
+          thread.appendChild(revWrap);
+        }
+        thread.scrollTop = thread.scrollHeight;
+      }
+
+      function generateCriteriaCardSponsee(threadId = active) {
+        const created = appendInlineGeneratedCardSponsee(threadId);
+        T(created ? "Deliverables to-do list generated" : "To-do list already present in this chat");
+      }
+
+      function generateReviewCardSponsee(threadId = active) {
+        generateCriteriaCardSponsee(threadId);
       }
 
       function updateQA(id) {
@@ -4042,9 +4141,16 @@
         const dealB = getSharedDeal("nl");
         const dealC = getSharedDeal("tb");
         const dealD = getSharedDeal("sb");
+        if (id === "gf" && dealA.allTasksComplete) {
+          row.innerHTML =
+            '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">All deliverables approved · rate the collaboration above</span>';
+          return;
+        }
         if (id === "gf" && dealA.termsAccepted) {
           row.innerHTML =
-            '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Sponsor accepted your terms · generate criteria verification card here</span><button class="qa qa-g" onclick="generateCriteriaCardSponsee()">Go to criteria verification</button>';
+            '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Terms agreed · sponsor is reviewing your deliverables</span>';
+          // ensure to-do card is shown
+          appendInlineGeneratedCardSponsee("gf");
           return;
         }
         if (id === "gf" && dealA.termsStatus === "countered") {
@@ -4055,7 +4161,7 @@
         if (id === "nl" && dealB.dealCriteriaApproved) {
           if (dealB.escrowPassedByAuthority) {
             row.innerHTML =
-              '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Escrow passed by authority · generate review card here</span><button class="qa qa-g" onclick="generateReviewCardSponsee()">Go to review card</button>';
+              '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Escrow passed by authority · generate review card here</span><button class="qa qa-g" onclick="generateReviewCardSponsee(\'nl\')">Go to review card</button>';
           } else {
             row.innerHTML =
               '<span style="font-size:12px;color:var(--tx3);padding:4px 0;">Criteria approved by sponsor · waiting authority escrow pass</span>';
@@ -4069,7 +4175,7 @@
         }
         if (id === "tb" && dealC.contentSubmitted) {
           row.innerHTML =
-            '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Content submitted · generate rating card here</span><button class="qa qa-g" onclick="generateReviewCardSponsee()">Go to rating</button>';
+            '<span style="font-size:12px;color:var(--grn-3);padding:4px 0;font-weight:700;">Content submitted · generate rating card here</span><button class="qa qa-g" onclick="generateReviewCardSponsee(\'tb\')">Go to rating</button>';
           return;
         }
         if (id === "sb" && dealD.sponseeRated && dealD.sponseeRating) {
@@ -4080,10 +4186,10 @@
         row.innerHTML = blueprint.qa
           .map((button) => {
             if (button.type === "terms") {
-              return `<button class="qa ${button.cls || ""}" onclick="showPanel('terms-panel')">${escapeHtml(button.label)}</button>`;
+              return `<button class="qa ${button.cls || ""}" onclick="showPanel(\'terms-panel\')">${escapeHtml(button.label)}</button>`;
             }
             if (button.type === "submit") {
-              return `<button class="qa ${button.cls || ""}" onclick="showPanel('submit-panel')">${escapeHtml(button.label)}</button>`;
+              return `<button class="qa ${button.cls || ""}" onclick="showPanel(\'submit-panel\')">${escapeHtml(button.label)}</button>`;
             }
             if (button.type === "message") {
               return `<button class="qa" onclick="T(${JSON.stringify(button.value)})">${escapeHtml(button.label)}</button>`;
@@ -4132,7 +4238,7 @@
             actions.innerHTML =
               '<div style="display:flex;flex-direction:column;gap:7px;">' +
               '<span style="font-size:12px;color:var(--grn-3);font-weight:700;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L10 3" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round"/></svg>Authority marked escrow passed</span>' +
-              '<button class="btn-g" onclick="generateReviewCardSponsee()">Open review card</button>' +
+              '<button class="btn-g" onclick="generateReviewCardSponsee(\'nl\')">Open review card</button>' +
               "</div>";
           } else {
             actions.innerHTML =
@@ -4337,6 +4443,43 @@
         T("Content submitted — awaiting sponsor review");
       }
 
+      function saveProfileRating(profileKey, payload) {
+        try {
+          const current = JSON.parse(localStorage.getItem(profileKey) || "[]");
+          const list = Array.isArray(current) ? current : [];
+          list.push({
+            ...payload,
+            createdAt: new Date().toISOString(),
+          });
+          localStorage.setItem(profileKey, JSON.stringify(list));
+        } catch (_err) {
+          // Ignore storage failures to keep chat flow usable.
+        }
+      }
+
+      function showDealDoneMessageSponsee() {
+        const thread = document.getElementById("thread-sb");
+        if (!thread) return;
+
+        const reviewCard = document.getElementById("review-card-cr");
+        const reviewWrap = reviewCard ? reviewCard.closest(".msg-wrap") : null;
+        if (reviewWrap) reviewWrap.style.display = "none";
+
+        if (!thread.querySelector("[data-deal-done='sb']")) {
+          const done = document.createElement("div");
+          done.className = "sys-ev";
+          done.setAttribute("data-deal-done", "sb");
+          done.style.cssText =
+            "background:var(--grn-l);border-color:var(--grn-m);max-width:420px;margin:0 auto;";
+          done.innerHTML =
+            '<div class="se-lbl" style="color:var(--grn-3);">Deal done</div>' +
+            '<div class="se-det" style="color:var(--grn-t);">Both sides submitted rating and optional review. Added to profiles.</div>' +
+            '<div class="se-t">Just now · Platform</div>';
+          thread.appendChild(done);
+        }
+        thread.scrollTop = thread.scrollHeight;
+      }
+
       function setRating(n) {
         rating = n;
         document
@@ -4352,6 +4495,8 @@
         const state = getConversationState("sb");
         const note = document.getElementById("rv-text").value.trim();
         const stars = "⭐".repeat(rating);
+        const before = getSharedDeal("sb");
+        const bothAfterSubmit = Boolean(before?.sponsorRated);
         const card = document.getElementById("review-card-cr");
         card.innerHTML =
           '<div class="rv-hd"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1.5L8 5H12L9 7.5L10 11L6.5 8.5L3 11L4 7.5L1 5H5Z" fill="#EF9F27"/></svg>Your rating submitted</div>' +
@@ -4372,9 +4517,26 @@
           sponseePreview: state.preview,
           sponsorPreview: `Creator rated this collaboration ${rating}/5`,
         });
+
+        saveProfileRating("sponsor_profile_ratings", {
+          source: "sponsee",
+          dealId: DEAL_ID_BY_CONV.sb,
+          rating,
+          review: note,
+        });
+
+        if (bothAfterSubmit) {
+          state.preview = "Deal done · ratings exchanged";
+          state.stageLabel = "Deal done";
+          state.unread = false;
+          showDealDoneMessageSponsee();
+          T("Deal done — ratings added to both profiles");
+        } else {
+          T("Rating submitted — visible on StyleBox BD's profile");
+        }
+
         saveMessageState();
         renderConversationList();
-        T("Rating submitted — visible on StyleBox BD's profile");
       }
 
       async function sendMsg() {
@@ -4412,17 +4574,13 @@
           if (!res.ok) {
             throw new Error("Reset API failed");
           }
-
-          LAST_MESSAGE_AT[dealId] = "";
-          await fetchDealsFromServer();
-          await fetchMessagesForConv("gf");
-          if (active === "gf") {
-            setActive("gf");
-          }
-          T("Demo chat reset: Towhidul Islam and GreenFresh BD");
         } catch (_err) {
-          T("Could not reset demo chat data right now");
+          // Fall through to the local reset path below.
         }
+
+        clearLocalDemoDealState("gf");
+        T("Demo chat reset: Towhidul Islam and GreenFresh BD");
+        setTimeout(() => window.location.reload(), 250);
       }
 
       function T(m) {
@@ -4480,39 +4638,6 @@
         currentCampaignPhone = window.SponseeDynamic.getCurrentPhone();
       }
     </script>
-    <script src="sponsee_dynamic.js">
-      function submitFinalRating() {
-         const rating = window.currentRating || 5; 
-         const reviewText = document.getElementById('optional-review') ? document.getElementById('optional-review').value : "";
-         
-         // 1. Show Deal Done Message inline
-         const thread = document.querySelector('.msg-thread.active');
-         if(thread) {
-            const card = document.createElement("div");
-            card.className = "sys-ev";
-            card.style.cssText = "background:var(--grn-l);border-color:var(--grn-m);max-width:420px;margin:0 auto;";
-            card.innerHTML = '<div class="se-lbl" style="color:var(--grn-3);">🎉 Deal Done!</div>' +
-                             '<div class="se-det" style="color:var(--grn-t);">Rating (' + rating + ' ★) ' + (reviewText ? 'and review ' : '') + 'were added successfully to the profile. Payment released.</div>' +
-                             '<div class="se-t">Just now · Platform</div>';
-            thread.appendChild(card);
-            thread.scrollTop = thread.scrollHeight;
-         }
-
-         // 2. Hide or disable the rating block so it can't be clicked again
-         const btn = document.querySelector('.cc-actions button');
-         if(btn) btn.disabled = true;
-
-         // 3. Save to localStorage profiles (Mock Backend)
-         try {
-            const tgtProfile = 'sponsor_profile_ratings';
-            let currentRatings = JSON.parse(localStorage.getItem(tgtProfile) || "[]");
-            currentRatings.push({ rating: rating, review: reviewText, date: new Date().toISOString() });
-            localStorage.setItem(tgtProfile, JSON.stringify(currentRatings));
-         } catch(e) {}
-         
-         if(window.T) window.T("Deal completed. Added to profile!");
-      }
-    </script>
-    
+    <script src="sponsee_dynamic.js"></script>
   </body>
 </html>
